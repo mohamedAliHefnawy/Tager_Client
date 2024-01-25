@@ -312,9 +312,9 @@ export default function MoadelOrderProducts({
               </p>
 
               <div className="max-h-96 overflow-y-scroll">
-                {products.map((item) => (
-                  <div key={item._id} className="flex items-center my-3">
-                    <div className="flex w-[50%]">
+                {products.map((item, index) => (
+                  <div key={index} className="flex items-center my-3">
+                    <div key={item._id} className="flex w-[50%]">
                       <div className="w-24 h-20 rounded-full">
                         <Avatar src={item.image[0]} size="lg" />
                         <p
@@ -331,33 +331,35 @@ export default function MoadelOrderProducts({
                         <p>
                           {item.size
                             .filter((item2) => item2.size === Size(item._id))
-                            .map((item3) =>
-                              item3.store
-                                .filter(
-                                  (item4) => item4.nameStore === selectedValueTo
-                                )
-                                .map((item5) => item5.amount)[0] !==
-                              undefined ? (
-                                <p className="text-success-600">
-                                  <span className="ml-1">متوفر</span>
-                                  {
-                                    item3.store
-                                      .filter(
-                                        (item4) =>
-                                          item4.nameStore === selectedValueTo
-                                      )
-                                      .map((item5) => item5.amount)[0]
-                                  }
-
-                                  <span className="mr-1">قطعة</span>
-                                </p>
-                              ) : (
-                                <p className="text-danger-600">
-                                  <span className="ml-1">متوفر</span>0
-                                  <span className="mr-1">قطعة</span>
-                                </p>
-                              )
-                            )}
+                            .map((item3, index3) => (
+                              <p key={index3}>
+                                {item3.store
+                                  .filter(
+                                    (item4) =>
+                                      item4.nameStore === selectedValueTo
+                                  )
+                                  .map((item5, index5) =>
+                                    item5.amount !== undefined ? (
+                                      <p
+                                        key={index5}
+                                        className="text-success-600"
+                                      >
+                                        <span className="ml-1">متوفر</span>
+                                        {item5.amount}
+                                        <span className="mr-1">قطعة</span>
+                                      </p>
+                                    ) : (
+                                      <p
+                                        key={index5}
+                                        className="text-danger-600"
+                                      >
+                                        <span className="ml-1">متوفر</span>0
+                                        <span className="mr-1">قطعة</span>
+                                      </p>
+                                    )
+                                  )}
+                              </p>
+                            ))}
                         </p>
                         <p className="flex text-[var(--mainColor)] mt-2">
                           <p>
