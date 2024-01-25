@@ -27,7 +27,7 @@ export default function SideBarElemnts(props: any) {
     try {
       let response: { data: { token: string; categories: any } };
       response = await axios.get(
-        "http://localhost:5000/categories/getCategories",
+        "https://tager-server.vercel.app/categories/getCategories",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

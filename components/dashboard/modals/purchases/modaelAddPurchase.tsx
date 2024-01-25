@@ -736,7 +736,7 @@ export default function ModaelAddPurchase({
         totalBuy: totalAmount,
       };
       const response = await axios.post(
-        "http://localhost:5000/purchases/addPurchases",
+        "https://tager-server.vercel.app/purchases/addPurchases",
         data
       );
       if (response.data === "yes") {
@@ -752,7 +752,7 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get("http://localhost:5000/products/getProducts", {
+      response = await axios.get("https://tager-server.vercel.app/products/getProducts", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -770,7 +770,7 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get("http://localhost:5000/stores/getStores", {
+      response = await axios.get("https://tager-server.vercel.app/stores/getStores", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -788,7 +788,7 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("http://localhost:5000/payment/getpayment", {
+      response = await axios.get("https://tager-server.vercel.app/payment/getpayment", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

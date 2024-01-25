@@ -101,7 +101,7 @@ export default function Home() {
         data: { token: string; combinedProducts: any; combinedProducts2: any };
       };
       response = await axios.get(
-        `http://localhost:5000/cart/getProductsInCart/${user}`,
+        `https://tager-server.vercel.app/cart/getProductsInCart/${user}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

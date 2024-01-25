@@ -203,7 +203,7 @@ export default function MoadelOrderProducts({
   const GetStores = async () => {
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get("http://localhost:5000/stores/getStores", {
+      response = await axios.get("https://tager-server.vercel.app/stores/getStores", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -482,7 +482,7 @@ export default function MoadelOrderProducts({
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "http://localhost:5000/orders/addOrderProducts",
+        "https://tager-server.vercel.app/orders/addOrderProducts",
         data
       );
       if (response.data === "yes") {

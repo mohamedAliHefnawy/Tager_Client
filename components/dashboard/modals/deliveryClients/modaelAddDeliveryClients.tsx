@@ -240,7 +240,7 @@ export default function ModelAddDeliveryClients(props: any) {
     try {
       const data = { name, phone, imageURL, password, selectedValue };
       const response = await axios.post(
-        "http://localhost:5000/users/addemployee",
+        "https://tager-server.vercel.app/users/addemployee",
         data
       );
       if (response.data === "yes") {

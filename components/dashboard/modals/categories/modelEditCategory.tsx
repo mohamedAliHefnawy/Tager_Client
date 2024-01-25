@@ -153,7 +153,7 @@ export default function ModelEditCategory({
         active,
       };
       const response = await axios.post(
-        "http://localhost:5000/categories/editCatgory",
+        "https://tager-server.vercel.app/categories/editCatgory",
         data
       );
       if (response.data === "yes") {

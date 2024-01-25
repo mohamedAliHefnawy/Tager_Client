@@ -45,7 +45,7 @@ export default function ButtonAddToFavourite({
   const addToFavourite = async (idProduct: any, sizeProduct: any) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/favourite/addProductToFavourite`,
+        `https://tager-server.vercel.app/favourite/addProductToFavourite`,
         {
           idProduct,
           size: sizeProduct,

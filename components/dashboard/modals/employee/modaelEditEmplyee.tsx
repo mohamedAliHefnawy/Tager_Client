@@ -91,7 +91,7 @@ export default function ModelEditEmplyee({
         selectedValueValidity,
       };
       const response = await axios.post(
-        "http://localhost:5000/users/editemployee",
+        "https://tager-server.vercel.app/users/editemployee",
         data
       );
       if (response.data === "yes") {

@@ -147,7 +147,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     try {
       let response: { data: { token: string; purchases: any } };
       response = await axios.get(
-        "http://localhost:5000/purchases/getpurchases",
+        "https://tager-server.vercel.app/purchases/getpurchases",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

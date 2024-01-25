@@ -85,7 +85,7 @@ export default function ModelPaymentpurchases({
         supplier: supplierr,
       };
       const response = await axios.post(
-        "http://localhost:5000/purchases/paymentPurchases",
+        "https://tager-server.vercel.app/purchases/paymentPurchases",
         data
       );
       if (response.data === "yes") {
@@ -104,7 +104,7 @@ export default function ModelPaymentpurchases({
     setLoading(true);
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("http://localhost:5000/payment/getpayment", {
+      response = await axios.get("https://tager-server.vercel.app/payment/getpayment", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

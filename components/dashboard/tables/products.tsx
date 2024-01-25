@@ -114,7 +114,7 @@ export default function Products() {
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get("http://localhost:5000/products/getProducts", {
+      response = await axios.get("https://tager-server.vercel.app/products/getProducts", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
