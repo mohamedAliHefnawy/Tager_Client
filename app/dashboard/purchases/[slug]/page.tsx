@@ -26,7 +26,18 @@ import { Card, CardBody, CardFooter, Pagination } from "@nextui-org/react";
 interface Purchasess {
   _id: string;
   name: string;
-  Products: [{ _id: string; name: string; price: string; amount: string }];
+  products: [
+    {
+      _id: string;
+      name: string;
+      image: string;
+      price: string;
+      amount: string;
+      details: [
+        { size: string; store: [{ nameStore: string; amount: number }] }
+      ];
+    }
+  ];
   stepsPayment: [
     { _id: string; price: string; employee: string; date: string; time: string }
   ];
@@ -130,7 +141,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                     </div>
                     <ModaelStepsPaymentpurchases
                       paymentSteps={item.stepsPayment}
-                      products={item.Products}
+                      products={item.products}
                     />
                   </p>
                 </CardBody>
