@@ -120,12 +120,10 @@ export default function MoadelOrderProducts({
     return sizeProductss.find((item2) => item2[0] === id)?.[1];
   };
 
-  const priceVal =
-    validityUser === "زبون عادي"
-      ? products.map((item) => item.price3)
-      : products.map((item) => item.price2);
-
-  const totalPrice = priceVal.reduce((calc, sd) => calc + sd, 0);
+  // const priceVal =
+  //   validityUser === "زبون عادي"
+  //     ? products.map((item) => item.price3)
+  //     : products.map((item) => item.price2);
 
   const Amount = (productId: any) => {
     const amount =
@@ -202,11 +200,6 @@ export default function MoadelOrderProducts({
         };
         return updatedProfitPerProduct;
       });
-
-      // setTotalAmount2((prevTotalAmount) => {
-      //   const updatedTotalAmount = amountOrder2;
-      //   return updatedTotalAmount;
-      // });
     }
   };
 
@@ -240,14 +233,6 @@ export default function MoadelOrderProducts({
   useEffect(() => {
     GetStores();
   }, []);
-
-  // const amountStore = storeProduct
-  //   .filter((item) => item.nameStore === selectedValueTo)
-  //   .map((item) => item.amount);
-
-  // const priceDeliveryStore = stores
-  //   .filter((item) => item.gbs === selectedValueTo)
-  //   .map((item) => item.priceDelivery);
 
   const Body = () => {
     return (
@@ -327,115 +312,110 @@ export default function MoadelOrderProducts({
               </p>
 
               <div className="max-h-96 overflow-y-scroll">
-                {products.map((item, index) => {
-                  // setNumberProductsNotAvl((prevValue) => prevValue + 1);
-
-                  return (
-                    <div key={index} className="flex items-center my-3">
-                      <div className="flex w-[50%]">
-                        <div className="w-24 h-20 rounded-full">
-                          <Avatar src={item.image[0]} size="lg" />
-                          <p
-                            className="text-danger-600 hover:cursor-pointer w-5"
-                            onClick={() => DeleteProductWithCart(item._id)}
-                          >
-                            ⤫
-                          </p>
-                        </div>
-                        <div className="mr-4">
-                          <p className="text-xl mb-2">{item.name}</p>
-                          {Size(item._id)}
-
-                          <p>
-                            {item.size
-                              .filter((item2) => item2.size === Size(item._id))
-                              .map((item3) =>
-                                item3.store
-                                  .filter(
-                                    (item4) =>
-                                      item4.nameStore === selectedValueTo
-                                  )
-                                  .map((item5) => item5.amount)[0] !==
-                                undefined ? (
-                                  <p className="text-success-600">
-                                    <span className="ml-1">متوفر</span>
-                                    {
-                                      item3.store
-                                        .filter(
-                                          (item4) =>
-                                            item4.nameStore === selectedValueTo
-                                        )
-                                        .map((item5) => item5.amount)[0]
-                                    }
-
-                                    <span className="mr-1">قطعة</span>
-                                  </p>
-                                ) : (
-                                  <p className="text-danger-600">
-                                    <span className="ml-1">متوفر</span>0
-                                    <span className="mr-1">قطعة</span>
-                                  </p>
-                                )
-                              )}
-                          </p>
-                          <p className="flex text-[var(--mainColor)] mt-2">
-                            <p>
-                              {validityUser === "زبون عادي"
-                                ? item.price3
-                                : item.price2}
-                            </p>
-                            <p className="mr-1">د.ل</p>
-                          </p>
-                        </div>
+                {products.map((item, index) => (
+                  <div key={index} className="flex items-center my-3">
+                    <div className="flex w-[50%]">
+                      <div className="w-24 h-20 rounded-full">
+                        <Avatar src={item.image[0]} size="lg" />
+                        <p
+                          className="text-danger-600 hover:cursor-pointer w-5"
+                          onClick={() => DeleteProductWithCart(item._id)}
+                        >
+                          ⤫
+                        </p>
                       </div>
-                      <div className="flex w-[50%]  px-4">
-                        <div className="w-32">
-                          <input
-                            type="number"
-                            className="input"
-                            placeholder="سعر البيع"
-                            defaultValue={item.price3}
-                            value={
-                              (inputValues[item._id] &&
-                                inputValues[item._id].price) ||
-                              ""
-                            }
-                            onChange={(e) =>
-                              handleInputChange(
-                                item._id,
-                                "price",
-                                e.target.value,
-                                item.price3,
-                                item.price2
+                      <div className="mr-4">
+                        <p className="text-xl mb-2">{item.name}</p>
+                        {Size(item._id)}
+
+                        <p>
+                          {item.size
+                            .filter((item2) => item2.size === Size(item._id))
+                            .map((item3) =>
+                              item3.store
+                                .filter(
+                                  (item4) => item4.nameStore === selectedValueTo
+                                )
+                                .map((item5) => item5.amount)[0] !==
+                              undefined ? (
+                                <p className="text-success-600">
+                                  <span className="ml-1">متوفر</span>
+                                  {
+                                    item3.store
+                                      .filter(
+                                        (item4) =>
+                                          item4.nameStore === selectedValueTo
+                                      )
+                                      .map((item5) => item5.amount)[0]
+                                  }
+
+                                  <span className="mr-1">قطعة</span>
+                                </p>
+                              ) : (
+                                <p className="text-danger-600">
+                                  <span className="ml-1">متوفر</span>0
+                                  <span className="mr-1">قطعة</span>
+                                </p>
                               )
-                            }
-                          />
-                        </div>
-                        <div className="w-32">
-                          <input
-                            type="number"
-                            className="input mr-1"
-                            placeholder="الكمية"
-                            value={
-                              (inputValues[item._id] &&
-                                inputValues[item._id].quantity) ||
-                              ""
-                            }
-                            onChange={(e) =>
-                              handleInputChange(
-                                item._id,
-                                "quantity",
-                                e.target.value,
-                                item.price3,
-                                item.price2
-                              )
-                            }
-                          />
-                        </div>
+                            )}
+                        </p>
+                        <p className="flex text-[var(--mainColor)] mt-2">
+                          <p>
+                            {validityUser === "زبون عادي"
+                              ? item.price3
+                              : item.price2}
+                          </p>
+                          <p className="mr-1">د.ل</p>
+                        </p>
                       </div>
                     </div>
-                  );
-                })}
+                    <div className="flex w-[50%]  px-4">
+                      <div className="w-32">
+                        <input
+                          type="number"
+                          className="input"
+                          placeholder="سعر البيع"
+                          defaultValue={item.price3}
+                          value={
+                            (inputValues[item._id] &&
+                              inputValues[item._id].price) ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            handleInputChange(
+                              item._id,
+                              "price",
+                              e.target.value,
+                              item.price3,
+                              item.price2
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="w-32">
+                        <input
+                          type="number"
+                          className="input mr-1"
+                          placeholder="الكمية"
+                          value={
+                            (inputValues[item._id] &&
+                              inputValues[item._id].quantity) ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            handleInputChange(
+                              item._id,
+                              "quantity",
+                              e.target.value,
+                              item.price3,
+                              item.price2
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <div className="w-[100%] h-[1px] bg-[var(--mainColor)]"></div>
@@ -542,13 +522,6 @@ export default function MoadelOrderProducts({
 
   return (
     <>
-      {/* <Button
-        onClick={onOpen}
-        className="w-[100%] bg-slate-800 rounded-2xl text-white text-center"
-      >
-        أطلب الآن
-      </Button> */}
-
       <div className="p-12 py-8 mr-2 h-auto flex justify-center items-center ">
         <div className="bg-orange-200 w-4 h-4 rotate-45 mt-1 rounded-lg"></div>
         <div

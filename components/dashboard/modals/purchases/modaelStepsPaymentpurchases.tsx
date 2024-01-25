@@ -12,7 +12,6 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
   Avatar,
 } from "@nextui-org/react";
 
@@ -42,9 +41,7 @@ export default function ModaelStepsPaymentpurchases({
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [discountedTotal, setDiscountedTotal] = useState(0);
-  const [sumMoney, setSumMoney] = useState("");
-  const [closeBtn, setCloseBtn] = useState(true);
-  const usernamee = localStorage.getItem("username");
+
 
   return (
     <>
@@ -98,10 +95,10 @@ export default function ModaelStepsPaymentpurchases({
                         <div>
                           <p className="flex">
                             <span>
-                              {item.details.map((item2) => (
-                                <p className="my-2">
-                                  {item2.store.map((item3) => (
-                                    <p className="flex mr-3">
+                              {item.details.map((item2 , index2) => (
+                                <p key={index2}  className="my-2">
+                                  {item2.store.map((item3 , index3) => (
+                                    <p key={index3} className="flex mr-3">
                                       <span className="mr-1 font-bold">
                                         {item2.size}
                                       </span>
