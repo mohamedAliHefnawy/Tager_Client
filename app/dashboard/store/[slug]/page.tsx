@@ -10,7 +10,6 @@ import axios from "axios";
 import NavBar from "../../../../components/dashboard/navbar";
 import SideBar from "../../../../components/dashboard/sidebar";
 import Store from "../../../../components/dashboard/tables/store";
-import CardsAnalysis from "../../../../components/dashboard/cardsAnalysis";
 import useCheckLogin from "../../../../components/dashboard/checkLogin/checkLogin";
 import DivCheck from "../../../../components/dashboard/checkLogin/divCheck";
 import Loading from "../loading";
@@ -54,7 +53,7 @@ interface Catogry {
 
 export default function Home({ params }: { params: { slug: string } }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const usernamee = useCheckLogin();
+  const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [num, setNum] = useState("");
   const [num2, setNum2] = useState("");
@@ -157,7 +156,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                   </Button>
                   <Button
                     disabled={amount === 0 ? true : false}
-                    color={amount === 0 ? 'default' : 'danger'}
+                    color={amount === 0 ? "default" : "danger"}
                     onClick={MinusProducts}
                   >
                     نعم
@@ -425,9 +424,7 @@ export default function Home({ params }: { params: { slug: string } }) {
               <div className="flex">
                 <p className="mr-2 text-black ">الكمية منتهية الصلاحية :</p>
               </div>
-              <div className="flex items-center">
-                {ModelMinus1()}
-              </div>
+              <div className="flex items-center">{ModelMinus1()}</div>
             </div>
 
             <div className="flex items-center mt-4">
@@ -479,9 +476,9 @@ export default function Home({ params }: { params: { slug: string } }) {
   }, [num]);
 
   useEffect(() => {
-    if (usernamee) {
+    if (nameAdmin) {
       const timeoutId = setTimeout(() => {
-        setUsername(usernamee);
+        setUsername(nameAdmin);
         setIsLoading(false);
       }, 2000);
 
@@ -489,14 +486,14 @@ export default function Home({ params }: { params: { slug: string } }) {
     } else {
       setIsLoading(false);
     }
-  }, [usernamee]);
+  }, [nameAdmin]);
 
   return (
     <>
       <div>
         {isLoading ? (
           <Loading />
-        ) : usernamee ? (
+        ) : nameAdmin ? (
           <>
             <div className="bg-slate-800 lg:h-auto min-h-screen flex justify-between max-2xl:flex max-xl:flex lg:flex md:hidden sm:hidden max-sm:hidden">
               <div className="w-[20%] h-auto bg-slate-700 rounded-r-3xl">
@@ -505,7 +502,7 @@ export default function Home({ params }: { params: { slug: string } }) {
               <div className="w-[100%] flex-col flex items-center ">
                 <NavBar />
                 <div className="w-[80%] h-9"></div>
-                <CardsAnalysis />
+                {/* <CardsAnalysis /> */}
                 <div className="w-[80%] h-9"></div>
                 <div className="w-[80%] h-[100%] bg-slate-700 rounded-r-3xl  rounded-2xl p-6">
                   {catogtyDiv()}
