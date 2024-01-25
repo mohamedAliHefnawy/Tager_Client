@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --mainColor: #cca330;
+  --ColorNav: rgb(199, 172, 99);
+  --mainColorRgba: #cca2303f;
+  --mainColorRgbaa: #cca23021;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--mainColor);
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ddd;
+}
+
+.scrollDashbordSideBar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollDashbordSideBar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-gray-500 {
+  scrollbar-color: #666 #ddd;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.inputDate {
+  border: 1px solid #666;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.inputDate:focus {
+  border: 1px solid blue !important;
+  outline: 0px solid #666 !important;
+}
+
+.inputDate:hover {
+  border: 1px solid blue !important;
+  outline: 0px solid #666 !important;
+  cursor: pointer;
+}
+.inputDate2:focus {
+  border: 0px solid blue !important;
+  outline: 0px solid #666 !important;
+}
+
+.inputDate2:hover {
+  border: 0px solid blue !important;
+  outline: 0px solid #666 !important;
+  cursor: pointer;
+}
+
+.input {
+  display: block;
+  text-align: center !important;
+  width: 100%;
+  height: 60px;
+  margin-top: 20px;
+  border: 0.2px solid var(--mainColor);
+  transition: border 0.5s ease-out;
+  transition: background-color 0.5s ease-out;
+  outline: none;
+  border-radius: 12px;
+}
+
+.inputTrue {
+  display: block;
+  text-align: center !important;
+  width: 100%;
+  height: 40px;
+  border: 0.2px solid var(--mainColor);
+  transition: border 0.5s ease-out;
+  transition: background-color 0.5s ease-out;
+  outline: none;
+  border-radius: 12px;
+}
+
+.input::-webkit-inner-spin-button,
+.input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.inputTrue::-webkit-inner-spin-button,
+.inputTrue::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.inputTrue[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.input::placeholder {
+  font-size: 16px !important;
+}
+
+.inputTrue::placeholder {
+  font-size: 16px !important;
+}
+
+.input:focus {
+  border: 1px solid var(--mainColor) !important;
+  background-color: var(--mainColorRgba) !important;
+}
+.inputTrue:focus {
+  border: 1px solid var(--mainColor) !important;
+  background-color: var(--mainColorRgba) !important;
+}
+
+.button {
+  background-color: var(--mainColor);
+  color: white;
+  margin-top: 20px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: none;
+  width: 100%;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: rgb(223, 184, 78);
+}
