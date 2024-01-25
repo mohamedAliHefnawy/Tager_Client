@@ -27,7 +27,18 @@ export default function ModaelStepsPaymentpurchases({
   paymentSteps: [
     { _id: string; price: string; employee: string; date: string; time: string }
   ];
-  products: [{ _id: string; name: string; price: string; amount: string }];
+  products: [
+    {
+      _id: string;
+      name: string;
+      image: string;
+      price: string;
+      amount: string;
+      details: [
+        { size: string; store: [{ nameStore: string; amount: number }] }
+      ];
+    }
+  ];
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [discountedTotal, setDiscountedTotal] = useState(0);
@@ -91,7 +102,9 @@ export default function ModaelStepsPaymentpurchases({
                                 <p className="my-2">
                                   {item2.store.map((item3) => (
                                     <p className="flex mr-3">
-                                      <span className="mr-1 font-bold">{item2.size}</span>
+                                      <span className="mr-1 font-bold">
+                                        {item2.size}
+                                      </span>
                                       <span className="mr-1">من الحجم</span>
                                       <span className="font-bold mr-1">
                                         {item3.nameStore}

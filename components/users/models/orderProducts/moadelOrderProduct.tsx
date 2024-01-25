@@ -51,9 +51,20 @@ interface Products {
   password: string;
   validity: string;
   image: string;
-  size: [{ size: string }];
+  size: [{ store: [{ amount: number; nameStore: string }]; size: string }];
   store: { amount: number }[];
   [key: string]: any;
+}
+
+interface InputValues {
+  [productId: string]: {
+    price: number;
+    quantity: number;
+  };
+}
+
+interface ProfitPerProduct {
+  [productId: string]: number;
 }
 
 export default function MoadelOrderProducts({
@@ -79,9 +90,11 @@ export default function MoadelOrderProducts({
   const [closeBtn, setCloseBtn] = useState(true);
   const [showConfetti, setShowConfetti] = React.useState(false);
   const [products, setProducts] = useState(Productss);
-  const [inputValues, setInputValues] = useState({});
+  const [inputValues, setInputValues] = useState<InputValues>({});
   const [totalAmount, setTotalAmount] = useState(0);
-  const [profitPerProduct, setProfitPerProduct] = useState(0);
+  const [profitPerProduct, setProfitPerProduct] = useState<ProfitPerProduct>(
+    {}
+  );
 
   const [selectedKeysTo, setSelectedKeysTo] = React.useState<string[]>([
     "إختر البلدة",
@@ -141,8 +154,14 @@ export default function MoadelOrderProducts({
     setProducts(updatedProducts);
   };
 
-  const handleInputChange = (productId, field, value, price3, price2) => {
-    const currentInputValues = inputValues[productId] || {
+  const handleInputChange = (
+    productId: string,
+    field: string,
+    value: string,
+    price3: number,
+    price2: number
+  ) => {
+    const currentInputValues = (inputValues as InputValues)[productId] || {
       price: 0,
       quantity: 0,
     };
@@ -153,9 +172,9 @@ export default function MoadelOrderProducts({
     const priceVall = validityUser === "زبون عادي" ? price3 : price2;
 
     if (
-      quantityValue >= 0 &&
-      parseInt(quantityValue) <= Amount(productId) &&
-      priceValue >= 0
+      +quantityValue >= 0 &&
+      +quantityValue <= Amount(productId) &&
+      +priceValue >= 0
     ) {
       setInputValues((prevInputValues) => ({
         ...prevInputValues,
@@ -164,9 +183,9 @@ export default function MoadelOrderProducts({
           [field]: value,
         },
       }));
-      const amountOrder = quantityValue * priceValue;
+      const amountOrder = +quantityValue * +priceValue;
 
-      const amountOrder2 = priceVall * quantityValue;
+      const amountOrder2 = priceVall * +quantityValue;
 
       setTotalAmount((prevTotalAmount) => {
         const updatedTotalAmount =
@@ -177,7 +196,7 @@ export default function MoadelOrderProducts({
       });
 
       setProfitPerProduct((prevProfitPerProduct) => {
-        const updatedProfitPerProduct = {
+        const updatedProfitPerProduct: ProfitPerProduct = {
           ...prevProfitPerProduct,
           [productId]: amountOrder2,
         };
@@ -203,11 +222,14 @@ export default function MoadelOrderProducts({
   const GetStores = async () => {
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get("https://tager-server.vercel.app/stores/getStores", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/stores/getStores",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setStores(response.data.stores);
       console.log(response.data);
     } catch (error) {
@@ -350,18 +372,12 @@ export default function MoadelOrderProducts({
                                   </p>
                                 ) : (
                                   <p className="text-danger-600">
-                                    <span className="ml-1">متوفر</span>
-                                    {0 &&
-                                      setNumberProductsNotAvl(
-                                        numberProductsNotAvl + 1
-                                      )}
-
+                                    <span className="ml-1">متوفر</span>0
                                     <span className="mr-1">قطعة</span>
                                   </p>
                                 )
                               )}
                           </p>
-                          {/* {Amount(item._id)} */}
                           <p className="flex text-[var(--mainColor)] mt-2">
                             <p>
                               {validityUser === "زبون عادي"
@@ -379,7 +395,11 @@ export default function MoadelOrderProducts({
                             className="input"
                             placeholder="سعر البيع"
                             defaultValue={item.price3}
-                            value={inputValues[item._id]?.price || ""}
+                            value={
+                              (inputValues[item._id] &&
+                                inputValues[item._id].price) ||
+                              ""
+                            }
                             onChange={(e) =>
                               handleInputChange(
                                 item._id,
@@ -396,7 +416,11 @@ export default function MoadelOrderProducts({
                             type="number"
                             className="input mr-1"
                             placeholder="الكمية"
-                            value={inputValues[item._id]?.quantity || ""}
+                            value={
+                              (inputValues[item._id] &&
+                                inputValues[item._id].quantity) ||
+                              ""
+                            }
                             onChange={(e) =>
                               handleInputChange(
                                 item._id,
