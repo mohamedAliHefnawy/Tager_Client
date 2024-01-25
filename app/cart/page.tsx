@@ -25,7 +25,7 @@ interface Products {
   password: string;
   validity: string;
   image: string;
-  size: [{ size: string }];
+  size: [{ store: [{ amount: number; nameStore: string }]; size: string }];
   store: { amount: number }[];
   [key: string]: any;
 }
