@@ -312,8 +312,8 @@ export default function MoadelOrderProducts({
               </p>
 
               <div className="max-h-96 overflow-y-scroll">
-                {products.map((item, index) => (
-                  <div key={index} className="flex items-center my-3">
+                {products.map((item) => (
+                  <div key={item._id} className="flex items-center my-3">
                     <div className="flex w-[50%]">
                       <div className="w-24 h-20 rounded-full">
                         <Avatar src={item.image[0]} size="lg" />
