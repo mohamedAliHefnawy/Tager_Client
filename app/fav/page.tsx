@@ -13,10 +13,25 @@ import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import DivCheck from "@/components/users/checkLogin/divCheck";
 import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
-import MoadelOrderProducts from "@/components/users/models/orderProducts/moadelOrderProduct";
 import Loading from "@/components/loading";
 
-import { Pagination, Spinner } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Pagination,
+  Spinner,
+} from "@nextui-org/react";
+
+// imgaes
+import medicine from "@/public/img/element.png";
+
+//svg
+import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
+import { DeleteIcon } from "@/public/svg/deleteIcon";
+import Link from "next/link";
 
 interface Products {
   _id: string;
@@ -25,9 +40,9 @@ interface Products {
   password: string;
   validity: string;
   image: string;
+  price2: number;
+  price3: number;
   size: [{ size: string }];
-  store: { amount: number }[];
-  [key: string]: any;
 }
 
 export default function Home() {
@@ -37,11 +52,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Products[]>([]);
-  const [sizes, setSizes] = useState<Products[]>([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [counter, setCounter] = useState(0);
-  const router = useRouter();
   const itemsPerPage = 20;
 
   const handleSearchChange = (e: any) => {
@@ -62,13 +74,6 @@ export default function Home() {
     );
   });
 
-  const handleAddToCart = (idToRemove: any) => {
-    const updatedProducts = products.filter(
-      (product) => product._id !== idToRemove
-    );
-    setProducts(updatedProducts);
-  };
-
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage);
   };
@@ -77,31 +82,14 @@ export default function Home() {
     indexOfLastItem
   );
 
-  const DeleteProductWithCart = (id: any) => {
-    const updatedProducts = products.filter((product) => product._id !== id);
-    setProducts(updatedProducts);
-  };
-
-  const Size = (id: any) => {
-    return sizes.find((item2) => item2[0] === id)?.[1];
-  };
-
-  const Amount = (size: any, id: any) => {
-    return size
-      .filter((item2: any) => item2.size === Size(id))
-      .map((item3: any) =>
-        item3.store.reduce((acc: any, calc: any) => acc + calc.amount, 0)
-      );
-  };
-
   const GetProductsInCart = async () => {
     setLoading(true);
     try {
       let response: {
-        data: { token: string; combinedProducts: any; combinedProducts2: any };
+        data: { token: string; combinedProducts: any };
       };
       response = await axios.get(
-        `http://localhost:5000/cart/getProductsInCart/${user}`,
+        `http://localhost:5000/favourite/getProductsInFavourite/${user}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -109,7 +97,6 @@ export default function Home() {
         }
       );
       setProducts(response.data.combinedProducts);
-      setSizes(response.data.combinedProducts2);
     } catch (error) {
       console.log(error);
     } finally {
@@ -150,14 +137,14 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
+        <div className="gap-2 grid grid-cols-2 sm:grid-cols-6">
           {loading ? (
             <div className="flex justify-center items-center h-[400px]">
               <Spinner size="lg" color="warning" />
             </div>
           ) : (
             currentItems.map((item, index) => (
-              <div key={index} className="p-8 py-3 mr-2 h-auto">
+              <div key={index} className="p-8 py-3 mr-2 h-auto ">
                 <div className="flex justify-center rounded-2xl py-4">
                   <Image
                     className="w-[90%] h-36"
@@ -166,22 +153,15 @@ export default function Home() {
                     width={100}
                     height={100}
                   />
-                  {/* {Size(item._id)} */}
-                  {/* {products.map((item) => item._id)} */}
                 </div>
                 <div className=" rounded-2xl py-2 mt-2">
-                  <div className="text-red-500 flex justify-center py-2">
-                    {Amount(item.size, item._id) <= 0 && <p>غير متوفر</p>}
-                  </div>
                   <div
                     // onClick={() =>
                     //   router.push(`/products/${item.catogry}/${item._id}`)
                     // }
-                    className="flex justify-center items-center"
+                    className="flex justify-center items-center "
                   >
                     <p> {item.name} </p>
-                    {/* <p> {Size(item._id)} </p> */}
-
                     <p className="text-[var(--mainColor)] ml-1"> ☍ </p>
                   </div>
                   <div className="flex justify-center items-center  ">
@@ -202,38 +182,17 @@ export default function Home() {
                       size={item.size?.[0]?.size}
                       updateParent={undefined}
                     />
-                    <p onClick={() => DeleteProductWithCart(item._id)}>
-                      <ButtonAddToCart
-                        id={item._id}
-                        index={index}
-                        size={item.size?.[0]?.size}
-                        updateParent={undefined}
-                      />
-                    </p>
+
+                    <ButtonAddToCart
+                      id={item._id}
+                      index={index}
+                      size={item.size?.[0]?.size}
+                      updateParent={undefined}
+                    />
                   </div>
                 </div>
               </div>
             ))
-          )}
-
-          {counter <= 0 ? (
-            <MoadelOrderProducts
-              nameUser={user}
-              validityUser={userValidity}
-              Productss={products}
-              sizeProductss={sizes}
-            />
-          ) : (
-            <>
-              <div className="p-12 py-8 mr-2 h-auto flex justify-center items-center ">
-                <div className="bg-orange-200 w-4 h-4 rotate-45 mt-1 rounded-lg"></div>
-                <div
-                  className="bg-red-200 p-4 rounded-lg hover:cursor-pointer"
-                >
-                  إستكمال الطلب
-                </div>
-              </div>
-            </>
           )}
         </div>
         <div className="pagination">
@@ -249,16 +208,6 @@ export default function Home() {
       </>
     );
   };
-
-  useEffect(() => {
-    const unavailableProductsCount = currentItems.reduce((count, item) => {
-      if (Amount(item.size, item._id) <= 0) {
-        return count + 1;
-      }
-      return count;
-    }, 0);
-    setCounter(unavailableProductsCount);
-  }, [currentItems]);
 
   return (
     <>

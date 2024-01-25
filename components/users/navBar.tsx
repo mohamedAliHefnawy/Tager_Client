@@ -4,6 +4,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 //nextUi
 import {
@@ -45,6 +46,7 @@ export default function NavBar({
   lengthProductsInFavourite: number;
 }) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const router = useRouter();
 
   const Icons = {
     BarsarrowdownIcon: <BarsarrowdownIcon />,
@@ -55,6 +57,11 @@ export default function NavBar({
     HeartIcon: <HeartIcon />,
     ShoppingcartIcon: <ShoppingcartIcon />,
     HomeIcon: <HomeIcon />,
+  };
+
+  const Logout = () => {
+    localStorage.removeItem("user");
+    router.push("/auth/login");
   };
 
   return (
@@ -104,7 +111,9 @@ export default function NavBar({
             <DropdownItem key="logout" className="text-danger" color="danger">
               <p className="flex items-center ">
                 <p>{Icons.LogoutIcon}</p>
-                <p className="mr-1">تسجيل خروج</p>
+                <p onClick={() => Logout()} className="mr-1">
+                  تسجيل خروج
+                </p>
               </p>
             </DropdownItem>
           </DropdownMenu>
