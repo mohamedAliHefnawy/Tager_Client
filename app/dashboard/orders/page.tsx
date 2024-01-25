@@ -27,7 +27,7 @@ interface Employee {
 }
 
 export default function Home() {
-  const nameAdmin = useCheckLogin();
+  const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   
