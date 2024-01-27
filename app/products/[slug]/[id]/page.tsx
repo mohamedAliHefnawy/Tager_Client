@@ -150,7 +150,10 @@ export default function Product({ params }: { params: { id: string } }) {
     ...(product.products || []),
   ];
 
-  const allProductsImages = [...(product?.products || [])];
+  const allProductsImages = [
+    ...(product ? [product] : []),
+    ...(product?.products || []),
+  ];
 
   const handleColorClick = (selectedColor: any) => {
     setSelectedColor(selectedColor);
@@ -409,7 +412,7 @@ export default function Product({ params }: { params: { id: string } }) {
           <p className="p-4 w-[100%] text-right">
             <p>{product.name}</p>
             <p> {selectedSize}</p>
-            <p style={{direction:'rtl'}}> اللون | {selectedColor}</p>
+            <p style={{ direction: "rtl" }}> اللون | {selectedColor}</p>
             <p> الكمية | {availableQuantity}</p>
           </p>
         </div>
@@ -485,7 +488,6 @@ export default function Product({ params }: { params: { id: string } }) {
           </>
         ) : (
           <DivCheck link="/auth/login" />
-
         )}
       </div>
     </>

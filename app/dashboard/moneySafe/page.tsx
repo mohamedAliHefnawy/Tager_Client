@@ -1,30 +1,19 @@
 "use client";
 
 //components
-import NavBar from "@/components/dashboard/navbar";
-import SideBar from "@/components/dashboard/sidebar";
-import Orders from "@/components/dashboard/tables/orders";
-import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
-import DivCheck from "@/components/dashboard/checkLogin/divCheck";
-import Loading from "@/components/loading";
+import NavBar from "../../../components/dashboard/navbar";
+import SideBar from "../../../components/dashboard/sidebar";
+import CardMoneySafe from "../../../components/dashboard/cardMoneySafe";
+import useCheckLogin from "../../../components/dashboard/checkLogin/checkLogin";
+import DivCheck from "../../../components/dashboard/checkLogin/divCheck";
+import Loading from "../loading";
 
 // react
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import axios from "axios";
 
 //imges
 import error from "../../../public/img/notfound.png";
-
-interface Employee {
-  _id: string;
-  name: string;
-  phone1: string;
-  phone2: string;
-  password: string;
-  image: string;
-  validity: string;
-}
 
 export default function Home() {
   const [nameAdmin] = useCheckLogin();
@@ -59,8 +48,8 @@ export default function Home() {
                 <NavBar />
                 <div className="w-[80%] h-5"></div>
                 <div className="w-[90%]  bg-slate-100 rounded-r-3xl  rounded-2xl p-6 min-h-screen">
-                  <div className="w-[100%] flex justify-end">
-                    <Orders />
+                  <div className="w-[100%]">
+                    <CardMoneySafe />
                   </div>
                 </div>
               </div>

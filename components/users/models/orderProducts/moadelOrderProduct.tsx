@@ -488,7 +488,7 @@ export default function MoadelOrderProducts({
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/addOrderProducts",
+        "http://localhost:5000/orders/addOrderProducts",
         data
       );
       if (response.data === "yes") {

@@ -27,7 +27,6 @@ import { ListbulletIcon } from "../../public/svg/listbulletIcon";
 import { StopcircleIcon } from "../../public/svg/stopcircleIcon";
 import { ClipboarddocumentlistIcon } from "../../public/svg/clipboarddocumentlistIcon";
 import { ArrowtrendingdownIcon } from "../../public/svg/arrowtrendingdownIcon";
-// import { BuildingstorefrontIcon } from "../../public/svg/buildingstorefrontIcon";
 
 //component
 import Link from "next/link";
@@ -147,10 +146,9 @@ export default function SideBar() {
           link="/dashboard/DeliveryClients"
           icon={icons.RocketlaunchIcon}
         />
-
         <ElementSideBar
           name="الطلبيات"
-          link="/dashboard/store"
+          link="/dashboard/orders"
           icon={icons.MapIcon}
         />
         <ElementSideBar
@@ -163,12 +161,22 @@ export default function SideBar() {
           link="/dashboard/products"
           icon={icons.ProductsIcon}
         />
-
         <div className="flex items-center justify-between">
           <div className="w-[35%] h-[1px] bg-slate-400"></div>
           <p className="text-slate-400">إضافات</p>
           <div className="w-[35%] h-[1px] bg-slate-400"></div>
         </div>
+        <ElementSideBar
+          name="طرق الدفع"
+          link="/dashboard/payment"
+          icon={icons.BanknotesIcon}
+        />
+        <ElementSideBar
+          name="الخزينه"
+          link="/dashboard/moneySafe"
+          icon={icons.BuildinglibraryIcon}
+        />
+
         <ElementSideBar
           name="المشتريات"
           link="/dashboard/purchases"

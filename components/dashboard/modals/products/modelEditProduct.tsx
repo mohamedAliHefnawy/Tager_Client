@@ -152,7 +152,7 @@ export default function ModelEditProduct({
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermStore, setSearchTermStore] = useState("");
-  const [colorProductMain, setColorProductMain] = useState(colorProductt);
+  const [colorProductMain, setColorProductMain] = useState("");
   const handleChangeProductMain = (newColor: any) => {
     setColorProductMain(newColor.hex);
   };
@@ -464,7 +464,6 @@ export default function ModelEditProduct({
                         setPriceProduct3(e.target.value.toString())
                       }
                     />
-                    {nameCategoryy}
                   </div>
                   <div className="w-[100%] flex items-center my-4 p-6">
                     <div
@@ -695,11 +694,14 @@ export default function ModelEditProduct({
     setLoading(true);
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get("https://tager-server.vercel.app/stores/getStores", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/stores/getStores",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setStores(response.data.stores);
     } catch (error) {
       console.log(error);
@@ -723,7 +725,7 @@ export default function ModelEditProduct({
         rows,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/products/editProduct",
+        "http://localhost:5000/products/editProduct",
         data
       );
       if (response.data === "yes") {
@@ -750,7 +752,7 @@ export default function ModelEditProduct({
   }, []);
 
   useEffect(() => {
-    if (sizeProductt && nameCategoryy && nameProductt) {
+    if (sizeProductt && nameCategoryy && nameProductt && colorProductt) {
       const convertedSizeProduct: SizeObject[] = sizeProductt.map(
         (sizeObject) => ({
           size: sizeObject.size,
@@ -758,6 +760,7 @@ export default function ModelEditProduct({
       );
 
       setSizeProduct(convertedSizeProduct);
+      setColorProductMain(colorProductt);
       setNameProduct(nameProductt);
       setPriceProduct1(price1Productt);
       setPriceProduct2(price2Productt);
@@ -772,7 +775,7 @@ export default function ModelEditProduct({
         catogry: "",
       });
     }
-  }, [sizeProductt, nameCategoryy, nameProductt]);
+  }, [sizeProductt, nameCategoryy, nameProductt, colorProductt]);
 
   useEffect(() => {
     if (allProductt) {

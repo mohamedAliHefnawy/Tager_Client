@@ -19,6 +19,7 @@ interface Orders {
   address: string;
   marketer: string;
   situation: string;
+  situationSteps: [{ situation: string; date: string; time: string }];
 }
 
 export default function Orders() {
@@ -27,11 +28,17 @@ export default function Orders() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [receivedData, setReceivedData] = useState("");
+
   const itemsPerPage = 6;
   const router = useRouter();
 
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);
+  };
+
+  const receiveDataFromChild = (data: any) => {
+    setReceivedData(data);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -65,15 +72,18 @@ export default function Orders() {
   };
   const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
 
-  const GetStores = async () => {
+  const GetOrders = async () => {
     setLoading(true);
     try {
       let response: { data: { token: string; orders: any } };
-      response = await axios.get("https://tager-server.vercel.app/orders/getOrders", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/orders/getOrders",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setOrders(response.data.orders);
     } catch (error) {
       console.log(error);
@@ -82,8 +92,11 @@ export default function Orders() {
     }
   };
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
-    GetStores();
+    GetOrders();
+    // setReceivedData(orders.map((item) => item.situationSteps[0].situation));
   }, []);
 
   return (
@@ -116,6 +129,7 @@ export default function Orders() {
             <div className="w-[25%] text-center">
               <p>إسم العميل</p>
             </div>
+
             <div className="w-[25%] text-center">
               <p>رقم الهاتف</p>
             </div>
@@ -160,15 +174,33 @@ export default function Orders() {
                   <p>{order.marketer}</p>
                 </div>
                 <div className="w-[25%] text-center">
-                  <p>{order.situation}</p>
+                  <p>
+                    {receivedData === "تم القبول" ? (
+                      <p className="text-success-600">تم قبول الطلبية</p>
+                    ) : receivedData === "تم الرفض" ? (
+                      <p className="text-danger-600">تم رفض الطلبية</p>
+                    ) : receivedData === "مع الشحن" ? (
+                      <p className="text-success-700"> مع الشحن</p>
+                    ) : receivedData === "تم التوصيل" ? (
+                      <p className="text-success-700"> تم التوصيل</p>
+                    ) : receivedData === "تم الإسترجاع" ? (
+                      <p className="text-success-700"> تم الإسترجاع</p>
+                    ) : receivedData === "إسترجاع جزئي" ? (
+                      <p className="text-success-700"> إسترجاع جزئي</p>
+                    ) : receivedData === "تم إستلام الكاش" ? (
+                      <p className="text-success-700"> "تم إستلام الكاش"</p>
+                    ) : (
+                      order.situation
+                    )}
+                  </p>
                 </div>
 
                 <div className="w-[33%] text-right">
                   <div className="flex justify-center">
                     <ModaelEditOrder
-                      idCatog={""}
-                      nameCatog={""}
-                      priceCatog={""}
+                      idOrder={order._id}
+                      situationSteps={order.situationSteps}
+                      sendDataToParent={receiveDataFromChild}
                     />
                   </div>
                 </div>

@@ -462,7 +462,7 @@ export default function ModaeEditOrderProduct(props: any) {
         {Icons.PencilIcon}
       </p>
       <Modal
-        size="4xl"
+        size="5xl"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}
