@@ -21,6 +21,8 @@ import {
   Card,
   Tabs,
   CardBody,
+  Avatar,
+  Spinner,
 } from "@nextui-org/react";
 
 //svgIcons
@@ -37,9 +39,52 @@ import { SearchIcon } from "@/public/svg/searchIcon";
 // imgaes
 import product from "@/public/img/blue-t-shirt.jpg";
 
-export default function ModaeEditOrderProduct(props: any) {
+interface Products {
+  idProduct: string;
+  name: string;
+  catogry: string;
+  nameProduct: string;
+  imageProduct: string;
+  products: [{ image: string }];
+  amount: number;
+  price: number;
+  size: string;
+  image: string;
+}
+
+export default function ModaeEditOrderProduct({
+  id,
+  userr,
+  name,
+  phone1,
+  phone2,
+  addres,
+  store,
+  produts,
+}: {
+  id: string;
+  userr: string;
+  name: string;
+  phone1: string;
+  phone2: string;
+  addres: string;
+  store: string;
+  produts: Products[];
+}) {
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [nameClient, setNameClient] = useState(name);
+  const [phone1Client, setPhone1Client] = useState(phone1);
+  const [phone2Client, setPhone2Client] = useState(phone2);
+  const [address, setAddress] = useState(addres);
+  const [produtss, setProdutss] = useState<Products[]>([]);
+  const [allProduts, setAllProduts] = useState<Products[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
+  const itemsPerPage = 6;
   const [selectedProducts, setSelectedProducts] = React.useState<string[]>([
     "إختر طريقة الدفع",
   ]);
@@ -75,6 +120,49 @@ export default function ModaeEditOrderProduct(props: any) {
     SearchIcon: <SearchIcon />,
   };
 
+  const handleSearchChange = (e: any) => {
+    setSearchText(e.target.value);
+  };
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const filteredProducts = allProduts.filter((product) => {
+    const lowerCaseSearchText = searchText.toLowerCase();
+    return (
+      (product.name &&
+        product.name.toLowerCase().includes(lowerCaseSearchText)) ||
+      (product.catogry &&
+        product.catogry.toLowerCase().includes(lowerCaseSearchText))
+    );
+  });
+
+  const AllProducts = allProduts.flatMap((item) => [item, ...item.products]);
+
+  const RomveProducWithOrder = (id: any) => {
+    const filters = produtss.filter((item) => item.idProduct !== id);
+    setProdutss(filters);
+  };
+
+  const AddProductWithOrder = (id: string) => {
+    const productToAdd = AllProducts.find((item) => item._id === id);
+    const indexToRemove = AllProducts.findIndex((item) => item._id === id);
+
+    if (productToAdd && indexToRemove !== -1) {
+      AllProducts.splice(indexToRemove, 1);
+      setProdutss((prevProducts) => [
+        ...prevProducts,
+        {
+          idProduct: productToAdd._id,
+          nameProduct: productToAdd.name,
+          imageProduct: productToAdd.image[0],
+          amount: 1,
+          price: productToAdd.price1,
+          size: "128GB",
+          _id: id,
+        },
+      ]);
+    }
+  };
+
   const body = () => {
     return (
       <>
@@ -97,7 +185,8 @@ export default function ModaeEditOrderProduct(props: any) {
                         type="text"
                         className="input"
                         placeholder="الإسم بالكامل "
-                        value="sdsdsd"
+                        value={nameClient}
+                        onChange={(e) => setNameClient(e.target.value)}
                       />
                     </div>
                     <div className="w-[90%] flex">
@@ -105,56 +194,33 @@ export default function ModaeEditOrderProduct(props: any) {
                         type="text"
                         className="input mr-1"
                         placeholder="رقم هاتف أساسي"
-                        value="01022222222"
+                        value={phone1Client}
+                        onChange={(e) => setPhone1Client(e.target.value)}
                       />
                       <input
                         type="text"
                         className="input ml-1"
-                        placeholder="رقم هاتف إحتياطي"
-                        value="01022222222"
+                        value={phone2Client}
+                        placeholder="رقم هاتف 2"
+                        onChange={(e) => setPhone2Client(e.target.value)}
                       />
                     </div>
                     <div className=" my-4">
                       <p>بيانات التوصيل</p>
                     </div>
                     <div className="w-[90%]">
-                      <Dropdown className="bg-[var(--mainColor)] w-[100%]">
-                        <DropdownTrigger>
-                          <Button
-                            startContent={Icons.ArrowUturnDownIcon}
-                            // variant="bordered"
-                            color="default"
-                            className="capitalize w-[100%] h-14 border-1 border-warning-500"
-                          >
-                            {/* {selectedValueProducts} */}
-                            البحيره
-                          </Button>
-                        </DropdownTrigger>
-                        <DropdownMenu
-                          aria-label="Single selection example"
-                          variant="flat"
-                          disallowEmptySelection
-                          selectionMode="single"
-                          selectedKeys={selectedProducts}
-                          onSelectionChange={(keys: string[] | any) =>
-                            handleSelectionChangeProducts(keys)
-                          }
-                        >
-                          <DropdownItem>12</DropdownItem>
-                          {/* {methodPayment
-                    .filter((payment) => payment.active === true)
-                    .map((payment) => (
-                      <DropdownItem key={payment.name}>
-                        {payment.name}
-                      </DropdownItem>
-                    ))} */}
-                        </DropdownMenu>
-                      </Dropdown>
+                      <Button
+                        color="default"
+                        className="capitalize w-[100%] h-14 border-1 border-warning-500"
+                      >
+                        {store}
+                      </Button>
                       <input
                         type="text"
                         className="input mr-1"
                         placeholder="العنوان بالتفصيل"
-                        value="hgsfddsfkjdjdj"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
                       />
                     </div>
                   </div>
@@ -164,286 +230,100 @@ export default function ModaeEditOrderProduct(props: any) {
             <Tab key="2" title="الطلبية">
               <Card>
                 <CardBody>
-                  <div className="lg:max-h-80 md:max-h-80 sm:max-h-40 max-sm:max-h-40 overflow-y-auto">
-                    <div className="lg:flex md:flex sm:block max-sm:block items-center my-3">
-                      <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
-                        <div className="w-24 h-20 rounded-full">
-                          <Image
-                            src={product}
-                            alt="error"
-                            className=" w-24 h-20 rounded-full"
-                          />
-                          <span className="relative bottom-9 text-3xl text-danger-600 hover:cursor-pointer">
-                            ⤬
-                          </span>
+                  {produtss.length > 0 ? (
+                    produtss.map((item, index) => (
+                      <div key={index}>
+                        <div className="lg:flex md:flex sm:block max-sm:block items-center my-3">
+                          <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
+                            <div className="w-24 h-20 rounded-full">
+                              <Avatar size="lg" src={item.imageProduct} />
+                              <span
+                                onClick={() =>
+                                  RomveProducWithOrder(item.idProduct)
+                                }
+                                className="relative bottom-9 text-3xl text-danger-600 hover:cursor-pointer"
+                              >
+                                ⤬
+                              </span>
+                            </div>
+                            <div className="mr-4">
+                              <p className="text-xl mb-2">{item.nameProduct}</p>
+                              <p className="flex">
+                                <span className="mr-1">قطعة</span>
+                                <span>{item.amount}</span>
+                              </p>
+                              <p> {item.size} </p>
+                              <p className="flex text-[var(--mainColor)] mt-2">
+                                <p className="mr-1">د.ل</p>
+                                <p>{item.price}</p>
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div className="mr-4">
-                          <p className="text-xl mb-2">تــيشيرت بني</p>
-                          <p>متوفر 100 قطعة</p>
-                          <p className="flex text-[var(--mainColor)] mt-2">
-                            <p>100</p>
-                            <p className="mr-1">د.ل</p>
-                          </p>
-                        </div>
+                        <div className="w-[100%] h-[1px] bg-[var(--mainColor)]"></div>
                       </div>
-                      <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%]  px-4">
-                        <div className="w-32">
-                          <input
-                            type="number"
-                            className="input"
-                            placeholder="سعر البيع"
-                          />
-                        </div>
-                        <div className="w-32">
-                          <input
-                            type="number"
-                            className="input ml-1"
-                            placeholder="الكمية"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-[100%] h-[1px] bg-[var(--mainColor)]"></div>
-                    <div className="lg:flex md:flex sm:block max-sm:block items-center my-3">
-                      <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
-                        <div className="w-24 h-20 rounded-full">
-                          <Image
-                            src={product}
-                            alt="error"
-                            className=" w-24 h-20 rounded-full"
-                          />
-                          <span className="relative bottom-9 text-3xl text-danger-600 hover:cursor-pointer">
-                            ⤬
-                          </span>
-                        </div>
-                        <div className="mr-4">
-                          <p className="text-xl mb-2">تــيشيرت بني</p>
-                          <p>متوفر 100 قطعة</p>
-                          <p className="flex text-[var(--mainColor)] mt-2">
-                            <p>100</p>
-                            <p className="mr-1">د.ل</p>
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%]  px-4">
-                        <div className="w-32">
-                          <input
-                            type="number"
-                            className="input"
-                            placeholder="سعر البيع"
-                          />
-                        </div>
-                        <div className="w-32">
-                          <input
-                            type="number"
-                            className="input ml-1"
-                            placeholder="الكمية"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-[100%] h-[1px] bg-[var(--mainColor)]"></div>
-                    <div className="lg:flex md:flex sm:block max-sm:block items-center my-3">
-                      <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
-                        <div className="w-24 h-20 rounded-full">
-                          <Image
-                            src={product}
-                            alt="error"
-                            className=" w-24 h-20 rounded-full"
-                          />
-                          <span className="relative bottom-9 text-3xl text-danger-600 hover:cursor-pointer">
-                            ⤬
-                          </span>
-                        </div>
-                        <div className="mr-4">
-                          <p className="text-xl mb-2">تــيشيرت بني</p>
-                          <p>متوفر 100 قطعة</p>
-                          <p className="flex text-[var(--mainColor)] mt-2">
-                            <p>100</p>
-                            <p className="mr-1">د.ل</p>
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%]  px-4">
-                        <div className="w-32">
-                          <input
-                            type="number"
-                            className="input"
-                            placeholder="سعر البيع"
-                          />
-                        </div>
-                        <div className="w-32">
-                          <input
-                            type="number"
-                            className="input ml-1"
-                            placeholder="الكمية"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    ))
+                  ) : (
+                    <p className="w-[100%]">لا يوجد منتجات</p>
+                  )}
                 </CardBody>
               </Card>
             </Tab>
             <Tab key="3" title="إضافة منتجات">
               <Card>
                 <CardBody>
-                  <div className=" max-h-60 overflow-y-auto">
-                    <div className="mb-7 mr-2 flex justify-start">
-                      <span className="relative top-10 left-10 opacity-50">
-                        {Icons.SearchIcon}
-                      </span>
-                      <input
-                        type="text"
-                        className="input"
-                        placeholder="... قم بالبحث "
-                      />
+                  {loading ? (
+                    <div className="flex justify-center items-center h-[400px]">
+                      <Spinner size="lg" color="warning" />
                     </div>
-                    <div className="flex lg:w-[100%] md:w-[100%] sm:w-[100%] max-sm:w-[100%] ">
+                  ) : allProduts.length > 0 ? (
+                    <div className="max-h-60 overflow-y-auto">
+                      <div className="mb-7 mr-2 flex justify-start">
+                        <span className="relative top-10 left-10 opacity-50">
+                          {Icons.SearchIcon}
+                        </span>
+                        <input
+                          type="text"
+                          className="input"
+                          placeholder="... قم بالبحث "
+                          onChange={handleSearchChange}
+                          value={searchText}
+                        />
+                      </div>
                       <div className="gap-2 w-[100%] grid lg:grid-cols-3 md:sm:grid-cols-2 sm:sm:grid-cols-1 max-sm:sm:grid-cols-1">
-                        <div className="flex mb-4 w-[100%] ">
-                          <div className="w-24 h-20 rounded-full">
-                            <Image
-                              src={product}
-                              alt="error"
-                              className=" w-24 h-20 rounded-full"
-                            />
-                            <span className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer">
-                              +
-                            </span>
+                        {AllProducts.map((product, index) => (
+                          <div key={index}>
+                            <div className="flex mb-4 w-[100%] ">
+                              <div className="w-24 h-20 rounded-full">
+                                <Avatar size="lg" src={product.image} />
+                                <span
+                                  onClick={() =>
+                                    AddProductWithOrder(product._id)
+                                  }
+                                  className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer"
+                                >
+                                  +
+                                </span>
+                              </div>
+                              <div className="mr-4">
+                                <p className="text-xl mb-2">{product.name}</p>
+                                <p className="flex text-[var(--mainColor)]">
+                                  <p className="mr-1">د.ل</p>
+                                  <p>
+                                    {userr === "زبون عادي"
+                                      ? product.price3
+                                      : product.price2}
+                                  </p>
+                                </p>
+                              </div>
+                            </div>
                           </div>
-                          <div className="mr-4">
-                            <p className="text-xl mb-2">تــيشيرت بني</p>
-                            <p>متوفر 100 قطعة</p>
-                            <p className="flex text-[var(--mainColor)]">
-                              <p>100</p>
-                              <p className="mr-1">د.ل</p>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex w-[100%] ">
-                          <div className="w-24 h-20 rounded-full">
-                            <Image
-                              src={product}
-                              alt="error"
-                              className=" w-24 h-20 rounded-full"
-                            />
-                            <span className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer">
-                              +
-                            </span>
-                          </div>
-                          <div className="mr-4">
-                            <p className="text-xl mb-2">تــيشيرت بني</p>
-                            <p>متوفر 100 قطعة</p>
-                            <p className="flex text-[var(--mainColor)]">
-                              <p>100</p>
-                              <p className="mr-1">د.ل</p>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex w-[100%] ">
-                          <div className="w-24 h-20 rounded-full">
-                            <Image
-                              src={product}
-                              alt="error"
-                              className=" w-24 h-20 rounded-full"
-                            />
-                            <span className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer">
-                              +
-                            </span>
-                          </div>
-                          <div className="mr-4">
-                            <p className="text-xl mb-2">تــيشيرت بني</p>
-                            <p>متوفر 100 قطعة</p>
-                            <p className="flex text-[var(--mainColor)]">
-                              <p>100</p>
-                              <p className="mr-1">د.ل</p>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex mb-4 w-[100%] ">
-                          <div className="w-24 h-20 rounded-full">
-                            <Image
-                              src={product}
-                              alt="error"
-                              className=" w-24 h-20 rounded-full"
-                            />
-                            <span className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer">
-                              +
-                            </span>
-                          </div>
-                          <div className="mr-4">
-                            <p className="text-xl mb-2">تــيشيرت بني</p>
-                            <p>متوفر 100 قطعة</p>
-                            <p className="flex text-[var(--mainColor)]">
-                              <p>100</p>
-                              <p className="mr-1">د.ل</p>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex w-[100%] ">
-                          <div className="w-24 h-20 rounded-full">
-                            <Image
-                              src={product}
-                              alt="error"
-                              className=" w-24 h-20 rounded-full"
-                            />
-                            <span className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer">
-                              +
-                            </span>
-                          </div>
-                          <div className="mr-4">
-                            <p className="text-xl mb-2">تــيشيرت بني</p>
-                            <p>متوفر 100 قطعة</p>
-                            <p className="flex text-[var(--mainColor)]">
-                              <p>100</p>
-                              <p className="mr-1">د.ل</p>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex w-[100%] ">
-                          <div className="w-24 h-20 rounded-full">
-                            <Image
-                              src={product}
-                              alt="error"
-                              className=" w-24 h-20 rounded-full"
-                            />
-                            <span className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer">
-                              +
-                            </span>
-                          </div>
-                          <div className="mr-4">
-                            <p className="text-xl mb-2">تــيشيرت بني</p>
-                            <p>متوفر 100 قطعة</p>
-                            <p className="flex text-[var(--mainColor)]">
-                              <p>100</p>
-                              <p className="mr-1">د.ل</p>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex w-[100%] ">
-                          <div className="w-24 h-20 rounded-full">
-                            <Image
-                              src={product}
-                              alt="error"
-                              className=" w-24 h-20 rounded-full"
-                            />
-                            <span className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer">
-                              +
-                            </span>
-                          </div>
-                          <div className="mr-4">
-                            <p className="text-xl mb-2">تــيشيرت بني</p>
-                            <p>متوفر 100 قطعة</p>
-                            <p className="flex text-[var(--mainColor)]">
-                              <p>100</p>
-                              <p className="mr-1">د.ل</p>
-                            </p>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <p className="p-4">لا يوجد منتجات</p>
+                  )}
                 </CardBody>
               </Card>
             </Tab>
@@ -452,6 +332,33 @@ export default function ModaeEditOrderProduct(props: any) {
       </>
     );
   };
+
+  const GetProducts = async () => {
+    setLoading(true);
+    try {
+      let response: { data: { token: string; products: any } };
+      response = await axios.get("http://localhost:5000/products/getProducts", {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
+      setAllProduts(response.data.products);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    GetProducts();
+  }, []);
+
+  useEffect(() => {
+    if (produts) {
+      setProdutss(produts);
+    }
+  }, [produts]);
 
   return (
     <>

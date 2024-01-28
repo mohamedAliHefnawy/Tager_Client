@@ -46,11 +46,21 @@ interface Orders {
   gainMarketer: number;
   situation: string;
   date: string;
+  products: [
+    {
+      idProduct: string;
+      nameProduct: string;
+      imageProduct: string;
+      amount: number;
+      price: number;
+      size: string;
+    }
+  ];
 }
 
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [user] = useCheckLogin();
+  const [user , userValidity] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -197,7 +207,16 @@ export default function Home() {
                         </PopoverTrigger>
                         <PopoverContent className=" border-1 border-[var(--mainColor)]">
                           <div className="px-1 py-2 ">
-                            <ModaeEditOrderProduct />
+                            <ModaeEditOrderProduct
+                              id={order._id}
+                              name={order.nameClient}
+                              phone1={order.phone1Client}
+                              phone2={order.phone2Client}
+                              addres={order.address}
+                              store={order.store}
+                              produts={order.products}
+                              userr={userValidity}
+                            />
 
                             <ModaelRecoveryProduct />
 
