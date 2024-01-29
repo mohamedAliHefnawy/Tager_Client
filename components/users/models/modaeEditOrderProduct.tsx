@@ -88,6 +88,7 @@ export default function ModaeEditOrderProduct({
   const [allProduts2, setAllProduts2] = useState<Products[]>([]);
   const [newProducts, setNewProducts] = useState<Products[]>([]);
   const [newProducts2, setNewProducts2] = useState<Products[]>([]);
+  const [selectedSize, setSelectedSize] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -178,7 +179,7 @@ export default function ModaeEditOrderProduct({
           imageProduct: productToAdd.image[0],
           amount: 1,
           price: productToAdd.price1,
-          size: productToAdd.size[0].size,
+          size: selectedSize,
           _id: id,
         },
       ]);
@@ -331,7 +332,14 @@ export default function ModaeEditOrderProduct({
                                 <p className="text-xl mb-2">{product.name}</p>
                                 <p className="flex">
                                   {product.size.map((item) => (
-                                    <p className="mr-2 bg-warning-50 p-1 px-3 rounded-2xl hover:cursor-pointer">
+                                    <p
+                                      onClick={() => setSelectedSize(item.size)}
+                                      className={`mr-2  ${
+                                        item.size === selectedSize
+                                          ? "bg-warning-200"
+                                          : "bg-warning-50"
+                                      } p-1 px-3 rounded-2xl hover:cursor-pointer`}
+                                    >
                                       {item.size}
                                     </p>
                                   ))}
