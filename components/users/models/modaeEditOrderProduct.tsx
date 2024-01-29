@@ -41,7 +41,10 @@ import product from "@/public/img/blue-t-shirt.jpg";
 
 interface Products {
   idProduct: string;
+  _id: string;
   name: string;
+  price2: string;
+  price3: string;
   catogry: string;
   nameProduct: string;
   imageProduct: string;
@@ -82,6 +85,10 @@ export default function ModaeEditOrderProduct({
   const [address, setAddress] = useState(addres);
   const [produtss, setProdutss] = useState<Products[]>([]);
   const [allProduts, setAllProduts] = useState<Products[]>([]);
+  const [allProduts2, setAllProduts2] = useState<Products[]>([]);
+  const [newProducts, setNewProducts] = useState<Products[]>([]);
+  const [newProducts2, setNewProducts2] = useState<Products[]>([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const itemsPerPage = 6;
@@ -135,19 +142,34 @@ export default function ModaeEditOrderProduct({
     );
   });
 
-  const AllProducts = allProduts.flatMap((item) => [item, ...item.products]);
-
   const RomveProducWithOrder = (id: any) => {
-    const filters = produtss.filter((item) => item.idProduct !== id);
-    setProdutss(filters);
+    const filteredProducts = produtss.filter((item) => item.idProduct !== id);
+    const isIdInProducts = newProducts2.some(
+      (product) => product.idProduct === id
+    );
+    const deletedProduct = newProducts2.find(
+      (product) => product.idProduct === id
+    );
+
+    setProdutss(filteredProducts);
+    if (isIdInProducts) {
+      setNewProducts((prevProducts) => [
+        ...prevProducts,
+        {
+          idProduct: id,
+          amount: deletedProduct?.amount,
+          size: deletedProduct?.size,
+        },
+      ]);
+    }
   };
 
   const AddProductWithOrder = (id: string) => {
-    const productToAdd = AllProducts.find((item) => item._id === id);
-    const indexToRemove = AllProducts.findIndex((item) => item._id === id);
+    const productToAdd = allProduts2.find((item) => item._id === id);
+    const AllProductsFiltred = allProduts2.filter((item) => item._id !== id);
 
-    if (productToAdd && indexToRemove !== -1) {
-      AllProducts.splice(indexToRemove, 1);
+    if (productToAdd) {
+      setAllProduts2(AllProductsFiltred);
       setProdutss((prevProducts) => [
         ...prevProducts,
         {
@@ -156,7 +178,7 @@ export default function ModaeEditOrderProduct({
           imageProduct: productToAdd.image[0],
           amount: 1,
           price: productToAdd.price1,
-          size: "128GB",
+          size: productToAdd.size[0].size,
           _id: id,
         },
       ]);
@@ -291,7 +313,7 @@ export default function ModaeEditOrderProduct({
                         />
                       </div>
                       <div className="gap-2 w-[100%] grid lg:grid-cols-3 md:sm:grid-cols-2 sm:sm:grid-cols-1 max-sm:sm:grid-cols-1">
-                        {AllProducts.map((product, index) => (
+                        {allProduts2.map((product, index) => (
                           <div key={index}>
                             <div className="flex mb-4 w-[100%] ">
                               <div className="w-24 h-20 rounded-full">
@@ -307,6 +329,13 @@ export default function ModaeEditOrderProduct({
                               </div>
                               <div className="mr-4">
                                 <p className="text-xl mb-2">{product.name}</p>
+                                <p className="flex">
+                                  {product.size.map((item) => (
+                                    <p className="mr-2 bg-warning-50 p-1 px-3 rounded-2xl hover:cursor-pointer">
+                                      {item.size}
+                                    </p>
+                                  ))}
+                                </p>
                                 <p className="flex text-[var(--mainColor)]">
                                   <p className="mr-1">د.ل</p>
                                   <p>
@@ -357,8 +386,15 @@ export default function ModaeEditOrderProduct({
   useEffect(() => {
     if (produts) {
       setProdutss(produts);
+      setNewProducts2(produts);
     }
   }, [produts]);
+
+  useEffect(() => {
+    if (allProduts) {
+      setAllProduts2(allProduts.flatMap((item) => [item, ...item.products]));
+    }
+  }, [allProduts]);
 
   return (
     <>
