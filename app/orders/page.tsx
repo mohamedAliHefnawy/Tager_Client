@@ -60,7 +60,7 @@ interface Orders {
 
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [user , userValidity] = useCheckLogin();
+  const [user, userValidity] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);

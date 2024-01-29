@@ -55,6 +55,22 @@ interface Products {
   image: string;
 }
 
+interface Products2 {
+  idProduct: string;
+  _id: string;
+  size: [{ size: string; store: [{ nameStore: string; amount: number }] }];
+  name: string;
+  price2: string;
+  price3: string;
+  catogry: string;
+  nameProduct: string;
+  imageProduct: string;
+  products: [{ image: string }];
+  amount: number;
+  price: number;
+  image: string;
+}
+
 export default function ModaeEditOrderProduct({
   id,
   userr,
@@ -77,7 +93,7 @@ export default function ModaeEditOrderProduct({
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [closeBtn, setCloseBtn] = useState(true);
+  const [closeBtn, setCloseBtn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [nameClient, setNameClient] = useState(name);
   const [phone1Client, setPhone1Client] = useState(phone1);
@@ -85,11 +101,15 @@ export default function ModaeEditOrderProduct({
   const [address, setAddress] = useState(addres);
   const [produtss, setProdutss] = useState<Products[]>([]);
   const [allProduts, setAllProduts] = useState<Products[]>([]);
-  const [allProduts2, setAllProduts2] = useState<Products[]>([]);
+  const [allProduts2, setAllProduts2] = useState<Products2[]>([]);
+  //DELTE
   const [newProducts, setNewProducts] = useState<Products[]>([]);
   const [newProducts2, setNewProducts2] = useState<Products[]>([]);
-  const [selectedSize, setSelectedSize] = useState("");
-
+  const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: string }>(
+    {}
+  );
+  const [lenAmountEqualZero, setLenAmountEqualZero] = useState(0);
+  const [amountInput, setAmountInput] = useState<{ [key: string]: string }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const itemsPerPage = 6;
@@ -133,7 +153,7 @@ export default function ModaeEditOrderProduct({
   };
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const filteredProducts = allProduts.filter((product) => {
+  const filteredProducts = allProduts2.filter((product) => {
     const lowerCaseSearchText = searchText.toLowerCase();
     return (
       (product.name &&
@@ -152,39 +172,106 @@ export default function ModaeEditOrderProduct({
       (product) => product.idProduct === id
     );
 
+    const Price =
+      userr === "زبون عادي" ? deletedProduct?.price3 : deletedProduct?.price2;
+
     setProdutss(filteredProducts);
     if (isIdInProducts) {
-      setNewProducts((prevProducts) => [
-        ...prevProducts,
-        {
-          idProduct: id,
-          amount: deletedProduct?.amount,
-          size: deletedProduct?.size,
-        },
-      ]);
+      setNewProducts(
+        (prevProducts) =>
+          [
+            ...prevProducts,
+            {
+              idProduct: deletedProduct?._id,
+              nameProduct: deletedProduct?.name,
+              imageProduct: deletedProduct?.image,
+              amount: 0,
+              price: Price,
+              size: selectedSizes[id],
+              _id: id,
+            },
+          ] as Products[]
+      );
     }
+  };
+
+  const handleSizeClick = ({
+    productId,
+    size,
+  }: {
+    productId: string;
+    size: string;
+  }) => {
+    setSelectedSizes((prevSelectedSizes) => ({
+      ...prevSelectedSizes,
+      [productId]: size,
+    }));
   };
 
   const AddProductWithOrder = (id: string) => {
     const productToAdd = allProduts2.find((item) => item._id === id);
+    const productToAdd2 = produtss.find((item) => item.idProduct === id);
     const AllProductsFiltred = allProduts2.filter((item) => item._id !== id);
+
+    const Price =
+      userr === "زبون عادي" ? productToAdd?.price3 : productToAdd?.price2;
+
+    const Amount = productToAdd?.size
+      .filter((size) => size.size === "128GB")
+      .map((size2) =>
+        size2.store
+          .filter((store) => store.nameStore === "البحيره")
+          .map((amount) => amount.amount)
+      );
+
+    const NumberAmount = Amount?.flatMap((item) => item[0]);
+    const NumberAmount2 = NumberAmount?.flatMap((item) => item)[0] || 0;
 
     if (productToAdd) {
       setAllProduts2(AllProductsFiltred);
-      setProdutss((prevProducts) => [
-        ...prevProducts,
-        {
-          idProduct: productToAdd._id,
-          nameProduct: productToAdd.name,
-          imageProduct: productToAdd.image[0],
-          amount: 1,
-          price: productToAdd.price1,
-          size: selectedSize,
-          _id: id,
-        },
-      ]);
+      setProdutss(
+        (prevProducts) =>
+          [
+            ...prevProducts,
+            {
+              idProduct: productToAdd._id,
+              nameProduct: productToAdd.name,
+              imageProduct: productToAdd.image[0],
+              amount: NumberAmount2,
+              price: Price,
+              size: selectedSizes[productToAdd._id],
+              _id: id,
+            },
+          ] as Products[]
+      );
+    }
+
+    if (productToAdd2) {
+      const deleteProduct = produtss.filter((item) => item._id !== id);
+      setProdutss(deleteProduct);
     }
   };
+
+  const handleAmountChange = (
+    productId: string,
+    e: React.ChangeEvent<HTMLInputElement>,
+    amount: number
+  ) => {
+    const value = e.target.value;
+    if (amount >= +value && +value > 0) {
+      setAmountInput((prevAmountInput) => ({
+        ...prevAmountInput,
+        [productId]: value,
+      }));
+    }
+  };
+
+  const productsWithZeroQuantity = produtss.filter(
+    (product) => product.amount === 0
+  );
+  const numberOfProductsWithZeroQuantity = productsWithZeroQuantity.length;
+
+  // console.log(amountInput);
 
   const body = () => {
     return (
@@ -253,6 +340,7 @@ export default function ModaeEditOrderProduct({
             <Tab key="2" title="الطلبية">
               <Card>
                 <CardBody>
+                  {newProducts.map((item) => item._id)}
                   {produtss.length > 0 ? (
                     produtss.map((item, index) => (
                       <div key={index}>
@@ -272,8 +360,14 @@ export default function ModaeEditOrderProduct({
                             <div className="mr-4">
                               <p className="text-xl mb-2">{item.nameProduct}</p>
                               <p className="flex">
-                                <span className="mr-1">قطعة</span>
-                                <span>{item.amount}</span>
+                                {/* {item.amount} */}
+                                <span>
+                                  {item.amount > 0 ? (
+                                    <p className="text-success-700">متوفر</p>
+                                  ) : (
+                                    <p className="text-danger-600">غير متوفر</p>
+                                  )}
+                                </span>
                               </p>
                               <p> {item.size} </p>
                               <p className="flex text-[var(--mainColor)] mt-2">
@@ -281,6 +375,18 @@ export default function ModaeEditOrderProduct({
                                 <p>{item.price}</p>
                               </p>
                             </div>
+                          </div>
+                          <div>
+                            <input
+                              type="number"
+                              className="input"
+                              placeholder="الكمية"
+                              value={amountInput[item._id] || item.amount}
+                              defaultValue={item.amount}
+                              onChange={(e) =>
+                                handleAmountChange(item._id, e, item.amount)
+                              }
+                            />
                           </div>
                         </div>
                         <div className="w-[100%] h-[1px] bg-[var(--mainColor)]"></div>
@@ -294,6 +400,7 @@ export default function ModaeEditOrderProduct({
             </Tab>
             <Tab key="3" title="إضافة منتجات">
               <Card>
+                {lenAmountEqualZero}
                 <CardBody>
                   {loading ? (
                     <div className="flex justify-center items-center h-[400px]">
@@ -314,31 +421,44 @@ export default function ModaeEditOrderProduct({
                         />
                       </div>
                       <div className="gap-2 w-[100%] grid lg:grid-cols-3 md:sm:grid-cols-2 sm:sm:grid-cols-1 max-sm:sm:grid-cols-1">
-                        {allProduts2.map((product, index) => (
+                        {filteredProducts.map((product, index) => (
                           <div key={index}>
                             <div className="flex mb-4 w-[100%] ">
                               <div className="w-24 h-20 rounded-full">
                                 <Avatar size="lg" src={product.image} />
-                                <span
-                                  onClick={() =>
-                                    AddProductWithOrder(product._id)
-                                  }
-                                  className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer"
-                                >
-                                  +
-                                </span>
+
+                                {selectedSizes[product._id] ? (
+                                  <span
+                                    onClick={() =>
+                                      AddProductWithOrder(product._id)
+                                    }
+                                    className="relative bottom-9 text-3xl text-success-600 hover:cursor-pointer"
+                                  >
+                                    +
+                                  </span>
+                                ) : (
+                                  <span className="relative bottom-9 text-3xl text-success-600 opacity-40 hover:cursor-pointer">
+                                    +
+                                  </span>
+                                )}
                               </div>
                               <div className="mr-4">
                                 <p className="text-xl mb-2">{product.name}</p>
                                 <p className="flex">
                                   {product.size.map((item) => (
                                     <p
-                                      onClick={() => setSelectedSize(item.size)}
-                                      className={`mr-2  ${
-                                        item.size === selectedSize
+                                      key={item.size}
+                                      onClick={() =>
+                                        handleSizeClick({
+                                          productId: product._id,
+                                          size: item.size,
+                                        })
+                                      }
+                                      className={`mr-2 p-1 px-3 rounded-2xl hover:cursor-pointer ${
+                                        selectedSizes[product._id] === item.size
                                           ? "bg-warning-200"
                                           : "bg-warning-50"
-                                      } p-1 px-3 rounded-2xl hover:cursor-pointer`}
+                                      }`}
                                     >
                                       {item.size}
                                     </p>
@@ -387,6 +507,39 @@ export default function ModaeEditOrderProduct({
     }
   };
 
+  const EditOrder = async () => {
+    try {
+      const data = {
+        nameClient,
+        phone1Client,
+        phone2Client,
+        store: store,
+        address: address,
+        produtss,
+        sizes: selectedSizes,
+        // amountAndPrice: inputValues,
+        totalPriceProducts: amountInput,
+        // gainMarketer: +totalAmount - +totalProfit,
+        marketer: userr,
+        // deliveryPrice: priceDeliveryStore,
+      };
+      const response = await axios.post(
+        "https://tager-server.vercel.app/users/editemployee",
+        data
+      );
+      if (response.data === "yes") {
+        alert("تم تعديل الموظف بنجاح ✓");
+        window.location.reload();
+      }
+      if (response.data === "no") {
+        alert("توجد مشكلة ما حاول مرة أخري 😓");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     GetProducts();
   }, []);
@@ -400,9 +553,19 @@ export default function ModaeEditOrderProduct({
 
   useEffect(() => {
     if (allProduts) {
-      setAllProduts2(allProduts.flatMap((item) => [item, ...item.products]));
+      setAllProduts2(
+        allProduts.flatMap((item) => [item, ...item.products]) as any[]
+      );
     }
   }, [allProduts]);
+
+  useEffect(() => {
+    if (numberOfProductsWithZeroQuantity > 0) {
+      setCloseBtn(true);
+    } else {
+      setCloseBtn(false);
+    }
+  }, [numberOfProductsWithZeroQuantity]);
 
   return (
     <>
@@ -431,9 +594,9 @@ export default function ModaeEditOrderProduct({
                   إلغاء
                 </Button>
                 <Button
-                // color={closeBtn ? "default" : "primary"}
-                // disabled={closeBtn}
-                // onClick={BuyBroducts}
+                  color={closeBtn ? "default" : "warning"}
+                  disabled={closeBtn}
+                  onClick={EditOrder}
                 >
                   تعديل الطلبية
                 </Button>
