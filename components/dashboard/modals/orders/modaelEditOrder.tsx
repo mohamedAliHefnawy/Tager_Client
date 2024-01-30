@@ -28,11 +28,11 @@ import { PencilIcon } from "../../../../public/svg/pencilIcon";
 export default function ModaelEditOrder({
   idOrder,
   situationSteps,
-  sendDataToParent,
-}: {
+}: // sendDataToParent,
+{
   idOrder: string;
   situationSteps: [{ situation: string; date: string; time: string }];
-  sendDataToParent: any;
+  // sendDataToParent: any;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
@@ -472,13 +472,16 @@ export default function ModaelEditOrder({
     try {
       const data = { idOrder: idOrder, situationOrder: situation };
       const response = await axios.post(
-        "http://localhost:5000/orders/editOrder",
+        "http://localhost:5000/orders/editOrderSituation",
         data
       );
       if (response.data === "yes") {
-        alert("تم تعديل الصنف بنجاح ✓");
-        sendDataToParent(situation[situation.length - 1].situation);
-        // window.location.reload();
+        // alert("تم تعديل الصنف بنجاح ✓");
+        // sendDataToParent({
+        //   orderId: order._id,
+        //   data: situation[situation.length - 1].situation,
+        // });
+        window.location.reload();
       }
       if (response.data === "no") {
         alert("توجد مشكلة ما. حاول مرة أخرى 😓");

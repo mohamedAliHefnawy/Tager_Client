@@ -49,11 +49,19 @@ interface Orders {
   products: [
     {
       idProduct: string;
+      _id: string;
+      name: string;
+      price2: string;
+      price3: string;
+      catogry: string;
       nameProduct: string;
       imageProduct: string;
+      products: [{ image: string }];
       amount: number;
       price: number;
+      gainMarketer: number;
       size: string;
+      image: string;
     }
   ];
 }
@@ -207,16 +215,18 @@ export default function Home() {
                         </PopoverTrigger>
                         <PopoverContent className=" border-1 border-[var(--mainColor)]">
                           <div className="px-1 py-2 ">
-                            <ModaeEditOrderProduct
-                              id={order._id}
-                              name={order.nameClient}
-                              phone1={order.phone1Client}
-                              phone2={order.phone2Client}
-                              addres={order.address}
-                              store={order.store}
-                              produts={order.products}
-                              userr={userValidity}
-                            />
+                            {order.situation === "بإنتظار الموافقة" && (
+                              <ModaeEditOrderProduct
+                                id={order._id}
+                                name={order.nameClient}
+                                phone1={order.phone1Client}
+                                phone2={order.phone2Client}
+                                addres={order.address}
+                                store={order.store}
+                                produts={order.products}
+                                userr={userValidity}
+                              />
+                            )}
 
                             <ModaelRecoveryProduct />
 

@@ -22,8 +22,10 @@ import { PhotoIcon } from "@/public/svg/photoIcon";
 import { EyeIcon } from "@/public/svg/eyeIcon";
 import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
 import { PencilIcon } from "@/public/svg/pencilIcon";
+import axios from "axios";
 
 export default function Home() {
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +40,7 @@ export default function Home() {
   const [passwordNew, setPasswordNew] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordNew, setShowPasswordNew] = useState(false);
+  const [dataUser, setDataUser] = useState("");
   const [color, setColor] = useState("#FF6900");
   const handleChangeComplete = (newColor: any) => {
     setColor(newColor.hex);
@@ -93,20 +96,31 @@ export default function Home() {
               <Card>
                 <CardBody>
                   <form className="lg:flex md:flex sm:block max-sm:block justify-center items-center">
-                    <input
-                      type="text"
-                      className="input mr-2"
-                      defaultValue={user}
-                      placeholder="إسم المستخدم"
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      className="input"
-                      value={phone}
-                      placeholder="رقم الهاتف"
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
+                    <div className="w-[100%]">
+                      <input
+                        type="text"
+                        className="input mr-2"
+                        defaultValue={user}
+                        placeholder="إسم المستخدم"
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
+                    <div className="w-[100%]">
+                      <input
+                        type="number"
+                        className="input"
+                        value={phone}
+                        placeholder="رقم الهاتف"
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                      <input
+                        type="number"
+                        className="input"
+                        value={phone}
+                        placeholder="رقم الهاتف 2"
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                    </div>
                   </form>
                 </CardBody>
               </Card>
@@ -199,7 +213,7 @@ export default function Home() {
                         value={nameCompany}
                         onChange={(e) => setNameCompany(e.target.value)}
                       />
-                      <div className="lg:flex md:flex sm:block max-sm:block">
+                      {/* <div className="lg:flex md:flex sm:block max-sm:block">
                         <input
                           type="text"
                           className="input mr-2"
@@ -214,7 +228,7 @@ export default function Home() {
                           value={phone2Company}
                           onChange={(e) => setPhone2Company(e.target.value)}
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </CardBody>
@@ -226,12 +240,37 @@ export default function Home() {
     );
   };
 
+  const GetDataUser = async () => {
+    try {
+      let response: { data: { token: string; user: any } };
+      response = await axios.get(
+        `http://localhost:5000/users/getUser/${user}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+      setDataUser(response.data.user);
+      setPhone(response.data.user.phone);
+      // }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    GetDataUser();
+  }, []);
+
   useEffect(() => {
     if (user) {
       const timeoutId = setTimeout(() => {
         setUsername(user);
+        // GetDataUser();
         setIsLoading(false);
       }, 2000);
+      GetDataUser();
 
       return () => clearTimeout(timeoutId);
     } else {

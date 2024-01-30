@@ -37,9 +37,13 @@ export default function Orders() {
     setSearchText(e.target.value);
   };
 
-  const receiveDataFromChild = (data: any) => {
-    setReceivedData(data);
-  };
+  // const receiveDataFromChild = (data) => {
+  //   const { orderId, data: situationData } = data;
+  //   setReceivedData((prevData) => ({
+  //     ...prevData,
+  //     [orderId]: situationData,
+  //   }));
+  // };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -175,33 +179,59 @@ export default function Orders() {
                 </div>
                 <div className="w-[25%] text-center">
                   <p>
-                    {receivedData === "تم القبول" ? (
+                    {order.situationSteps[order.situationSteps.length - 1]
+                      .situation === "تم القبول" ? (
                       <p className="text-success-600">تم قبول الطلبية</p>
-                    ) : receivedData === "تم الرفض" ? (
+                    ) : order.situationSteps[order.situationSteps.length - 1]
+                        .situation === "تم الرفض" ? (
                       <p className="text-danger-600">تم رفض الطلبية</p>
-                    ) : receivedData === "مع الشحن" ? (
+                    ) : order.situationSteps[order.situationSteps.length - 1]
+                        .situation === "مع الشحن" ? (
                       <p className="text-success-700"> مع الشحن</p>
-                    ) : receivedData === "تم التوصيل" ? (
+                    ) : order.situationSteps[order.situationSteps.length - 1]
+                        .situation === "تم التوصيل" ? (
                       <p className="text-success-700"> تم التوصيل</p>
-                    ) : receivedData === "تم الإسترجاع" ? (
+                    ) : order.situationSteps[order.situationSteps.length - 1]
+                        .situation === "تم الإسترجاع" ? (
                       <p className="text-success-700"> تم الإسترجاع</p>
-                    ) : receivedData === "إسترجاع جزئي" ? (
+                    ) : order.situationSteps[order.situationSteps.length - 1]
+                        .situation === "إسترجاع جزئي" ? (
                       <p className="text-success-700"> إسترجاع جزئي</p>
-                    ) : receivedData === "تم إستلام الكاش" ? (
-                      <p className="text-success-700"> "تم إستلام الكاش"</p>
+                    ) : order.situationSteps[order.situationSteps.length - 1]
+                        .situation === "تم إستلام الكاش" ? (
+                      <p className="text-success-700"> تم إستلام الكاش</p>
                     ) : (
-                      order.situation
+                      <p className="text-warning-700">
+                        {
+                          order.situationSteps[order.situationSteps.length - 1]
+                            .situation
+                        }
+                      </p>
                     )}
                   </p>
                 </div>
 
                 <div className="w-[33%] text-right">
                   <div className="flex justify-center">
-                    <ModaelEditOrder
-                      idOrder={order._id}
-                      situationSteps={order.situationSteps}
-                      sendDataToParent={receiveDataFromChild}
-                    />
+                    {order.situationSteps[order.situationSteps.length - 1]
+                      .situation !== "تم إستلام الكاش" &&
+                    order.situationSteps[order.situationSteps.length - 1]
+                      .situation !== "تم الرفض" ? (
+                      <ModaelEditOrder
+                        idOrder={order._id}
+                        situationSteps={order.situationSteps}
+                        // sendDataToParent={receiveDataFromChild}
+                      />
+                    ) : (
+                      <>
+                        {order.situationSteps[order.situationSteps.length - 1]
+                          .situation !== "تم الرفض" ? (
+                          <p className=" text-lg">✔</p>
+                        ) : (
+                          <p className=" text-lg">✘</p>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
