@@ -63,6 +63,7 @@ interface Row {
   catogry: string | undefined;
   name: string;
   marketer: string;
+  gainMarketer: string;
   regularCustomer: string;
   color: string;
   size: [{ size: string; store: [{ amount: number }] }];
@@ -79,6 +80,7 @@ interface Product {
   price1: string;
   price2: string;
   price3: string;
+  gainMarketer: string;
   image: string[];
   products: Row[];
   active: boolean;
@@ -107,6 +109,7 @@ export default function ModelAddProduct({
   const [priceProduct1, setPriceProduct1] = useState("");
   const [priceProduct2, setPriceProduct2] = useState("");
   const [priceProduct3, setPriceProduct3] = useState("");
+  const [priceProduct4, setPriceProduct4] = useState("");
   const [sizeProduct, setSizeProduct] = useState<string[]>([]);
   const [closeBtn, setCloseBtn] = useState(true);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -136,6 +139,7 @@ export default function ModelAddProduct({
         id: "",
         cost: "",
         marketer: "",
+        gainMarketer: "",
         regularCustomer: "",
         color: "#ffffff",
         images: [],
@@ -430,33 +434,56 @@ export default function ModelAddProduct({
                       </div>
                     </div>
                   </div>
-                  <div className="w-[100%] flex">
+                  <div className="w-[100%] flex items-center">
                     <input
                       type="number"
                       className="input mr-1"
                       placeholder="سعر  التكلفة"
                       value={priceProduct1}
-                      onChange={(e) =>
-                        setPriceProduct1(e.target.value.toString())
-                      }
+                      onChange={(e) => {
+                        const value = +e.target.value;
+                        if (value > 0) {
+                          setPriceProduct1(e.target.value.toString());
+                        }
+                      }}
                     />
-                    <input
-                      type="number"
-                      className="input"
-                      placeholder="سعر البيع للمسوق"
-                      value={priceProduct2}
-                      onChange={(e) =>
-                        setPriceProduct2(e.target.value.toString())
-                      }
-                    />
+                    <div className="w-[100%]">
+                      <input
+                        type="number"
+                        className="input"
+                        placeholder="سعر البيع للمسوق"
+                        value={priceProduct2}
+                        onChange={(e) => {
+                          const value = +e.target.value;
+                          if (value > 0) {
+                            setPriceProduct2(e.target.value.toString());
+                          }
+                        }}
+                      />
+                      <input
+                        type="number"
+                        className="input"
+                        placeholder="ربح المسوق"
+                        value={priceProduct4}
+                        onChange={(e) => {
+                          const value = +e.target.value;
+                          if (value > 0) {
+                            setPriceProduct4(e.target.value.toString());
+                          }
+                        }}
+                      />
+                    </div>
                     <input
                       type="text"
                       className="input ml-1"
                       placeholder="سعر البيع للزبون العادي"
                       value={priceProduct3}
-                      onChange={(e) =>
-                        setPriceProduct3(e.target.value.toString())
-                      }
+                      onChange={(e) => {
+                        const value = +e.target.value;
+                        if (value > 0) {
+                          setPriceProduct3(e.target.value.toString());
+                        }
+                      }}
                     />
                   </div>
                   <div className="w-[100%] flex items-center my-4 p-6">
@@ -548,6 +575,19 @@ export default function ModelAddProduct({
                             }
                             className="inputTrue mt-2"
                             placeholder="لمندوب التسويق"
+                          />
+                          <input
+                            type="number"
+                            value={row.gainMarketer}
+                            onChange={(e) =>
+                              handleChange(
+                                index,
+                                "gainMarketer",
+                                e.target.value
+                              )
+                            }
+                            className="inputTrue mt-2"
+                            placeholder="ربح مندوب التسويق"
                           />
                           <input
                             type="text"
@@ -683,11 +723,14 @@ export default function ModelAddProduct({
     setLoading(true);
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get("https://tager-server.vercel.app/stores/getStores", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/stores/getStores",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setStores(response.data.stores);
     } catch (error) {
       console.log(error);
@@ -705,12 +748,13 @@ export default function ModelAddProduct({
         priceProduct1,
         priceProduct2,
         priceProduct3,
+        priceProduct4,
         colorProductMain,
         sizeProduct,
         rows,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/products/addProduct",
+        "http://localhost:5000/products/addProduct",
         data
       );
       if (response.data === "yes") {
@@ -727,6 +771,7 @@ export default function ModelAddProduct({
           color: "",
           price2: "",
           price3: "",
+          gainMarketer: "",
         });
 
         setNameProduct("");

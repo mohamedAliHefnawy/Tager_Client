@@ -51,6 +51,7 @@ interface Products {
   products: [{ image: string }];
   amount: number;
   price: number;
+  gainMarketer: number;
   size: string;
   image: string;
 }
@@ -68,6 +69,7 @@ interface Products2 {
   products: [{ image: string }];
   amount: number;
   price: number;
+  gainMarketer: number;
   image: string;
 }
 
@@ -109,6 +111,8 @@ export default function ModaeEditOrderProduct({
     {}
   );
   const [lenAmountEqualZero, setLenAmountEqualZero] = useState(0);
+  const [totalPriceOrder, setTotalPriceOrder] = useState(0);
+  const [gainMarketer, setGainMarketer] = useState(0);
   const [amountInput, setAmountInput] = useState<{ [key: string]: string }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -217,13 +221,12 @@ export default function ModaeEditOrderProduct({
       userr === "زبون عادي" ? productToAdd?.price3 : productToAdd?.price2;
 
     const Amount = productToAdd?.size
-      .filter((size) => size.size === "128GB")
+      .filter((size) => size.size === selectedSizes[id])
       .map((size2) =>
         size2.store
-          .filter((store) => store.nameStore === "البحيره")
+          .filter((item) => item.nameStore === store)
           .map((amount) => amount.amount)
       );
-
     const NumberAmount = Amount?.flatMap((item) => item[0]);
     const NumberAmount2 = NumberAmount?.flatMap((item) => item)[0] || 0;
 
@@ -239,6 +242,7 @@ export default function ModaeEditOrderProduct({
               imageProduct: productToAdd.image[0],
               amount: NumberAmount2,
               price: Price,
+              gainMarketer: productToAdd.gainMarketer,
               size: selectedSizes[productToAdd._id],
               _id: id,
             },
@@ -271,7 +275,28 @@ export default function ModaeEditOrderProduct({
   );
   const numberOfProductsWithZeroQuantity = productsWithZeroQuantity.length;
 
-  // console.log(amountInput);
+  useEffect(() => {
+    const totalGainMarketer = produtss.reduce((acc, product) => {
+      const inputValue = amountInput[product._id];
+      const inputNumber = parseInt(inputValue, 10);
+      if (!isNaN(inputNumber) && inputNumber >= 0) {
+        return acc + inputNumber * product.gainMarketer;
+      }
+      return acc;
+    }, 0);
+
+    const totalPrice = produtss.reduce((acc, product) => {
+      const inputValue = amountInput[product._id];
+      const inputNumber = parseInt(inputValue, 10);
+
+      if (!isNaN(inputNumber) && inputNumber >= 0) {
+        return acc + inputNumber * product.price;
+      }
+      return acc;
+    }, 0);
+    setTotalPriceOrder(totalPrice);
+    setGainMarketer(totalGainMarketer);
+  }, [produtss, amountInput]);
 
   const body = () => {
     return (
@@ -338,69 +363,80 @@ export default function ModaeEditOrderProduct({
               </Card>
             </Tab>
             <Tab key="2" title="الطلبية">
-              <Card>
+              <Card className="max-h-60 overflow-y-auto">
                 <CardBody>
-                  {newProducts.map((item) => item._id)}
-                  {produtss.length > 0 ? (
-                    produtss.map((item, index) => (
-                      <div key={index}>
-                        <div className="lg:flex md:flex sm:block max-sm:block items-center my-3">
-                          <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
-                            <div className="w-24 h-20 rounded-full">
-                              <Avatar size="lg" src={item.imageProduct} />
-                              <span
-                                onClick={() =>
-                                  RomveProducWithOrder(item.idProduct)
-                                }
-                                className="relative bottom-9 text-3xl text-danger-600 hover:cursor-pointer"
-                              >
-                                ⤬
-                              </span>
-                            </div>
-                            <div className="mr-4">
-                              <p className="text-xl mb-2">{item.nameProduct}</p>
-                              <p className="flex">
-                                {/* {item.amount} */}
-                                <span>
-                                  {item.amount > 0 ? (
-                                    <p className="text-success-700">متوفر</p>
-                                  ) : (
-                                    <p className="text-danger-600">غير متوفر</p>
-                                  )}
+                  <div className="max-h-60 overflow-y-auto">
+                    {newProducts.map((item) => item._id)}
+                    {produtss.length > 0 ? (
+                      produtss.map((item, index) => (
+                        <div className="max-h-60 overflow-y-auto" key={index}>
+                          <div className=" lg:flex md:flex sm:block max-sm:block items-center my-3">
+                            <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
+                              <div className="w-24 h-20 rounded-full">
+                                <Avatar size="lg" src={item.imageProduct} />
+                                {/* {item.gainMarketer} */}
+                                <span
+                                  onClick={() =>
+                                    RomveProducWithOrder(item.idProduct)
+                                  }
+                                  className="relative bottom-9 text-3xl text-danger-600 hover:cursor-pointer"
+                                >
+                                  ⤬
                                 </span>
-                              </p>
-                              <p> {item.size} </p>
-                              <p className="flex text-[var(--mainColor)] mt-2">
-                                <p className="mr-1">د.ل</p>
-                                <p>{item.price}</p>
-                              </p>
+                              </div>
+                              <div className="mr-4">
+                                <p className="text-xl mb-2">
+                                  {item.nameProduct}
+                                </p>
+                                <p className="flex">
+                                  {/* {item.amount} */}
+                                  {/* {gainMarketer} */}
+                                  <span>
+                                    {item.amount > 0 ? (
+                                      <p className="text-success-700">متوفر</p>
+                                    ) : (
+                                      <p className="text-danger-600">
+                                        غير متوفر
+                                      </p>
+                                    )}
+                                  </span>
+                                </p>
+                                <p> {item.size} </p>
+                                <p className="flex text-[var(--mainColor)] mt-2">
+                                  <p className="mr-1">د.ل</p>
+                                  <p>{item.price}</p>
+                                </p>
+                              </div>
+                            </div>
+                            <div>
+                              <p>يجب التأكد من الكميه التي تريدها</p>
+                              <input
+                                type="number"
+                                className="input"
+                                placeholder="الكمية"
+                                value={amountInput[item._id] || ""}
+                                // defaultValue={item.amount}
+                                onChange={(e) =>
+                                  handleAmountChange(item._id, e, item.amount)
+                                }
+                              />
                             </div>
                           </div>
-                          <div>
-                            <input
-                              type="number"
-                              className="input"
-                              placeholder="الكمية"
-                              value={amountInput[item._id] || item.amount}
-                              defaultValue={item.amount}
-                              onChange={(e) =>
-                                handleAmountChange(item._id, e, item.amount)
-                              }
-                            />
-                          </div>
+                          <div className="w-[100%] h-[1px] bg-[var(--mainColor)]"></div>
                         </div>
-                        <div className="w-[100%] h-[1px] bg-[var(--mainColor)]"></div>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="w-[100%]">لا يوجد منتجات</p>
-                  )}
+                      ))
+                    ) : (
+                      <p className="w-[100%] p-10 text-center">
+                        قم بالتسوق من قسم إضافة المنتجات
+                      </p>
+                    )}
+                  </div>
                 </CardBody>
               </Card>
             </Tab>
             <Tab key="3" title="إضافة منتجات">
               <Card>
-                {lenAmountEqualZero}
+                {/* {lenAmountEqualZero} */}
                 <CardBody>
                   {loading ? (
                     <div className="flex justify-center items-center h-[400px]">
@@ -510,21 +546,19 @@ export default function ModaeEditOrderProduct({
   const EditOrder = async () => {
     try {
       const data = {
+        id,
         nameClient,
         phone1Client,
         phone2Client,
         store: store,
         address: address,
         produtss,
-        sizes: selectedSizes,
-        // amountAndPrice: inputValues,
-        totalPriceProducts: amountInput,
-        // gainMarketer: +totalAmount - +totalProfit,
-        marketer: userr,
-        // deliveryPrice: priceDeliveryStore,
+        amount: amountInput,
+        totalPriceProducts: totalPriceOrder,
+        gainMarketer: gainMarketer,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/users/editemployee",
+        "http://localhost:5000/orders/editOrder",
         data
       );
       if (response.data === "yes") {
@@ -546,7 +580,7 @@ export default function ModaeEditOrderProduct({
 
   useEffect(() => {
     if (produts) {
-      setProdutss(produts);
+      // setProdutss(produts);
       setNewProducts2(produts);
     }
   }, [produts]);
@@ -560,12 +594,12 @@ export default function ModaeEditOrderProduct({
   }, [allProduts]);
 
   useEffect(() => {
-    if (numberOfProductsWithZeroQuantity > 0) {
+    if (numberOfProductsWithZeroQuantity > 0 || totalPriceOrder === 0) {
       setCloseBtn(true);
     } else {
       setCloseBtn(false);
     }
-  }, [numberOfProductsWithZeroQuantity]);
+  }, [numberOfProductsWithZeroQuantity, totalPriceOrder]);
 
   return (
     <>

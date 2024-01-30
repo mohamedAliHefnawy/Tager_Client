@@ -20,12 +20,13 @@ interface Row {
   id: string;
   cost: string;
   image: string;
-  price1?: string; // Make it optional
-  price2: string; // Add price2 property
-  price3: string; // Add price3 property
+  price1?: string;
+  price2: string;
+  price3: string;
   catogry: string | undefined;
   name: string;
   marketer: string;
+  gainMarketer: string;
   regularCustomer: string;
   color: string;
   size: [{ size: string; store: [{ amount: number }] }];
@@ -42,6 +43,7 @@ interface Product {
   price1: string;
   price2: string;
   price3: string;
+  gainMarketer: string;
   image: string[];
   products: Row[];
   active: boolean;
@@ -102,6 +104,7 @@ export default function Products() {
       color: "",
       price2: "",
       price3: "",
+      gainMarketer: "",
     };
 
     setProducts((prevnProduct: Product[]) => [
@@ -114,11 +117,14 @@ export default function Products() {
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get("https://tager-server.vercel.app/products/getProducts", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/products/getProducts",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setProducts(response.data.products);
       console.log(response.data);
     } catch (error) {
@@ -247,10 +253,10 @@ export default function Products() {
                           price1Productt={product.price1}
                           price2Productt={product.price2}
                           price3Productt={product.price3}
+                          price4Productt={product.gainMarketer}
                           colorProductt={product.color}
                           sizeProductt={product.size}
                           allProductt={product.products}
-                          
                         />
                       </div>
                     </div>

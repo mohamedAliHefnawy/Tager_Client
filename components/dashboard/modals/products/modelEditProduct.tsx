@@ -64,6 +64,7 @@ interface Row {
   catogry: string | undefined;
   name: string;
   marketer: string;
+  gainMarketer: string;
   regularCustomer: string;
   color: string;
   size: [{ size: string; store: [{ amount: number }] }];
@@ -107,6 +108,7 @@ export default function ModelEditProduct({
   price1Productt,
   price2Productt,
   price3Productt,
+  price4Productt,
   colorProductt,
   sizeProductt,
   allProductt,
@@ -118,6 +120,7 @@ export default function ModelEditProduct({
   price1Productt: string;
   price2Productt: string;
   price3Productt: string;
+  price4Productt: string;
   colorProductt: string;
   sizeProductt: [{ size: string; store: [{ amount: number }] }];
   allProductt: Row[];
@@ -128,6 +131,7 @@ export default function ModelEditProduct({
   const [priceProduct1, setPriceProduct1] = useState("");
   const [priceProduct2, setPriceProduct2] = useState("");
   const [priceProduct3, setPriceProduct3] = useState("");
+  const [priceProduct4, setPriceProduct4] = useState("");
   const [sizeProduct, setSizeProduct] = useState<SizeObject[]>([]);
   const [closeBtn, setCloseBtn] = useState(true);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -165,6 +169,7 @@ export default function ModelEditProduct({
         id: "",
         cost: "",
         marketer: "",
+        gainMarketer: "",
         regularCustomer: "",
         color: "#ffffff",
         images: [],
@@ -436,7 +441,7 @@ export default function ModelEditProduct({
                       </div>
                     </div>
                   </div>
-                  <div className="w-[100%] flex">
+                  <div className="w-[100%] flex items-center">
                     <input
                       type="number"
                       className="input mr-1"
@@ -446,15 +451,26 @@ export default function ModelEditProduct({
                         setPriceProduct1(e.target.value.toString())
                       }
                     />
-                    <input
-                      type="number"
-                      className="input"
-                      placeholder="سعر البيع للمسوق"
-                      value={priceProduct2}
-                      onChange={(e) =>
-                        setPriceProduct2(e.target.value.toString())
-                      }
-                    />
+                    <div className="w-[100%]">
+                      <input
+                        type="number"
+                        className="input"
+                        placeholder="سعر البيع للمسوق"
+                        value={priceProduct2}
+                        onChange={(e) =>
+                          setPriceProduct2(e.target.value.toString())
+                        }
+                      />
+                      <input
+                        type="number"
+                        className="input"
+                        placeholder="ربح المسوق"
+                        value={priceProduct4}
+                        onChange={(e) =>
+                          setPriceProduct4(e.target.value.toString())
+                        }
+                      />
+                    </div>
                     <input
                       type="text"
                       className="input ml-1"
@@ -561,6 +577,19 @@ export default function ModelEditProduct({
                             }
                             className="inputTrue mt-2"
                             placeholder="لمندوب التسويق"
+                          />
+                          <input
+                            type="number"
+                            value={row.gainMarketer}
+                            onChange={(e) =>
+                              handleChange(
+                                index,
+                                "gainMarketer",
+                                e.target.value
+                              )
+                            }
+                            className="inputTrue mt-2"
+                            placeholder="ربح مندوب التسويق"
                           />
                           <input
                             type="text"
@@ -720,6 +749,7 @@ export default function ModelEditProduct({
         priceProduct1,
         priceProduct2,
         priceProduct3,
+        priceProduct4,
         colorProductMain,
         sizeProduct,
         rows,
@@ -752,7 +782,13 @@ export default function ModelEditProduct({
   }, []);
 
   useEffect(() => {
-    if (sizeProductt && nameCategoryy && nameProductt && colorProductt) {
+    if (
+      sizeProductt &&
+      nameCategoryy &&
+      nameProductt &&
+      colorProductt &&
+      price4Productt
+    ) {
       const convertedSizeProduct: SizeObject[] = sizeProductt.map(
         (sizeObject) => ({
           size: sizeObject.size,
@@ -765,6 +801,7 @@ export default function ModelEditProduct({
       setPriceProduct1(price1Productt);
       setPriceProduct2(price2Productt);
       setPriceProduct3(price3Productt);
+      setPriceProduct4(price4Productt);
       setImageURLs(imagesProductt);
       setSelectedCategory({
         name: nameCategoryy,
@@ -784,6 +821,7 @@ export default function ModelEditProduct({
           id: "",
           cost: product.price1 || "",
           marketer: product.price2,
+          gainMarketer: product.gainMarketer,
           regularCustomer: product.price3,
           color: product.color,
           images: [product.image],
