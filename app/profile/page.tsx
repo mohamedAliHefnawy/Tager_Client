@@ -4,6 +4,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { TwitterPicker } from "react-color";
+import { getUnixTime } from "date-fns";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -11,6 +14,12 @@ import Footer from "@/components/users/footer";
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import DivCheck from "@/components/users/checkLogin/divCheck";
 import Loading from "@/components/loading";
+import { analytics } from "@/fireBase/fireBaseConfig";
+
+//fireBase
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+//compenents
 
 //nextUi
 import { Avatar, Card, CardBody, Tab, Tabs } from "@nextui-org/react";
@@ -27,14 +36,14 @@ import axios from "axios";
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user] = useCheckLogin();
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [imgUser, setImgUser] = useState("");
-  const [imgCompany, setImgCompany] = useState("");
   const [name, setName] = useState(user);
+  const [newName, setNewName] = useState(user);
   const [nameCompany, setNameCompany] = useState("");
-  const [phone1Company, setPhone1Company] = useState("");
-  const [phone2Company, setPhone2Company] = useState("");
+  const [phoneMarketer, setPhoneMarketer] = useState("");
+  const [phoneCompany, setPhoneCompany] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [passwordNew, setPasswordNew] = useState("");
@@ -42,6 +51,72 @@ export default function Home() {
   const [showPasswordNew, setShowPasswordNew] = useState(false);
   const [dataUser, setDataUser] = useState("");
   const [color, setColor] = useState("#FF6900");
+  const [imgMarketr, setImgMarketr] = useState("");
+  const [imageURLMarketr, setImageURLMarketr] = useState("");
+  const [imgCompany, setImgCompany] = useState("");
+  const [imageURLCompany, setImageURLCompany] = useState("");
+  const [closeBtn, setCloseBtn] = useState(true);
+
+  const imagebase64 = async (file: any) => {
+    const reader = new FileReader();
+    await reader.readAsDataURL(file);
+    return new Promise<string>((resolve, reject) => {
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (err) => reject(err);
+    });
+  };
+
+  const handleUploadImage = async (selectedFiles?: FileList | null) => {
+    const file = selectedFiles?.[0];
+    if (file) {
+      const image = await imagebase64(file);
+      setImgCompany(image);
+    }
+  };
+  const handleUploadImageMarketr = async (selectedFiles?: FileList | null) => {
+    const file = selectedFiles?.[0];
+    if (file) {
+      const image = await imagebase64(file);
+      setImgMarketr(image);
+    }
+  };
+
+  const generateUniqueFileName = (file: File) => {
+    const timestamp = getUnixTime(new Date());
+    const randomChars = Math.random().toString(36).substring(2, 10);
+    const fileName = `${timestamp}_${randomChars}_${file.name}`;
+    return fileName;
+  };
+
+  const Upload = async (selectedFiles: FileList | null) => {
+    handleUploadImage(selectedFiles);
+    if (selectedFiles && selectedFiles.length > 0) {
+      const file = selectedFiles[0];
+      const fileName = generateUniqueFileName(file);
+
+      const fileRef = ref(analytics, `elhbaieb/${fileName}`);
+      const data = await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(data.ref);
+      setImageURLCompany(url);
+    } else {
+      alert("Please select a file");
+    }
+  };
+  const UploadMarketr = async (selectedFiles: FileList | null) => {
+    handleUploadImageMarketr(selectedFiles);
+    if (selectedFiles && selectedFiles.length > 0) {
+      const file = selectedFiles[0];
+      const fileName = generateUniqueFileName(file);
+
+      const fileRef = ref(analytics, `elhbaieb/${fileName}`);
+      const data = await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(data.ref);
+      setImageURLMarketr(url);
+    } else {
+      alert("Please select a file");
+    }
+  };
+
   const handleChangeComplete = (newColor: any) => {
     setColor(newColor.hex);
   };
@@ -59,28 +134,6 @@ export default function Home() {
     PencilIcon: <PencilIcon />,
   };
 
-  const imagebase64 = async (file: any) => {
-    const reader = new FileReader();
-    await reader.readAsDataURL(file);
-    const data = new Promise((resolve, reject) => {
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (err) => reject(err);
-    });
-    return data;
-  };
-
-  const handleUploadImage = async (e: any) => {
-    const file = e.target.files[0];
-    const image = (await imagebase64(file)) as string;
-    setImgUser(image);
-  };
-
-  const handleUploadImageCompany = async (e: any) => {
-    const file = e.target.files[0];
-    const image = (await imagebase64(file)) as string;
-    setImgCompany(image);
-  };
-
   const tabs = () => {
     return (
       <>
@@ -96,31 +149,22 @@ export default function Home() {
               <Card>
                 <CardBody>
                   <form className="lg:flex md:flex sm:block max-sm:block justify-center items-center">
-                    <div className="w-[100%]">
-                      <input
-                        type="text"
-                        className="input mr-2"
-                        defaultValue={user}
-                        placeholder="إسم المستخدم"
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </div>
-                    <div className="w-[100%]">
-                      <input
-                        type="number"
-                        className="input"
-                        value={phone}
-                        placeholder="رقم الهاتف"
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
-                      <input
-                        type="number"
-                        className="input"
-                        value={phone}
-                        placeholder="رقم الهاتف 2"
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      className="input mr-2"
+                      // defaultValue={user}
+                      placeholder="إسم المستخدم"
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                    />
+
+                    <input
+                      type="number"
+                      className="input"
+                      value={phoneMarketer}
+                      placeholder="رقم الهاتف"
+                      onChange={(e) => setPhoneMarketer(e.target.value)}
+                    />
                   </form>
                 </CardBody>
               </Card>
@@ -178,16 +222,15 @@ export default function Home() {
                           onChangeComplete={handleChangeComplete}
                         />
                       </span>
-
                       <span
                         className={`flex justify-center  mx-3 py-2 rounded-3xl`}
                         style={{ backgroundColor: color }}
                       >
                         <label htmlFor="Photo" className="text-center ">
                           <p className="bg-white my-4 p-3 rounded-full hover:cursor-pointer">
-                            {imgCompany ? (
+                            {imageURLCompany ? (
                               <span className="flex justify-center">
-                                <Avatar size="lg" src={imgCompany} />
+                                <Avatar size="lg" src={imageURLCompany} />
                               </span>
                             ) : (
                               <p className="text-slate-400 h-auto bg-white rounded-3xl text-9xl flex justify-center items-center">
@@ -197,7 +240,7 @@ export default function Home() {
                           </p>
                         </label>
                         <input
-                          onChange={handleUploadImageCompany}
+                          onChange={(e) => Upload(e.target.files)}
                           type="file"
                           name="Photo"
                           id="Photo"
@@ -213,22 +256,15 @@ export default function Home() {
                         value={nameCompany}
                         onChange={(e) => setNameCompany(e.target.value)}
                       />
-                      {/* <div className="lg:flex md:flex sm:block max-sm:block">
+                      <div className="lg:flex md:flex sm:block max-sm:block">
                         <input
                           type="text"
                           className="input mr-2"
-                          placeholder="رقم هاتف 1"
-                          value={phone1Company}
-                          onChange={(e) => setPhone1Company(e.target.value)}
+                          placeholder="رقم هاتف الشركة "
+                          value={phoneCompany}
+                          onChange={(e) => setPhoneCompany(e.target.value)}
                         />
-                        <input
-                          type="text"
-                          className="input"
-                          placeholder="رقم هاتف 2"
-                          value={phone2Company}
-                          onChange={(e) => setPhone2Company(e.target.value)}
-                        />
-                      </div> */}
+                      </div>
                     </div>
                   </div>
                 </CardBody>
@@ -238,6 +274,58 @@ export default function Home() {
         </div>
       </>
     );
+  };
+
+  const EditDataUser = async () => {
+    try {
+      const data = {
+        imageURLMarketr,
+        name: username,
+        newName,
+        phoneMarketer,
+        password,
+        passwordNew,
+        nameCompany,
+        phoneCompany,
+        color,
+        imageURLCompany,
+      };
+      const response = await axios.post(
+        "http://localhost:5000/users/editUser",
+        data
+      );
+      if (response.data === "yes") {
+        Swal.fire({
+          icon: "success",
+          title: "تم التعديل بنجاح",
+          text: "⤫",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+        localStorage.removeItem("user");
+        router.push("/auth/login");
+      }
+      if (response.data === "no") {
+        Swal.fire({
+          icon: "warning",
+          title: "هذا الإسم مستخدم من قبل ",
+          text: "⤫",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+      }
+      if (response.data === "noPaswordCom") {
+        Swal.fire({
+          icon: "error",
+          title: "كلمة المرور غير صحيحة",
+          text: "⤫",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const GetDataUser = async () => {
@@ -252,8 +340,13 @@ export default function Home() {
         }
       );
       setDataUser(response.data.user);
-      setPhone(response.data.user.phone);
-      // }
+      // setNewName(response.data.user.name);
+      setPhoneMarketer(response.data.user.phone);
+      setImageURLMarketr(response.data.user.image);
+      setPhoneCompany(response.data.user.phoneCompany);
+      setNameCompany(response.data.user.nameCompany);
+      setImageURLCompany(response.data.user.imageCompany);
+      setColor(response.data.user.colorCompany);
     } catch (error) {
       console.log(error);
     }
@@ -264,10 +357,18 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (newName === "") {
+      setCloseBtn(true);
+    } else {
+      setCloseBtn(false);
+    }
+  }, [newName]);
+
+  useEffect(() => {
     if (user) {
       const timeoutId = setTimeout(() => {
         setUsername(user);
-        // GetDataUser();
+        // setNewName(user);
         setIsLoading(false);
       }, 2000);
       GetDataUser();
@@ -297,20 +398,29 @@ export default function Home() {
                     <div className="  lg:w-[70%] md:w-[100%] sm:w-[100%] max-sm:w-[100%] p-4">
                       {tabs()}
                       <div className=" flex justify-end pr-4 py-5">
-                        <p className="bg-[var(--mainColorRgba)] text-xl border-1 border-[var(--mainColor)] w-20 h-20 rounded-full flex justify-center items-center hover:cursor-pointer">
-                          {Icons.PencilIcon}
-                        </p>
+                        {!closeBtn ? (
+                          <p
+                            onClick={EditDataUser}
+                            className="bg-[var(--mainColorRgba)] text-xl border-1 border-[var(--mainColor)] w-20 h-20 rounded-full rounded-es-none flex justify-center items-center hover:cursor-pointer hover:opacity-80 hover:rotate-45"
+                          >
+                            {Icons.PencilIcon}
+                          </p>
+                        ) : (
+                          <p className="bg-[var(--mainColorRgba)] text-xl border-1 border-[var(--mainColor)] w-20 h-20 rounded-full rounded-es-none flex justify-center items-center opacity-50 ">
+                            {Icons.PencilIcon}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="p-4 w-[30%] lg:w-[30%] md:w-[100%] sm:w-[100%] max-sm:w-[100%]">
                       <p className="bg-slate-200">
-                        {imgUser ? (
+                        {imageURLMarketr ? (
                           <span className="flex justify-center">
                             <Image
                               alt="error"
-                              width={300}
-                              height={400}
-                              src={imgUser}
+                              width={200}
+                              height={300}
+                              src={imageURLMarketr}
                             />
                           </span>
                         ) : (
@@ -319,16 +429,17 @@ export default function Home() {
                           </p>
                         )}
                       </p>
-                      <label htmlFor="Photo" className="text-center ">
+
+                      <label htmlFor="Photo1" className="text-center ">
                         <p className="bg-[var(--mainColorRgba)] my-4 p-3 rounded-full hover:cursor-pointer">
                           تغيير الصورة
                         </p>
                       </label>
                       <input
-                        onChange={handleUploadImage}
+                        onChange={(e) => UploadMarketr(e.target.files)}
                         type="file"
-                        name="Photo"
-                        id="Photo"
+                        name="Photo1"
+                        id="Photo1"
                         className="hidden"
                       />
                     </div>
@@ -340,7 +451,7 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <DivCheck link="/doctor" />
+          <DivCheck link="/auth/login" />
         )}
       </div>
     </>

@@ -7,8 +7,9 @@ import { useRouter } from "next/navigation";
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
 
 //components
-// import ModelAddStore from "../modals/store/modelAddStore";
+import PrintInvoice from "../modals/orders/printInvoice";
 import ModaelEditOrder from "../modals/orders/modaelEditOrder";
+import QrCode from "../modals/orders/qrCode";
 
 interface Orders {
   _id: string;
@@ -212,28 +213,27 @@ export default function Orders() {
                 </div>
 
                 <div className="w-[33%] text-right">
-                  <div className="flex justify-center">
-                    {order.situationSteps[order.situationSteps.length - 1]
-                      .situation !== "تم إستلام الكاش" &&
-                    order.situationSteps[order.situationSteps.length - 1]
-                      .situation !== "تم الرفض" ? (
+                  <div className="flex justify-center items-center">
+                    <div>
                       <ModaelEditOrder
                         idOrder={order._id}
                         situationSteps={order.situationSteps}
                         // sendDataToParent={receiveDataFromChild}
                       />
-                    ) : (
-                      <>
-                        {order.situationSteps[order.situationSteps.length - 1]
-                          .situation !== "تم الرفض" ? (
-                          <p className=" text-lg">✔</p>
-                        ) : (
-                          <p className=" text-lg">✘</p>
-                        )}
-                      </>
-                    )}
+                    </div>
+                    <div className="mx-2">
+                      <PrintInvoice
+                        day={""}
+                        time={""}
+                        doctor={""}
+                        patient={""}
+                      />
+                    </div>
+                    <div className="">
+                      <QrCode day={""} time={""} doctor={""} patient={""} />
+                    </div>
                   </div>
-                </div>
+                </div>  
               </div>
             ))
           )}

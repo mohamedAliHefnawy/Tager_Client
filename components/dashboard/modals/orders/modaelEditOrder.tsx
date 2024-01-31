@@ -499,12 +499,14 @@ export default function ModaelEditOrder({
   }, [situationSteps]);
 
   useEffect(() => {
-    if (situation !== situationSteps) {
+    if (situation !== situationSteps && situationSteps[situationSteps.length - 1].situation !== "تم إستلام الكاش") {
       setCloseBtn(false);
     } else {
       setCloseBtn(true);
     }
   }, [situation]);
+
+
 
   return (
     <>
