@@ -151,10 +151,11 @@ export default function Home() {
                   <form className="lg:flex md:flex sm:block max-sm:block justify-center items-center">
                     <input
                       type="text"
-                      className="input mr-2"
+                      className="input mr-2 opacity-60"
                       // defaultValue={user}
                       placeholder="إسم المستخدم"
-                      value={newName}
+                      value={user}
+                      disabled
                       onChange={(e) => setNewName(e.target.value)}
                     />
 
@@ -356,13 +357,13 @@ export default function Home() {
     GetDataUser();
   }, []);
 
-  useEffect(() => {
-    if (newName === "") {
-      setCloseBtn(true);
-    } else {
-      setCloseBtn(false);
-    }
-  }, [newName]);
+  // useEffect(() => {
+  //   if (newName === "") {
+  //     setCloseBtn(true);
+  //   } else {
+  //     setCloseBtn(false);
+  //   }
+  // }, [newName]);
 
   useEffect(() => {
     if (user) {
@@ -398,18 +399,12 @@ export default function Home() {
                     <div className="  lg:w-[70%] md:w-[100%] sm:w-[100%] max-sm:w-[100%] p-4">
                       {tabs()}
                       <div className=" flex justify-end pr-4 py-5">
-                        {!closeBtn ? (
-                          <p
-                            onClick={EditDataUser}
-                            className="bg-[var(--mainColorRgba)] text-xl border-1 border-[var(--mainColor)] w-20 h-20 rounded-full rounded-es-none flex justify-center items-center hover:cursor-pointer hover:opacity-80 hover:rotate-45"
-                          >
-                            {Icons.PencilIcon}
-                          </p>
-                        ) : (
-                          <p className="bg-[var(--mainColorRgba)] text-xl border-1 border-[var(--mainColor)] w-20 h-20 rounded-full rounded-es-none flex justify-center items-center opacity-50 ">
-                            {Icons.PencilIcon}
-                          </p>
-                        )}
+                        <p
+                          onClick={EditDataUser}
+                          className="bg-[var(--mainColorRgba)] text-xl border-1 border-[var(--mainColor)] w-20 h-20 rounded-full rounded-es-none flex justify-center items-center hover:cursor-pointer hover:opacity-80 hover:rotate-45"
+                        >
+                          {Icons.PencilIcon}
+                        </p>
                       </div>
                     </div>
                     <div className="p-4 w-[30%] lg:w-[30%] md:w-[100%] sm:w-[100%] max-sm:w-[100%]">

@@ -10,6 +10,9 @@ import { Avatar, Spinner, Pagination } from "@nextui-org/react";
 import PrintInvoice from "../modals/orders/printInvoice";
 import ModaelEditOrder from "../modals/orders/modaelEditOrder";
 import QrCode from "../modals/orders/qrCode";
+import Scanner from "@/components/dashboard/scanner";
+import QRCode from "qrcode.react";
+
 
 interface Orders {
   _id: string;
@@ -20,7 +23,22 @@ interface Orders {
   address: string;
   marketer: string;
   situation: string;
+  totalPriceProducts: number;
+  ImageURLCompany: string;
+  NameCompany: string;
+  ColorCompany: string;
+  date: string;
+  time: string;
   situationSteps: [{ situation: string; date: string; time: string }];
+  products: [
+    {
+      nameProduct: string;
+      imageProduct: string;
+      amount: number;
+      price: number;
+      size: string;
+    }
+  ];
 }
 
 export default function Orders() {
@@ -223,17 +241,26 @@ export default function Orders() {
                     </div>
                     <div className="mx-2">
                       <PrintInvoice
-                        day={""}
-                        time={""}
-                        doctor={""}
-                        patient={""}
+                        idOrder={order._id}
+                        imageCom={order.ImageURLCompany}
+                        nameCom={order.NameCompany}
+                        colorCom={order.ColorCompany}
+                        dateOrd={order.date}
+                        timeOrd={order.time}
+                        nameCli={order.nameClient}
+                        addressCli={order.address}
+                        phone1Cli={order.phone1Client}
+                        phone2Cli={order.phone2Client}
+                        totalPriceOrder={order.totalPriceProducts}
+                        allProducts={order.products}
                       />
                     </div>
                     <div className="">
-                      <QrCode day={""} time={""} doctor={""} patient={""} />
+                      <QrCode idOrder={order._id} />
+                      {/* <Scanner /> */}
                     </div>
                   </div>
-                </div>  
+                </div>
               </div>
             ))
           )}

@@ -11,8 +11,7 @@ import { EllipsisverticalIcon } from "../../../public/svg/ellipsisverticalIcon";
 
 //components
 import ModelAddDeliveryClients from "../modals/deliveryClients/modaelAddDeliveryClients";
-import ModaelEditMarketingClients from "../modals/marketingClients/modaelEditMarketingClients";
-import Link from "next/link";
+import ModaelEditDeliveryClients from "../modals/deliveryClients/modaelEditDeliveryClients";
 
 interface Employees {
   _id: string;
@@ -25,7 +24,6 @@ interface Employees {
 
 export default function DeliveryClients() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const usernamee = localStorage.getItem("username");
   const [employees, setEmployees] = useState<Employees[]>([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,11 +39,14 @@ export default function DeliveryClients() {
     setLoading(true);
     try {
       let response: { data: { token: string; users: any } };
-      response = await axios.get("https://tager-server.vercel.app/users/getUsers", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/users/getUsers",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setEmployees(response.data.users);
     } catch (error) {
       console.log(error);
@@ -161,7 +162,7 @@ export default function DeliveryClients() {
                   </div>
                   <div className="w-[10%] flex justify-center">
                     <div className="flex flex-wrap gap-4">
-                      <ModaelEditMarketingClients
+                      <ModaelEditDeliveryClients
                         idEmployee={employees._id}
                         nameEmployee={employees.name}
                         imageEmployee={employees.image}

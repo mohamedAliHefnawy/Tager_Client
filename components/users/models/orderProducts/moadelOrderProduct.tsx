@@ -92,6 +92,10 @@ export default function MoadelOrderProducts({
   const [products, setProducts] = useState(Productss);
   const [inputValues, setInputValues] = useState<InputValues>({});
   const [totalAmount, setTotalAmount] = useState(0);
+  const [imageURLCompany, setImageURLCompany] = useState("");
+  const [nameCompany, setNameCompany] = useState("");
+  const [color, setColor] = useState("#FF6900");
+  const [phoneCompany, setPhoneCompany] = useState("");
   const [profitPerProduct, setProfitPerProduct] = useState<ProfitPerProduct>(
     {}
   );
@@ -482,6 +486,10 @@ export default function MoadelOrderProducts({
         products,
         sizes: sizeProductss,
         amountAndPrice: inputValues,
+        phoneCompany,
+        nameCompany,
+        imageURLCompany,
+        color,
         totalPriceProducts: +totalAmount + +priceDeliveryStore,
         gainMarketer: +totalAmount - +totalProfit,
         marketer: nameUser,
@@ -502,6 +510,31 @@ export default function MoadelOrderProducts({
       console.error(error);
     }
   };
+
+  const GetDataUser = async () => {
+    try {
+      let response: { data: { token: string; user: any } };
+      response = await axios.get(
+        `http://localhost:5000/users/getUser/${nameUser}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+
+      setPhoneCompany(response.data.user.phoneCompany);
+      setNameCompany(response.data.user.nameCompany);
+      setImageURLCompany(response.data.user.imageCompany);
+      setColor(response.data.user.colorCompany);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    GetDataUser();
+  }, []);
 
   useEffect(() => {
     if (Productss) {

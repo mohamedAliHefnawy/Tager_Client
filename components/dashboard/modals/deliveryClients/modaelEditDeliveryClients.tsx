@@ -37,7 +37,7 @@ import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
 import { PhotoIcon } from "../../../../public/svg/photoIcon";
 import { PencilIcon } from "../../../../public/svg/pencilIcon";
 
-export default function ModelEditEmplyee({
+export default function ModaelEditDeliveryClients({
   idEmployee,
   nameEmployee,
   imageEmployee,
@@ -181,22 +181,6 @@ export default function ModelEditEmplyee({
                 <CardBody>
                   <form className="flex flex-col justify-center items-center">
                     <div className="w-[100%] flex justify-center">
-                      {/* {!img ? (
-                        <label
-                          htmlFor="img"
-                          className="p-10 rounded-full text-black hover:cursor-pointer  bg-[var(--mainColorRgba)] border-1 border-[var(--mainColor)]"
-                        >
-                          <Avatar size="lg" src={img} />
-                        </label>
-                      ) : (
-                        <label
-                          htmlFor="img"
-                          className="p-0 rounded-full text-black hover:cursor-pointer  bg-[var(--mainColorRgba)] border-1 border-[var(--mainColor)]"
-                        >
-                          <Avatar size="lg" src={img} />
-                        </label>
-                      )} */}
-
                       <label
                         htmlFor="img"
                         className="p-0 rounded-full text-black hover:cursor-pointer  bg-[var(--mainColorRgba)] border-1 border-[var(--mainColor)]"
@@ -253,6 +237,7 @@ export default function ModelEditEmplyee({
                       </Button>
                     </DropdownTrigger>
                     <DropdownMenu
+                      aria-label="Single selection example"
                       variant="flat"
                       disallowEmptySelection
                       selectionMode="single"
@@ -261,8 +246,8 @@ export default function ModelEditEmplyee({
                         setSelectedValidity(keys as Set<string>)
                       }
                     >
-                      <DropdownItem key="موظف">موظف</DropdownItem>
-                      <DropdownItem key="أدمن">أدمن</DropdownItem>
+                      <DropdownItem key="زبون عادي">زبون عادي</DropdownItem>
+                      <DropdownItem key="مندوب تسويق">مندوب تسويق</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 </CardBody>
@@ -306,7 +291,7 @@ export default function ModelEditEmplyee({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                تعديل الموظف
+                تعديل مندوب التوصيل
               </ModalHeader>
               <ModalBody>{tabs()}</ModalBody>
               <ModalFooter>

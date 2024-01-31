@@ -7,6 +7,7 @@ import Orders from "@/components/dashboard/tables/orders";
 import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "@/components/loading";
+import Scanner from '@/components/dashboard/scanner'
 
 // react
 import { useEffect, useState } from "react";
@@ -65,6 +66,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
+            {/* <Scanner /> */}
 
             <div className="flex max-2xl:hidden max-xl:hidden lg:hidden md:flex sm:flex max-sm:flex h-screen flex-col items-center justify-center">
               <Image src={error} alt={"error"} width={200} height={300} />

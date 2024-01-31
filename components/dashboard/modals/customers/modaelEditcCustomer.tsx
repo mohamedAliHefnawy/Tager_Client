@@ -200,6 +200,7 @@ export default function ModaelEditcCustomer({
                       placeholder="إسم الموظف"
                       onChange={(e) => setName(e.target.value)}
                       value={name}
+                      disabled
                     />
                     <input
                       type="number"

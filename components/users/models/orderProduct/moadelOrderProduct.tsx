@@ -72,6 +72,11 @@ export default function MoadelOrderProduct({
   const [priceOrder, setPriceOrder] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
   const [showConfetti, setShowConfetti] = React.useState(false);
+  const [imageURLCompany, setImageURLCompany] = useState("");
+  const [nameCompany, setNameCompany] = useState("");
+  const [color, setColor] = useState("#FF6900");
+  const [phoneCompany, setPhoneCompany] = useState("");
+
   const [selectedKeysTo, setSelectedKeysTo] = React.useState<string[]>([
     "إختر البلدة",
   ]);
@@ -95,11 +100,14 @@ export default function MoadelOrderProduct({
   const GetStores = async () => {
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get("https://tager-server.vercel.app/stores/getStores", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/stores/getStores",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setStores(response.data.stores);
       console.log(response.data);
     } catch (error) {
@@ -320,6 +328,10 @@ export default function MoadelOrderProduct({
         imageProduct,
         sizeProduct,
         nameProduct,
+        phoneCompany,
+        nameCompany,
+        imageURLCompany,
+        color,
         amount: amountOrder,
         price: priceOrder,
         totalPriceProducts: +amountOrder * +priceOrder + +priceDeliveryStore,
@@ -328,7 +340,7 @@ export default function MoadelOrderProduct({
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/addOrder",
+        "http://localhost:5000/orders/addOrder",
         data
       );
       if (response.data === "yes") {
@@ -342,6 +354,31 @@ export default function MoadelOrderProduct({
       console.error(error);
     }
   };
+
+  const GetDataUser = async () => {
+    try {
+      let response: { data: { token: string; user: any } };
+      response = await axios.get(
+        `http://localhost:5000/users/getUser/${nameUser}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+
+      setPhoneCompany(response.data.user.phoneCompany);
+      setNameCompany(response.data.user.nameCompany);
+      setImageURLCompany(response.data.user.imageCompany);
+      setColor(response.data.user.colorCompany);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    GetDataUser();
+  }, []);
 
   useEffect(() => {
     if (
