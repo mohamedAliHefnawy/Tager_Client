@@ -10,9 +10,23 @@ import { Avatar, Spinner, Pagination } from "@nextui-org/react";
 import PrintInvoice from "../modals/orders/printInvoice";
 import ModaelEditOrder from "../modals/orders/modaelEditOrder";
 import QrCode from "../modals/orders/qrCode";
+import ChatDiv from "../modals/orders/chatDiv";
 import Scanner from "@/components/dashboard/scanner";
 import QRCode from "qrcode.react";
 
+//svg
+import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
+import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
+
+interface Messages {
+  chatMessages: [
+    {
+      admin: [{ message: string; date: string; time: string }];
+      marketer: [{ message: string; date: string; time: string }];
+      delivery: [{ message: string; date: string; time: string }];
+    }
+  ];
+}
 
 interface Orders {
   _id: string;
@@ -30,6 +44,7 @@ interface Orders {
   date: string;
   time: string;
   situationSteps: [{ situation: string; date: string; time: string }];
+  chatMessages: Messages[];
   products: [
     {
       nameProduct: string;
@@ -43,6 +58,7 @@ interface Orders {
 
 export default function Orders() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const nameAdmin = localStorage.getItem("nameAdmin");
   const [orders, setOrders] = useState<Orders[]>([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,13 +72,10 @@ export default function Orders() {
     setSearchText(e.target.value);
   };
 
-  // const receiveDataFromChild = (data) => {
-  //   const { orderId, data: situationData } = data;
-  //   setReceivedData((prevData) => ({
-  //     ...prevData,
-  //     [orderId]: situationData,
-  //   }));
-  // };
+  const Icons = {
+    ChatbubbleleftrightIcon: <ChatbubbleleftrightIcon />,
+    PaperAirplaneIcon: <PaperAirplaneIcon />,
+  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -115,11 +128,8 @@ export default function Orders() {
     }
   };
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     GetOrders();
-    // setReceivedData(orders.map((item) => item.situationSteps[0].situation));
   }, []);
 
   return (
@@ -152,6 +162,7 @@ export default function Orders() {
             <div className="w-[25%] text-center">
               <p>إسم العميل</p>
             </div>
+            {nameAdmin}
 
             <div className="w-[25%] text-center">
               <p>رقم الهاتف</p>
@@ -257,8 +268,12 @@ export default function Orders() {
                     </div>
                     <div className="">
                       <QrCode idOrder={order._id} />
-                      {/* <Scanner /> */}
                     </div>
+                    <ChatDiv
+                      admin={nameAdmin || ""}
+                      idOrder={order._id}
+                      chatMessages={order.chatMessages}
+                    />
                   </div>
                 </div>
               </div>
