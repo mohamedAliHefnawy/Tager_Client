@@ -472,7 +472,7 @@ export default function ModaelEditOrder({
     try {
       const data = { idOrder: idOrder, situationOrder: situation };
       const response = await axios.post(
-        "http://localhost:5000/orders/editOrderSituation",
+        "https://tager-server.vercel.app/orders/editOrderSituation",
         data
       );
       if (response.data === "yes") {

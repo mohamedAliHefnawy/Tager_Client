@@ -290,7 +290,7 @@ export default function Home({ params }: { params: { slug: string } }) {
       const currentDateStr = currentDate.toLocaleDateString();
 
       const response = await axios.post(
-        `http://localhost:5000/payment/addpayment/${params.slug}`,
+        `https://tager-server.vercel.app/payment/addpayment/${params.slug}`,
         {
           num: num,
           notes: notes,
@@ -316,7 +316,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/payment/getpayment/${params.slug}`
+        `https://tager-server.vercel.app/payment/getpayment/${params.slug}`
       );
       setMoneySafe(response.data);
     } catch (error) {

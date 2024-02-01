@@ -530,7 +530,7 @@ export default function ModaeEditOrderProduct({
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get("http://localhost:5000/products/getProducts", {
+      response = await axios.get("https://tager-server.vercel.app/products/getProducts", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -558,7 +558,7 @@ export default function ModaeEditOrderProduct({
         gainMarketer: gainMarketer,
       };
       const response = await axios.post(
-        "http://localhost:5000/orders/editOrder",
+        "https://tager-server.vercel.app/orders/editOrder",
         data
       );
       if (response.data === "yes") {

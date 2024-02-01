@@ -754,7 +754,7 @@ export default function ModelAddProduct({
         rows,
       };
       const response = await axios.post(
-        "http://localhost:5000/products/addProduct",
+        "https://tager-server.vercel.app/products/addProduct",
         data
       );
       if (response.data === "yes") {

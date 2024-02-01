@@ -77,7 +77,7 @@ export default function CardMoneySafe() {
     setLoading(true);
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("http://localhost:5000/payment/getpayment", {
+      response = await axios.get("https://tager-server.vercel.app/payment/getpayment", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

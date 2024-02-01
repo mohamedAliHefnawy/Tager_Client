@@ -292,7 +292,7 @@ export default function Home() {
         imageURLCompany,
       };
       const response = await axios.post(
-        "http://localhost:5000/users/editUser",
+        "https://tager-server.vercel.app/users/editUser",
         data
       );
       if (response.data === "yes") {
@@ -333,7 +333,7 @@ export default function Home() {
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
-        `http://localhost:5000/users/getUser/${user}`,
+        `https://tager-server.vercel.app/users/getUser/${user}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
