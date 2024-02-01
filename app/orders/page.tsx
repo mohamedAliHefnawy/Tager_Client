@@ -13,6 +13,7 @@ import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import DivCheck from "@/components/users/checkLogin/divCheck";
 import ModaelRecoveryProduct from "@/components/users/models/modaelRecoveryProduct";
 import ModaeEditOrderProduct from "@/components/users/models/modaeEditOrderProduct";
+import ChatDivMarketer from "@/components/users/models/chatDiv";
 import Loading from "@/components/loading";
 
 //nextUi
@@ -34,6 +35,12 @@ import { PencilIcon } from "@/public/svg/pencilIcon";
 import { EllipsisverticalIcon } from "@/public/svg/ellipsisverticalIcon";
 import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
 
+interface Messages {
+  admin: [{ message: string; person: string; date: string; time: string }];
+  marketer: [{ message: string; person: string; date: string; time: string }];
+  delivery: [{ message: string; person: string; date: string; time: string }];
+}
+
 interface Orders {
   _id: string;
   nameClient: string;
@@ -46,6 +53,7 @@ interface Orders {
   gainMarketer: number;
   situation: string;
   date: string;
+  chatMessages: Messages[];
   products: [
     {
       idProduct: string;
@@ -230,12 +238,11 @@ export default function Home() {
 
                             <ModaelRecoveryProduct />
 
-                            <p
-                              onClick={() => setShowDivCaht(!showDivCaht)}
-                              className="bg-primary-200 border-1 border-primary-300 p-4 rounded-full text-primary-800 hover:cursor-pointer mt-1"
-                            >
-                              {Icons.ChatbubbleleftrightIcon}
-                            </p>
+                            <ChatDivMarketer
+                              marketer={username}
+                              idOrder={order._id}
+                              chatMessages={order.chatMessages}
+                            />
                           </div>
                         </PopoverContent>
                       </Popover>

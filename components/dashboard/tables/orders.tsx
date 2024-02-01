@@ -19,13 +19,9 @@ import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
 import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
 
 interface Messages {
-  chatMessages: [
-    {
-      admin: [{ message: string; date: string; time: string }];
-      marketer: [{ message: string; date: string; time: string }];
-      delivery: [{ message: string; date: string; time: string }];
-    }
-  ];
+  admin: [{ message: string; person: string; date: string; time: string }];
+  marketer: [{ message: string; person: string; date: string; time: string }];
+  delivery: [{ message: string; person: string; date: string; time: string }];
 }
 
 interface Orders {
@@ -63,7 +59,6 @@ export default function Orders() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [receivedData, setReceivedData] = useState("");
 
   const itemsPerPage = 6;
   const router = useRouter();

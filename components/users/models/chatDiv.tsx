@@ -1,22 +1,13 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 
 //nextui
 import {
   Modal,
   ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
-  Button,
   useDisclosure,
-  Input,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
 } from "@nextui-org/react";
 
 //svg
@@ -29,16 +20,15 @@ interface Messages {
   delivery: [{ message: string; person: string; date: string; time: string }];
 }
 
-export default function ChatDiv({
-  admin,
+export default function ChatDivMarketer({
+  marketer,
   idOrder,
   chatMessages,
 }: {
-  admin: string;
+  marketer: string;
   idOrder: string;
   chatMessages: Messages[];
 }) {
-  const [showDivCaht, setShowDivCaht] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
   const [messageText, setMessageText] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -88,8 +78,8 @@ export default function ChatDiv({
         {
           idOrder: idOrder,
           text: messageText,
-          val: "أدمن",
-          admin,
+          val: "مندوب تسويق",
+          marketer,
         }
       );
       if (response.data === "yes") {
@@ -98,18 +88,18 @@ export default function ChatDiv({
           {
             admin: [
               {
-                message: messageText,
-                person: admin,
-                date: new Date().toLocaleDateString(),
-                time: new Date().toLocaleTimeString(),
-              },
-            ],
-            marketer: [
-              {
                 message: "",
                 person: "",
                 date: "",
                 time: "",
+              },
+            ],
+            marketer: [
+              {
+                message: messageText,
+                person: marketer,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
               },
             ],
             delivery: [
@@ -148,7 +138,7 @@ export default function ChatDiv({
       <div>
         <p
           onClick={onOpen}
-          className="hover:cursor-pointer hover:opacity-75 bg-danger-200 p-3 mt-1 rounded-full border-1 border-danger-600 text-danger-900 ml-2"
+          className="bg-primary-200 border-1 border-primary-300 mt-1 p-4 rounded-full text-primary-800 hover:cursor-pointer mb-1"
         >
           {Icons.ChatbubbleleftrightIcon}
         </p>
