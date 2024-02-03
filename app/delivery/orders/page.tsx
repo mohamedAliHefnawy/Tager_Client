@@ -16,6 +16,7 @@ import {
   DropdownItem,
   Button,
   Avatar,
+  Textarea,
 } from "@nextui-org/react";
 
 //svg
@@ -125,7 +126,6 @@ export default function Home() {
           </DropdownTrigger>
           <DropdownMenu
             style={{ direction: "rtl" }}
-            // className="border-1 bg-[var(--mainColorRgba)] rounded-lg"
           >
             <DropdownItem key="1">
               <p className="flex items-center ">
@@ -164,46 +164,32 @@ export default function Home() {
           </DropdownMenu>
         </Dropdown>
       </div>
-      <div className="my-6">
-        <Image src={Logo} alt={"error"} className="w-[100%] h-36" />
+      <div className="my-6 p-6">
+        <div className="w-[100%] h-24 border-1 border-slate-600 border-dashed rounded-2xl flex flex-col justify-center items-center ">
+          <p>أموال الخزينة</p>
+          <p className="flex text-sm my-2 text-success-700">
+            <span className="mr-1">د.ل</span>
+            <span> 1000</span>
+          </p>
+        </div>
       </div>
       <div className="p-3 text-end">
-        <p className="opacity-80 text-xl">أحدث 3 طلبات</p>
-        <div className="mt-4 flex justify-between items-center">
-          <p className="text-success-600">تم التسليم</p>
-          <div className="flex justify-end items-start">
-            <p className="text-right">
-              <p className="mr-2">ساعه سمارات </p>
-              <p className="mr-2 text-[12px]" style={{ direction: "rtl" }}>
-                +3 منتجات أخري
-              </p>
-            </p>
-            <Avatar src={`${Logo}`} size="md" />
-          </div>
+        <div className="flex justify-end">
+          <p className="bg-warning-100 opacity-65 p-3 px-6 rounded-3xl rounded-es-none w-[100%] text-center">
+            تحويل أموال
+          </p>
         </div>
-        <div className="mt-4 flex justify-between items-center">
-          <p className="text-success-600">تم التسليم</p>
-          <div className="flex justify-end items-start">
-            <p className="text-right">
-              <p className="mr-2">ساعه سمارات </p>
-              <p className="mr-2 text-[12px]" style={{ direction: "rtl" }}>
-                +3 منتجات أخري
-              </p>
-            </p>
-            <Avatar src={`${Logo}`} size="md" />
-          </div>
+        <div className="w-[100%]">
+          <textarea
+            className="input p-3"
+            placeholder="أكتب ملاحظه"
+            style={{ direction: "rtl" }}
+          />
         </div>
-        <div className="mt-4 flex justify-between items-center">
-          <p className="text-success-600">تم التسليم</p>
-          <div className="flex justify-end items-start">
-            <p className="text-right">
-              <p className="mr-2">ساعه سمارات </p>
-              <p className="mr-2 text-[12px]" style={{ direction: "rtl" }}>
-                +3 منتجات أخري
-              </p>
-            </p>
-            <Avatar src={`${Logo}`} size="md" />
-          </div>
+        <div className="flex justify-end">
+          <p className="bg-warning-200 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
+            تأكيد العملية
+          </p>
         </div>
       </div>
     </>
