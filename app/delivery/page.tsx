@@ -38,7 +38,7 @@ export default function Home() {
         password,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/users/login",
+        "http://localhost:5000/users/login",
         data
       );
 
@@ -52,9 +52,9 @@ export default function Home() {
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
         });
-        localStorage.setItem("user", name);
-        localStorage.setItem("userValidity", validity);
-        router.push("/");
+        localStorage.setItem("nameDelivery", name);
+        localStorage.setItem("valDelivery", validity);
+        router.push("/delivery/mainPage");
       }
       if (answer === "no") {
         Swal.fire({

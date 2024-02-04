@@ -18,9 +18,9 @@ export default function DivCheck(props : any) {
       <p>يجب أن تسجل دخول اولاَ </p>
       <Button
         onClick={() => router.push(props.link)}
-        color="primary"
+        color="warning"
         variant="shadow"
-        className="w-[30%] mt-5"
+        className="w-[50%] mt-5 text-white"
       >
         تسجيل دخول
       </Button>

@@ -37,130 +37,126 @@ import Logo from "@/public/img/hbaieb.png";
 //components
 import NavBar from "@/components/delivery/navBar";
 import QRScanner from "@/components/delivery/scanner";
+import useCheckLogin from "@/components/delivery/checkLogin/checkLogin";
+import Loading from "@/components/loading";
+import DivCheck from "@/components/delivery/checkLogin/divCheck";
+
+interface Orders {
+  _id: string;
+  name: string;
+  phone: string;
+  password: string;
+  validity: string;
+  image: string;
+  size: [{ store: [{ amount: number; nameStore: string }]; size: string }];
+  store: { amount: number }[];
+  [key: string]: any;
+}
 
 export default function Home() {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [check, setCheck] = useState(true);
-  const [showPassword, setShowPassword] = useState(true);
-  const [showPasswordConfirn, setShowPasswordConfirn] = useState(true);
-  const router = useRouter();
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const [nameDelivery] = useCheckLogin();
+  const [nameDeliveryy, setNameDeliveryy] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState<Orders[]>([]);
 
-  const Icons = {
-    BarsarrowdownIcon: <BarsarrowdownIcon />,
-    UserIcon: <UserIcon />,
-    BanknotesIcon: <BanknotesIcon />,
-    TagIcon: <TagIcon />,
-    LogoutIcon: <LogoutIcon />,
-    HeartIcon: <HeartIcon />,
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    HomeIcon: <HomeIcon />,
-    ChevrondownIcon: <ChevrondownIcon />,
-    MapIcon: <MapIcon />,
-    BuildingstorefrontIcon: <BuildingstorefrontIcon />,
-  };
-
-  const SignUp = async () => {
+  const GetProductsInCart = async () => {
+    setLoading(true);
     try {
-      const data = {
-        name,
-        phone,
-        password,
+      let response: {
+        data: { token: string; ordersData: any };
       };
-      const response = await axios.post(
-        "https://tager-server.vercel.app/users/signUp",
-        data
+      response = await axios.get(
+        `http://localhost:5000/scanner/getOrders/${nameDelivery}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
       );
-
-      if (response.data === "yes") {
-        Swal.fire({
-          icon: "success",
-          title: "تم  التسجيل بنجاح ",
-          text: "✓",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-        localStorage.setItem("user", name);
-        router.push("/");
-      }
-      if (response.data === "no") {
-        Swal.fire({
-          icon: "warning",
-          title: "هذا الإسم مستخدم من قبل ",
-          text: "⤫",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-      }
-      if (response.data === "error") {
-        Swal.fire({
-          icon: "error",
-          title: "توجد مشكلة ما. حاول مرة أخرى ",
-          text: "😓",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-      }
+      setOrders(response.data.ordersData);
     } catch (error) {
-      console.error(error);
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const Logout = () => {
-    localStorage.removeItem("user");
-    router.push("/auth/login");
-  };
+  useEffect(() => {
+    if (nameDelivery) {
+      GetProductsInCart();
+    }
+  }, [nameDelivery]);
+
+  useEffect(() => {
+    if (nameDelivery) {
+      const timeoutId = setTimeout(() => {
+        setNameDeliveryy(nameDelivery);
+        setIsLoading(false);
+      }, 2000);
+
+      return () => clearTimeout(timeoutId);
+    } else {
+      setIsLoading(false);
+    }
+  }, [nameDelivery]);
 
   return (
     <>
-      <NavBar />
-      <div className="my-6">
-        <div>
-          <QRScanner />
-        </div>
-        <Image src={Logo} alt={"error"} className="w-[100%] h-36" />
-      </div>
-      <div className="p-3 text-end">
-        <p className="opacity-80 text-xl">أحدث 3 طلبات</p>
-        <div className="mt-4 flex justify-between items-center">
-          <p className="text-success-600">تم التسليم</p>
-          <div className="flex justify-end items-start">
-            <p className="text-right">
-              <p className="mr-2">ساعه سمارات </p>
-              <p className="mr-2 text-[12px]" style={{ direction: "rtl" }}>
-                +3 منتجات أخري
-              </p>
-            </p>
-            <Avatar src={`${Logo}`} size="md" />
+      {isLoading ? (
+        <Loading />
+      ) : nameDelivery ? (
+        <>
+          <NavBar />
+          <div className="my-6">
+            <div>
+              <QRScanner name={nameDeliveryy} />
+            </div>
+            <Image src={Logo} alt={"error"} className="w-[100%] h-36" />
           </div>
-        </div>
-        <div className="mt-4 flex justify-between items-center">
-          <p className="text-success-600">تم التسليم</p>
-          <div className="flex justify-end items-start">
-            <p className="text-right">
-              <p className="mr-2">ساعه سمارات </p>
-              <p className="mr-2 text-[12px]" style={{ direction: "rtl" }}>
-                +3 منتجات أخري
-              </p>
-            </p>
-            <Avatar src={`${Logo}`} size="md" />
+          <div className="p-3 text-end">
+            <p className="opacity-80 text-xl">أحدث 3 طلبات</p>
+
+            {orders.length > 0 ? (
+              orders
+                .slice(Math.max(orders.length - 3, 0))
+                .map((order, indexOrder) => (
+                  <div
+                    key={indexOrder}
+                    className="mt-4 flex justify-between items-center"
+                  >
+                    <p className="text-success-600">
+                      {
+                        order.situationSteps[order.situationSteps.length - 1]
+                          .situation
+                      }
+                    </p>
+                    <div className="flex justify-end items-start">
+                      <p className="text-right">
+                        <p className="mr-2">{order.products[0].nameProduct}</p>
+                        <p
+                          className="mr-2 text-[12px]"
+                          style={{ direction: "rtl" }}
+                        >
+                          + {order.products.length - 1} منتجات أخري
+                        </p>
+                      </p>
+                      <Avatar
+                        src={`${order.products[0].imageProduct}`}
+                        size="md"
+                      />
+                    </div>
+                  </div>
+                ))
+            ) : (
+              <p>لا يوجد طلبيات</p>
+            )}
           </div>
-        </div>
-        <div className="mt-4 flex justify-between items-center">
-          <p className="text-success-600">تم التسليم</p>
-          <div className="flex justify-end items-start">
-            <p className="text-right">
-              <p className="mr-2">ساعه سمارات </p>
-              <p className="mr-2 text-[12px]" style={{ direction: "rtl" }}>
-                +3 منتجات أخري
-              </p>
-            </p>
-            <Avatar src={`${Logo}`} size="md" />
-          </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <DivCheck link="/delivery" />
+      )}
     </>
   );
 }

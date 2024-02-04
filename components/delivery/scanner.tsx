@@ -4,16 +4,13 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Swal from "sweetalert2";
 
-interface QrcodeSuccessCallback {
-  (decodedText: string, result: any, instance: any): void;
-}
+//nextUi
+import { useDisclosure } from "@nextui-org/react";
 
-interface QrcodeErrorCallback {
-  (errorMessage: string, errorObject: any, instance: any): void;
-}
-
-export default function QRScanner() {
+export default function QRScanner({ name }: { name: string }) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [scanResult, setScanResult] = useState<string | null>(null);
   const router = useRouter();
   let scanner: Html5QrcodeScanner | null = null;
@@ -22,12 +19,26 @@ export default function QRScanner() {
   const ScannerOrder = async () => {
     try {
       const data = {
-        deliveryName: "محمد",
+        deliveryName: name,
+        idOrder: scanResult,
       };
       const response = await axios.post(
         "http://localhost:5000/scanner/addOrderWithDelivery",
         data
       );
+
+      if (response.data === "yes") {
+        router.push("/delivery/orders");
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "هذة الطلبية موجوده بالفعل",
+          text: "⤫",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+        window.location.reload();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -43,18 +54,7 @@ export default function QRScanner() {
         },
         fps: 5,
       },
-      (result: string, _decodedText: string, _instance: any) => {
-        if (isScanning) {
-          alert("12");
-          setScanResult(result);
-          isScanning = false;
-        }
-        setScanResult(null);
-      },
-      (error: string, _decodedText: string, _instance: any) => {
-        alert("34");
-        console.warn(error);
-      }
+      true
     );
 
     scanner.render(
@@ -68,23 +68,51 @@ export default function QRScanner() {
         console.warn(error);
       }
     );
-
-    // return () => {
-    //   if (scanner) {
-    //     isScanning = false;
-    //     scanner.clear();
-    //   }
-    // };
   }, []);
 
   useEffect(() => {
     if (scanResult) {
-      alert("56");
-      ScannerOrder()
+      ScannerOrder();
     }
   }, [scanResult]);
 
   return (
-    <div>{scanResult ? <p>{scanResult}</p> : <div id="reader"></div>}</div>
+    <>
+      {scanResult ? (
+        <p className="text-center">يرجي الإنتظار</p>
+      ) : (
+        <div id="reader"></div>
+      )}
+      {/* <p
+        onClick={onOpen}
+        className=" w-[50px] h-[50px] text-center hover:cursor-pointer hover:opacity-75 bg-danger-200 p-3 mt-1 rounded-full border-1 border-white"
+      >
+        1
+      </p>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        isDismissable={false}
+        className=" rounded-e-none max-h-screen overflow-y-auto overflow-x-hidden scrollbar-thumb-gray-500 scrollbar-track-gray-300"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">َ</ModalHeader>
+              <ModalBody>
+                <div>
+                  {scanResult ? <p>{scanResult}</p> : <div id="reader"></div>}
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="success" variant="light" onPress={onClose}>
+                  إلغاء
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal> */}
+    </>
   );
 }

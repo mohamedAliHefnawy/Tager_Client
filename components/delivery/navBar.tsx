@@ -1,7 +1,7 @@
 "use client";
 
 //React
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -29,8 +29,13 @@ import { MapIcon } from "@/public/svg/mapIcon";
 import { BuildingstorefrontIcon } from "@/public/svg/buildingstorefrontIcon";
 import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
 
+//components
+import useCheckLogin from "@/components/delivery/checkLogin/checkLogin";
+
 export default function NavBar() {
   const router = useRouter();
+  const [nameDelivery] = useCheckLogin();
+  const [nameDeliveryy, setNameDeliveryy] = useState("");
 
   const Icons = {
     BarsarrowdownIcon: <BarsarrowdownIcon />,
@@ -48,9 +53,19 @@ export default function NavBar() {
   };
 
   const Logout = () => {
-    localStorage.removeItem("user");
-    router.push("/auth/login");
+    localStorage.removeItem("nameDelivery");
+    router.push("/delivery");
   };
+
+  useEffect(() => {
+    if (nameDelivery) {
+      const timeoutId = setTimeout(() => {
+        setNameDeliveryy(nameDelivery);
+      }, 2000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [nameDelivery]);
 
   return (
     <>
@@ -61,8 +76,9 @@ export default function NavBar() {
               className="text-white bg-[var(--mainColor)]"
               startContent={Icons.ChevrondownIcon}
             >
-              <p className="text-white" style={{ direction: "rtl" }}>
-                مرحباَ بك محمد علي
+              <p className="text-white flex" style={{ direction: "rtl" }}>
+                <span>مرحباَ بك</span>
+                <span className="mr-1">{nameDeliveryy}</span>
               </p>
             </Button>
           </DropdownTrigger>
