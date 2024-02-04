@@ -11,7 +11,7 @@ import PrintInvoice from "../modals/orders/printInvoice";
 import ModaelEditOrder from "../modals/orders/modaelEditOrder";
 import QrCode from "../modals/orders/qrCode";
 import ChatDiv from "../modals/orders/chatDiv";
-import Scanner from "@/components/dashboard/scanner";
+import Scanner from "@/components/delivery/scanner";
 import QRCode from "qrcode.react";
 
 //svg

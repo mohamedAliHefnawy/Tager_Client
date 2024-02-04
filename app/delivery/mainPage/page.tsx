@@ -34,6 +34,10 @@ import { BuildingstorefrontIcon } from "@/public/svg/buildingstorefrontIcon";
 //images
 import Logo from "@/public/img/hbaieb.png";
 
+//components
+import NavBar from "@/components/delivery/navBar";
+import QRScanner from "@/components/delivery/scanner";
+
 export default function Home() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -111,60 +115,11 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-[100%] h-32 bg-[var(--mainColor)] flex justify-end items-end pb-10 rounded-es-3xl rounded-ee-3xl">
-        <Dropdown>
-          <DropdownTrigger>
-            <Button
-              className="text-white bg-[var(--mainColor)]"
-              startContent={Icons.ChevrondownIcon}
-            >
-              <p className="text-white" style={{ direction: "rtl" }}>
-                مرحباَ بك محمد علي
-              </p>
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            style={{ direction: "rtl" }}
-            // className="border-1 bg-[var(--mainColorRgba)] rounded-lg"
-          >
-            <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">{Icons.BanknotesIcon}</p>
-                <Link href="/profile" className="mr-1 text-slate-700">
-                  الخزينه
-                </Link>
-              </p>
-            </DropdownItem>
-            <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">{Icons.MapIcon}</p>
-                <Link href="/wallet" className="mr-1 text-slate-700">
-                  الطلبيات
-                </Link>
-              </p>
-            </DropdownItem>
-            <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">
-                  {Icons.BuildingstorefrontIcon}
-                </p>
-                <Link href="/orders" className="mr-1 text-slate-700">
-                  المخزن
-                </Link>
-              </p>
-            </DropdownItem>
-            <DropdownItem key="logout" className="text-danger" color="danger">
-              <p className="flex items-center ">
-                <p>{Icons.LogoutIcon}</p>
-                <p onClick={() => Logout()} className="mr-1">
-                  تسجيل خروج
-                </p>
-              </p>
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
+      <NavBar />
       <div className="my-6">
+        <div>
+          <QRScanner />
+        </div>
         <Image src={Logo} alt={"error"} className="w-[100%] h-36" />
       </div>
       <div className="p-3 text-end">

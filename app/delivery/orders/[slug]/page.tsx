@@ -31,6 +31,7 @@ import { HomeIcon } from "@/public/svg/homeIcon";
 import { ChevrondownIcon } from "@/public/svg/chevrondownIcon";
 import { MapIcon } from "@/public/svg/mapIcon";
 import { BuildingstorefrontIcon } from "@/public/svg/buildingstorefrontIcon";
+import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
 
 //images
 import Logo from "@/public/img/hbaieb.png";
@@ -47,6 +48,9 @@ export default function Home() {
   const [showPassword, setShowPassword] = useState(true);
   const [showPasswordConfirn, setShowPasswordConfirn] = useState(true);
   const router = useRouter();
+  const [selectedKeyCategory, setSelectedKeyCategory] = React.useState<
+    string[]
+  >(["تغيير حالة الطلبية"]);
 
   const Icons = {
     BarsarrowdownIcon: <BarsarrowdownIcon />,
@@ -60,6 +64,7 @@ export default function Home() {
     ChevrondownIcon: <ChevrondownIcon />,
     MapIcon: <MapIcon />,
     BuildingstorefrontIcon: <BuildingstorefrontIcon />,
+    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
   };
 
   const SignUp = async () => {
@@ -113,13 +118,40 @@ export default function Home() {
     router.push("/auth/login");
   };
 
+  const selectedValueCategory = React.useMemo(
+    () => Array.from(selectedKeyCategory).join(", ").replaceAll("_", " "),
+    [selectedKeyCategory]
+  );
+  const handleSelectionChangeCategory = (selectedItems: string[]) => {
+    setSelectedKeyCategory(selectedItems);
+  };
+
   return (
     <>
       <NavBar />
       <div className="mt-4">
         <div className="p-6 pb-1 pt-0 text-right">
           <p>
-            طلبيه أستاذ محمد <span className="text-[13px]">(الاربع عذب)</span>
+            <span className="flex justify-end text-[14px] mb-2">
+              <span className="mr-1">محمد</span>
+              <span className="opacity-80"> : الإسم </span>
+            </span>
+            <span className="flex justify-end text-[14px] mb-2">
+              <span className="mr-1">1212619708</span>
+              <span className="opacity-80"> : الهاتف 1 </span>
+            </span>
+            <span className="flex justify-end text-[14px] mb-2">
+              <span className="mr-1">1022595631</span>
+              <span className="opacity-80"> : الهاتف 2 </span>
+            </span>
+            <span className="flex justify-end text-[14px] mb-2">
+              <span className="mr-1">البحيره ابو حمص مركز دمنهور</span>
+              <span className="opacity-80"> : العنوان </span>
+            </span>
+            <span className="flex justify-end text-[14px] mb-2">
+              <span className="mr-1">مع الشحن</span>
+              <span className="opacity-80"> : الحالة </span>
+            </span>
           </p>
         </div>
         <div className="mb-2 p-6 pt-0 px-3 w-[100%]">
@@ -141,38 +173,43 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="w-[100%] h-[1px] bg-warning-200"></div>
-      <div className="p-3 text-end">
-        <div className="flex justify-end">
-          <p className="bg-warning-100 opacity-65 p-3 px-6 rounded-3xl rounded-es-none w-[100%] text-center">
-            إسترجاع منتجات
-          </p>
-        </div>
-        <div className="mb-2 p-6 px-0 pt-0 mt-2 w-[100%]">
-          <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
-            <div className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  ">
-              <p className="text-right text-[12px] mr-1">
-                <span className=""> ساعة سمارات (3) </span>
-                <p className="flex justify-between">
-                  <span className="text-[12px] text-success-700 flex justify-end">
-                    <span className="mr-1">د.ل</span>
-                    <span>200</span>
-                  </span>
-                  <span className="text-[12px]"> 128GB </span>
-                </p>
-              </p>
-              <p>
-                <Avatar src={`${Logo}`} size="sm" />
-              </p>
-            </div>
+        <div className="px-3">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                variant="bordered"
+                color="warning"
+                startContent={Icons.ArrowUturnDownIcon}
+                className="w-[100%]"
+              >
+                {selectedValueCategory}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              color="warning"
+              disallowEmptySelection
+              selectionMode="single"
+              selectedKeys={selectedKeyCategory}
+              onSelectionChange={(keys: string[] | any) =>
+                handleSelectionChangeCategory(keys)
+              }
+            >
+              <DropdownItem key="تم التسليم">
+                <p className="text-center">تم التسليم</p>
+              </DropdownItem>
+              <DropdownItem key="تم الإسترجاع">
+                <p className="text-center">تم الإسترجاع</p>
+              </DropdownItem>
+              <DropdownItem key="إسترجاع جزئي">
+                <p className="text-center">إسترجاع جزئي</p>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+          <div className="flex justify-end">
+            <p className="bg-warning-200 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
+              تغيير الحالة
+            </p>
           </div>
-        </div>
-
-        <div className="flex justify-end">
-          <p className="bg-warning-200 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
-            تأكيد عمليه الإسترجاع
-          </p>
         </div>
       </div>
     </>

@@ -35,7 +35,10 @@ import { BuildingstorefrontIcon } from "@/public/svg/buildingstorefrontIcon";
 //images
 import Logo from "@/public/img/hbaieb.png";
 
-export default function Home() {
+//components
+import NavBar from "@/components/delivery/navBar";
+
+export default function Home({ params }: { params: { slug: string } }) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -112,84 +115,34 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-[100%] h-32 bg-[var(--mainColor)] flex justify-end items-end pb-10 rounded-es-3xl rounded-ee-3xl">
-        <Dropdown>
-          <DropdownTrigger>
-            <Button
-              className="text-white bg-[var(--mainColor)]"
-              startContent={Icons.ChevrondownIcon}
-            >
-              <p className="text-white" style={{ direction: "rtl" }}>
-                مرحباَ بك محمد علي
-              </p>
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            style={{ direction: "rtl" }}
+      <NavBar />
+      <div className="mt-4">
+        <div className="p-6 pb-1 pt-0 text-right">
+          <Link
+            href={`/delivery/orders/dsfr4`}
+            className="text-warning-600 underline"
           >
-            <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">{Icons.BanknotesIcon}</p>
-                <Link href="/profile" className="mr-1 text-slate-700">
-                  الخزينه
-                </Link>
-              </p>
-            </DropdownItem>
-            <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">{Icons.MapIcon}</p>
-                <Link href="/wallet" className="mr-1 text-slate-700">
-                  الطلبيات
-                </Link>
-              </p>
-            </DropdownItem>
-            <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">
-                  {Icons.BuildingstorefrontIcon}
-                </p>
-                <Link href="/orders" className="mr-1 text-slate-700">
-                  المخزن
-                </Link>
-              </p>
-            </DropdownItem>
-            <DropdownItem key="logout" className="text-danger" color="danger">
-              <p className="flex items-center ">
-                <p>{Icons.LogoutIcon}</p>
-                <p onClick={() => Logout()} className="mr-1">
-                  تسجيل خروج
+            طلبيه أستاذ محمد <span className="text-[13px]">(الاربع عذب)</span>
+          </Link>
+        </div>
+        <div className="mb-2 p-6 pt-0 px-3 w-[100%]">
+          <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
+            <div className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  ">
+              <p className="text-right text-[12px] mr-1">
+                <span className=""> ساعة سمارات (3) </span>
+                <p className="flex justify-between">
+                  <span className="text-[12px] text-success-700 flex justify-end">
+                    <span className="mr-1">د.ل</span>
+                    <span>200</span>
+                  </span>
+                  <span className="text-[12px]"> 128GB </span>
                 </p>
               </p>
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
-      <div className="my-6 p-6">
-        <div className="w-[100%] h-24 border-1 border-slate-600 border-dashed rounded-2xl flex flex-col justify-center items-center ">
-          <p>أموال الخزينة</p>
-          <p className="flex text-sm my-2 text-success-700">
-            <span className="mr-1">د.ل</span>
-            <span> 1000</span>
-          </p>
-        </div>
-      </div>
-      <div className="p-3 text-end">
-        <div className="flex justify-end">
-          <p className="bg-warning-100 opacity-65 p-3 px-6 rounded-3xl rounded-es-none w-[100%] text-center">
-            تحويل أموال
-          </p>
-        </div>
-        <div className="w-[100%]">
-          <textarea
-            className="input p-3"
-            placeholder="أكتب ملاحظه"
-            style={{ direction: "rtl" }}
-          />
-        </div>
-        <div className="flex justify-end">
-          <p className="bg-warning-200 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
-            تأكيد العملية
-          </p>
+              <p>
+                <Avatar src={`${Logo}`} size="sm" />
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </>

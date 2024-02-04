@@ -7,7 +7,7 @@ import Orders from "@/components/dashboard/tables/orders";
 import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "@/components/loading";
-import Scanner from '@/components/dashboard/scanner'
+import Scanner from '@/components/delivery/scanner'
 
 // react
 import { useEffect, useState } from "react";
