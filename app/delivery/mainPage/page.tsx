@@ -121,6 +121,7 @@ export default function Home() {
             {orders.length > 0 ? (
               orders
                 .slice(Math.max(orders.length - 3, 0))
+                .reverse()
                 .map((order, indexOrder) => (
                   <div
                     key={indexOrder}

@@ -43,24 +43,16 @@ import Loading from "@/components/loading";
 
 interface Orders {
   _id: string;
-  name: string;
-  phone: string;
-  password: string;
-  validity: string;
-  image: string;
-  products: [
-    {
-      idProduct: string;
-      nameProduct: string;
-      imageProduct: string;
-      amount: number;
-      price: number;
-      size: string;
-    }
-  ];
-  size: [{ store: [{ amount: number; nameStore: string }]; size: string }];
-  store: { amount: number }[];
-  [key: string]: any;
+  nameClient: string;
+  address: string;
+  products: {
+    idProduct: string;
+    nameProduct: string;
+    imageProduct: string;
+    amount: number;
+    price: number;
+    size: string;
+  }[];
 }
 
 export default function Home() {
@@ -71,8 +63,41 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<Orders[]>([]);
   const [productsOrders, setProductsOrders] = useState<Orders[]>([]);
+  const [productsOrdersRecovery, setProductsOrdersRecovery] = useState<
+    Orders[]
+  >([]);
 
+  const RemoveProduct = (orderId: any, idProduct: any) => {
+    const updatedProductsOrders = productsOrders.map((order) => {
+      if (order._id === orderId) {
+        const filteredProducts = order.products.filter(
+          (product) => product.idProduct !== idProduct
+        );
 
+        return {
+          ...order,
+          products: filteredProducts,
+        };
+      }
+      return order;
+    });
+
+    const removedProduct = productsOrders
+      .find((order) => order._id === orderId)
+      ?.products.find((product) => product.idProduct === idProduct);
+
+    if (removedProduct) {
+      const recoveredOrder: Orders = {
+        _id: orderId,
+        nameClient: "",
+        address: "",
+        products: [removedProduct],
+      };
+
+      productsOrdersRecovery.push(recoveredOrder);
+    }
+    setProductsOrders(updatedProductsOrders);
+  };
 
   const GetProductsInCart = async () => {
     setLoading(true);
@@ -89,6 +114,7 @@ export default function Home() {
         }
       );
       setOrders(response.data.ordersData);
+      setProductsOrders(response.data.ordersData);
     } catch (error) {
       console.log(error);
     } finally {
@@ -122,55 +148,67 @@ export default function Home() {
       ) : nameDelivery ? (
         <>
           <NavBar />
-          {orders.length > 0 ? (
-            orders.map((order, indexOrder) => (
-              <div key={indexOrder} className="mt-4">
-                <div className="p-6 pb-1 pt-0 text-right">
-                  <Link
-                    href={`/delivery/orders/${order._id}`}
-                    className="text-warning-600 underline flex items-end"
-                    style={{ direction: "rtl" }}
-                  >
-                    <p className="flex">
-                      <span className="ml-1">طلبيه</span>
-                      <span>{order.nameClient}</span>
-                    </p>
+          {productsOrders.length > 0 &&
+          productsOrders[0].products.length > 0 ? (
+            productsOrders
+              .slice()
+              .reverse()
+              .map((order, indexOrder) => (
+                <div key={indexOrder} className="mt-4">
+                  <div className="p-6 pb-1 pt-0 text-right">
+                    <Link
+                      href={`/delivery/orders/${order._id}`}
+                      className="text-warning-600 underline flex items-end"
+                      style={{ direction: "rtl" }}
+                    >
+                      <p className="flex">
+                        <span className="ml-1">طلبيه</span>
+                        <span>{order.nameClient}</span>
+                      </p>
 
-                    <span className="text-[13px] mr-1">({order.address})</span>
-                  </Link>
-                </div>
-                <div className="mb-2 p-6 pt-0 px-3 w-[100%]">
-                  <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
-                    {order.products.map((product, indexProduct) => (
-                      <div
-                        key={indexProduct}
-                        className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  "
-                      >
-                        <p className="text-right text-[12px] mr-1">
-                          <span className="">
-                            {product.nameProduct} ({product.amount})
-                          </span>
-                          <p className="flex justify-between">
-                            <span className="text-[12px] text-success-700 flex justify-end">
-                              <span className="mr-1">د.ل</span>
-                              <span>{product.price}</span>
-                            </span>
-                            <span className="text-[12px]">{product.size}</span>
-                          </p>
-                        </p>
-                        <p>
-                          {/* {product.idProduct} */}
-                          <Avatar src={`${product.imageProduct}`} size="sm" />
-                        </p>
-                      </div>
-                    ))}
+                      <span className="text-[13px] mr-1">
+                        ({order.address})
+                      </span>
+                    </Link>
                   </div>
+                  <div className="mb-2 p-6 pt-0 px-3 w-[100%]">
+                    <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
+                      {order.products.map((product, indexProduct) => (
+                        <div
+                          key={indexProduct}
+                          className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  "
+                        >
+                          <p className="text-right text-[12px] mr-1">
+                            <span className="">
+                              {product.nameProduct} ({product.amount})
+                            </span>
+                            <p className="flex justify-between">
+                              <span className="text-[12px] text-success-700 flex justify-end">
+                                <span className="mr-1">د.ل</span>
+                                <span>{product.price}</span>
+                              </span>
+                              <span className="text-[12px]">
+                                {product.size}
+                              </span>
+                            </p>
+                          </p>
+                          <p
+                            onClick={() =>
+                              RemoveProduct(order._id, product.idProduct)
+                            }
+                          >
+                            {/* {product.idProduct} */}
+                            <Avatar src={`${product.imageProduct}`} size="sm" />
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="w-[100%] h-[1px] bg-warning-200"></div>
                 </div>
-                <div className="w-[100%] h-[1px] bg-warning-200"></div>
-              </div>
-            ))
+              ))
           ) : (
-            <p>لا يوجد طلبيات</p>
+            <p className="text-center p-8">لا يوجد طلبيات</p>
           )}
 
           <div className="p-3 text-end">
@@ -179,25 +217,37 @@ export default function Home() {
                 إسترجاع منتجات
               </p>
             </div>
-            <div className="mb-2 p-6 px-0 pt-0 mt-2 w-[100%]">
-              <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
-                <div className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  ">
-                  <p className="text-right text-[12px] mr-1">
-                    <span className=""> ساعة سمارات (3) </span>
-                    <p className="flex justify-between">
-                      <span className="text-[12px] text-success-700 flex justify-end">
-                        <span className="mr-1">د.ل</span>
-                        <span>200</span>
-                      </span>
-                      <span className="text-[12px]"> 128GB </span>
-                    </p>
-                  </p>
-                  <p>
-                    <Avatar src={`${Logo}`} size="sm" />
-                  </p>
-                </div>
+            {productsOrdersRecovery.length > 0 ? (
+              <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2">
+                {productsOrdersRecovery
+                  .map((order) => order.products)
+                  .flat()
+                  .map((product, indexProduct) => (
+                    <div
+                      key={indexProduct}
+                      className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  "
+                    >
+                      <p className="text-right text-[12px] mr-1">
+                        <span className="">
+                          {product.nameProduct} ({product.amount})
+                        </span>
+                        <p className="flex justify-between">
+                          <span className="text-[12px] text-success-700 flex justify-end">
+                            <span className="mr-1">د.ل</span>
+                            <span>{product.price}</span>
+                          </span>
+                          <span className="text-[12px]">{product.size}</span>
+                        </p>
+                      </p>
+                      <p>
+                        <Avatar src={`${product.imageProduct}`} size="sm" />
+                      </p>
+                    </div>
+                  ))}
               </div>
-            </div>
+            ) : (
+              <p className="text-center p-8">لا يوجد منتجات</p>
+            )}
 
             <div className="flex justify-end">
               <p className="bg-warning-200 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">

@@ -101,53 +101,57 @@ export default function Home() {
           <NavBar />
 
           {orders.length > 0 ? (
-            orders.map((order, indexOrder) => (
-              <div key={indexOrder} className="mt-4">
-                <div className="p-6 pb-1 pt-0 text-right">
-                  <Link
-                    href={`/delivery/orders/${order._id}`}
-                    className="text-warning-600 underline flex items-end"
-                    style={{ direction: "rtl" }}
-                  >
-                    <p className="flex">
-                      <span className="ml-1">طلبيه</span>
-                      <span>{order.nameClient}</span>
-                    </p>
+            orders
+              .slice()
+              .reverse()
+              .map((order, indexOrder) => (
+                <div key={indexOrder} className="mt-4">
+                  <div className="p-6 pb-1 pt-0 text-right">
+                    <Link
+                      href={`/delivery/orders/${order._id}`}
+                      className="text-warning-600 underline flex items-end"
+                      style={{ direction: "rtl" }}
+                    >
+                      <p className="flex">
+                        <span className="ml-1">طلبيه</span>
+                        <span>{order.nameClient}</span>
+                      </p>
 
-                    <span className="text-[13px] mr-1">({order.address})</span>
-                  </Link>
-                </div>
-                <div className="mb-2 p-6 pt-0 px-3 w-[100%]">
-                  <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
-                    {order.products.map((product, indexProduct) => (
-                      <div
-                        key={indexProduct}
-                        className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  "
-                      >
-                        <p className="text-right text-[12px] mr-1">
-                          <span className="">
-                            {product.nameProduct} ({product.amount})
-                          </span>
-                          <p className="flex justify-between">
-                            <span className="text-[12px] text-success-700 flex justify-end">
-                              <span className="mr-1">د.ل</span>
-                              <span>{product.price}</span>
+                      <span className="text-[13px] mr-1">
+                        ({order.address})
+                      </span>
+                    </Link>
+                  </div>
+                  <div className="mb-2 p-6 pt-0 px-3 w-[100%]">
+                    <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
+                      {order.products.map((product, indexProduct) => (
+                        <div
+                          key={indexProduct}
+                          className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  "
+                        >
+                          <p className="text-right text-[12px] mr-1">
+                            <span className="">
+                              {product.nameProduct} ({product.amount})
                             </span>
-                            <span className="text-[12px]">
-                          
-                              {product.size}
-                            </span>
+                            <p className="flex justify-between">
+                              <span className="text-[12px] text-success-700 flex justify-end">
+                                <span className="mr-1">د.ل</span>
+                                <span>{product.price}</span>
+                              </span>
+                              <span className="text-[12px]">
+                                {product.size}
+                              </span>
+                            </p>
                           </p>
-                        </p>
-                        <p>
-                          <Avatar src={`${product.imageProduct}`} size="sm" />
-                        </p>
-                      </div>
-                    ))}
+                          <p>
+                            <Avatar src={`${product.imageProduct}`} size="sm" />
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))
           ) : (
             <p>لا يوجد طلبيات</p>
           )}
