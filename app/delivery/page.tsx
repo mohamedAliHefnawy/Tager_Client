@@ -52,9 +52,19 @@ export default function Home() {
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
         });
-        localStorage.setItem("nameDelivery", name);
-        localStorage.setItem("valDelivery", validity);
-        router.push("/delivery/mainPage");
+        if (validity === "مندوب توصيل") {
+          localStorage.setItem("nameDelivery", name);
+          localStorage.setItem("valDelivery", validity);
+          router.push("/delivery/mainPage");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: " ليس لك الصلاحية للدخول لهذه الصفحة",
+            text: "⤫",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "حسنًا",
+          });
+        }
       }
       if (answer === "no") {
         Swal.fire({

@@ -157,8 +157,6 @@ export default function Orders() {
             <div className="w-[25%] text-center">
               <p>إسم العميل</p>
             </div>
-            {nameAdmin}
-
             <div className="w-[25%] text-center">
               <p>رقم الهاتف</p>
             </div>

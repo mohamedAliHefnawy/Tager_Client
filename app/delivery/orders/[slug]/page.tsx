@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 //nextUi
 import {
@@ -20,17 +21,6 @@ import {
 } from "@nextui-org/react";
 
 //svg
-import { BarsarrowdownIcon } from "@/public/svg/barsarrowdownIcon";
-import { UserIcon } from "@/public/svg/userIcon";
-import { BanknotesIcon } from "@/public/svg/banknotesIcon";
-import { TagIcon } from "@/public/svg/tagIcon";
-import { LogoutIcon } from "@/public/svg/logoutIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { HomeIcon } from "@/public/svg/homeIcon";
-import { ChevrondownIcon } from "@/public/svg/chevrondownIcon";
-import { MapIcon } from "@/public/svg/mapIcon";
-import { BuildingstorefrontIcon } from "@/public/svg/buildingstorefrontIcon";
 import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
 
 //images
@@ -41,6 +31,7 @@ import NavBar from "@/components/delivery/navBar";
 import useCheckLogin from "@/components/delivery/checkLogin/checkLogin";
 import DivCheck from "@/components/delivery/checkLogin/divCheck";
 import Loading from "@/components/loading";
+import ChatDiv from "@/components/delivery/chatDiv";
 
 interface Orders {
   _id: string;
@@ -49,6 +40,7 @@ interface Orders {
   password: string;
   validity: string;
   image: string;
+  money: number;
   products: [
     {
       nameProduct: string;
@@ -56,6 +48,13 @@ interface Orders {
       amount: number;
       price: number;
       size: string;
+    }
+  ];
+  situationSteps: [
+    {
+      situation: string;
+      date: string;
+      time: string;
     }
   ];
   size: [{ store: [{ amount: number; nameStore: string }]; size: string }];
@@ -70,7 +69,8 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<Orders>();
-  const [selectedKeyCategory, setSelectedKeyCategory] = React.useState<
+  const [closeBtn, setCloseBtn] = useState(true);
+  const [selectedSituationOrder, setSelectedSituationOrder] = React.useState<
     string[]
   >(["تغيير حالة الطلبية"]);
 
@@ -78,12 +78,38 @@ export default function Home({ params }: { params: { slug: string } }) {
     ArrowUturnDownIcon: <ArrowUturnDownIcon />,
   };
 
-  const selectedValueCategory = React.useMemo(
-    () => Array.from(selectedKeyCategory).join(", ").replaceAll("_", " "),
-    [selectedKeyCategory]
+  const selectedValueSituationOrder = React.useMemo(
+    () => Array.from(selectedSituationOrder).join(", ").replaceAll("_", " "),
+    [selectedSituationOrder]
   );
-  const handleSelectionChangeCategory = (selectedItems: string[]) => {
-    setSelectedKeyCategory(selectedItems);
+  const handleSelectionOrder = (selectedItems: string[]) => {
+    setSelectedSituationOrder(selectedItems);
+  };
+
+  const EditOrder = async () => {
+    setCloseBtn(true);
+    try {
+      const data = {
+        delivery: nameDeliveryy,
+        idOrder: order?._id,
+        situationOrder: selectedValueSituationOrder,
+        orderMoney: order?.totalPriceProducts,
+      };
+      const response = await axios.post(
+        "http://localhost:5000/orders/editOrderSituation2",
+        data
+      );
+      if (response.data === "yes") {
+        toast.success("تم عمل الشراء بنجاح ✓");
+        window.location.reload();
+      }
+      if (response.data === "no") {
+        alert("توجد مشكلة ما. حاول مرة أخرى 😓");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const GetOrder = async () => {
@@ -107,6 +133,14 @@ export default function Home({ params }: { params: { slug: string } }) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectedValueSituationOrder !== "تغيير حالة الطلبية") {
+      setCloseBtn(false);
+    } else {
+      setCloseBtn(true);
+    }
+  }, [selectedValueSituationOrder]);
 
   useEffect(() => {
     if (nameDelivery) {
@@ -135,7 +169,12 @@ export default function Home({ params }: { params: { slug: string } }) {
         <>
           <NavBar />
           <div className="mt-4">
-            <div className="p-6 pb-1 pt-0 text-right">
+            <div className="p-6 pb-1 pt-0 flex justify-between items-center">
+              <ChatDiv
+                idOrder={order?._id}
+                delivery={nameDeliveryy}
+                chatMessages={order?.chatMessages}
+              />
               <p>
                 <span className="flex justify-end text-[14px] mb-2">
                   <span className="mr-1">{order?.nameClient}</span>
@@ -191,41 +230,65 @@ export default function Home({ params }: { params: { slug: string } }) {
               </div>
             </div>
             <div className="px-3">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button
-                    variant="bordered"
-                    color="warning"
-                    startContent={Icons.ArrowUturnDownIcon}
-                    className="w-[100%]"
-                  >
-                    {selectedValueCategory}
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  color="warning"
-                  disallowEmptySelection
-                  selectionMode="single"
-                  selectedKeys={selectedKeyCategory}
-                  onSelectionChange={(keys: string[] | any) =>
-                    handleSelectionChangeCategory(keys)
+              {order?.situationSteps.some(
+                (step) =>
+                  step.situation === "تم التوصيل" ||
+                  step.situation === "تم الاسترجاع" ||
+                  step.situation === "تم الاسترجاع"
+              ) ? (
+                <Button variant="bordered" color="warning" className="w-[100%]">
+                  {
+                    order?.situationSteps[order?.situationSteps.length - 1]
+                      ?.situation
                   }
-                >
-                  <DropdownItem key="تم التسليم">
-                    <p className="text-center">تم التسليم</p>
-                  </DropdownItem>
-                  <DropdownItem key="تم الإسترجاع">
-                    <p className="text-center">تم الإسترجاع</p>
-                  </DropdownItem>
-                  <DropdownItem key="إسترجاع جزئي">
-                    <p className="text-center">إسترجاع جزئي</p>
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+                </Button>
+              ) : (
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button
+                      variant="bordered"
+                      color="warning"
+                      startContent={Icons.ArrowUturnDownIcon}
+                      className="w-[100%]"
+                    >
+                      {selectedValueSituationOrder}
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    color="warning"
+                    disallowEmptySelection
+                    selectionMode="single"
+                    selectedKeys={selectedSituationOrder}
+                    onSelectionChange={(keys: string[] | any) =>
+                      handleSelectionOrder(keys)
+                    }
+                  >
+                    <DropdownItem key="تم التوصيل">
+                      <p className="text-center">تم التوصيل</p>
+                    </DropdownItem>
+                    <DropdownItem key="تم الإسترجاع">
+                      <p className="text-center">تم الإسترجاع</p>
+                    </DropdownItem>
+                    <DropdownItem key="إسترجاع جزئي">
+                      <p className="text-center">إسترجاع جزئي</p>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
+
               <div className="flex justify-end">
-                <p className="bg-warning-200 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
-                  تغيير الحالة
-                </p>
+                {!closeBtn ? (
+                  <p
+                    onClick={EditOrder}
+                    className="bg-warning-300 focus:bg-warning-400 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center"
+                  >
+                    تغيير الحالة
+                  </p>
+                ) : (
+                  <p className="bg-warning-100 focus:bg-warning-400 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
+                    تغيير الحالة
+                  </p>
+                )}
               </div>
             </div>
           </div>

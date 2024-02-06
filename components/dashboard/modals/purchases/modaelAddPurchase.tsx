@@ -758,7 +758,7 @@ export default function ModaelAddPurchase({
         },
       });
       setProducts(response.data.products);
-      console.log(response.data);
+     
     } catch (error) {
       console.log(error);
     } finally {
@@ -776,7 +776,7 @@ export default function ModaelAddPurchase({
         },
       });
       setStores(response.data.stores);
-      console.log(response.data);
+      
     } catch (error) {
       console.log(error);
     } finally {

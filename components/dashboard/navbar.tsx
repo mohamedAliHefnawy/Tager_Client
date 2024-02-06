@@ -21,37 +21,20 @@ import {
 import { BellalertIcon } from "../../public/svg/bellalertIcon";
 import { BackwardIcon } from "../../public/svg/backwardIcon";
 
-interface Employee {
+interface Notifications {
   _id: string;
-  name: string;
-  phone1: string;
-  phone2: string;
-  password: string;
-  image: string;
-  validity: string;
-}
-
-interface Store {
-  _id: string;
-  name: string;
-  price: string;
-  amount: string;
-  details: [
-    {
-      _id: string;
-      price: Number;
-      amount: Number;
-      date: String;
-      expirydate: String;
-    }
-  ];
+  message: string;
+  date: string;
+  time: string;
+  notes: string;
+  person: string;
 }
 
 export default function NavBar() {
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [loading, setLoading] = useState(true);
   const usernamee = localStorage.getItem("nameAdmin");
-  const [employee, setEmployee] = useState<Employee | null>(null);
-  const [store, setStore] = useState<Store[]>([]);
+  const [notifications, setNotifications] = useState<Notifications[]>([]);
   const router = useRouter();
 
   const icons = {
@@ -64,14 +47,42 @@ export default function NavBar() {
     router.push("/dashboard");
   };
 
-  const GetEmployees = async () => {
+  const AcceptMoney = async (person: string) => {
+    try {
+      const data = {
+        person: person,
+      };
+      const response = await axios.post(
+        "http://localhost:5000/notifications/addNotification",
+        data
+      );
+      // if (response.data === "yes") {
+      //   Swal.fire({
+      //     icon: "success",
+      //     title: "تم التحويل بنجاح",
+      //     text: "⤫",
+      //     confirmButtonColor: "#3085d6",
+      //     confirmButtonText: "حسنًا",
+      //   });
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const GetNotifications = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `https://server-clinic.vercel.app/employees/getemployee/${usernamee}`
+      let response: { data: { token: string; notifications: any } };
+      response = await axios.get(
+        "http://localhost:5000/notifications/getNotifications",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
       );
-      setEmployee(response.data);
-      console.log(response.data);
+      setNotifications(response.data.notifications);
     } catch (error) {
       console.log(error);
     } finally {
@@ -80,32 +91,14 @@ export default function NavBar() {
   };
 
   useEffect(() => {
-    GetEmployees();
+    GetNotifications();
   }, []);
-
-  const tooltip = () => {
-    return (
-      <>
-        {/* <div>
-          <Model />
-        </div> */}
-
-        <Button
-          onClick={() => router.push(`/dashboard/account/${usernamee}`)}
-          variant="faded"
-          color="primary"
-        >
-          حسابي
-        </Button>
-      </>
-    );
-  };
 
   const notif = () => {
     return (
       <>
         <div className=" text-white text-sm flex items-center justify-between pr-5 hover:font-bold hover:cursor-pointer hover:transform hover:scale-110 transition-transform duration-300">
-          <Popover className="w-[500px]" placement="right" backdrop="blur">
+          <Popover className="w-[1000px]" placement="right" backdrop="blur">
             <PopoverTrigger>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-3">
@@ -115,32 +108,33 @@ export default function NavBar() {
                 </div>
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-[320px] flex flex-col justify-start h-72 P-4 py-6">
-              سيستم الحبايب
+            <PopoverContent className="w-[100%] flex flex-col justify-start items-end h-72 P-4 py-6">
+              {notifications.map((item, indexItem) => (
+                <div key={indexItem} className="flex items-center">
+                  <p className="text-danger-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-danger-50 rounded-full p-4">
+                    رفض
+                  </p>
+                  <p
+                    onClick={() => AcceptMoney(item.person)}
+                    className="text-success-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-success-50 rounded-full p-4"
+                  >
+                    إستلام
+                  </p>
+                  <p
+                    style={{ direction: "rtl" }}
+                    className="text-lg pr-10 flex items-center mb-2"
+                  >
+                    <span className="ml-2 text-warning-500">✦</span>
+                    <span>{item.message}</span>
+                  </p>
+                </div>
+              ))}
             </PopoverContent>
           </Popover>
         </div>
       </>
     );
   };
-
-  const GetStore = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        "https://server-clinic.vercel.app/store/getstore"
-      );
-      setStore(response.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    GetStore();
-  }, []);
 
   return (
     <>
@@ -174,7 +168,7 @@ export default function NavBar() {
                     {usernamee}
                   </p>
                 }
-                description={employee?.validity}
+                // description={employee?.validity}
                 avatarProps={{
                   src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
                 }}

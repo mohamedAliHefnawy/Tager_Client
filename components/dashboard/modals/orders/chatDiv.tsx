@@ -49,22 +49,28 @@ export default function ChatDiv({
     PaperAirplaneIcon: <PaperAirplaneIcon />,
   };
 
-  const parseTime = (timeString: string): number => {
+  const parseDateTime = (dateString: string, timeString: string): number => {
+    const [day, month, year] = dateString.split("/");
     const [time, period] = timeString.split(" ");
     const [hours, minutes, seconds] = time.split(":");
     const isPM = period === "PM";
     const hours24 = isPM ? parseInt(hours, 10) + 12 : parseInt(hours, 10);
 
-    const date = new Date(
-      0,
-      0,
-      0,
+    const dateTime = new Date(
+      +year,
+      +month - 1,
+      +day,
       hours24,
       parseInt(minutes, 10),
       parseInt(seconds, 10)
     );
-    return date.getTime();
+    return dateTime.getTime();
   };
+
+  const today = new Date();
+  const todayDateString = `${
+    today.getMonth() + 1
+  }/${today.getDate()}/${today.getFullYear()}`;
 
   const allMessages = messages.reduce(
     (
@@ -79,7 +85,14 @@ export default function ChatDiv({
 
   const sortedMessages = allMessages
     .filter((item) => item.message !== "")
-    .sort((a, b) => parseTime(a.time) - parseTime(b.time));
+    .sort((a, b) => {
+      const dateComparison =
+        a.date === todayDateString ? 1 : b.date === todayDateString ? -1 : 0;
+      const timeComparison =
+        parseDateTime(a.date, a.time) - parseDateTime(b.date, b.time);
+
+      return dateComparison === 0 ? timeComparison : dateComparison;
+    });
 
   const SendMessageApi = async (idOrder: string) => {
     try {

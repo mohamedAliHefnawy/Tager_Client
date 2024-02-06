@@ -78,7 +78,7 @@ export default function NavBar() {
             >
               <p className="text-white flex" style={{ direction: "rtl" }}>
                 <span>مرحباَ بك</span>
-                <span className="mr-1">{nameDeliveryy}</span>
+                <span className="mr-1">{nameDelivery}</span>
               </p>
             </Button>
           </DropdownTrigger>

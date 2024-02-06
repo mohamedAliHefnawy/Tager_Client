@@ -21,12 +21,12 @@ interface Messages {
 }
 
 export default function ChatDivMarketer({
-  marketer,
+  delivery,
   idOrder,
   chatMessages,
 }: {
-  marketer: string;
-  idOrder: string;
+  delivery: string;
+  idOrder: string | undefined;
   chatMessages: Messages[];
 }) {
   const [messages, setMessages] = useState<Messages[]>([]);
@@ -84,15 +84,15 @@ export default function ChatDivMarketer({
       return dateComparison === 0 ? timeComparison : dateComparison;
     });
 
-  const SendMessageApi = async (idOrder: string) => {
+  const SendMessageApi = async (idOrder: string | undefined) => {
     try {
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/chatOrder",
+        "http://localhost:5000/orders/chatOrder",
         {
           idOrder: idOrder,
           text: messageText,
-          val: "مندوب تسويق",
-          marketer,
+          val: "مندوب توصيل",
+          delivery,
         }
       );
       if (response.data === "yes") {
@@ -109,18 +109,18 @@ export default function ChatDivMarketer({
             ],
             marketer: [
               {
-                message: messageText,
-                person: marketer,
-                date: new Date().toLocaleDateString(),
-                time: new Date().toLocaleTimeString(),
-              },
-            ],
-            delivery: [
-              {
                 message: "",
                 person: "",
                 date: "",
                 time: "",
+              },
+            ],
+            delivery: [
+              {
+                message: messageText,
+                person: delivery,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
               },
             ],
           },

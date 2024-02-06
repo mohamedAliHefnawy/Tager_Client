@@ -151,7 +151,7 @@ export default function Home() {
                   </div>
                 ))
             ) : (
-              <p>لا يوجد طلبيات</p>
+              <p className="text-center w-[100%] p-10 text-danger-600">لا يوجد طلبيات</p>
             )}
           </div>
         </>

@@ -45,16 +45,26 @@ export default function Home() {
       const { validity, answer } = response.data;
 
       if (answer === "yes") {
-        Swal.fire({
-          icon: "success",
-          title: "تم  التسجيل بنجاح ",
-          text: "✓",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-        localStorage.setItem("user", name);
-        localStorage.setItem("userValidity", validity);
-        router.push("/");
+        if (validity === "مندوب تسويق") {
+          Swal.fire({
+            icon: "success",
+            title: "تم  التسجيل بنجاح ",
+            text: "✓",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "حسنًا",
+          });
+          localStorage.setItem("user", name);
+          localStorage.setItem("userValidity", validity);
+          router.push("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: " ليس لك الصلاحية للدخول لهذه الصفحة",
+            text: "⤫",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "حسنًا",
+          });
+        }
       }
       if (answer === "no") {
         Swal.fire({

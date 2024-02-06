@@ -48,7 +48,7 @@ export default function SideBar() {
   const [employee, setEmployee] = useState<Employee | null>(null);
 
   const handleLogout = () => {
-    localStorage.removeItem("username");
+    localStorage.removeItem("nameAdmin");
     router.push("/dashboard");
   };
 

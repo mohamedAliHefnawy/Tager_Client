@@ -51,11 +51,21 @@ export default function Home() {
       const { validity, answer } = response.data;
 
       if (answer === "yes") {
-        handleSuccess();
-        localStorage.setItem("nameAdmin", name);
-        localStorage.setItem("valAdmin", validity);
         setTimeout(() => {
-          router.push("/dashboard/analysis");
+          if (validity === "أدمن") {
+            handleSuccess();
+            localStorage.setItem("nameAdmin", name);
+            localStorage.setItem("valAdmin", validity);
+            router.push("/dashboard/analysis");
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "انت ليس لك الصلاحية للدخول للوحة التحكم",
+              text: "⤫",
+              confirmButtonColor: "#3085d6",
+              confirmButtonText: "حسنًا",
+            });
+          }
         }, 3000);
       }
       if (response.data === "noPassword") {
