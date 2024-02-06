@@ -55,7 +55,7 @@ export default function Home() {
         orders: 12,
       };
       const response = await axios.post(
-        "http://localhost:5000/notifications/addNotification",
+        "https://tager-server.vercel.app/notifications/addNotification",
         data
       );
       if (response.data === "yes") {
@@ -76,7 +76,7 @@ export default function Home() {
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
-        `http://localhost:5000/users/getUser/${nameDelivery}`,
+        `https://tager-server.vercel.app/users/getUser/${nameDelivery}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -88,6 +88,19 @@ export default function Home() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const moneyArray = dataUser?.money || [];
+    const totalMoney = moneyArray
+      .filter((money) => money.acceptMoney === false)
+      .reduce((calc, alt) => calc + alt.money, 0);
+
+    if (totalMoney > 0) {
+      setCloseBtn(false);
+    } else {
+      setCloseBtn(true);
+    }
+  }, [dataUser]);
 
   useEffect(() => {
     if (nameDelivery) {
@@ -140,18 +153,18 @@ export default function Home() {
               />
             </div>
             <div className="flex justify-end">
-              {/* {!closeBtn ? ( */}
-              <p
-                onClick={SendMoney}
-                className="bg-warning-300 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center"
-              >
-                تأكيد العملية
-              </p>
-              {/* ) : (
-                <p className="bg-warning-200 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
+              {!closeBtn ? (
+                <p
+                  onClick={SendMoney}
+                  className="bg-warning-300 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center"
+                >
                   تأكيد العملية
                 </p>
-              )} */}
+              ) : (
+                <p className="bg-warning-200 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
+                  لا يمكنك التحويل
+                </p>
+              )}
             </div>
           </div>
         </>

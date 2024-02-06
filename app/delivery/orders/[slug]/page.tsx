@@ -96,7 +96,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         orderMoney: order?.totalPriceProducts,
       };
       const response = await axios.post(
-        "http://localhost:5000/orders/editOrderSituation2",
+        "https://tager-server.vercel.app/orders/editOrderSituation2",
         data
       );
       if (response.data === "yes") {
@@ -119,7 +119,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         data: { token: string; order: any };
       };
       response = await axios.get(
-        `http://localhost:5000/scanner/getOrder/${params.slug}`,
+        `https://tager-server.vercel.app/scanner/getOrder/${params.slug}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

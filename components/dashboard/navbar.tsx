@@ -3,6 +3,7 @@
 // react
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 import axios from "axios";
 
 // nextUi
@@ -42,29 +43,67 @@ export default function NavBar() {
     BackwardIcon: <BackwardIcon />,
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem(" ");
-    router.push("/dashboard");
-  };
-
-  const AcceptMoney = async (person: string) => {
+  const AcceptMoney = async (
+    person: string,
+    message: string,
+    idMessage: string
+  ) => {
+    const regex = /\d+/;
+    let number = 0;
+    const match = message.match(regex);
+    if (match) {
+      number = parseInt(match[0], 10);
+    } else {
+      console.log("لم يتم العثور على أي رقم في النص");
+    }
     try {
       const data = {
-        person: person,
+        id: idMessage,
+        nameDelivery: person,
+        nameAdmin: usernamee,
+        money: number,
       };
       const response = await axios.post(
-        "http://localhost:5000/notifications/addNotification",
+        "https://tager-server.vercel.app/users/acceptMoney",
         data
       );
-      // if (response.data === "yes") {
-      //   Swal.fire({
-      //     icon: "success",
-      //     title: "تم التحويل بنجاح",
-      //     text: "⤫",
-      //     confirmButtonColor: "#3085d6",
-      //     confirmButtonText: "حسنًا",
-      //   });
-      // }
+      if (response.data === "yes") {
+        Swal.fire({
+          icon: "success",
+          title: "تم الإستلام بنجاح",
+          text: "⤫",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+
+        const filter = notifications.filter((item) => item._id !== idMessage);
+        setNotifications(filter);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const DeclineMoney = async (idMessage: string) => {
+    try {
+      const data = {
+        id: idMessage,
+      };
+      const response = await axios.post(
+        "https://tager-server.vercel.app/users/declineMoney",
+        data
+      );
+      if (response.data === "yes") {
+        Swal.fire({
+          icon: "success",
+          title: "تم الحذف بنجاح",
+          text: "⤫",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+        const filter = notifications.filter((item) => item._id !== idMessage);
+        setNotifications(filter);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -75,7 +114,7 @@ export default function NavBar() {
     try {
       let response: { data: { token: string; notifications: any } };
       response = await axios.get(
-        "http://localhost:5000/notifications/getNotifications",
+        "https://tager-server.vercel.app/notifications/getNotifications",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -102,33 +141,48 @@ export default function NavBar() {
             <PopoverTrigger>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-3">
-                  <Badge color="success" content={5} shape="circle">
+                  <Badge
+                    color="success"
+                    content={notifications.length}
+                    shape="circle"
+                  >
                     <span className="text-black">{icons.BellalertIcon}</span>
                   </Badge>
                 </div>
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-[100%] flex flex-col justify-start items-end h-72 P-4 py-6">
-              {notifications.map((item, indexItem) => (
-                <div key={indexItem} className="flex items-center">
-                  <p className="text-danger-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-danger-50 rounded-full p-4">
-                    رفض
-                  </p>
-                  <p
-                    onClick={() => AcceptMoney(item.person)}
-                    className="text-success-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-success-50 rounded-full p-4"
-                  >
-                    إستلام
-                  </p>
-                  <p
-                    style={{ direction: "rtl" }}
-                    className="text-lg pr-10 flex items-center mb-2"
-                  >
-                    <span className="ml-2 text-warning-500">✦</span>
-                    <span>{item.message}</span>
-                  </p>
-                </div>
-              ))}
+            <PopoverContent className="w-[100%] flex flex-col justify-start items-end max-h-96 min-h-96  P-4 py-6">
+              {notifications.length > 0 ? (
+                notifications.map((item, indexItem) => (
+                  <div key={indexItem} className="flex items-center">
+                    <p
+                      onClick={() => DeclineMoney(item._id)}
+                      className="text-danger-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-danger-50 rounded-full p-4"
+                    >
+                      رفض
+                    </p>
+                    <p
+                      onClick={() =>
+                        AcceptMoney(item.person, item.message, item._id)
+                      }
+                      className="text-success-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-success-50 rounded-full p-4"
+                    >
+                      إستلام
+                    </p>
+                    <p
+                      style={{ direction: "rtl" }}
+                      className="text-lg pr-10 flex items-center mb-2"
+                    >
+                      <span className="ml-2 text-warning-500">✦</span>
+                      <span>{item.message}</span>
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="w-[100%] h-96 text-lg flex justify-center items-center">
+                  لا يوجد أي إشعارات
+                </p>
+              )}
             </PopoverContent>
           </Popover>
         </div>

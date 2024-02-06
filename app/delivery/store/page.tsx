@@ -106,7 +106,7 @@ export default function Home() {
         data: { token: string; ordersData: any };
       };
       response = await axios.get(
-        `http://localhost:5000/scanner/getOrders/${nameDelivery}`,
+        `https://tager-server.vercel.app/scanner/getOrders/${nameDelivery}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
