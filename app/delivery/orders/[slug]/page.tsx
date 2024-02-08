@@ -90,13 +90,24 @@ export default function Home({ params }: { params: { slug: string } }) {
     setCloseBtn(true);
     try {
       const data = {
-        delivery: nameDeliveryy,
+        delivery: nameDelivery,
         idOrder: order?._id,
         situationOrder: selectedValueSituationOrder,
         orderMoney: order?.totalPriceProducts,
+
+        message: `تم تحويل منتجات طلبيه من خلال مندوب التوصيل ${nameDelivery}`,
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+        notes: "",
+
+        nameClient: order?.nameClient,
+        phone1Client: order?.phone1Client,
+        phone2Client: order?.phone2Client,
+        address: order?.address,
+        products: order?.products,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/editOrderSituation2",
+        "http://localhost:5000/orders/editOrderSituation2",
         data
       );
       if (response.data === "yes") {
@@ -234,7 +245,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                 (step) =>
                   step.situation === "تم التوصيل" ||
                   step.situation === "تم الاسترجاع" ||
-                  step.situation === "تم الاسترجاع"
+                  step.situation === "إسترجاع جزئي"
               ) ? (
                 <Button variant="bordered" color="warning" className="w-[100%]">
                   {
@@ -274,6 +285,11 @@ export default function Home({ params }: { params: { slug: string } }) {
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
+              )}
+              {selectedValueSituationOrder === "تم الإسترجاع" && (
+                <p className="w-[100%] text-center text-sm text-danger-600 my-2">
+                  سيتم إرسال منتجات الطلبيه للمخزن الخاص بك
+                </p>
               )}
 
               <div className="flex justify-end">

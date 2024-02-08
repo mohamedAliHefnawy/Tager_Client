@@ -53,6 +53,13 @@ interface Orders {
     price: number;
     size: string;
   }[];
+  situationSteps: [
+    {
+      situation: string;
+      date: string;
+      time: string;
+    }
+  ];
 }
 
 export default function Home() {
@@ -67,37 +74,37 @@ export default function Home() {
     Orders[]
   >([]);
 
-  const RemoveProduct = (orderId: any, idProduct: any) => {
-    const updatedProductsOrders = productsOrders.map((order) => {
-      if (order._id === orderId) {
-        const filteredProducts = order.products.filter(
-          (product) => product.idProduct !== idProduct
-        );
+  // const RemoveProduct = (orderId: any, idProduct: any) => {
+  //   const updatedProductsOrders = productsOrders.map((order) => {
+  //     if (order._id === orderId) {
+  //       const filteredProducts = order.products.filter(
+  //         (product) => product.idProduct !== idProduct
+  //       );
 
-        return {
-          ...order,
-          products: filteredProducts,
-        };
-      }
-      return order;
-    });
+  //       return {
+  //         ...order,
+  //         products: filteredProducts,
+  //       };
+  //     }
+  //     return order;
+  //   });
 
-    const removedProduct = productsOrders
-      .find((order) => order._id === orderId)
-      ?.products.find((product) => product.idProduct === idProduct);
+  //   const removedProduct = productsOrders
+  //     .find((order) => order._id === orderId)
+  //     ?.products.find((product) => product.idProduct === idProduct);
 
-    if (removedProduct) {
-      const recoveredOrder: Orders = {
-        _id: orderId,
-        nameClient: "",
-        address: "",
-        products: [removedProduct],
-      };
+  //   if (removedProduct) {
+  //     const recoveredOrder: Orders = {
+  //       _id: orderId,
+  //       nameClient: "",
+  //       address: "",
+  //       products: [removedProduct],
+  //     };
 
-      productsOrdersRecovery.push(recoveredOrder);
-    }
-    setProductsOrders(updatedProductsOrders);
-  };
+  //     productsOrdersRecovery.push(recoveredOrder);
+  //   }
+  //   setProductsOrders(updatedProductsOrders);
+  // };
 
   const GetProductsInCart = async () => {
     setLoading(true);
@@ -148,11 +155,17 @@ export default function Home() {
       ) : nameDelivery ? (
         <>
           <NavBar />
+
           {productsOrders.length > 0 &&
           productsOrders[0].products.length > 0 ? (
             productsOrders
               .slice()
               .reverse()
+              .filter((item) =>
+                item.situationSteps.some(
+                  (step) => step.situation === "تم الإسترجاع"
+                )
+              )
               .map((order, indexOrder) => (
                 <div key={indexOrder} className="mt-4">
                   <div className="p-6 pb-1 pt-0 text-right">
@@ -193,9 +206,9 @@ export default function Home() {
                             </p>
                           </p>
                           <p
-                            onClick={() =>
-                              RemoveProduct(order._id, product.idProduct)
-                            }
+                          // onClick={() =>
+                          //   RemoveProduct(order._id, product.idProduct)
+                          // }
                           >
                             {/* {product.idProduct} */}
                             <Avatar src={`${product.imageProduct}`} size="sm" />
@@ -211,7 +224,7 @@ export default function Home() {
             <p className="text-center p-8">لا يوجد طلبيات</p>
           )}
 
-          <div className="p-3 text-end">
+          {/* <div className="p-3 text-end">
             <div className="flex justify-end">
               <p className="bg-warning-100 opacity-65 p-3 px-6 rounded-3xl rounded-es-none w-[100%] text-center">
                 إسترجاع منتجات
@@ -254,7 +267,7 @@ export default function Home() {
                 تأكيد عمليه الإسترجاع
               </p>
             </div>
-          </div>
+          </div> */}
         </>
       ) : (
         <DivCheck link="/delivery" />

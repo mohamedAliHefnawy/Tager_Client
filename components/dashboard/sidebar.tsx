@@ -199,10 +199,9 @@ export default function SideBar() {
         />
         <ElementSideBar
           name="المرتجع"
-          link="/dashboard/moneySafe"
+          link="/dashboard/returns"
           icon={icons.ArrowtrendingdownIcon}
         />
-
         <ElementSideBar
           name="المخازن"
           link="/dashboard/store"
