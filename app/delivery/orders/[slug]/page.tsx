@@ -244,7 +244,7 @@ export default function Home({ params }: { params: { slug: string } }) {
               {order?.situationSteps.some(
                 (step) =>
                   step.situation === "تم التوصيل" ||
-                  step.situation === "تم الاسترجاع" ||
+                  step.situation === "تم الإسترجاع" ||
                   step.situation === "إسترجاع جزئي"
               ) ? (
                 <Button variant="bordered" color="warning" className="w-[100%]">
@@ -291,6 +291,30 @@ export default function Home({ params }: { params: { slug: string } }) {
                   سيتم إرسال منتجات الطلبيه للمخزن الخاص بك
                 </p>
               )}
+
+              {selectedValueSituationOrder === "إسترجاع جزئي" &&
+                order?.products.map((product, indexProduct) => (
+                  <div
+                    key={indexProduct}
+                    className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  "
+                  >
+                    <p className="text-right text-[12px] mr-1">
+                      <span className="">
+                        {product.nameProduct} ({product.amount})
+                      </span>
+                      <p className="flex justify-between">
+                        <span className="text-[12px] text-success-700 flex justify-end">
+                          <span className="mr-1">د.ل</span>
+                          <span>{product.price}</span>
+                        </span>
+                        <span className="text-[12px]"> {product.size} </span>
+                      </p>
+                    </p>
+                    <p>
+                      <Avatar src={`${product.imageProduct}`} size="sm" />
+                    </p>
+                  </div>
+                ))}
 
               <div className="flex justify-end">
                 {!closeBtn ? (
