@@ -161,7 +161,8 @@ export default function MoadelOrderProducts({
     field: string,
     value: string,
     price3: number,
-    price2: number
+    price2: number,
+    gainMarketer: number
   ) => {
     const currentInputValues = (inputValues as InputValues)[productId] || {
       price: 0,
@@ -185,9 +186,12 @@ export default function MoadelOrderProducts({
           [field]: value,
         },
       }));
-      const amountOrder = +quantityValue * +priceValue;
 
+      const amountOrder = +quantityValue * +priceValue;
       const amountOrder2 = priceVall * +quantityValue;
+
+      const profit = gainMarketer * +quantityValue;
+
 
       setTotalAmount((prevTotalAmount) => {
         const updatedTotalAmount =
@@ -200,7 +204,7 @@ export default function MoadelOrderProducts({
       setProfitPerProduct((prevProfitPerProduct) => {
         const updatedProfitPerProduct: ProfitPerProduct = {
           ...prevProfitPerProduct,
-          [productId]: amountOrder2,
+          [productId]: profit,
         };
         return updatedProfitPerProduct;
       });
@@ -247,6 +251,8 @@ export default function MoadelOrderProducts({
         >
           <div className=" flex flex-col items-center lg:w-[65%] md:w-[100%] sm:w-[100%] max-sm:w-[100%]">
             <p>البيانات الشخصية</p>
+            {totalProfit}
+            {totalAmount}
 
             <div className=" lg:w-[60%] md:w-[90%] sm:w-[90%] max-sm:w-[90%]">
               <input
@@ -379,22 +385,25 @@ export default function MoadelOrderProducts({
                         <input
                           type="number"
                           className="input opacity-65"
-                          disabled
+                          // disabled
                           placeholder="سعر البيع"
                           value={
-                            validityUser === "زبون عادي"
-                              ? item.price3
-                              : item.price2
+                            (inputValues[item._id] &&
+                              inputValues[item._id].price) ||
+                            ""
                           }
-                          // onChange={(e) =>
-                          //   handleInputChange(
-                          //     item._id,
-                          //     "price",
-                          //     e.target.value,
-                          //     item.price3,
-                          //     item.price2
-                          //   )
-                          // }
+                          onChange={(e) =>
+                            handleInputChange(
+                              item._id,
+                              "price",
+                              validityUser === "زبون عادي"
+                                ? item.price3
+                                : item.price2,
+                              item.price3,
+                              item.price2,
+                              item.gainMarketer
+                            )
+                          }
                         />
                       </div>
                       <div className="w-32">
@@ -402,6 +411,7 @@ export default function MoadelOrderProducts({
                           type="number"
                           className="input mr-1"
                           placeholder="الكمية"
+                          disabled={selectedValueTo === "إختر البلدة"}
                           value={
                             (inputValues[item._id] &&
                               inputValues[item._id].quantity) ||
@@ -413,7 +423,8 @@ export default function MoadelOrderProducts({
                               "quantity",
                               e.target.value,
                               item.price3,
-                              item.price2
+                              item.price2,
+                              item.gainMarketer
                             )
                           }
                         />
@@ -434,7 +445,7 @@ export default function MoadelOrderProducts({
               <div className="flex justify-between px-8 py-4">
                 <p> صافي الربح </p>
                 <p className="flex">
-                  <p>{+totalAmount - +totalProfit}</p>
+                  <p>{totalProfit}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>

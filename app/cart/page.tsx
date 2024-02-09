@@ -177,21 +177,36 @@ export default function Home() {
                     // onClick={() =>
                     //   router.push(`/products/${item.catogry}/${item._id}`)
                     // }
-                    className="flex justify-center items-center"
+                    className="flex justify-center items-center text-lg"
                   >
                     <p> {item.name} </p>
                     {/* <p> {Size(item._id)} </p> */}
 
                     <p className="text-[var(--mainColor)] ml-1"> ☍ </p>
                   </div>
-                  <div className="flex justify-center items-center  ">
-                    <p className="flex ">
-                      <p className="mr-1">د.ل</p>
-
-                      <p className="font-bold">
-                        {userValidity === "زبون عادي"
-                          ? item.price3
-                          : item.price2}
+                  <div className="flex flex-col items-center">
+                    <p className="flex">
+                      <p className="flex">
+                        <p className="mr-1">د.ل</p>
+                        <p className="font-bold">
+                          {userValidity === "زبون عادي"
+                            ? item.price3
+                            : item.price2}
+                        </p>
+                      </p>
+                      <p style={{ direction: "rtl" }} className="ml-2">
+                        {" "}
+                        السعر :{" "}
+                      </p>
+                    </p>
+                    <p className="flex">
+                      <p className="flex">
+                        <p className="mr-1">د.ل</p>
+                        <p className="font-bold">{item.gainMarketer}</p>
+                      </p>
+                      <p style={{ direction: "rtl" }} className="ml-2">
+                        {" "}
+                        الربح :{" "}
                       </p>
                     </p>
                   </div>
@@ -227,9 +242,7 @@ export default function Home() {
             <>
               <div className="p-12 py-8 mr-2 h-auto flex justify-center items-center ">
                 <div className="bg-orange-200 w-4 h-4 rotate-45 mt-1 rounded-lg"></div>
-                <div
-                  className="bg-red-200 p-4 rounded-lg hover:cursor-pointer"
-                >
+                <div className="bg-red-200 p-4 rounded-lg hover:cursor-pointer">
                   إستكمال الطلب
                 </div>
               </div>
