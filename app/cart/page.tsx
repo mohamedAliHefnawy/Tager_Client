@@ -199,7 +199,7 @@ export default function Home() {
                         السعر :{" "}
                       </p>
                     </p>
-                    <p className="flex">
+                    {/* <p className="flex">
                       <p className="flex">
                         <p className="mr-1">د.ل</p>
                         <p className="font-bold">{item.gainMarketer}</p>
@@ -208,7 +208,7 @@ export default function Home() {
                         {" "}
                         الربح :{" "}
                       </p>
-                    </p>
+                    </p> */}
                   </div>
                   <div className="flex justify-evenly items-center mt-3 ">
                     <ButtonAddToFavourite

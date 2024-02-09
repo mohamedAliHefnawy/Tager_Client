@@ -99,6 +99,8 @@ export default function MoadelOrderProducts({
   const [profitPerProduct, setProfitPerProduct] = useState<ProfitPerProduct>(
     {}
   );
+  const [profitPerProductAdmin, setProfitPerProductAdmin] =
+    useState<ProfitPerProduct>({});
 
   const [selectedKeysTo, setSelectedKeysTo] = React.useState<string[]>([
     "إختر البلدة",
@@ -162,6 +164,7 @@ export default function MoadelOrderProducts({
     value: string,
     price3: number,
     price2: number,
+    price1: number,
     gainMarketer: number
   ) => {
     const currentInputValues = (inputValues as InputValues)[productId] || {
@@ -192,6 +195,10 @@ export default function MoadelOrderProducts({
 
       const profit = gainMarketer * +quantityValue;
 
+      // console.log((+priceVall - +price1 ) * +quantityValue);
+
+      const profitAdmin = (+priceVall - +price1) * +quantityValue - +profit;
+      // console.log(profitAdmin);
 
       setTotalAmount((prevTotalAmount) => {
         const updatedTotalAmount =
@@ -208,10 +215,22 @@ export default function MoadelOrderProducts({
         };
         return updatedProfitPerProduct;
       });
+
+      setProfitPerProductAdmin((prevProfitPerProduct) => {
+        const updatedProfitPerProduct: ProfitPerProduct = {
+          ...prevProfitPerProduct,
+          [productId]: profitAdmin,
+        };
+        return updatedProfitPerProduct;
+      });
     }
   };
 
   const totalProfit = Object.values(profitPerProduct).reduce(
+    (acc, profit) => acc + profit,
+    0
+  );
+  const totalProfitAdmin = Object.values(profitPerProductAdmin).reduce(
     (acc, profit) => acc + profit,
     0
   );
@@ -251,8 +270,8 @@ export default function MoadelOrderProducts({
         >
           <div className=" flex flex-col items-center lg:w-[65%] md:w-[100%] sm:w-[100%] max-sm:w-[100%]">
             <p>البيانات الشخصية</p>
-            {totalProfit}
-            {totalAmount}
+            {/* {totalProfit}
+            {totalAmount} */}
 
             <div className=" lg:w-[60%] md:w-[90%] sm:w-[90%] max-sm:w-[90%]">
               <input
@@ -371,13 +390,13 @@ export default function MoadelOrderProducts({
                               </p>
                             ))}
                         </p>
-                        <p className="flex text-[var(--mainColor)] mt-2">
+                        {/* <p className="flex text-[var(--mainColor)] mt-2">
                           <p style={{ direction: "rtl" }}>الربح :</p>
                           <p className="flex">
                             <p>{item.gainMarketer}</p>
                             <p className="mr-1">د.ل</p>
                           </p>
-                        </p>
+                        </p> */}
                       </div>
                     </div>
                     <div className="flex w-[50%]  px-4">
@@ -401,6 +420,7 @@ export default function MoadelOrderProducts({
                                 : item.price2,
                               item.price3,
                               item.price2,
+                              item.price1,
                               item.gainMarketer
                             )
                           }
@@ -424,6 +444,7 @@ export default function MoadelOrderProducts({
                               e.target.value,
                               item.price3,
                               item.price2,
+                              item.price1,
                               item.gainMarketer
                             )
                           }
@@ -442,13 +463,20 @@ export default function MoadelOrderProducts({
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
-              <div className="flex justify-between px-8 py-4">
+              {/* <div className="flex justify-between px-8 py-4">
                 <p> صافي الربح </p>
                 <p className="flex">
                   <p>{totalProfit}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
+              <div className="flex justify-between px-8 py-4">
+                <p> ربح الادمن </p>
+                <p className="flex">
+                  <p>{totalProfitAdmin}</p>
+                  <p className="mr-1">د.ل</p>
+                </p>
+              </div> */}
               <div className="flex justify-between px-8 py-4">
                 <p> سعر التوصيل </p>
                 <p className="flex">
@@ -501,12 +529,13 @@ export default function MoadelOrderProducts({
         imageURLCompany,
         color,
         totalPriceProducts: +totalAmount + +priceDeliveryStore,
-        gainMarketer: +totalAmount - +totalProfit,
+        gainMarketer: +totalProfit,
+        gainAdmin: +totalProfitAdmin,
         marketer: nameUser,
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/addOrderProducts",
+        "http://localhost:5000/orders/addOrderProducts",
         data
       );
       if (response.data === "yes") {

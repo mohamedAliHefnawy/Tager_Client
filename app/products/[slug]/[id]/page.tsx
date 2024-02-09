@@ -88,6 +88,7 @@ export default function Product({ params }: { params: { id: string } }) {
   const [productImages, setProductImages] = useState<string[]>([]);
   const [selectedSize, setSelectedSize] = useState(null);
   const [displayedPrice, setDisplayedPrice] = useState(0);
+  const [displayedPriceRealy, setDisplayedPriceRealy] = useState(0);
   const [displayedGain, setDisplayedGain] = useState(0);
   const [displayedId, setDisplayedId] = useState("");
   const [displayedName, setDisplayedName] = useState("");
@@ -126,6 +127,7 @@ export default function Product({ params }: { params: { id: string } }) {
   const allProducts = [
     ...(product.size ? [product] : []),
     ...(product.name ? [product] : []),
+    ...(product.price1 ? [product] : []),
     ...(product.price2 ? [product] : []),
     ...(product.gainMarketer ? [product] : []),
     ...(product._id ? [product] : []),
@@ -135,6 +137,7 @@ export default function Product({ params }: { params: { id: string } }) {
       color: p.color,
       name: p.name,
       _id: p._id,
+      price1: p.price1,
       price2: p.price2,
       price3: p.price3,
       gainMarketer: p.gainMarketer,
@@ -177,7 +180,9 @@ export default function Product({ params }: { params: { id: string } }) {
         userValidity === "زبون عادي"
           ? productWithSelectedColor.price3
           : productWithSelectedColor.price2;
+
       setDisplayedPrice(priceForUser);
+      setDisplayedPriceRealy(productWithSelectedColor.price1);
 
       const gain = productWithSelectedColor.gainMarketer;
       setDisplayedGain(gain);
@@ -386,6 +391,7 @@ export default function Product({ params }: { params: { id: string } }) {
                   idProduct={displayedId}
                   nameProduct={displayedName}
                   priceProduct={displayedPrice}
+                  priceProductRealy={displayedPriceRealy}
                   gainProduct={displayedGain}
                   imageProduct={productImages}
                   sizeProduct={selectedSize}

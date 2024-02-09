@@ -46,6 +46,7 @@ export default function MoadelOrderProduct({
   nameUser,
   idProduct,
   nameProduct,
+  priceProductRealy,
   priceProduct,
   gainProduct,
   imageProduct,
@@ -57,6 +58,7 @@ export default function MoadelOrderProduct({
   idProduct: string;
   nameProduct: string;
   sizeProduct: null;
+  priceProductRealy: number;
   priceProduct: number;
   gainProduct: number;
   amountProduct: number;
@@ -128,6 +130,11 @@ export default function MoadelOrderProduct({
   const priceDeliveryStore = stores
     .filter((item) => item.gbs === selectedValueTo)
     .map((item) => item.priceDelivery);
+
+  const profitAdmin =
+    +amountOrder * +priceProduct -
+    +amountOrder * +priceProductRealy -
+    +amountOrder * +gainProduct;
 
   const Body = () => {
     return (
@@ -275,14 +282,14 @@ export default function MoadelOrderProduct({
                   </p>
                   <p className="flex items-center text-[var(--mainColor)] mt-2">
                     <span className="flex">
-                      {/* <p>{priceProduct}</p>
-                      <p className="mr-1">د.ل</p> */}
-                      الربح :
+                      <p>{priceProduct}</p>
+                      <p className="mr-1">د.ل</p>
+                      {/* الربح : */}
                     </span>
-                    <span className="flex mr-1">
+                    {/* <span className="flex mr-1">
                       <p>{gainProduct}</p>
                       <p className="mr-1">د.ل</p>
-                    </span>
+                    </span> */}
                   </p>
                 </div>
               </div>
@@ -294,13 +301,23 @@ export default function MoadelOrderProduct({
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
-              <div className="flex justify-between px-8 py-4">
+              {/* <div className="flex justify-between px-8 py-4">
                 <p> صافي الربح </p>
                 <p className="flex">
                   <p>{+amountOrder * +gainProduct}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
+              <div className="flex justify-between px-8 py-4">
+                <p> صافي الربح للادمن </p>
+                <p className="flex">
+                  <p>{(+amountOrder * +priceProduct ) - (+amountOrder * +priceProductRealy) - (+amountOrder * +gainProduct)}</p>
+                  <p>{priceProductRealy}</p>
+                  <p>{priceProduct}</p>
+                  <p className="mr-1">د.ل</p>
+                </p>
+              </div> */}
+              {/* {profitAdmin} */}
               <div className="flex justify-between px-8 py-4">
                 <p> سعر التوصيل </p>
                 <p className="flex">
@@ -312,11 +329,7 @@ export default function MoadelOrderProduct({
               <div className="flex justify-between px-8 py-4">
                 <p> الإجمالي </p>
                 <p className="flex">
-                  <p>
-                    {+amountOrder * +priceProduct +
-                      +priceDeliveryStore +
-                      +amountOrder * +gainProduct}
-                  </p>
+                  <p>{+amountOrder * +priceProduct + +priceDeliveryStore}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
@@ -359,11 +372,9 @@ export default function MoadelOrderProduct({
         color,
         amount: amountOrder,
         price: priceProduct,
-        totalPriceProducts:
-          +amountOrder * +priceProduct +
-          +priceDeliveryStore +
-          +amountOrder * +gainProduct,
+        totalPriceProducts: +amountOrder * +priceProduct,
         gainMarketer: +amountOrder * +gainProduct,
+        gainAdmin: profitAdmin,
         marketer: nameUser,
         deliveryPrice: priceDeliveryStore,
       };
