@@ -45,6 +45,7 @@ export default function Home() {
     .reduce((calc, alt) => calc + alt.money, 0);
 
   const SendMoney = async () => {
+    setCloseBtn(true)
     try {
       const data = {
         person: nameDelivery,

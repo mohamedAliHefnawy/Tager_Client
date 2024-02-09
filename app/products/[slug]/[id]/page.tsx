@@ -43,6 +43,7 @@ interface Product {
   price1: number;
   price2: number;
   price3: number;
+  gainMarketer: number;
   color: string;
   size: Size[];
   _id: string;
@@ -56,6 +57,7 @@ interface Data {
   price1: number;
   price2: number;
   price3: number;
+  gainMarketer: number;
   color: string;
   size: Size[];
   products: Product[];
@@ -76,6 +78,7 @@ export default function Product({ params }: { params: { id: string } }) {
     price1: 0,
     price2: 0,
     price3: 0,
+    gainMarketer: 0,
     color: "",
     size: [],
     products: [],
@@ -85,6 +88,7 @@ export default function Product({ params }: { params: { id: string } }) {
   const [productImages, setProductImages] = useState<string[]>([]);
   const [selectedSize, setSelectedSize] = useState(null);
   const [displayedPrice, setDisplayedPrice] = useState(0);
+  const [displayedGain, setDisplayedGain] = useState(0);
   const [displayedId, setDisplayedId] = useState("");
   const [displayedName, setDisplayedName] = useState("");
 
@@ -123,6 +127,7 @@ export default function Product({ params }: { params: { id: string } }) {
     ...(product.size ? [product] : []),
     ...(product.name ? [product] : []),
     ...(product.price2 ? [product] : []),
+    ...(product.gainMarketer ? [product] : []),
     ...(product._id ? [product] : []),
     ...(product.products || []),
   ].flatMap((p) => [
@@ -132,6 +137,7 @@ export default function Product({ params }: { params: { id: string } }) {
       _id: p._id,
       price2: p.price2,
       price3: p.price3,
+      gainMarketer: p.gainMarketer,
       size: (p.size || [])[0]?.size,
     },
     ...(p.size || []).map((s: any) => ({
@@ -139,6 +145,7 @@ export default function Product({ params }: { params: { id: string } }) {
       price1: p.price1,
       price3: p.price3,
       price2: p.price2,
+      gainMarketer: p.gainMarketer,
       size: s.size,
       name: s.name,
       _id: s._id,
@@ -171,6 +178,9 @@ export default function Product({ params }: { params: { id: string } }) {
           ? productWithSelectedColor.price3
           : productWithSelectedColor.price2;
       setDisplayedPrice(priceForUser);
+
+      const gain = productWithSelectedColor.gainMarketer;
+      setDisplayedGain(gain);
 
       const selectedProductImages = allProductsImages.filter(
         (item: any) => item.color === selectedColor
@@ -265,8 +275,8 @@ export default function Product({ params }: { params: { id: string } }) {
     return (
       <>
         <div className="py-20 px-6  lg:flex md:flex sm:block max-sm:block justify-end w-[100%]">
-          <div className="lg:hidden md:hidden sm:flex max-sm:flex lg:w-[33%] md:w-[33%] sm:w-[90%] max-sm:w-[90%] h-auto bg-gray-200 flex justify-center p-6">
-            <div>
+          <div className="lg:hidden md:hidden sm:flex max-sm:flex lg:w-[33%] md:w-[33%] sm:w-[90%] max-sm:w-[90%] h-auto flex justify-center p-6">
+            <div className="w-[100%]">
               <Slider {...settings}>
                 {productImages &&
                   productImages.map((img, index) => (
@@ -290,10 +300,17 @@ export default function Product({ params }: { params: { id: string } }) {
               <p>{displayedPrice}</p>
             </p>
             <p className="my-1 mt-6  text-lg text-[var(--mainColor)]">
-              <p style={{ direction: "rtl" }}>الكمية :</p>
+              <p style={{ direction: "rtl" }}>الحالة :</p>
             </p>
             <p className="">
-              <p style={{ direction: "rtl" }}>{availableQuantity} قطعة</p>
+              <p style={{ direction: "rtl" }}>
+                {availableQuantity > 0 ? (
+                  <p className="text-success-600">متوفر</p>
+                ) : (
+                  <p className="text-danger-600">غير متوفر</p>
+                )}
+                {/* قطعة */}
+              </p>
             </p>
             <p className="my-1 mt-6 text-[var(--mainColor)] text-lg">
               <p style={{ direction: "rtl" }}>الأحجام :</p>
@@ -318,9 +335,9 @@ export default function Product({ params }: { params: { id: string } }) {
             <p className="my-1 mt-6 text-[var(--mainColor)] text-lg">
               <p style={{ direction: "rtl" }}>الألوان :</p>
             </p>
-            <p className="flex justify-between mt-4">
+            <p className="flex justify-end mt-4">
               {allColors.map((color, index) => (
-                <span key={index} className="mr-3 hover:cursor-pointer">
+                <span key={index} className="mr-6 hover:cursor-pointer">
                   <div
                     onClick={() => handleColorClick(color)}
                     style={{
@@ -328,10 +345,10 @@ export default function Product({ params }: { params: { id: string } }) {
                       outlineColor: color,
                       border:
                         selectedColor === color
-                          ? "0px solid #ccc"
+                          ? "0px solid red"
                           : `0px solid ${color}`,
                     }}
-                    className={`w-10 h-10 border-1 border-slate-300 ${
+                    className={`w-10 h-10 border-1 border-slate-400 ${
                       selectedColor === color ? "outline-8" : "outline-2"
                     } outline-double rounded-full`}
                   ></div>
@@ -369,6 +386,7 @@ export default function Product({ params }: { params: { id: string } }) {
                   idProduct={displayedId}
                   nameProduct={displayedName}
                   priceProduct={displayedPrice}
+                  gainProduct={displayedGain}
                   imageProduct={productImages}
                   sizeProduct={selectedSize}
                   storeProduct={availableStores}

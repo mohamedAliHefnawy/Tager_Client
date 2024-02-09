@@ -34,7 +34,7 @@ import Loading from "@/components/loading";
 import ChatDiv from "@/components/delivery/chatDiv";
 
 interface Orders {
-  _id: string;
+  idProduct: string;
   name: string;
   phone: string;
   password: string;
@@ -43,6 +43,7 @@ interface Orders {
   money: number;
   products: [
     {
+      idProduct: string;
       nameProduct: string;
       imageProduct: string;
       amount: number;
@@ -62,6 +63,15 @@ interface Orders {
   [key: string]: any;
 }
 
+interface ReturnOrders {
+  idProduct: string;
+  nameProduct: string;
+  imageProduct: string;
+  amount: number;
+  price: number;
+  size: string;
+}
+
 export default function Home({ params }: { params: { slug: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [nameDelivery] = useCheckLogin();
@@ -70,6 +80,9 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<Orders>();
   const [closeBtn, setCloseBtn] = useState(true);
+  const [returnOrders, setReturnOrders] = useState<ReturnOrders[]>([]);
+  const [noReturnOrders, setNoReturnOrders] = useState<ReturnOrders[]>([]);
+
   const [selectedSituationOrder, setSelectedSituationOrder] = React.useState<
     string[]
   >(["تغيير حالة الطلبية"]);
@@ -84,6 +97,47 @@ export default function Home({ params }: { params: { slug: string } }) {
   );
   const handleSelectionOrder = (selectedItems: string[]) => {
     setSelectedSituationOrder(selectedItems);
+  };
+
+  const ReturnProductswithStore = (idOrder: string) => {
+    const productOrderId = order?.products.find(
+      (item) => item.idProduct === idOrder
+    );
+
+    if (productOrderId) {
+      const isProductInReturnOrders = returnOrders.some(
+        (item) => item.idProduct === productOrderId.idProduct
+      );
+
+      if (!isProductInReturnOrders) {
+        const updatedReturnOrders = [
+          ...returnOrders,
+          {
+            idProduct: productOrderId.idProduct,
+            nameProduct: productOrderId.nameProduct || "",
+            imageProduct: productOrderId.imageProduct || "",
+            amount: productOrderId.amount || 0,
+            price: productOrderId.price || 0,
+            size: productOrderId.size || "",
+          },
+        ];
+        setReturnOrders(updatedReturnOrders);
+      } else {
+        const updatedReturnOrders = returnOrders.filter(
+          (item) => item.idProduct !== productOrderId.idProduct
+        );
+        setReturnOrders(updatedReturnOrders);
+      }
+
+      const productsNotInReturnOrders = order?.products.filter(
+        (item) =>
+          !returnOrders.some(
+            (orderItem) => orderItem.idProduct === item.idProduct
+          )
+      );
+
+      setNoReturnOrders([...productsNotInReturnOrders!]);
+    }
   };
 
   const EditOrder = async () => {
@@ -105,6 +159,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         phone2Client: order?.phone2Client,
         address: order?.address,
         products: order?.products,
+        returnOrders,
       };
       const response = await axios.post(
         "http://localhost:5000/orders/editOrderSituation2",
@@ -138,6 +193,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         }
       );
       setOrder(response.data.order);
+      setNoReturnOrders(response.data.order?.products);
     } catch (error) {
       console.log(error);
     } finally {
@@ -240,14 +296,14 @@ export default function Home({ params }: { params: { slug: string } }) {
                 ))}
               </div>
             </div>
-            <div className="px-3">
+            <div className="flex flex-col items-center">
               {order?.situationSteps.some(
                 (step) =>
                   step.situation === "تم التوصيل" ||
                   step.situation === "تم الإسترجاع" ||
                   step.situation === "إسترجاع جزئي"
               ) ? (
-                <Button variant="bordered" color="warning" className="w-[100%]">
+                <Button variant="bordered" color="warning" className="w-[93%]">
                   {
                     order?.situationSteps[order?.situationSteps.length - 1]
                       ?.situation
@@ -260,7 +316,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                       variant="bordered"
                       color="warning"
                       startContent={Icons.ArrowUturnDownIcon}
-                      className="w-[100%]"
+                      className="w-[93%]"
                     >
                       {selectedValueSituationOrder}
                     </Button>
@@ -292,31 +348,45 @@ export default function Home({ params }: { params: { slug: string } }) {
                 </p>
               )}
 
-              {selectedValueSituationOrder === "إسترجاع جزئي" &&
-                order?.products.map((product, indexProduct) => (
-                  <div
-                    key={indexProduct}
-                    className="flex bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl  "
-                  >
-                    <p className="text-right text-[12px] mr-1">
-                      <span className="">
-                        {product.nameProduct} ({product.amount})
-                      </span>
-                      <p className="flex justify-between">
-                        <span className="text-[12px] text-success-700 flex justify-end">
-                          <span className="mr-1">د.ل</span>
-                          <span>{product.price}</span>
-                        </span>
-                        <span className="text-[12px]"> {product.size} </span>
-                      </p>
-                    </p>
-                    <p>
-                      <Avatar src={`${product.imageProduct}`} size="sm" />
-                    </p>
+              {selectedValueSituationOrder === "إسترجاع جزئي" && (
+                <div className="my-2 mt-6 p-6 pt-0  px-3 w-[100%]">
+                  <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-4 gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
+                    {order?.products.map((product, indexProduct) => (
+                      <div
+                        key={indexProduct}
+                        onClick={() =>
+                          ReturnProductswithStore(product.idProduct)
+                        }
+                        className={`flex bg-warning-50 border-1 p-2 rounded-2xl ${
+                          returnOrders.some(
+                            (item) => item.idProduct === product.idProduct
+                          )
+                            ? "border-danger-600"
+                            : ""
+                        }`}
+                      >
+                        <p className="text-right text-[12px] mr-1">
+                          <span className="">
+                            {product.nameProduct} ({product.amount})
+                          </span>
+                          <p className="flex justify-between">
+                            <span className="text-[12px] text-success-700 flex justify-end">
+                              <span className="mr-1">د.ل</span>
+                              <span>{product.price}</span>
+                            </span>
+                            <span className="text-[12px]">{product.size}</span>
+                          </p>
+                        </p>
+                        <p>
+                          <Avatar src={`${product.imageProduct}`} size="sm" />
+                        </p>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+              )}
 
-              <div className="flex justify-end">
+              <div className="flex justify-end w-[94%] mb-6">
                 {!closeBtn ? (
                   <p
                     onClick={EditOrder}
@@ -326,7 +396,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                   </p>
                 ) : (
                   <p className="bg-warning-100 focus:bg-warning-400 text-slate-600 p-3 px-6 mt-4 rounded-3xl w-[100%] text-center">
-                    تغيير الحالة
+                    لا يمكنك تغيير الحالة
                   </p>
                 )}
               </div>

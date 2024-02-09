@@ -349,8 +349,8 @@ export default function MoadelOrderProducts({
                                         className="text-success-600"
                                       >
                                         <span className="ml-1">متوفر</span>
-                                        {item5.amount}
-                                        <span className="mr-1">قطعة</span>
+                                        {/* {item5.amount}
+                                        <span className="mr-1">قطعة</span> */}
                                       </p>
                                     ) : (
                                       <p
@@ -366,12 +366,11 @@ export default function MoadelOrderProducts({
                             ))}
                         </p>
                         <p className="flex text-[var(--mainColor)] mt-2">
-                          <p>
-                            {validityUser === "زبون عادي"
-                              ? item.price3
-                              : item.price2}
+                          <p style={{ direction: "rtl" }}>الربح :</p>
+                          <p className="flex">
+                            <p>{item.gainMarketer}</p>
+                            <p className="mr-1">د.ل</p>
                           </p>
-                          <p className="mr-1">د.ل</p>
                         </p>
                       </div>
                     </div>
@@ -379,23 +378,23 @@ export default function MoadelOrderProducts({
                       <div className="w-32">
                         <input
                           type="number"
-                          className="input"
+                          className="input opacity-65"
+                          disabled
                           placeholder="سعر البيع"
-                          defaultValue={item.price3}
                           value={
-                            (inputValues[item._id] &&
-                              inputValues[item._id].price) ||
-                            ""
+                            validityUser === "زبون عادي"
+                              ? item.price3
+                              : item.price2
                           }
-                          onChange={(e) =>
-                            handleInputChange(
-                              item._id,
-                              "price",
-                              e.target.value,
-                              item.price3,
-                              item.price2
-                            )
-                          }
+                          // onChange={(e) =>
+                          //   handleInputChange(
+                          //     item._id,
+                          //     "price",
+                          //     e.target.value,
+                          //     item.price3,
+                          //     item.price2
+                          //   )
+                          // }
                         />
                       </div>
                       <div className="w-32">

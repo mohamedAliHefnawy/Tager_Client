@@ -47,6 +47,7 @@ export default function MoadelOrderProduct({
   idProduct,
   nameProduct,
   priceProduct,
+  gainProduct,
   imageProduct,
   sizeProduct,
   storeProduct,
@@ -57,6 +58,7 @@ export default function MoadelOrderProduct({
   nameProduct: string;
   sizeProduct: null;
   priceProduct: number;
+  gainProduct: number;
   amountProduct: number;
   imageProduct: string[];
   storeProduct: any;
@@ -221,17 +223,18 @@ export default function MoadelOrderProduct({
               />
               <input
                 type="number"
-                className="input mr-1"
+                className="input mr-1 opacity-65"
                 placeholder="سعر بيع القطعة"
-                value={priceOrder}
-                onChange={(e) => {
-                  const value = +e.target.value;
-                  if (value >= 0) {
-                    setPriceOrder(e.target.value);
-                  } else {
-                    setPriceOrder("");
-                  }
-                }}
+                value={priceProduct}
+                disabled
+                // onChange={(e) => {
+                //   const value = +e.target.value;
+                //   if (value >= 0) {
+                //     setPriceOrder(e.target.value);
+                //   } else {
+                //     setPriceOrder("");
+                //   }
+                // }}
               />
             </div>
           </div>
@@ -253,13 +256,33 @@ export default function MoadelOrderProduct({
                 <div className="mr-4">
                   <p className="text-xl mb-2"> {nameProduct} </p>
                   <p>
-                    متوفر
-                    {amountStore.length > 0 ? amountStore[0] - +amountOrder : 0}
-                    <span className="mr-1">قطعة</span>
+                    {selectedValueTo === "إختر البلدة" ? (
+                      <p>من فضلك إختر المكان</p>
+                    ) : (
+                      <p>
+                        {/* متوفر
+                        {amountStore.length > 0
+                          ? amountStore[0] - +amountOrder
+                          : 0}
+                        <span className="mr-1">قطعة</span> */}
+                        {amountStore.length > 0 ? (
+                          <p className="text-success-600">متوفر</p>
+                        ) : (
+                          <p className="text-danger-600">غير متوفر</p>
+                        )}
+                      </p>
+                    )}
                   </p>
-                  <p className="flex text-[var(--mainColor)] mt-2">
-                    <p>{priceProduct}</p>
-                    <p className="mr-1">د.ل</p>
+                  <p className="flex items-center text-[var(--mainColor)] mt-2">
+                    <span className="flex">
+                      {/* <p>{priceProduct}</p>
+                      <p className="mr-1">د.ل</p> */}
+                      الربح :
+                    </span>
+                    <span className="flex mr-1">
+                      <p>{gainProduct}</p>
+                      <p className="mr-1">د.ل</p>
+                    </span>
                   </p>
                 </div>
               </div>
@@ -267,16 +290,14 @@ export default function MoadelOrderProduct({
               <div className="flex justify-between px-8 py-4">
                 <p>سعر المنتجات ({amountOrder})</p>
                 <p className="flex">
-                  <p>{+amountOrder * +priceOrder}</p>
+                  <p>{+amountOrder * +priceProduct}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
               <div className="flex justify-between px-8 py-4">
                 <p> صافي الربح </p>
                 <p className="flex">
-                  <p>
-                    {+amountOrder * +priceOrder - +amountOrder * +priceProduct}
-                  </p>
+                  <p>{+amountOrder * +gainProduct}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
@@ -291,7 +312,11 @@ export default function MoadelOrderProduct({
               <div className="flex justify-between px-8 py-4">
                 <p> الإجمالي </p>
                 <p className="flex">
-                  <p>{+amountOrder * +priceOrder + +priceDeliveryStore}</p>
+                  <p>
+                    {+amountOrder * +priceProduct +
+                      +priceDeliveryStore +
+                      +amountOrder * +gainProduct}
+                  </p>
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
@@ -333,19 +358,21 @@ export default function MoadelOrderProduct({
         imageURLCompany,
         color,
         amount: amountOrder,
-        price: priceOrder,
-        totalPriceProducts: +amountOrder * +priceOrder + +priceDeliveryStore,
-        gainMarketer: +amountOrder * +priceOrder - +amountOrder * +priceProduct,
+        price: priceProduct,
+        totalPriceProducts:
+          +amountOrder * +priceProduct +
+          +priceDeliveryStore +
+          +amountOrder * +gainProduct,
+        gainMarketer: +amountOrder * +gainProduct,
         marketer: nameUser,
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/addOrder",
+        "http://localhost:5000/orders/addOrder",
         data
       );
       if (response.data === "yes") {
         handleSuccess();
-
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -385,7 +412,6 @@ export default function MoadelOrderProduct({
       nameClient.trim() !== "" &&
       phone1Client.trim() !== "" &&
       amountOrder !== "" &&
-      priceOrder !== "" &&
       addressClient !== "" &&
       phone1Client.trim() !== "" &&
       phone2Client.trim() !== ""
@@ -394,14 +420,7 @@ export default function MoadelOrderProduct({
     } else {
       setCloseBtn(true);
     }
-  }, [
-    nameClient,
-    phone1Client,
-    phone2Client,
-    amountOrder,
-    priceOrder,
-    addressClient,
-  ]);
+  }, [nameClient, phone1Client, phone2Client, amountOrder, addressClient]);
 
   return (
     <>
