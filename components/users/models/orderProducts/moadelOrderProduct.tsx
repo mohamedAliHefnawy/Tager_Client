@@ -4,6 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import Confetti from "react-confetti";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 //component
 import NavBar from "@/components/users/navBar";
@@ -79,6 +80,7 @@ export default function MoadelOrderProducts({
   sizeProductss: Products[];
 }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [stores, setStores] = useState<Stores[]>([]);
   const [nameClient, setNameClient] = useState("");
@@ -535,14 +537,13 @@ export default function MoadelOrderProducts({
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "http://localhost:5000/orders/addOrderProducts",
+        "https://tager-server.vercel.app/orders/addOrderProducts",
         data
       );
       if (response.data === "yes") {
         handleSuccess();
-
         setTimeout(() => {
-          window.location.reload();
+          router.push("/orders");
         }, 2000);
       }
     } catch (error) {

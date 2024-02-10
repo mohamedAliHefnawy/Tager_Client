@@ -84,10 +84,25 @@ export default function NavBar() {
     }
   };
 
-  const DeclineMoney = async (idMessage: string) => {
+  const DeclineMoney = async (
+    idMessage: string,
+    person: string,
+    message: string
+  ) => {
     try {
+      const regex = /\d+/;
+      let number = 0;
+      const match = message.match(regex);
+      if (match) {
+        number = parseInt(match[0], 10);
+      } else {
+        console.log("لم يتم العثور على أي رقم في النص");
+      }
       const data = {
         id: idMessage,
+        nameDelivery: person,
+        nameAdmin: usernamee,
+        money: number,
       };
       const response = await axios.post(
         "https://tager-server.vercel.app/users/declineMoney",
@@ -151,33 +166,49 @@ export default function NavBar() {
                 </div>
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-[100%] flex flex-col justify-start items-end max-h-96 min-h-96  P-4 py-6">
+            <PopoverContent className="w-[100%] flex flex-col justify-start items-end max-h-[500px] min-h-96 overflow-y-auto  P-4 py-6">
               {notifications.length > 0 ? (
-                notifications.map((item, indexItem) => (
-                  <div key={indexItem} className="flex items-center">
-                    <p
-                      onClick={() => DeclineMoney(item._id)}
-                      className="text-danger-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-danger-50 rounded-full p-4"
-                    >
-                      رفض
-                    </p>
-                    <p
-                      onClick={() =>
-                        AcceptMoney(item.person, item.message, item._id)
-                      }
-                      className="text-success-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-success-50 rounded-full p-4"
-                    >
-                      إستلام
-                    </p>
-                    <p
-                      style={{ direction: "rtl" }}
-                      className="text-lg pr-10 flex items-center mb-2"
-                    >
-                      <span className="ml-2 text-warning-500">✦</span>
-                      <span>{item.message}</span>
-                    </p>
-                  </div>
-                ))
+                notifications
+                  .slice()
+                  .reverse()
+                  .map((item, indexItem) => (
+                    <div key={indexItem} className="flex items-center">
+                      <p
+                        style={{ direction: "rtl" }}
+                        className="text-lg pr-10 flex items-center mb-6"
+                      >
+                        <span className="ml-2 text-warning-500">✦</span>
+
+                        {item.message.startsWith("تم تحويل مبلغ قدرة") ? (
+                          <>
+                            {item.message}
+                            <p
+                              onClick={() =>
+                                DeclineMoney(
+                                  item._id,
+                                  item.person,
+                                  item.message
+                                )
+                              }
+                              className="text-danger-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-danger-50 rounded-full p-4"
+                            >
+                              رفض
+                            </p>
+                            <p
+                              onClick={() =>
+                                AcceptMoney(item.person, item.message, item._id)
+                              }
+                              className="text-success-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-success-50 rounded-full p-4"
+                            >
+                              إستلام
+                            </p>
+                          </>
+                        ) : (
+                          <p className=""> {item.message}</p>
+                        )}
+                      </p>
+                    </div>
+                  ))
               ) : (
                 <p className="w-[100%] h-96 text-lg flex justify-center items-center">
                   لا يوجد أي إشعارات

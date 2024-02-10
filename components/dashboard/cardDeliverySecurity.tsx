@@ -12,6 +12,7 @@ import {
   Image,
   Input,
   Spinner,
+  Avatar,
 } from "@nextui-org/react";
 
 //svgIcons
@@ -22,59 +23,62 @@ import { ConvertIcon } from "../../public/svg/convertIcon";
 //components
 import ModaelShowReturn from "@/components/dashboard/modals/returns/modaelShowReturn";
 
-interface ReturnOrders {
+interface Data {
   _id: string;
-  nameClient: string;
-  phone1Client: number;
-  phone2Client: number;
-  address: string;
-  person: string;
-  date: string;
-  time: string;
-  products: [
+  name: string;
+  phone: string;
+  image: string;
+  orders: [];
+  money: [
     {
-      idProduct: string;
-      nameProduct: string;
-      imageProduct: string;
-      amount: number;
-      price: number;
-      size: string;
+      money: number;
+      notes: string;
+      date: string;
+      time: string;
+      acceptMoney: boolean;
     }
   ];
 }
 
-export default function CardReturnSafe() {
+export default function CardDeliverySecurity({
+  nameAdmin,
+}: {
+  nameAdmin: string;
+}) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [returnOrders, setReturnOrders] = useState<ReturnOrders[]>([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pressable, setPressable] = useState(true);
-  const itemsPerPage = 1000000;
   const [loading, setLoading] = useState(true);
+  const [dataDeliveries, setDataDeliveries] = useState<Data[]>([]);
+  const itemsPerPage = 1000000;
   const router = useRouter();
 
-  const icons = {
-    SearchIcon: <SearchIcon />,
-    EllipsisverticalIcon: <EllipsisverticalIcon />,
-    ConvertIcon: <ConvertIcon />,
+  const handleSearchChange = (e: any) => {
+    setSearchText(e.target.value);
   };
+
+  const filteredDeliveries = dataDeliveries.filter((delivery) => {
+    const lowerCaseSearchText = searchText.toLowerCase();
+    return (
+      delivery.name && delivery.name.toLowerCase().includes(lowerCaseSearchText)
+    );
+  });
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = returnOrders
+  const currentItems = filteredDeliveries
     .slice(indexOfFirstItem, indexOfLastItem)
     .reverse();
 
-  const GetReturnOrders = async () => {
-    setLoading(true);
+  const GetDataDeliveries = async () => {
     try {
-      let response: { data: { token: string; returns: any } };
-      response = await axios.get("https://tager-server.vercel.app/returns/getReturns", {
+      let response: { data: { token: string; deliveryUsers: any } };
+      response = await axios.get(`https://tager-server.vercel.app/users/getDeliveries`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
       });
-      setReturnOrders(response.data.returns);
+      setDataDeliveries(response.data.deliveryUsers);
     } catch (error) {
       console.log(error);
     } finally {
@@ -83,13 +87,13 @@ export default function CardReturnSafe() {
   };
 
   useEffect(() => {
-    GetReturnOrders();
+    GetDataDeliveries();
   }, []);
 
   return (
     <>
       <div className="flex justify-between">
-        {/* <div className="w-[70%]">
+        <div className="w-[100%]">
           <input
             type="text"
             placeholder="بحث ..."
@@ -99,67 +103,73 @@ export default function CardReturnSafe() {
           />
         </div>
 
-        <ModaelConvertMoney /> */}
+        {/* <ModaelConvertMoney /> */}
       </div>
       <div className="my-3 ml-2 text-slate-600 text-xs">
-        <p>Total {returnOrders.length} OrderReturns </p>
+        <p>Total {dataDeliveries.length} Deliveries </p>
       </div>
       <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
         {loading ? (
           <div className="flex justify-center items-center h-[400px]">
             <Spinner size="lg" />
           </div>
-        ) : returnOrders.length === 0 ? (
+        ) : dataDeliveries.length === 0 ? (
           <p className="text-default-500">لا توجد نتائج موجودة</p>
         ) : (
-          currentItems.map((order, indexOrder) => (
-            <Card shadow="sm" key={indexOrder}>
+          currentItems.map((delivery, indexDelivery) => (
+            <Card shadow="sm" key={indexDelivery}>
               <CardBody className="overflow-visible p-5 text-lg">
-                <p className="flex justify-end mb-2">
-                  <span className="mr-2">{order.nameClient}</span>
+                <p className="w-[100%] flex justify-center">
+                  <Avatar
+                    src={`${delivery.image}`}
+                    size="lg"
+                    alt="لا يوجد صورة"
+                  />
+                </p>
+
+                <p className="flex justify-end my-2">
+                  <span className="mr-2">{delivery.name}</span>
                   <span style={{ direction: "rtl" }} className="opacity-75">
-                    إسم العميل :
+                    إسم المندوب :
                   </span>
                 </p>
                 <p className="flex justify-end mb-2">
-                  <span className="mr-2">{order.phone1Client}</span>
+                  <span className="mr-2">{delivery.phone}</span>
                   <span style={{ direction: "rtl" }} className="opacity-75">
-                    رقم الهاتف 1 :
+                    رقم الهاتف :
                   </span>
                 </p>
                 <p className="flex justify-end mb-2">
-                  <span className="mr-2">{order.phone2Client}</span>
+                  <span className="mr-2">{delivery.orders.length}</span>
                   <span style={{ direction: "rtl" }} className="opacity-75">
-                    رقم الهاتف 2 :
+                    عدد الطلبات :
                   </span>
                 </p>
                 <p className="flex justify-end mb-2">
-                  <span className="mr-2">{order.address}</span>
-                  <span style={{ direction: "rtl" }} className="opacity-75">
-                    العنوان :
+                  <span className="mr-2 flex">
+                    <span className="mr-1">د.ل</span>
+                    <span>
+                      {delivery.money
+                        .filter((item) => item.acceptMoney === true)
+                        .reduce((calc, alt) => calc + alt.money, 0)}
+                    </span>
                   </span>
-                </p>
-                <p className="flex justify-end mb-2">
-                  <span className="mr-2">{order.date}</span>
                   <span style={{ direction: "rtl" }} className="opacity-75">
-                    التاريخ :
-                  </span>
-                </p>
-                <p className="flex justify-end mb-2">
-                  <span className="mr-2">{order.time}</span>
-                  <span style={{ direction: "rtl" }} className="opacity-75">
-                    الوقت :
-                  </span>
-                </p>
-                <p className="flex justify-end mb-2">
-                  <span className="mr-2">{order.person}</span>
-                  <span style={{ direction: "rtl" }} className="opacity-75">
-                    مندوب التوصيل :
+                    الأموال :
                   </span>
                 </p>
               </CardBody>
               <CardFooter className="text-small justify-between">
-                <ModaelShowReturn products={order.products} />
+                <Button
+                  onPress={() =>
+                    router.push(`/dashboard/deliverySecurity/${delivery._id}`)
+                  }
+                  color="warning"
+                  className="opacity-90 rounded-full w-[100%]"
+                  // startContent={Icons.PlusIcon}
+                >
+                  المخزن
+                </Button>
               </CardFooter>
             </Card>
           ))

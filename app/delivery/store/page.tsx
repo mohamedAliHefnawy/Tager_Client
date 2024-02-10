@@ -48,6 +48,16 @@ interface Products {
   price: number;
   imageProduct: string;
   size: string;
+  products: [
+    {
+      idProduct: string;
+      nameProduct: string;
+      imageProduct: string;
+      amount: number;
+      price: number;
+      size: string;
+    }
+  ];
 }
 
 export default function Home() {
@@ -62,10 +72,10 @@ export default function Home() {
     setLoading(true);
     try {
       let response: {
-        data: { token: string; user: any };
+        data: { token: string; ordersInStore: any };
       };
       response = await axios.get(
-        `http://localhost:5000/users/getUser/${nameDelivery}`,
+        `https://tager-server.vercel.app/scanner/getOrdersInStore/${nameDelivery}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -73,7 +83,7 @@ export default function Home() {
         }
       );
 
-      setProductsOrders(response.data.user?.productsStore);
+      setProductsOrders(response.data.ordersInStore);
     } catch (error) {
       console.log(error);
     } finally {
@@ -108,7 +118,7 @@ export default function Home() {
         <>
           <NavBar />
 
-          <div className="p-1 my-3 gap-2 grid grid-cols-2 ">
+          <div className="w-[93%] mx-2 my-4 flex justify-center bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl">
             {productsOrders.length > 0 ? (
               productsOrders
                 .slice()
@@ -116,27 +126,31 @@ export default function Home() {
                 .map((item, indexItem) => (
                   <div
                     key={indexItem}
-                    className="flex justify-between bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl"
+                    className=" p-1 my-3 w-[100%] flex items-center justify-evenly"
                   >
-                    <p className="text-right text-[12px] mr-1">
-                      <span>
-                        {item.nameProduct} ({item.amount})
-                      </span>
-                      <p className="flex justify-between">
-                        <span className="text-[12px] text-success-700 flex justify-end">
-                          <span className="mr-1">د.ل</span>
-                          <span>{item.price}</span>
-                        </span>
-                        <span className="text-[12px]">{item.size}</span>
-                      </p>
-                    </p>
-                    <p>
-                      <Avatar src={`${item.imageProduct}`} size="sm" />
-                    </p>
+                    {item.products.map((product, indexProduct) => (
+                      <div key={indexProduct} className="flex">
+                        <p className="text-right text-[12px] mr-1">
+                          <span>
+                            {product.nameProduct} ({product.amount})
+                          </span>
+                          <p className="flex justify-between">
+                            <span className="text-[12px] text-success-700 flex justify-end">
+                              <span className="mr-1">د.ل</span>
+                              <span>{product.price}</span>
+                            </span>
+                            <span className="text-[12px]">{product.size}</span>
+                          </p>
+                        </p>
+                        <p>
+                          <Avatar src={`${product.imageProduct}`} size="sm" />
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 ))
             ) : (
-              <p className="w-[100%] text-center p-6">لا يوجد منتجات</p>
+              <p className="w-[200%] text-center p-6">لا يوجد منتجات</p>
             )}
           </div>
         </>

@@ -198,6 +198,11 @@ export default function SideBar() {
           icon={icons.ClipboarddocumentlistIcon}
         />
         <ElementSideBar
+          name="عهدة التوصيل"
+          link="/dashboard/deliverySecurity"
+          icon={icons.ArrowtrendingdownIcon}
+        />
+        <ElementSideBar
           name="المرتجع"
           link="/dashboard/returns"
           icon={icons.ArrowtrendingdownIcon}

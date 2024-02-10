@@ -153,7 +153,7 @@ export default function Home() {
                 </div>
               ))
           ) : (
-            <p>لا يوجد طلبيات</p>
+            <p className="w-[100%] p-8 text-center">لا يوجد طلبيات</p>
           )}
         </>
       ) : (

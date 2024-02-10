@@ -16,7 +16,7 @@ import { ArrowspointinginIcon } from "../../../../public/svg/arrowspointinginIco
 import { PrinterIcon } from "../../../../public/svg/printerIcon";
 
 //images
-// import Logo from "../../../../public/img/logo.png";
+import Hbaieb from "@/public/img/hbaieb.png";
 
 export default function PrintInvoice({
   idOrder,
@@ -82,13 +82,42 @@ export default function PrintInvoice({
           className="flex w-[100%] flex-col justify-center p-8 rounded-lg "
         >
           <div className="flex justify-start items-center text-[30px]">
-            <Avatar src={`${imageCom}`} size="lg" />
-            <p className=" text-slate-800 ml-2">{nameCom}</p>
+            {imageCom && nameCom ? (
+              <>
+                <Avatar src={`${imageCom}`} size="lg" />
+                <p className=" text-slate-800 ml-2">{nameCom}</p>
+              </>
+            ) : (
+              <>
+                <p className="w-24 h-24">
+                  <Image
+                    src={Hbaieb}
+                    alt="error"
+                    width={70}
+                    height={70}
+                    className="rounded-full"
+                  />
+                </p>
+                <p className=" text-slate-800 ml-2"> الحبايب </p>
+              </>
+            )}
           </div>
           <div className="flex justify-between items-center my-6">
-            <div className="w-[60%] h-16 bg-warning-400"></div>
-            <p className="text-[30px] text-slate-800">{nameCom}</p>
-            <div className="w-[20%] h-16 bg-warning-400"></div>
+            <div
+              className={`w-[60%] h-16`}
+              style={{ backgroundColor: `${colorCom ? colorCom : "#CCA330"} ` }}
+            ></div>
+            <p>
+              {nameCom ? (
+                <p className="text-[30px] text-slate-800"> {nameCom} </p>
+              ) : (
+                <p className="text-[30px] text-slate-800"> الحبايب</p>
+              )}
+            </p>
+            <div
+              className="w-[20%] h-16"
+              style={{ backgroundColor: `${colorCom ? colorCom : "#CCA330"} ` }}
+            ></div>
           </div>
           <div className="flex flex-col items-end">
             <p className="flex">
@@ -142,11 +171,12 @@ export default function PrintInvoice({
             </div>
           </div>
           <div className="flex justify-end">
-            <div className="bg-warning-400 w-[30%] h-20 flex items-center justify-center">
+            <div
+              className=" w-[30%] h-20 flex items-center justify-center"
+              style={{ backgroundColor: `${colorCom ? colorCom : "#CCA330"} ` }}
+            >
               <span className="mr-1">د.ل</span>
-              <span>
-                {totalPriceOrder} 
-              </span>
+              <span>{totalPriceOrder}</span>
             </div>
           </div>
           <div>

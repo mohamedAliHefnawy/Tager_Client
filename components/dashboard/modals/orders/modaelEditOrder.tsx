@@ -69,39 +69,39 @@ export default function ModaelEditOrder({
       setSituation((prevSituation) => [...prevSituation, newSituationItem]);
     }
 
-    if (newSituation === "تم القبول" || newSituation === "تم الرفض") {
-      setSituation((prevSituation) =>
-        prevSituation.filter(
-          (item) =>
-            item.situation !== "تم القبول" && item.situation !== "تم الرفض"
-        )
-      );
-      setSituation((prevSituation) => [...prevSituation, newSituationItem]);
-    }
+    // if (newSituation === "تم القبول" || newSituation === "تم الرفض") {
+    //   setSituation((prevSituation) =>
+    //     prevSituation.filter(
+    //       (item) =>
+    //         item.situation !== "تم القبول" && item.situation !== "تم الرفض"
+    //     )
+    //   );
+    //   setSituation((prevSituation) => [...prevSituation, newSituationItem]);
+    // }
 
-    if (newSituation === "تم الإسترجاع" || newSituation === "تم التوصيل") {
-      setSituation((prevSituation) =>
-        prevSituation.filter(
-          (item) =>
-            item.situation !== "تم الإسترجاع" && item.situation !== "تم التوصيل"
-        )
-      );
-      setSituation((prevSituation) => [...prevSituation, newSituationItem]);
-    }
+    // if (newSituation === "تم الإسترجاع" || newSituation === "تم التوصيل") {
+    //   setSituation((prevSituation) =>
+    //     prevSituation.filter(
+    //       (item) =>
+    //         item.situation !== "تم الإسترجاع" && item.situation !== "تم التوصيل"
+    //     )
+    //   );
+    //   setSituation((prevSituation) => [...prevSituation, newSituationItem]);
+    // }
 
-    if (newSituation === "تم الرفض") {
-      setSituation((prevSituation) =>
-        prevSituation.filter(
-          (item) =>
-            item.situation !== "مع الشحن" &&
-            item.situation !== "تم التوصيل" &&
-            item.situation !== "تم الإسترجاع" &&
-            item.situation !== "إسترجاع جزئي" &&
-            item.situation !== "تم إستلام الكاش"
-        )
-      );
-      setSituation((prevSituation) => [...prevSituation, newSituationItem]);
-    }
+    // if (newSituation === "تم الرفض") {
+    //   setSituation((prevSituation) =>
+    //     prevSituation.filter(
+    //       (item) =>
+    //         item.situation !== "مع الشحن" &&
+    //         item.situation !== "تم التوصيل" &&
+    //         item.situation !== "تم الإسترجاع" &&
+    //         item.situation !== "إسترجاع جزئي" &&
+    //         item.situation !== "تم إستلام الكاش"
+    //     )
+    //   );
+    //   setSituation((prevSituation) => [...prevSituation, newSituationItem]);
+    // }
   };
 
   const tabs = () => {
@@ -135,18 +135,32 @@ export default function ModaelEditOrder({
                             بإنتظار الموافقة
                           </div>
                           <p className="w-[100%] text-center">
-                            {situation
-                              .filter(
-                                (item) => item.situation === "بإنتظار الموافقة"
-                              )
-                              .map((item2) => item2.date)}
+                            {situation.some(
+                              (item) => item.situation === "بإنتظار الموافقة"
+                            ) ? (
+                              situation
+                                .filter(
+                                  (item) =>
+                                    item.situation === "بإنتظار الموافقة"
+                                )
+                                .map((item2) => item2.date)
+                            ) : (
+                              <p>-/--/----</p>
+                            )}
                           </p>
                           <p className="w-[100%] text-center">
-                            {situation
-                              .filter(
-                                (item) => item.situation === "بإنتظار الموافقة"
-                              )
-                              .map((item2) => item2.time)}
+                            {situation.some(
+                              (item) => item.situation === "بإنتظار الموافقة"
+                            ) ? (
+                              situation
+                                .filter(
+                                  (item) =>
+                                    item.situation === "بإنتظار الموافقة"
+                                )
+                                .map((item2) => item2.time)
+                            ) : (
+                              <p>--:--</p>
+                            )}
                           </p>
                         </div>
 
@@ -203,7 +217,7 @@ export default function ModaelEditOrder({
                             }`}
                             onClick={() => ChangeSituation("تم الرفض")}
                           >
-                            الرفض
+                            رفض
                           </div>
                           <p className="w-[100%] text-center">
                             {situation.some(
@@ -498,15 +512,16 @@ export default function ModaelEditOrder({
     }
   }, [situationSteps]);
 
-  useEffect(() => {
-    if (situation !== situationSteps && situationSteps[situationSteps.length - 1].situation !== "تم إستلام الكاش") {
-      setCloseBtn(false);
-    } else {
-      setCloseBtn(true);
-    }
-  }, [situation]);
-
-
+  // useEffect(() => {
+  //   if (
+  //     situation !== situationSteps &&
+  //     situationSteps[situationSteps.length - 1].situation !== "تم إستلام الكاش"
+  //   ) {
+  //     setCloseBtn(false);
+  //   } else {
+  //     setCloseBtn(true);
+  //   }
+  // }, [situation]);
 
   return (
     <>
@@ -534,8 +549,8 @@ export default function ModaelEditOrder({
                   إلغاء
                 </Button>
                 <Button
-                  color={closeBtn ? "default" : "warning"}
-                  disabled={closeBtn}
+                  color="warning"
+                  // disabled={closeBtn}
                   onClick={EditOrder}
                   onPress={onClose}
                 >

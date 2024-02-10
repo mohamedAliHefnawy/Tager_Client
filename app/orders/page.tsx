@@ -52,6 +52,13 @@ interface Orders {
   totalPriceProducts: number;
   gainMarketer: number;
   situation: string;
+  situationSteps: [
+    {
+      situation: string;
+      date: string;
+      time: string;
+    }
+  ];
   date: string;
   chatMessages: Messages[];
   products: [
@@ -149,7 +156,7 @@ export default function Home() {
         <div className="lg:p-20 md:p-20 lg:pt-0 md:pt-0 sm:p-0 max-sm:p-0 sm:pt-0 max-sm:pt-0 w-[100%] overflow-x-scroll">
           <table className="border-1 border-[var(--mainColor)] w-[100%] text-center p-4">
             <tr className="border-1 border-[var(--mainColor)] text-sm">
-              <th className="border-1 border-[var(--mainColor)] w-48 mx-2">
+              <th className="border-1 border-[var(--mainColor)] w-48 mx-2 p-4">
                 إسم العميل
               </th>
               <th className="border-1 border-[var(--mainColor)] w-36 mx-2">
@@ -158,9 +165,9 @@ export default function Home() {
               <th className="border-1 border-[var(--mainColor)] w-36 mx-2">
                 الإجمالي
               </th>
-              <th className="border-1 border-[var(--mainColor)] w-36 mx-2">
+              {/* <th className="border-1 border-[var(--mainColor)] w-36 mx-2">
                 <p className="p-4">الربح</p>
-              </th>
+              </th> */}
               <th className="border-1 border-[var(--mainColor)] w-60 mx-2">
                 المكان
               </th>
@@ -198,12 +205,12 @@ export default function Home() {
                       <p>{order.totalPriceProducts}</p>
                     </p>
                   </td>
-                  <td className="border-1 border-[var(--mainColor)]">
+                  {/* <td className="border-1 border-[var(--mainColor)]">
                     <p className="flex justify-center p-3">
                       <p className="mr-1">د.ل</p>
                       <p>{order.gainMarketer}</p>
                     </p>
-                  </td>
+                  </td> */}
                   <td className="border-1 border-[var(--mainColor)] p-3">
                     <p className="flex justify-center p-3">{order.address}</p>
                   </td>
@@ -211,7 +218,12 @@ export default function Home() {
                     <p className="flex justify-center p-3">{order.date}</p>
                   </td>
                   <td className="border-1 border-[var(--mainColor)]">
-                    <p className="flex justify-center p-3">{order.situation}</p>
+                    <p className="flex justify-center p-3">
+                      {
+                        order.situationSteps[order.situationSteps.length - 1]
+                          .situation
+                      }
+                    </p>
                   </td>
                   <td className="border-1 border-[var(--mainColor)]">
                     <p className="flex justify-center p-3">
@@ -223,7 +235,9 @@ export default function Home() {
                         </PopoverTrigger>
                         <PopoverContent className=" border-1 border-[var(--mainColor)]">
                           <div className="px-1 py-2 ">
-                            {order.situation === "بإنتظار الموافقة" && (
+                            {order.situationSteps[
+                              order.situationSteps.length - 1
+                            ].situation === "بإنتظار الموافقة" && (
                               <ModaeEditOrderProduct
                                 id={order._id}
                                 name={order.nameClient}
@@ -270,19 +284,21 @@ export default function Home() {
     );
   };
 
-  const GetOrders = async () => {
+  const GetProductsInCart = async () => {
     setLoading(true);
     try {
-      let response: { data: { token: string; orders: any } };
+      let response: {
+        data: { token: string; ordersData: any };
+      };
       response = await axios.get(
-        "https://tager-server.vercel.app/orders/getOrders",
+        `https://tager-server.vercel.app/scanner/getOrders/${user}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
           },
         }
       );
-      setOrders(response.data.orders);
+      setOrders(response.data.ordersData);
     } catch (error) {
       console.log(error);
     } finally {
@@ -291,8 +307,34 @@ export default function Home() {
   };
 
   useEffect(() => {
-    GetOrders();
-  }, []);
+    if (user) {
+      GetProductsInCart();
+    }
+  }, [user]);
+
+  // const GetOrders = async () => {
+  //   setLoading(true);
+  //   try {
+  //     let response: { data: { token: string; orders: any } };
+  //     response = await axios.get(
+  //       "https://tager-server.vercel.app/orders/getOrders",
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${secretKey}`,
+  //         },
+  //       }
+  //     );
+  //     setOrders(response.data.orders);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   GetOrders();
+  // }, []);
 
   useEffect(() => {
     if (user) {

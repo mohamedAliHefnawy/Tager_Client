@@ -145,6 +145,10 @@ export default function Home({ params }: { params: { slug: string } }) {
     try {
       const data = {
         delivery: nameDelivery,
+        marketer: order?.marketer,
+        // admin: order?.marketer,
+        gainMarketer: order?.gainMarketer,
+        gainAdmin: order?.gainAdmin,
         idOrder: order?._id,
         situationOrder: selectedValueSituationOrder,
         orderMoney: order?.totalPriceProducts,
@@ -162,7 +166,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         returnOrders,
       };
       const response = await axios.post(
-        "http://localhost:5000/orders/editOrderSituation2",
+        "https://tager-server.vercel.app/orders/editOrderSituation2",
         data
       );
       if (response.data === "yes") {

@@ -82,8 +82,6 @@ interface MoneySafe {
   image: string;
 }
 
-
-
 export default function ModaelAddPurchase({
   supplier,
 }: {
@@ -209,18 +207,22 @@ export default function ModaelAddPurchase({
   const handleInputChange = (
     productId: string,
     field: string,
-    value: string
+    value: string,
+    price: string
   ) => {
     setInputValues((prevValues) => {
+      const inputValue = +value;
+      const itemPrice = +price;
+
       const newValues = {
         ...prevValues,
         [productId]: {
           ...prevValues[productId],
           [field]: value,
+          total: inputValue * itemPrice, // حساب إجمالي السعر هنا
         },
       };
 
-      newValues[productId].total = 0;
       return newValues;
     });
   };
@@ -249,7 +251,7 @@ export default function ModaelAddPurchase({
 
   useEffect(() => {
     const calculateTotal = () => {
-      let total = 10;
+      let total = 0;
       for (const productId in inputValues) {
         if (
           inputValues.hasOwnProperty(productId) &&
@@ -295,7 +297,7 @@ export default function ModaelAddPurchase({
 
                           <div className="w-[100%] flex justify-end">
                             <p className="flex">
-                              <p className="mr-2"> 0</p>
+                              <p className="mr-2"> {product.price1} </p>
                               <p> | الكمية الموجودة </p>
                             </p>
                           </div>
@@ -374,6 +376,7 @@ export default function ModaelAddPurchase({
                       </div>
                       <div className="flex items-center justify-end">
                         <p className="mr-4"> {movedProduct.name} </p>
+
                         <Avatar src={movedProduct.image[0]} />
                       </div>
                     </div>
@@ -430,6 +433,7 @@ export default function ModaelAddPurchase({
                                   <p className="p-3 flex w-[100%] items-center">
                                     <p className="mr-2 ">{selectedStore}</p>
                                     <div className=" w-[100%]">
+                                      {movedProduct.price1}
                                       <input
                                         type="text"
                                         placeholder="الكمية"
@@ -446,7 +450,8 @@ export default function ModaelAddPurchase({
                                           handleInputChange(
                                             movedProduct._id,
                                             selectedStore,
-                                            e.target.value
+                                            e.target.value,
+                                            movedProduct.price1
                                           )
                                         }
                                         className="inputTrue"
@@ -569,6 +574,7 @@ export default function ModaelAddPurchase({
                                                 {selectedStore}
                                               </p>
                                               <div className=" w-[100%]">
+                                                {products2.price1}
                                                 <input
                                                   type="text"
                                                   placeholder="الكمية"
@@ -590,7 +596,8 @@ export default function ModaelAddPurchase({
                                                     handleInputChange(
                                                       products2._id,
                                                       selectedStore,
-                                                      e.target.value
+                                                      e.target.value,
+                                                      products2.price1
                                                     )
                                                   }
                                                   className="inputTrue"
@@ -752,13 +759,15 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get("https://tager-server.vercel.app/products/getProducts", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/products/getProducts",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setProducts(response.data.products);
-     
     } catch (error) {
       console.log(error);
     } finally {
@@ -770,13 +779,15 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get("https://tager-server.vercel.app/stores/getStores", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/stores/getStores",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setStores(response.data.stores);
-      
     } catch (error) {
       console.log(error);
     } finally {
@@ -788,11 +799,14 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("https://tager-server.vercel.app/payment/getpayment", {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        "https://tager-server.vercel.app/payment/getpayment",
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setMoneySafe(response.data.payment);
     } catch (error) {
       console.log(error);

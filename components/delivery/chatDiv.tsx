@@ -172,7 +172,7 @@ export default function ChatDivMarketer({
                 >
                   <div className="w-[100%] flex justify-end ">
                     <span
-                      onClick={() => window.location.reload()}
+                      onClick={onClose}
                       className="p-4 hover:cursor-pointer text-danger-600"
                     >
                       ⌧

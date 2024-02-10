@@ -23,61 +23,64 @@ import { PhotoIcon } from "@/public/svg/photoIcon";
 import { EyeIcon } from "@/public/svg/eyeIcon";
 import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
 import { PencilIcon } from "@/public/svg/pencilIcon";
+import axios from "axios";
+
+interface Data {
+  _id: string;
+  name: string;
+  money: [
+    {
+      money: number;
+      notes: string;
+      date: string;
+      time: string;
+      acceptMoney: boolean;
+    }
+  ];
+}
 
 export default function Home() {
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [imgUser, setImgUser] = useState("");
   const [imgCompany, setImgCompany] = useState("");
-  const [name, setName] = useState(user);
-  const [nameCompany, setNameCompany] = useState("");
-  const [phone1Company, setPhone1Company] = useState("");
-  const [phone2Company, setPhone2Company] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordNew, setPasswordNew] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordNew, setShowPasswordNew] = useState(false);
+  const [dataUser, setDataUser] = useState<Data>();
+
   const [color, setColor] = useState("#FF6900");
-  const handleChangeComplete = (newColor: any) => {
-    setColor(newColor.hex);
-  };
+
   const [selected, setSelected] = React.useState("1");
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
   };
 
-  const Icons = {
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    DeleteIcon: <DeleteIcon />,
-    PhotoIcon: <PhotoIcon />,
-    EyeIcon: <EyeIcon />,
-    EyeNotIcon: <EyeNotIcon />,
-    PencilIcon: <PencilIcon />,
+  const TotalMoney = dataUser?.money
+    .filter((money) => money.acceptMoney === false)
+    .reduce((calc, alt) => calc + alt.money, 0);
+
+  const GetDataUser = async () => {
+    try {
+      let response: { data: { token: string; user: any } };
+      response = await axios.get(
+        `https://tager-server.vercel.app/users/getUser/${user}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+      setDataUser(response.data.user);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const imagebase64 = async (file: any) => {
-    const reader = new FileReader();
-    await reader.readAsDataURL(file);
-    const data = new Promise((resolve, reject) => {
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (err) => reject(err);
-    });
-    return data;
-  };
-
-  const handleUploadImage = async (e: any) => {
-    const file = e.target.files[0];
-    const image = (await imagebase64(file)) as string;
-    setImgUser(image);
-  };
-
-  const handleUploadImageCompany = async (e: any) => {
-    const file = e.target.files[0];
-    const image = (await imagebase64(file)) as string;
-    setImgCompany(image);
-  };
+  useEffect(() => {
+    if (user) {
+      GetDataUser();
+    }
+  }, [user]);
 
   const tabs = () => {
     return (
@@ -100,7 +103,7 @@ export default function Home() {
                     <div className="bg-slate-100 w-[35%] flex flex-col items-center p-4 mt-1 rounded-3xl">
                       <p className="flex text-xl">
                         <p className="mr-1">د.ل</p>
-                        <p>1000</p>
+                        <p>{TotalMoney}</p>
                       </p>
                       <div className="mt-4">
                         <ModaelPullMoney />

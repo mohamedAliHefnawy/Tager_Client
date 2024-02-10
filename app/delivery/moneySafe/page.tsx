@@ -32,7 +32,7 @@ export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [nameDelivery] = useCheckLogin();
   const [nameDeliveryy, setNameDeliveryy] = useState("");
-  const [notesSend, setNotesSend] = useState("");
+  const [notesSend, setNotesSend] = useState("لا يوجد ملاحظة");
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [closeBtn, setCloseBtn] = useState(true);
@@ -41,11 +41,11 @@ export default function Home() {
   const router = useRouter();
 
   const TotalMoney = dataUser?.money
-    .filter((money) => money.acceptMoney === false)
+    .filter((money) => money.acceptMoney === true)
     .reduce((calc, alt) => calc + alt.money, 0);
 
   const SendMoney = async () => {
-    setCloseBtn(true)
+    setCloseBtn(true);
     try {
       const data = {
         person: nameDelivery,
@@ -55,6 +55,7 @@ export default function Home() {
         notes: notesSend,
         orders: 12,
       };
+
       const response = await axios.post(
         "https://tager-server.vercel.app/notifications/addNotification",
         data
@@ -67,6 +68,7 @@ export default function Home() {
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
         });
+        TotalMoney === 0;
       }
     } catch (error) {
       console.error(error);
@@ -93,7 +95,7 @@ export default function Home() {
   useEffect(() => {
     const moneyArray = dataUser?.money || [];
     const totalMoney = moneyArray
-      .filter((money) => money.acceptMoney === false)
+      .filter((money) => money.acceptMoney === true)
       .reduce((calc, alt) => calc + alt.money, 0);
 
     if (totalMoney > 0) {
@@ -147,7 +149,7 @@ export default function Home() {
             <div className="w-[100%]">
               <textarea
                 className="input p-3"
-                placeholder="أكتب ملاحظه"
+                placeholder="لا يوجد ملاحظة"
                 style={{ direction: "rtl" }}
                 value={notesSend}
                 onChange={(e) => setNotesSend(e.target.value)}
