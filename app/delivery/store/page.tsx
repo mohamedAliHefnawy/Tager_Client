@@ -72,7 +72,7 @@ export default function Home() {
     setLoading(true);
     try {
       let response: {
-        data: { token: string; ordersInStore: any };
+        data: { token: string; AllData: any };
       };
       response = await axios.get(
         `http://localhost:5000/scanner/getOrdersInStore/${nameDelivery}`,
@@ -83,7 +83,7 @@ export default function Home() {
         }
       );
 
-      setProductsOrders(response.data.ordersInStore);
+      setProductsOrders(response.data.AllData);
     } catch (error) {
       console.log(error);
     } finally {
@@ -128,28 +128,52 @@ export default function Home() {
                     key={indexItem}
                     className=" p-1 my-3 w-[100%] flex flex-col justify-center items-center  border-1 border-warning-200 rounded-xl mr-1"
                   >
-                    {item.products.map((product, indexProduct) => (
-                      <div key={indexProduct} className="flex justify-end w-[100%] mb-3 p-1">
+                    {item.nameProduct &&
+                      <div className="flex justify-end w-[100%] mb-3 p-1">
                         <p className="text-right text-[12px] mr-1">
                           <span>
-                            {product.nameProduct} ({product.amount})
+                            {item.nameProduct} ({item.amount})
                           </span>
                           <p className="flex justify-between">
                             <span className="text-[12px] text-success-700 flex justify-end">
                               <span className="mr-1">د.ل</span>
-                              <span>{product.price}</span>
+                              <span>{item.price}</span>
                             </span>
-                            <span className="text-[12px]">{product.size}</span>
+                            <span className="text-[12px]">{item.size}</span>
                           </p>
                         </p>
                         <p>
-                          <Avatar src={`${product.imageProduct}`} size="sm" />
+                          <Avatar src={`${item.imageProduct}`} size="sm" />
                         </p>
                       </div>
-                    ))}
+                    } 
+                    {
+                      item.products &&
+                      item.products.map((product, indexProduct) => (
+                        <div key={indexProduct} className="flex justify-end w-[100%] mb-3 p-1">
+                          <p className="text-right text-[12px] mr-1">
+                            <span>
+                              {product.nameProduct} ({product.amount})
+                            </span>
+                            <p className="flex justify-between">
+                              <span className="text-[12px] text-success-700 flex justify-end">
+                                <span className="mr-1">د.ل</span>
+                                <span>{product.price}</span>
+                              </span>
+                              <span className="text-[12px]">{product.size}</span>
+                            </p>
+                          </p>
+                          <p>
+                            <Avatar src={`${product.imageProduct}`} size="sm" />
+                          </p>
+                        </div>
+                      ))
+                    }
+
+
                   </div>
                 ))
-            ) : ( 
+            ) : (
               <p className="w-[100%] text-center p-6">لا يوجد منتجات</p>
             )}
           </div>

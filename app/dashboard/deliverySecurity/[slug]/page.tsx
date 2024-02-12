@@ -23,6 +23,7 @@ import error from "../../../../public/img/notfound.png";
 
 //nextUi
 import {
+  Avatar,
   Button,
   Input,
   Pagination,
@@ -55,17 +56,6 @@ interface Data {
   phone2Client: string;
   address: string;
   marketer: string;
-  situationSteps: [{ situation: string }];
-  orders: [];
-  money: [
-    {
-      money: number;
-      notes: string;
-      date: string;
-      time: string;
-      acceptMoney: boolean;
-    }
-  ];
   products: [
     {
       idProduct: string;
@@ -76,6 +66,20 @@ interface Data {
       size: string;
     }
   ];
+  idProduct: string;
+  nameProduct: string;
+  imageProduct: string;
+  amount: number;
+  price: number;
+  size: string;
+  store: string;
+}
+
+interface ReturnOrders {
+  idProduct: string;
+  amount: number;
+  size: string;
+  store: string;
 }
 
 export default function Home({ params }: { params: { slug: string } }) {
@@ -91,11 +95,46 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [moneySafe, setMoneySafe] = useState<MoneySafeDetails>();
   const [currentPage, setCurrentPage] = useState(1);
   const [dataDelivery, setDataDelivery] = useState<Data[]>([]);
+  const [returnOrders, setReturnOrders] = useState<ReturnOrders[]>([]);
 
   const ItemsPerPage = 3;
 
   const indexOfLastItem = currentPage * ItemsPerPage;
   const indexOfFirstItem = indexOfLastItem - ItemsPerPage;
+
+  const ReturnProductswithStore = (
+    idProduct: string,
+    sizeProduct: string,
+    amountProduct: number,
+    storeProduct: string
+  ) => {
+    const productOrderId = idProduct;
+
+    if (productOrderId) {
+      const isProductInReturnOrders = returnOrders.some(
+        (item) => item.idProduct === productOrderId
+      );
+
+      if (!isProductInReturnOrders) {
+        const updatedReturnOrders = [
+          ...returnOrders,
+          {
+            idProduct: idProduct,
+            amount: amountProduct || 0,
+            size: sizeProduct || "",
+            store: storeProduct || "",
+          },
+        ];
+
+        setReturnOrders(updatedReturnOrders);
+      } else {
+        const updatedReturnOrders = returnOrders.filter(
+          (item) => item.idProduct !== idProduct
+        );
+        setReturnOrders(updatedReturnOrders);
+      }
+    }
+  };
 
   const details = () => {
     return (
@@ -107,91 +146,92 @@ export default function Home({ params }: { params: { slug: string } }) {
             </p>
           ) : dataDelivery ? (
             <div className="w-[100%] flex justify-between">
-              <div className="border-1 border-warning-200 rounded-2xl p-10 w-[49%] flex flex-col items-center">
+              <div className="border-1 border-warning-200 rounded-2xl p-6 w-[49%] flex flex-col items-center">
                 <p className="text-lg">في إنتظار التوصيل ...</p>
-                <div className="grid gab-1 grid-cols-2 w-[100%] my-3">
-                  {dataDelivery && dataDelivery.length > 0 ? (
-                    dataDelivery
-                      .filter((item0) =>
-                        item0.situationSteps.some(
-                          (step) => step.situation === "مع الشحن"
-                        )
-                      )
-                      .map((item, indexItem) => (
-                        <p
-                          key={indexItem}
-                          className="border-1 border-slate-200 rounded-lg mr-1 p-4 text-right text-lg"
-                        >
-                          <span className="block mb-2">
-                            <span>{item.nameClient}</span>
-                            <span> | إسم العميل </span>
-                          </span>
-                          <span className="block mb-2">
-                            <span>{item.phone1Client}</span>
-                            <span> | رقم الهاتف1 </span>
-                          </span>
-                          <span className="block mb-2">
-                            <span>{item.phone2Client}</span>
-                            <span> | رقم الهاتف2 </span>
-                          </span>
-                          <span className="block mb-2">
-                            <span>{item.address}</span>
-                            <span> | العنوان </span>
-                          </span>
-                          <span className="block mb-2">
-                            <span> المسوق |</span>
-                            <span>{item.marketer}</span>
-                          </span>
-                          <ModaelDeliverySecurity products={item.products} />
-                        </p>
-                      ))
-                  ) : (
-                    <p>لا</p>
+                <div className="grid gab-1 grid-cols-1 w-[100%] my-3">
+                  {dataDelivery.map((item, indexItem) =>
+                    item.nameClient ? (
+                      <div
+                        key={indexItem}
+                        className="border-1 border-slate-400 rounded-2xl mr-1 p-4 text-right text-lg"
+                      >
+                        <span className="block mb-2">
+                          <span>{item.nameClient}</span>
+                          <span> | إسم العميل </span>
+                        </span>
+                        <span className="block mb-2">
+                          <span>{item.phone1Client}</span>
+                          <span> | رقم الهاتف1 </span>
+                        </span>
+                        <span className="block mb-2">
+                          <span>{item.phone2Client}</span>
+                          <span> | رقم الهاتف2 </span>
+                        </span>
+                        <span className="block mb-2">
+                          <span>{item.address}</span>
+                          <span> | العنوان </span>
+                        </span>
+                        <span className="block mb-2">
+                          <span> المسوق |</span>
+                          <span>{item.marketer}</span>
+                        </span>
+                        <ModaelDeliverySecurity products={item.products} />
+                      </div>
+                    ) : (
+                      <p className="w-[100%] text-center p-6"></p>
+                    )
                   )}
                 </div>
               </div>
-              <div className="border-1 border-warning-200 rounded-2xl p-10 w-[49%] flex flex-col items-center">
+              <div className="border-1 border-warning-200 rounded-2xl p-6 w-[49%] flex flex-col items-center">
                 <p className="text-lg">راجع</p>
-                <div className="grid gab-1 grid-cols-2 w-[100%] my-3">
-                  {dataDelivery && dataDelivery.length > 0 ? (
-                    dataDelivery
-                      .filter((item0) =>
-                        item0.situationSteps.some(
-                          (step) =>
-                            step.situation === "تم الإسترجاع" || "إسترجاع جزئي"
+                <div className="my-2 p-2 pt-0  px-3 w-[100%]">
+                  <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-3 gap-2 grid grid-cols-2">
+                    {dataDelivery.map(
+                      (product, indexProduct) =>
+                        product.nameProduct && (
+                          <div
+                            key={indexProduct}
+                            onClick={() =>
+                              ReturnProductswithStore(
+                                product.idProduct,
+                                product.size,
+                                product.amount,
+                                product.store
+                              )
+                            }
+                            className={`flex justify-evenly bg-warning-50 border-1 p-2 rounded-2xl text-lg hover:cursor-pointer ${
+                              returnOrders.some(
+                                (item) => item.idProduct === product.idProduct
+                              )
+                                ? "border-danger-600"
+                                : ""
+                            }`}
+                          >
+                            <p className="text-right text-[12px] mr-1">
+                              <span className="">
+                                {product.nameProduct} ({product.amount})
+                              </span>
+                              <p className="flex justify-between">
+                                <span className="text-[12px] text-success-700 flex justify-end">
+                                  <span className="mr-1">د.ل</span>
+                                  <span>{product.price}</span>
+                                </span>
+                                <span className="text-[12px]">
+                                  {product.size}
+                                </span>
+                              </p>
+                            </p>
+                            <p>
+                              <Avatar
+                                src={`${product.imageProduct}`}
+                                size="lg"
+                              />
+                            </p>
+                          </div>
                         )
-                      )
-                      .map((item, indexItem) => (
-                        <p
-                          key={indexItem}
-                          className="border-1 border-slate-200 rounded-lg mr-1 p-4 text-right text-lg"
-                        >
-                          <span className="block mb-2">
-                            <span>{item.nameClient}</span>
-                            <span> | إسم العميل </span>
-                          </span>
-                          <span className="block mb-2">
-                            <span>{item.phone1Client}</span>
-                            <span> | رقم الهاتف1 </span>
-                          </span>
-                          <span className="block mb-2">
-                            <span>{item.phone2Client}</span>
-                            <span> | رقم الهاتف2 </span>
-                          </span>
-                          <span className="block mb-2">
-                            <span>{item.address}</span>
-                            <span> | العنوان </span>
-                          </span>
-                          <span className="block mb-2">
-                            <span> المسوق |</span>
-                            <span>{item.marketer}</span>
-                          </span>
-                          <ModaelDeliverySecurity products={item.products} />
-                        </p>
-                      ))
-                  ) : (
-                    <p>لا</p>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -236,7 +276,7 @@ export default function Home({ params }: { params: { slug: string } }) {
 
   const GetDataDelivery = async () => {
     try {
-      let response: { data: { token: string; orders: any } };
+      let response: { data: { token: string; AllData: any } };
       response = await axios.get(
         `http://localhost:5000/users/getDeliveryProductStore/${params.slug}`,
         {
@@ -245,7 +285,7 @@ export default function Home({ params }: { params: { slug: string } }) {
           },
         }
       );
-      setDataDelivery(response.data.orders);
+      setDataDelivery(response.data.AllData);
     } catch (error) {
       console.log(error);
     } finally {

@@ -135,7 +135,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         ) || [];
   
         setNoReturnOrders(productsNotInReturnOrders);
-        console.log(noReturnOrders);
+       
       } else {
         const updatedReturnOrders = returnOrders.filter(
           (item) => item.idProduct !== productOrderId.idProduct
@@ -147,7 +147,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         ) || [];
   
         setNoReturnOrders(productsNotInReturnOrders);
-        console.log(noReturnOrders);
+        
       }
     }
   };

@@ -83,36 +83,7 @@ export default function QRScanner({ name }: { name: string }) {
       ) : (
         <div id="reader"></div>
       )}
-      {/* <p
-        onClick={onOpen}
-        className=" w-[50px] h-[50px] text-center hover:cursor-pointer hover:opacity-75 bg-danger-200 p-3 mt-1 rounded-full border-1 border-white"
-      >
-        1
-      </p>
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        isDismissable={false}
-        className=" rounded-e-none max-h-screen overflow-y-auto overflow-x-hidden scrollbar-thumb-gray-500 scrollbar-track-gray-300"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">َ</ModalHeader>
-              <ModalBody>
-                <div>
-                  {scanResult ? <p>{scanResult}</p> : <div id="reader"></div>}
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="success" variant="light" onPress={onClose}>
-                  إلغاء
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal> */}
+
     </>
   );
 }
