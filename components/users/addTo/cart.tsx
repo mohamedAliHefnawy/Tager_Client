@@ -45,7 +45,7 @@ export default function ButtonAddToCart({
   const addToCart = async (idProduct: any, sizeProduct: any) => {
     try {
       const response = await axios.post(
-        `https://tager-server.vercel.app/cart/addProductToCart`,
+        `http://localhost:5000/cart/addProductToCart`,
         {
           idProduct,
           size: sizeProduct,

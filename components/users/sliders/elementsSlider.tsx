@@ -47,7 +47,7 @@ export default function ElementsSlider() {
     try {
       let response: { data: { token: string; categories: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/categories/getCategories",
+        "http://localhost:5000/categories/getCategories",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

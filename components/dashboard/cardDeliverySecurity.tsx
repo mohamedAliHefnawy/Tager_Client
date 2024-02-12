@@ -72,13 +72,13 @@ export default function CardDeliverySecurity({
 
   const GetDataDeliveries = async () => {
     try {
-      let response: { data: { token: string; deliveryUsers: any } };
-      response = await axios.get(`https://tager-server.vercel.app/users/getDeliveries`, {
+      let response: { data: { token: string; users: any } };
+      response = await axios.get(`http://localhost:5000/users/getDelivery`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
       });
-      setDataDeliveries(response.data.deliveryUsers);
+      setDataDeliveries(response.data.users);
     } catch (error) {
       console.log(error);
     } finally {
@@ -166,7 +166,7 @@ export default function CardDeliverySecurity({
                   }
                   color="warning"
                   className="opacity-90 rounded-full w-[100%]"
-                  // startContent={Icons.PlusIcon}
+                // startContent={Icons.PlusIcon}
                 >
                   المخزن
                 </Button>

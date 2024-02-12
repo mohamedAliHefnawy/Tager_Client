@@ -26,7 +26,7 @@ import { Card, CardBody, CardFooter, Pagination } from "@nextui-org/react";
 interface Purchasess {
   _id: string;
   name: string;
-  products: [
+  Products: [
     {
       _id: string;
       name: string;
@@ -141,7 +141,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                     </div>
                     <ModaelStepsPaymentpurchases
                       paymentSteps={item.stepsPayment}
-                      products={item.products}
+                      products={item.Products}
                     />
                   </p>
                 </CardBody>
@@ -158,7 +158,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     try {
       let response: { data: { token: string; purchases: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/purchases/getpurchases",
+        "http://localhost:5000/purchases/getpurchases",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

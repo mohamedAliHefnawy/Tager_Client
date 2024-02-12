@@ -151,7 +151,7 @@ export default function ModelAddCategory({
         imageURL,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/categories/addCatgory",
+        "http://localhost:5000/categories/addCatgory",
         data
       );
       if (response.data === "yes") {

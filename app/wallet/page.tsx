@@ -63,7 +63,7 @@ export default function Home() {
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
-        `https://tager-server.vercel.app/users/getUser/${user}`,
+        `http://localhost:5000/users/getUser/${user}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

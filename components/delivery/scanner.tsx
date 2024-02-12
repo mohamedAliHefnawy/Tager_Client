@@ -23,7 +23,7 @@ export default function QRScanner({ name }: { name: string }) {
         idOrder: scanResult,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/scanner/addOrderWithDelivery",
+        "http://localhost:5000/scanner/addOrderWithDelivery",
         data
       );
 

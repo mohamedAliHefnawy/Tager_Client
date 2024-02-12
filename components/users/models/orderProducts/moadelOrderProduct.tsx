@@ -146,8 +146,8 @@ export default function MoadelOrderProducts({
                   .filter((item4) => item4.nameStore === selectedValueTo)
                   .map((item5) => item5.amount)[0] !== undefined
                   ? item3.store
-                      .filter((item4) => item4.nameStore === selectedValueTo)
-                      .map((item5) => item5.amount)[0]
+                    .filter((item4) => item4.nameStore === selectedValueTo)
+                    .map((item5) => item5.amount)[0]
                   : 0
               )[0] || 0
         )[0] || 0;
@@ -194,14 +194,8 @@ export default function MoadelOrderProducts({
 
       const amountOrder = +quantityValue * +priceValue;
       const amountOrder2 = priceVall * +quantityValue;
-
       const profit = gainMarketer * +quantityValue;
-
-      // console.log((+priceVall - +price1 ) * +quantityValue);
-
       const profitAdmin = (+priceVall - +price1) * +quantityValue - +profit;
-      // console.log(profitAdmin);
-
       setTotalAmount((prevTotalAmount) => {
         const updatedTotalAmount =
           prevTotalAmount -
@@ -245,7 +239,7 @@ export default function MoadelOrderProducts({
     try {
       let response: { data: { token: string; stores: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/stores/getStores",
+        "http://localhost:5000/stores/getStores",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -392,13 +386,7 @@ export default function MoadelOrderProducts({
                               </p>
                             ))}
                         </p>
-                        {/* <p className="flex text-[var(--mainColor)] mt-2">
-                          <p style={{ direction: "rtl" }}>الربح :</p>
-                          <p className="flex">
-                            <p>{item.gainMarketer}</p>
-                            <p className="mr-1">د.ل</p>
-                          </p>
-                        </p> */}
+
                       </div>
                     </div>
                     <div className="flex w-[50%]  px-4">
@@ -537,7 +525,7 @@ export default function MoadelOrderProducts({
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/addOrderProducts",
+        "http://localhost:5000/orders/addOrderProducts",
         data
       );
       if (response.data === "yes") {
@@ -555,7 +543,7 @@ export default function MoadelOrderProducts({
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
-        `https://tager-server.vercel.app/users/getUser/${nameUser}`,
+        `http://localhost:5000/users/getUser/${nameUser}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

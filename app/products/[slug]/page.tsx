@@ -128,7 +128,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     try {
       let response: { data: { token: string; products: any } };
       response = await axios.get(
-        `https://tager-server.vercel.app/products/getProductsCatogry/${decodeURIComponent(
+        `http://localhost:5000/products/getProductsCatogry/${decodeURIComponent(
           params.slug
         )}`,
         {
@@ -149,7 +149,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     try {
       let response: { data: { token: string; categories: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/categories/getCategories",
+        "http://localhost:5000/categories/getCategories",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

@@ -101,7 +101,7 @@ export default function ModelAddCategory({
         priceDelivery,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/stores/addStore",
+        "http://localhost:5000/stores/addStore",
         data
       );
       if (response.data === "yes") {

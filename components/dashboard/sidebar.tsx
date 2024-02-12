@@ -202,11 +202,11 @@ export default function SideBar() {
           link="/dashboard/deliverySecurity"
           icon={icons.ArrowtrendingdownIcon}
         />
-        <ElementSideBar
+        {/* <ElementSideBar
           name="المرتجع"
           link="/dashboard/returns"
           icon={icons.ArrowtrendingdownIcon}
-        />
+        /> */}
         <ElementSideBar
           name="المخازن"
           link="/dashboard/store"

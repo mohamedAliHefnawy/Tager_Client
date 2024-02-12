@@ -91,7 +91,7 @@ export default function ModaelEditDeliveryClients({
         selectedValueValidity,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/users/editemployee",
+        "http://localhost:5000/users/editemployee",
         data
       );
       if (response.data === "yes") {

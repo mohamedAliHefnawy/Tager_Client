@@ -94,7 +94,7 @@ export default function ModelEditStore({
         priceDelivery,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/stores/editStore",
+        "http://localhost:5000/stores/editStore",
         data
       );
       if (response.data === "yes") {

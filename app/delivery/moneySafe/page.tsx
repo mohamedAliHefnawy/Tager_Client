@@ -57,7 +57,7 @@ export default function Home() {
       };
 
       const response = await axios.post(
-        "https://tager-server.vercel.app/notifications/addNotification",
+        "http://localhost:5000/notifications/addNotification",
         data
       );
       if (response.data === "yes") {
@@ -79,7 +79,7 @@ export default function Home() {
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
-        `https://tager-server.vercel.app/users/getUser/${nameDelivery}`,
+        `http://localhost:5000/users/getUser/${nameDelivery}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

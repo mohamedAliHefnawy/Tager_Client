@@ -72,7 +72,7 @@ export default function Supplier2() {
     try {
       let response: { data: { token: string; suppliers: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/suppliers/getSuppliers",
+        "http://localhost:5000/suppliers/getSuppliers",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

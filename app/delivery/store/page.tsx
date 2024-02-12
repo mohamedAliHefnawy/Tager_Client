@@ -75,7 +75,7 @@ export default function Home() {
         data: { token: string; ordersInStore: any };
       };
       response = await axios.get(
-        `https://tager-server.vercel.app/scanner/getOrdersInStore/${nameDelivery}`,
+        `http://localhost:5000/scanner/getOrdersInStore/${nameDelivery}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -118,7 +118,7 @@ export default function Home() {
         <>
           <NavBar />
 
-          <div className="w-[93%] mx-2 my-4 flex justify-center bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl">
+          <div className="w-[93%] mx-2 my-4  bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl">
             {productsOrders.length > 0 ? (
               productsOrders
                 .slice()
@@ -126,10 +126,10 @@ export default function Home() {
                 .map((item, indexItem) => (
                   <div
                     key={indexItem}
-                    className=" p-1 my-3 w-[100%] flex items-center justify-evenly"
+                    className=" p-1 my-3 w-[100%] flex flex-col justify-center items-center  border-1 border-warning-200 rounded-xl mr-1"
                   >
                     {item.products.map((product, indexProduct) => (
-                      <div key={indexProduct} className="flex">
+                      <div key={indexProduct} className="flex justify-end w-[100%] mb-3 p-1">
                         <p className="text-right text-[12px] mr-1">
                           <span>
                             {product.nameProduct} ({product.amount})
@@ -149,8 +149,8 @@ export default function Home() {
                     ))}
                   </div>
                 ))
-            ) : (
-              <p className="w-[200%] text-center p-6">لا يوجد منتجات</p>
+            ) : ( 
+              <p className="w-[100%] text-center p-6">لا يوجد منتجات</p>
             )}
           </div>
         </>

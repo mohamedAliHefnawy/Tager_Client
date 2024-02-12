@@ -69,7 +69,7 @@ export default function CardReturnSafe() {
     setLoading(true);
     try {
       let response: { data: { token: string; returns: any } };
-      response = await axios.get("https://tager-server.vercel.app/returns/getReturns", {
+      response = await axios.get("http://localhost:5000/returns/getReturns", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

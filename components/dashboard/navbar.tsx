@@ -64,7 +64,7 @@ export default function NavBar() {
         money: number,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/users/acceptMoney",
+        "http://localhost:5000/users/acceptMoney",
         data
       );
       if (response.data === "yes") {
@@ -105,13 +105,13 @@ export default function NavBar() {
         money: number,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/users/declineMoney",
+        "http://localhost:5000/users/declineMoney",
         data
       );
       if (response.data === "yes") {
         Swal.fire({
           icon: "success",
-          title: "تم الحذف بنجاح",
+          title: "تم الرفض بنجاح",
           text: "⤫",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
@@ -129,7 +129,7 @@ export default function NavBar() {
     try {
       let response: { data: { token: string; notifications: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/notifications/getNotifications",
+        "http://localhost:5000/notifications/getNotifications",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

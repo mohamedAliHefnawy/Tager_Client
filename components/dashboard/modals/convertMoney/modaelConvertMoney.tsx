@@ -233,7 +233,7 @@ export default function ModaelConvertMoney(props: any) {
   const GetMethodPayment = async () => {
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("https://tager-server.vercel.app/payment/getpayment", {
+      response = await axios.get("http://localhost:5000/payment/getpayment", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -251,7 +251,7 @@ export default function ModaelConvertMoney(props: any) {
   const SendMoney = async () => {
     try {
       const response = await axios.post(
-        "https://tager-server.vercel.app/payment/convertMoney",
+        "http://localhost:5000/payment/convertMoney",
         {
           nameFrom: selectedValueFrom,
           nameTo: selectedValueTo,

@@ -89,7 +89,7 @@ export default function Home() {
         data: { token: string; combinedProducts: any };
       };
       response = await axios.get(
-        `https://tager-server.vercel.app/favourite/getProductsInFavourite/${user}`,
+        `http://localhost:5000/favourite/getProductsInFavourite/${user}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

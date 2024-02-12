@@ -77,7 +77,7 @@ export default function Home() {
   const AddPayment = async () => {
     try {
       const response = await axios.post(
-        "https://tager-server.vercel.app/payment/addpayment",
+        "http://localhost:5000/payment/addpayment",
         {
           name: namePayment,
         }
@@ -100,7 +100,7 @@ export default function Home() {
   const GetMethodPayment = async () => {
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("https://tager-server.vercel.app/payment/getpayment", {
+      response = await axios.get("http://localhost:5000/payment/getpayment", {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -116,7 +116,7 @@ export default function Home() {
     try {
       const updatedPayment = methodPayment[index];
       const response = await axios.post(
-        "https://tager-server.vercel.app/payment/editpayment",
+        "http://localhost:5000/payment/editpayment",
         {
           id: updatedPayment._id,
           name: updatedPayment.name,

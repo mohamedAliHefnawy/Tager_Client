@@ -97,7 +97,7 @@ export default function ChatDiv({
   const SendMessageApi = async (idOrder: string) => {
     try {
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/chatOrder",
+        "http://localhost:5000/orders/chatOrder",
         {
           idOrder: idOrder,
           text: messageText,

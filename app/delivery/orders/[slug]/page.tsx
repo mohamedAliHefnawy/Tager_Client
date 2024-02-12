@@ -49,6 +49,9 @@ interface Orders {
       amount: number;
       price: number;
       size: string;
+      store: string;
+      gainMarketer: string;
+      gainAdmin: string;
     }
   ];
   situationSteps: [
@@ -103,12 +106,12 @@ export default function Home({ params }: { params: { slug: string } }) {
     const productOrderId = order?.products.find(
       (item) => item.idProduct === idOrder
     );
-
+  
     if (productOrderId) {
       const isProductInReturnOrders = returnOrders.some(
         (item) => item.idProduct === productOrderId.idProduct
       );
-
+  
       if (!isProductInReturnOrders) {
         const updatedReturnOrders = [
           ...returnOrders,
@@ -119,26 +122,37 @@ export default function Home({ params }: { params: { slug: string } }) {
             amount: productOrderId.amount || 0,
             price: productOrderId.price || 0,
             size: productOrderId.size || "",
+            store: order?.store || "",
+            gainMarketer: productOrderId?.gainMarketer || "",
+            gainAdmin: productOrderId?.gainAdmin || "",
           },
         ];
+  
         setReturnOrders(updatedReturnOrders);
+  
+        const productsNotInReturnOrders = order?.products.filter(
+          (item) => !returnOrders.some((orderItem) => orderItem.idProduct === item.idProduct)
+        ) || [];
+  
+        setNoReturnOrders(productsNotInReturnOrders);
+        console.log(noReturnOrders);
       } else {
         const updatedReturnOrders = returnOrders.filter(
           (item) => item.idProduct !== productOrderId.idProduct
         );
         setReturnOrders(updatedReturnOrders);
+  
+        const productsNotInReturnOrders = order?.products.filter(
+          (item) => !returnOrders.some((orderItem) => orderItem.idProduct === item.idProduct)
+        ) || [];
+  
+        setNoReturnOrders(productsNotInReturnOrders);
+        console.log(noReturnOrders);
       }
-
-      const productsNotInReturnOrders = order?.products.filter(
-        (item) =>
-          !returnOrders.some(
-            (orderItem) => orderItem.idProduct === item.idProduct
-          )
-      );
-
-      setNoReturnOrders([...productsNotInReturnOrders!]);
     }
   };
+  
+
 
   const EditOrder = async () => {
     setCloseBtn(true);
@@ -163,10 +177,12 @@ export default function Home({ params }: { params: { slug: string } }) {
         phone2Client: order?.phone2Client,
         address: order?.address,
         products: order?.products,
+        store: order?.store,
         returnOrders,
+        noReturnOrders,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/editOrderSituation2",
+        "http://localhost:5000/orders/editOrderSituation2",
         data
       );
       if (response.data === "yes") {
@@ -189,7 +205,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         data: { token: string; order: any };
       };
       response = await axios.get(
-        `https://tager-server.vercel.app/scanner/getOrder/${params.slug}`,
+        `http://localhost:5000/scanner/getOrder/${params.slug}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -197,7 +213,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         }
       );
       setOrder(response.data.order);
-      setNoReturnOrders(response.data.order?.products);
+      // setNoReturnOrders(response.data.order?.products);
     } catch (error) {
       console.log(error);
     } finally {
@@ -361,13 +377,12 @@ export default function Home({ params }: { params: { slug: string } }) {
                         onClick={() =>
                           ReturnProductswithStore(product.idProduct)
                         }
-                        className={`flex bg-warning-50 border-1 p-2 rounded-2xl ${
-                          returnOrders.some(
-                            (item) => item.idProduct === product.idProduct
-                          )
-                            ? "border-danger-600"
-                            : ""
-                        }`}
+                        className={`flex bg-warning-50 border-1 p-2 rounded-2xl ${returnOrders.some(
+                          (item) => item.idProduct === product.idProduct
+                        )
+                          ? "border-danger-600"
+                          : ""
+                          }`}
                       >
                         <p className="text-right text-[12px] mr-1">
                           <span className="">

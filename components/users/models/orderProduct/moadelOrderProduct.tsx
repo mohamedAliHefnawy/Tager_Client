@@ -105,7 +105,7 @@ export default function MoadelOrderProduct({
     try {
       let response: { data: { token: string; stores: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/stores/getStores",
+        "http://localhost:5000/stores/getStores",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -379,7 +379,7 @@ export default function MoadelOrderProduct({
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/orders/addOrder",
+        "http://localhost:5000/orders/addOrder",
         data
       );
       if (response.data === "yes") {
@@ -397,7 +397,7 @@ export default function MoadelOrderProduct({
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
-        `https://tager-server.vercel.app/users/getUser/${nameUser}`,
+        `http://localhost:5000/users/getUser/${nameUser}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

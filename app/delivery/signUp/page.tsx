@@ -39,7 +39,7 @@ export default function Home() {
         password,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/users/signUp",
+        "http://localhost:5000/users/signUp",
         data
       );
 

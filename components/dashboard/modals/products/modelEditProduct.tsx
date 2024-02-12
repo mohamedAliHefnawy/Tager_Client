@@ -704,7 +704,7 @@ export default function ModelEditProduct({
     try {
       let response: { data: { token: string; categories: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/categories/getCategories",
+        "http://localhost:5000/categories/getCategories",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -724,7 +724,7 @@ export default function ModelEditProduct({
     try {
       let response: { data: { token: string; stores: any } };
       response = await axios.get(
-        "https://tager-server.vercel.app/stores/getStores",
+        "http://localhost:5000/stores/getStores",
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -755,7 +755,7 @@ export default function ModelEditProduct({
         rows,
       };
       const response = await axios.post(
-        "https://tager-server.vercel.app/products/editProduct",
+        "http://localhost:5000/products/editProduct",
         data
       );
       if (response.data === "yes") {
