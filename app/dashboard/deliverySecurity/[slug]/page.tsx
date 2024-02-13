@@ -177,7 +177,10 @@ export default function Home({ params }: { params: { slug: string } }) {
                         <ModaelDeliverySecurity products={item.products} />
                       </div>
                     ) : (
-                      <p className="w-[100%] text-center p-6"></p>
+                      <p
+                        key={`${indexItem}-${item}`}
+                        className="w-[100%] text-center p-6"
+                      ></p>
                     )
                   )}
                 </div>
