@@ -6,7 +6,6 @@ import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
-import linkServer from "@/linkServer";
 
 //components
 import NavBar from "@/components/users/navBar";
