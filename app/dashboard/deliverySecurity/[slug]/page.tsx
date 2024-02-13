@@ -169,17 +169,7 @@ export default function Home({ params }: { params: { slug: string } }) {
             amount: amountValue,
           },
         }));
-        // console.log(returnOrders);
       }
-
-      // else {
-      //   const updatedReturnOrders = returnOrders.filter(
-      //     (item) => item.idProduct !== idProduct
-      //   );
-      //   setReturnOrders(updatedReturnOrders);
-      //   console.log(inputValues);
-      // }
-      // console.log(inputValues);
     }
   };
 
@@ -237,68 +227,56 @@ export default function Home({ params }: { params: { slug: string } }) {
                 <p className="text-lg">راجع</p>
                 <div className="my-2 p-2 pt-0  px-3 w-[100%]">
                   <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-3 gap-2 grid grid-cols-2">
-                    {dataDelivery.map(
-                      (product, indexProduct) =>
-                        product.nameProduct && (
-                          <div
-                            key={indexProduct}
-                            onClick={() =>
-                              ReturnProductswithStore(
-                                product.idProduct,
-                                product.size,
-                                product.amount,
-                                product.store
-                              )
-                            }
-                            className={`flex justify-evenly bg-warning-50 border-1 p-2 rounded-2xl text-lg hover:cursor-pointer ${
-                              returnOrders.some(
-                                (item) => item.idProduct === product.idProduct
-                              )
-                                ? "border-danger-600"
-                                : ""
-                            }`}
-                          >
-                            {/* <p>
-                              {dataDelivery.reduce(
-                                (calc, alt) =>
-                                  calc +
-                                  (alt.idProduct === product.idProduct &&
-                                  alt.size === product.size &&
-                                  alt.store === product.store
-                                    ? alt.amount
-                                    : 0),
-                                0
-                              )}
-                            </p> */}
-                            <p className="text-right text-[12px] mr-1">
-                              <span className="">
-                                {product.nameProduct} ({product.amount})
+                    {dataDelivery.map((product, indexProduct) =>
+                      product.nameProduct ? (
+                        <div
+                          key={indexProduct}
+                          onClick={() =>
+                            ReturnProductswithStore(
+                              product.idProduct,
+                              product.size,
+                              product.amount,
+                              product.store
+                            )
+                          }
+                          className={`flex justify-evenly bg-warning-50 border-1 p-2 rounded-2xl text-lg hover:cursor-pointer ${
+                            returnOrders.some(
+                              (item) => item.idProduct === product.idProduct
+                            )
+                              ? "border-danger-600"
+                              : ""
+                          }`}
+                        >
+                          <p className="text-right text-[12px] mr-1">
+                            <span className="">
+                              {product.nameProduct} ({product.amount})
+                            </span>
+                            <p className="flex justify-between">
+                              <span className="text-[12px] text-success-700 flex justify-end">
+                                <span className="mr-1">د.ل</span>
+                                <span>{product.price}</span>
                               </span>
-                              <p className="flex justify-between">
-                                <span className="text-[12px] text-success-700 flex justify-end">
-                                  <span className="mr-1">د.ل</span>
-                                  <span>{product.price}</span>
-                                </span>
-                                <span className="text-[12px]">
-                                  {product.size}
-                                </span>
-                              </p>
+                              <span className="text-[12px]">
+                                {product.size}
+                              </span>
                             </p>
-                            <p>
-                              <Avatar
-                                src={`${product.imageProduct}`}
-                                size="lg"
-                              />
-                            </p>
-                          </div>
-                        )
+                          </p>
+                          <p>
+                            <Avatar src={`${product.imageProduct}`} size="lg" />
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="w-[200%] p-10 text-center">
+                          لا يوجد منتجات
+                        </p>
+                      )
                     )}
                   </div>
-                  {/* <p className="p-10 w-[100%] text-center">إسترجاع للمخزن</p> */}
+
                   <Button
-                    // color="warning"
+                    color={closeBtn ? "default" : "warning"}
+                    disabled={closeBtn}
                     className="opacity-90 rounded-full w-[100%] p-6 mt-6"
-                    // startContent={Icons.PlusIcon}
                     onClick={ReturnProductsToStore}
                   >
                     إسترجاع للمخزن
@@ -321,6 +299,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     try {
       const data = {
         inputValues,
+        idDelivery: params.slug,
       };
       const response = await axios.post(
         `${linkServer.link}products/returnProductsInStore`,
@@ -357,6 +336,12 @@ export default function Home({ params }: { params: { slug: string } }) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (returnOrders.length > 0) {
+      setCloseBtn(false);
+    }
+  }, [returnOrders]);
 
   useEffect(() => {
     GetDataDelivery();
