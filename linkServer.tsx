@@ -1,5 +1,8 @@
 const linkServer = {
-  link: "https://tager-server.vercel.app/",
+  link: "http://localhost:5000/",
 };
 
 export default linkServer;
+
+// https://tager-server.vercel.app/
+// http://localhost:5000/

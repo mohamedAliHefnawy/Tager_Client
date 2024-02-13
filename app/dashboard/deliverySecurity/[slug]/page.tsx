@@ -4,6 +4,7 @@
 import axios from "axios";
 import Image from "next/image";
 import linkServer from "@/linkServer";
+import { toast } from "react-toastify";
 
 //components
 import NavBar from "../../../../components/dashboard/navbar";
@@ -81,6 +82,14 @@ interface ReturnOrders {
   store: string;
 }
 
+interface InputValues {
+  [productId: string]: {
+    amount: number;
+    size: string;
+    store: string;
+  };
+}
+
 export default function Home({ params }: { params: { slug: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [nameAdmin] = useCheckLogin();
@@ -95,6 +104,7 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [dataDelivery, setDataDelivery] = useState<Data[]>([]);
   const [returnOrders, setReturnOrders] = useState<ReturnOrders[]>([]);
+  const [inputValues, setInputValues] = useState<InputValues>({});
 
   const ItemsPerPage = 3;
 
@@ -109,29 +119,67 @@ export default function Home({ params }: { params: { slug: string } }) {
   ) => {
     const productOrderId = idProduct;
 
+    const AmountAll = dataDelivery.reduce(
+      (calc, alt) =>
+        calc +
+        (alt.idProduct === idProduct &&
+        alt.size === sizeProduct &&
+        alt.store === storeProduct
+          ? alt.amount
+          : 0),
+      0
+    );
+
     if (productOrderId) {
       const isProductInReturnOrders = returnOrders.some(
         (item) => item.idProduct === productOrderId
       );
 
       if (!isProductInReturnOrders) {
+        const currentInputValues = (inputValues as InputValues)[idProduct] || {
+          store: "",
+          size: "",
+          amount: 0,
+        };
+
+        const storeValue = storeProduct || currentInputValues.store;
+        const sizeValue = sizeProduct || currentInputValues.size;
+        const amountValue = AmountAll;
+
         const updatedReturnOrders = [
           ...returnOrders,
           {
             idProduct: idProduct,
-            amount: amountProduct || 0,
-            size: sizeProduct || "",
-            store: storeProduct || "",
+            amount: amountValue,
+            size: sizeValue,
+            store: storeValue,
           },
         ];
 
+        // console.log(SizeAll);
+
         setReturnOrders(updatedReturnOrders);
-      } else {
-        const updatedReturnOrders = returnOrders.filter(
-          (item) => item.idProduct !== idProduct
-        );
-        setReturnOrders(updatedReturnOrders);
+
+        setInputValues((prevInputValues) => ({
+          ...prevInputValues,
+          [idProduct]: {
+            ...currentInputValues,
+            store: storeValue,
+            size: sizeValue,
+            amount: amountValue,
+          },
+        }));
+        // console.log(returnOrders);
       }
+
+      // else {
+      //   const updatedReturnOrders = returnOrders.filter(
+      //     (item) => item.idProduct !== idProduct
+      //   );
+      //   setReturnOrders(updatedReturnOrders);
+      //   console.log(inputValues);
+      // }
+      // console.log(inputValues);
     }
   };
 
@@ -210,6 +258,18 @@ export default function Home({ params }: { params: { slug: string } }) {
                                 : ""
                             }`}
                           >
+                            {/* <p>
+                              {dataDelivery.reduce(
+                                (calc, alt) =>
+                                  calc +
+                                  (alt.idProduct === product.idProduct &&
+                                  alt.size === product.size &&
+                                  alt.store === product.store
+                                    ? alt.amount
+                                    : 0),
+                                0
+                              )}
+                            </p> */}
                             <p className="text-right text-[12px] mr-1">
                               <span className="">
                                 {product.nameProduct} ({product.amount})
@@ -234,6 +294,15 @@ export default function Home({ params }: { params: { slug: string } }) {
                         )
                     )}
                   </div>
+                  {/* <p className="p-10 w-[100%] text-center">إسترجاع للمخزن</p> */}
+                  <Button
+                    // color="warning"
+                    className="opacity-90 rounded-full w-[100%] p-6 mt-6"
+                    // startContent={Icons.PlusIcon}
+                    onClick={ReturnProductsToStore}
+                  >
+                    إسترجاع للمخزن
+                  </Button>
                 </div>
               </div>
             </div>
@@ -245,6 +314,29 @@ export default function Home({ params }: { params: { slug: string } }) {
         </div>
       </>
     );
+  };
+
+  const ReturnProductsToStore = async () => {
+    setCloseBtn(true);
+    try {
+      const data = {
+        inputValues,
+      };
+      const response = await axios.post(
+        `${linkServer.link}products/returnProductsInStore`,
+        data
+      );
+      if (response.data === "yes") {
+        toast.success("تم الإسترجاع بنجاح ✓");
+        window.location.reload();
+      }
+      if (response.data === "no") {
+        alert("توجد مشكلة ما. حاول مرة أخرى 😓");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const GetDataDelivery = async () => {
