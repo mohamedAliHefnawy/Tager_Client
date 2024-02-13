@@ -266,7 +266,10 @@ export default function Home({ params }: { params: { slug: string } }) {
                           </p>
                         </div>
                       ) : (
-                        <p className="w-[200%] p-10 text-center">
+                        <p
+                          key={`${indexProduct}-${product}`}
+                          className="w-[200%] p-10 text-center"
+                        >
                           لا يوجد منتجات
                         </p>
                       )
