@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
+import linkServer from "@/linkServer";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -151,7 +152,7 @@ export default function ModelAddCategory({
         imageURL,
       };
       const response = await axios.post(
-        "http://localhost:5000/categories/addCatgory",
+        `${linkServer.link}categories/addCatgory`,
         data
       );
       if (response.data === "yes") {

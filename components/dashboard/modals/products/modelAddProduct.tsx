@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
 import { TwitterPicker } from "react-color";
+import linkServer from "@/linkServer";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -703,14 +704,11 @@ export default function ModelAddProduct({
     setLoading(true);
     try {
       let response: { data: { token: string; categories: any } };
-      response = await axios.get(
-        "http://localhost:5000/categories/getCategories",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}categories/getCategories`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setCategories(response.data.categories);
     } catch (error) {
       console.log(error);
@@ -723,14 +721,11 @@ export default function ModelAddProduct({
     setLoading(true);
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get(
-        "http://localhost:5000/stores/getStores",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}stores/getStores`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setStores(response.data.stores);
     } catch (error) {
       console.log(error);
@@ -754,7 +749,7 @@ export default function ModelAddProduct({
         rows,
       };
       const response = await axios.post(
-        "http://localhost:5000/products/addProduct",
+        `${linkServer.link}products/addProduct`,
         data
       );
       if (response.data === "yes") {

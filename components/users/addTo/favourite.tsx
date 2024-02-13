@@ -1,6 +1,7 @@
 //react
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
@@ -45,7 +46,7 @@ export default function ButtonAddToFavourite({
   const addToFavourite = async (idProduct: any, sizeProduct: any) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/favourite/addProductToFavourite`,
+        `${linkServer.link}favourite/addProductToFavourite`,
         {
           idProduct,
           size: sizeProduct,

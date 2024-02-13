@@ -4,6 +4,7 @@ import Image from "next/image";
 import Slider from "react-slick";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 //components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
@@ -55,7 +56,7 @@ export default function ProductsSlider1({
   const GetProducts = async () => {
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get("http://localhost:5000/products/getProducts", {
+      response = await axios.get(`${linkServer.link}products/getProducts`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

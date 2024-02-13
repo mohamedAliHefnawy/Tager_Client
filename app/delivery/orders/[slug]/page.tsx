@@ -8,6 +8,7 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import linkServer from "@/linkServer";
 
 //nextUi
 import {
@@ -106,12 +107,12 @@ export default function Home({ params }: { params: { slug: string } }) {
     const productOrderId = order?.products.find(
       (item) => item.idProduct === idOrder
     );
-  
+
     if (productOrderId) {
       const isProductInReturnOrders = returnOrders.some(
         (item) => item.idProduct === productOrderId.idProduct
       );
-  
+
       if (!isProductInReturnOrders) {
         const updatedReturnOrders = [
           ...returnOrders,
@@ -127,32 +128,36 @@ export default function Home({ params }: { params: { slug: string } }) {
             gainAdmin: productOrderId?.gainAdmin || "",
           },
         ];
-  
+
         setReturnOrders(updatedReturnOrders);
-  
-        const productsNotInReturnOrders = order?.products.filter(
-          (item) => !returnOrders.some((orderItem) => orderItem.idProduct === item.idProduct)
-        ) || [];
-  
+
+        const productsNotInReturnOrders =
+          order?.products.filter(
+            (item) =>
+              !returnOrders.some(
+                (orderItem) => orderItem.idProduct === item.idProduct
+              )
+          ) || [];
+
         setNoReturnOrders(productsNotInReturnOrders);
-       
       } else {
         const updatedReturnOrders = returnOrders.filter(
           (item) => item.idProduct !== productOrderId.idProduct
         );
         setReturnOrders(updatedReturnOrders);
-  
-        const productsNotInReturnOrders = order?.products.filter(
-          (item) => !returnOrders.some((orderItem) => orderItem.idProduct === item.idProduct)
-        ) || [];
-  
+
+        const productsNotInReturnOrders =
+          order?.products.filter(
+            (item) =>
+              !returnOrders.some(
+                (orderItem) => orderItem.idProduct === item.idProduct
+              )
+          ) || [];
+
         setNoReturnOrders(productsNotInReturnOrders);
-        
       }
     }
   };
-  
-
 
   const EditOrder = async () => {
     setCloseBtn(true);
@@ -182,7 +187,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         noReturnOrders,
       };
       const response = await axios.post(
-        "http://localhost:5000/orders/editOrderSituation2",
+        `${linkServer.link}orders/editOrderSituation2`,
         data
       );
       if (response.data === "yes") {
@@ -205,7 +210,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         data: { token: string; order: any };
       };
       response = await axios.get(
-        `http://localhost:5000/scanner/getOrder/${params.slug}`,
+        `${linkServer.link}scanner/getOrder/${params.slug}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -377,12 +382,13 @@ export default function Home({ params }: { params: { slug: string } }) {
                         onClick={() =>
                           ReturnProductswithStore(product.idProduct)
                         }
-                        className={`flex bg-warning-50 border-1 p-2 rounded-2xl ${returnOrders.some(
-                          (item) => item.idProduct === product.idProduct
-                        )
-                          ? "border-danger-600"
-                          : ""
-                          }`}
+                        className={`flex bg-warning-50 border-1 p-2 rounded-2xl ${
+                          returnOrders.some(
+                            (item) => item.idProduct === product.idProduct
+                          )
+                            ? "border-danger-600"
+                            : ""
+                        }`}
                       >
                         <p className="text-right text-[12px] mr-1">
                           <span className="">

@@ -7,6 +7,7 @@ import { TwitterPicker } from "react-color";
 import { getUnixTime } from "date-fns";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -292,7 +293,7 @@ export default function Home() {
         imageURLCompany,
       };
       const response = await axios.post(
-        "http://localhost:5000/users/editUser",
+        `${linkServer.link}users/editUser`,
         data
       );
       if (response.data === "yes") {
@@ -332,14 +333,11 @@ export default function Home() {
   const GetDataUser = async () => {
     try {
       let response: { data: { token: string; user: any } };
-      response = await axios.get(
-        `http://localhost:5000/users/getUser/${user}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}users/getUser/${user}`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setDataUser(response.data.user);
       // setNewName(response.data.user.name);
       setPhoneMarketer(response.data.user.phone);

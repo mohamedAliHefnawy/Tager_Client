@@ -1,6 +1,7 @@
 //react
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -86,15 +87,12 @@ export default function ChatDivMarketer({
 
   const SendMessageApi = async (idOrder: string) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/orders/chatOrder",
-        {
-          idOrder: idOrder,
-          text: messageText,
-          val: "مندوب تسويق",
-          marketer,
-        }
-      );
+      const response = await axios.post(`${linkServer.link}orders/chatOrder`, {
+        idOrder: idOrder,
+        text: messageText,
+        val: "مندوب تسويق",
+        marketer,
+      });
       if (response.data === "yes") {
         setMessages((prevMessages) => [
           ...prevMessages,

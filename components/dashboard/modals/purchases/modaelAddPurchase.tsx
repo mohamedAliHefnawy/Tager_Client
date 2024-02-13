@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -387,14 +388,14 @@ export default function ModaelAddPurchase({
                           <DropdownTrigger>
                             <Button className="inputTrue">
                               {inputValues[movedProduct._id]?.selectedStore &&
-                                inputValues[movedProduct._id]?.selectedStore
-                                  .length > 0
+                              inputValues[movedProduct._id]?.selectedStore
+                                .length > 0
                                 ? inputValues[
-                                  movedProduct._id
-                                ]?.selectedStore.join(", ")
+                                    movedProduct._id
+                                  ]?.selectedStore.join(", ")
                                 : inputValues[movedProduct._id]?.selectedStore
-                                  ? "المخزن"
-                                  : "المخزن"}
+                                ? "المخزن"
+                                : "المخزن"}
                             </Button>
                           </DropdownTrigger>
 
@@ -433,17 +434,16 @@ export default function ModaelAddPurchase({
                                   <p className="p-3 flex w-[100%] items-center">
                                     <p className="mr-2 ">{selectedStore}</p>
                                     <div className=" w-[100%]">
-
                                       <input
                                         type="text"
                                         placeholder="الكمية"
                                         defaultValue={
                                           inputValues[movedProduct._id]
                                             ?.inputForStore &&
-                                            inputValues[movedProduct._id]
-                                              ?.inputForStore[selectedStore]
+                                          inputValues[movedProduct._id]
+                                            ?.inputForStore[selectedStore]
                                             ? inputValues[movedProduct._id]
-                                              ?.inputForStore[selectedStore]
+                                                ?.inputForStore[selectedStore]
                                             : ""
                                         }
                                         onChange={(e) =>
@@ -469,14 +469,14 @@ export default function ModaelAddPurchase({
                           <DropdownTrigger>
                             <Button className="inputTrue">
                               {inputValues[movedProduct._id]?.selectedSize &&
-                                inputValues[movedProduct._id]?.selectedSize
-                                  .length > 0
+                              inputValues[movedProduct._id]?.selectedSize
+                                .length > 0
                                 ? inputValues[
-                                  movedProduct._id
-                                ]?.selectedSize.join(", ")
+                                    movedProduct._id
+                                  ]?.selectedSize.join(", ")
                                 : inputValues[movedProduct._id]?.selectedSize
-                                  ? "اختر"
-                                  : "اختر"}
+                                ? "اختر"
+                                : "اختر"}
                             </Button>
                           </DropdownTrigger>
 
@@ -522,15 +522,15 @@ export default function ModaelAddPurchase({
                                       <Button className="inputTrue">
                                         {inputValues[products2._id]
                                           ?.selectedStore &&
-                                          inputValues[products2._id]
-                                            ?.selectedStore.length > 0
+                                        inputValues[products2._id]
+                                          ?.selectedStore.length > 0
                                           ? inputValues[
-                                            products2._id
-                                          ]?.selectedStore.join(", ")
+                                              products2._id
+                                            ]?.selectedStore.join(", ")
                                           : inputValues[products2._id]
-                                            ?.selectedStore
-                                            ? "المخزن"
-                                            : "المخزن"}
+                                              ?.selectedStore
+                                          ? "المخزن"
+                                          : "المخزن"}
                                       </Button>
                                     </DropdownTrigger>
 
@@ -574,22 +574,21 @@ export default function ModaelAddPurchase({
                                                 {selectedStore}
                                               </p>
                                               <div className=" w-[100%]">
-
                                                 <input
                                                   type="text"
                                                   placeholder="الكمية"
                                                   defaultValue={
                                                     inputValues[products2._id]
                                                       ?.inputForStore &&
-                                                      inputValues[products2._id]
-                                                        ?.inputForStore[
+                                                    inputValues[products2._id]
+                                                      ?.inputForStore[
                                                       selectedStore
-                                                      ]
+                                                    ]
                                                       ? inputValues[
-                                                        products2._id
-                                                      ]?.inputForStore[
-                                                      selectedStore
-                                                      ]
+                                                          products2._id
+                                                        ]?.inputForStore[
+                                                          selectedStore
+                                                        ]
                                                       : ""
                                                   }
                                                   onChange={(e) =>
@@ -616,15 +615,15 @@ export default function ModaelAddPurchase({
                                       <Button className="inputTrue">
                                         {inputValues[products2._id]
                                           ?.selectedSize &&
-                                          inputValues[products2._id]?.selectedSize
-                                            .length > 0
+                                        inputValues[products2._id]?.selectedSize
+                                          .length > 0
                                           ? inputValues[
-                                            products2._id
-                                          ]?.selectedSize.join(", ")
+                                              products2._id
+                                            ]?.selectedSize.join(", ")
                                           : inputValues[products2._id]
-                                            ?.selectedSize
-                                            ? "اختر"
-                                            : "اختر"}
+                                              ?.selectedSize
+                                          ? "اختر"
+                                          : "اختر"}
                                       </Button>
                                     </DropdownTrigger>
 
@@ -743,7 +742,7 @@ export default function ModaelAddPurchase({
         totalBuy: totalAmount,
       };
       const response = await axios.post(
-        "http://localhost:5000/purchases/addPurchases",
+        `${linkServer.link}purchases/addPurchases`,
         data
       );
       if (response.data === "yes") {
@@ -759,14 +758,11 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get(
-        "http://localhost:5000/products/getProducts",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}products/getProducts`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setProducts(response.data.products);
     } catch (error) {
       console.log(error);
@@ -779,14 +775,11 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get(
-        "http://localhost:5000/stores/getStores",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}stores/getStores`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setStores(response.data.stores);
     } catch (error) {
       console.log(error);
@@ -799,14 +792,11 @@ export default function ModaelAddPurchase({
     setLoading(true);
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get(
-        "http://localhost:5000/payment/getpayment",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}payment/getpayment`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setMoneySafe(response.data.payment);
     } catch (error) {
       console.log(error);

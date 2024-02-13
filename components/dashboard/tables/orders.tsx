@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
@@ -107,14 +108,11 @@ export default function Orders() {
     setLoading(true);
     try {
       let response: { data: { token: string; orders: any } };
-      response = await axios.get(
-        "http://localhost:5000/orders/getOrders",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}orders/getOrders`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setOrders(response.data.orders);
     } catch (error) {
       console.log(error);

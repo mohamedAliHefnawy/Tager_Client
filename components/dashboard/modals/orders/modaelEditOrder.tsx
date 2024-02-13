@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -486,7 +487,7 @@ export default function ModaelEditOrder({
     try {
       const data = { idOrder: idOrder, situationOrder: situation };
       const response = await axios.post(
-        "http://localhost:5000/orders/editOrderSituation",
+        `${linkServer.link}orders/editOrderSituation`,
         data
       );
       if (response.data === "yes") {

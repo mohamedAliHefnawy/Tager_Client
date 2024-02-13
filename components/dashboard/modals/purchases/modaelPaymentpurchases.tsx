@@ -1,7 +1,7 @@
 //react
 import React, { useEffect, useState } from "react";
-
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -85,7 +85,7 @@ export default function ModelPaymentpurchases({
         supplier: supplierr,
       };
       const response = await axios.post(
-        "http://localhost:5000/purchases/paymentPurchases",
+        `${linkServer.link}purchases/paymentPurchases`,
         data
       );
       if (response.data === "yes") {
@@ -104,7 +104,7 @@ export default function ModelPaymentpurchases({
     setLoading(true);
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("http://localhost:5000/payment/getpayment", {
+      response = await axios.get(`${linkServer.link}payment/getpayment`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

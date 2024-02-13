@@ -4,6 +4,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
+import linkServer from "@/linkServer";
 
 //components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
@@ -450,7 +451,7 @@ export default function Product({ params }: { params: { id: string } }) {
     try {
       let response: { data: { token: string; product: any } };
       response = await axios.get(
-        `http://localhost:5000/products/getProduct/${params.id}`,
+        `${linkServer.link}products/getProduct/${params.id}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

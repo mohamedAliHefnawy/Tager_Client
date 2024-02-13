@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -101,7 +102,7 @@ export default function Home() {
         data: { token: string; combinedProducts: any; combinedProducts2: any };
       };
       response = await axios.get(
-        `http://localhost:5000/cart/getProductsInCart/${user}`,
+        `${linkServer.link}cart/getProductsInCart/${user}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

@@ -3,8 +3,8 @@
 //react
 import axios from "axios";
 import Image from "next/image";
-
 import { format, isValid, parse } from "date-fns";
+import linkServer from "@/linkServer";
 
 //components
 import NavBar from "../../../../components/dashboard/navbar";
@@ -290,7 +290,7 @@ export default function Home({ params }: { params: { slug: string } }) {
       const currentDateStr = currentDate.toLocaleDateString();
 
       const response = await axios.post(
-        `http://localhost:5000/payment/addpayment/${params.slug}`,
+        `${linkServer.link}payment/addpayment/${params.slug}`,
         {
           num: num,
           notes: notes,
@@ -316,7 +316,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/payment/getpayment/${params.slug}`
+        `${linkServer.link}payment/getpayment/${params.slug}`
       );
       setMoneySafe(response.data);
     } catch (error) {

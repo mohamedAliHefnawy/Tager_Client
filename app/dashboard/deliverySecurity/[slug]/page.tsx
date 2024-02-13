@@ -3,8 +3,7 @@
 //react
 import axios from "axios";
 import Image from "next/image";
-
-import { format, isValid, parse } from "date-fns";
+import linkServer from "@/linkServer";
 
 //components
 import NavBar from "../../../../components/dashboard/navbar";
@@ -245,40 +244,11 @@ export default function Home({ params }: { params: { slug: string } }) {
     );
   };
 
-  // const AddMoney = async () => {
-  //   try {
-  //     const currentDate = new Date();
-  //     const currentTime = currentDate.toLocaleTimeString();
-  //     const currentDateStr = currentDate.toLocaleDateString();
-
-  //     const response = await axios.post(
-  //       `http://localhost:5000/payment/addpayment/${params.slug}`,
-  //       {
-  //         num: num,
-  //         notes: notes,
-  //         person: nameAdmin,
-  //         date: currentDateStr,
-  //         time: currentTime,
-  //       }
-  //     );
-
-  //     if (response.data === "yes") {
-  //       window.location.reload();
-  //     }
-  //     if (response.data === "no") {
-  //       alert("توجد مشكلة ما. حاول مرة أخرى 😓");
-  //       window.location.reload();
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const GetDataDelivery = async () => {
     try {
       let response: { data: { token: string; AllData: any } };
       response = await axios.get(
-        `http://localhost:5000/users/getDeliveryProductStore/${params.slug}`,
+        `${linkServer.link}users/getDeliveryProductStore/${params.slug}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

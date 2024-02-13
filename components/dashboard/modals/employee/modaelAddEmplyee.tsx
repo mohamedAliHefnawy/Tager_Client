@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -44,7 +45,7 @@ export default function ModelAddEmplyee(props: any) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [generatedPassword, setGeneratedPassword] = useState("");
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
   const [selected, setSelected] = React.useState("1");
   const [selectedValidity, setSelectedValidity] = React.useState(
@@ -234,7 +235,7 @@ export default function ModelAddEmplyee(props: any) {
     try {
       const data = { name, phone, imageURL, password, selectedValue };
       const response = await axios.post(
-        "http://localhost:5000/users/addemployee",
+        `${linkServer.link}users/addemployee`,
         data
       );
       if (response.data === "yes") {

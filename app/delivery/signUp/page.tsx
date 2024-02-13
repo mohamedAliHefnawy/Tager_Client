@@ -6,7 +6,8 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";import linkServer from "@/linkServer";
+
 
 //Images
 import UserSignUp from "@/public/img/userSignUp.png";
@@ -39,7 +40,7 @@ export default function Home() {
         password,
       };
       const response = await axios.post(
-        "http://localhost:5000/users/signUp",
+        `${linkServer.link}users/signUp`,
         data
       );
 

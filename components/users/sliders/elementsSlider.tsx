@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 interface Categories {
   _id: string;
@@ -46,14 +47,11 @@ export default function ElementsSlider() {
   const GetCategories = async () => {
     try {
       let response: { data: { token: string; categories: any } };
-      response = await axios.get(
-        "http://localhost:5000/categories/getCategories",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}categories/getCategories`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setCategories(response.data.categories);
       console.log(response.data);
     } catch (error) {

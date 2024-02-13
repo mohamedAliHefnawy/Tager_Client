@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -530,7 +531,7 @@ export default function ModaeEditOrderProduct({
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get("http://localhost:5000/products/getProducts", {
+      response = await axios.get(`${linkServer.link}products/getProducts`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -558,7 +559,7 @@ export default function ModaeEditOrderProduct({
         gainMarketer: gainMarketer,
       };
       const response = await axios.post(
-        "http://localhost:5000/orders/editOrder",
+        `${linkServer.link}orders/editOrder`,
         data
       );
       if (response.data === "yes") {

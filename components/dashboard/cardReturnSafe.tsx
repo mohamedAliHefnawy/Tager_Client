@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextUi
 import {
@@ -69,7 +70,7 @@ export default function CardReturnSafe() {
     setLoading(true);
     try {
       let response: { data: { token: string; returns: any } };
-      response = await axios.get("http://localhost:5000/returns/getReturns", {
+      response = await axios.get(`${linkServer.link}returns/getReturns`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

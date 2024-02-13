@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
+import linkServer from "@/linkServer";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -131,7 +133,7 @@ export default function Home() {
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get("http://localhost:5000/products/getProducts", {
+      response = await axios.get(`${linkServer.link}products/getProducts`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -147,14 +149,11 @@ export default function Home() {
   const GetCategories = async () => {
     try {
       let response: { data: { token: string; categories: any } };
-      response = await axios.get(
-        "http://localhost:5000/categories/getCategories",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}categories/getCategories`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setCategories(response.data.categories);
     } catch (error) {
       console.log(error);

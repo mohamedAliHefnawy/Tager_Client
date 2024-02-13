@@ -4,6 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import Confetti from "react-confetti";
 import Swal from "sweetalert2";
+import linkServer from "@/linkServer";
 
 //component
 import NavBar from "@/components/users/navBar";
@@ -104,14 +105,11 @@ export default function MoadelOrderProduct({
   const GetStores = async () => {
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get(
-        "http://localhost:5000/stores/getStores",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}stores/getStores`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setStores(response.data.stores);
       console.log(response.data);
     } catch (error) {
@@ -379,7 +377,7 @@ export default function MoadelOrderProduct({
         deliveryPrice: priceDeliveryStore,
       };
       const response = await axios.post(
-        "http://localhost:5000/orders/addOrder",
+        `${linkServer.link}orders/addOrder`,
         data
       );
       if (response.data === "yes") {
@@ -397,7 +395,7 @@ export default function MoadelOrderProduct({
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
-        `http://localhost:5000/users/getUser/${nameUser}`,
+        `${linkServer.link}users/getUser/${nameUser}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

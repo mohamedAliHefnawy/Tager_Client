@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 //components
 import NavBar from "@/components/delivery/navBar";
@@ -57,7 +58,7 @@ export default function Home() {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/notifications/addNotification",
+        `${linkServer.link}notifications/addNotification`,
         data
       );
       if (response.data === "yes") {
@@ -79,7 +80,7 @@ export default function Home() {
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
-        `http://localhost:5000/users/getUser/${nameDelivery}`,
+        `${linkServer.link}users/getUser/${nameDelivery}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

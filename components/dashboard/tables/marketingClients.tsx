@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
@@ -34,7 +35,7 @@ export default function MarketingClients() {
     setLoading(true);
     try {
       let response: { data: { token: string; users: any } };
-      response = await axios.get("http://localhost:5000/users/getUsers", {
+      response = await axios.get(`${linkServer.link}users/getUsers`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

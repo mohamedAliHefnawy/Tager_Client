@@ -5,6 +5,8 @@ import { format, isValid, parse } from "date-fns";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
+import linkServer from "@/linkServer";
+
 
 //components
 import NavBar from "../../../../components/dashboard/navbar";
@@ -306,7 +308,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     try {
       let response: { data: { token: string; order: any } };
       response = await axios.get(
-        `http://localhost:5000/orders/getOrder/${params.slug}`,
+        `${linkServer.link}orders/getOrder/${params.slug}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

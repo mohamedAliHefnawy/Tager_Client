@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import Swal from "sweetalert2";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -233,7 +234,7 @@ export default function ModaelConvertMoney(props: any) {
   const GetMethodPayment = async () => {
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("http://localhost:5000/payment/getpayment", {
+      response = await axios.get(`${linkServer.link}payment/getpayment`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -251,7 +252,7 @@ export default function ModaelConvertMoney(props: any) {
   const SendMoney = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/payment/convertMoney",
+        `${linkServer.link}payment/convertMoney`,
         {
           nameFrom: selectedValueFrom,
           nameTo: selectedValueTo,

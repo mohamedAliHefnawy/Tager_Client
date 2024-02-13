@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextUi
 import {
@@ -73,7 +74,7 @@ export default function CardDeliverySecurity({
   const GetDataDeliveries = async () => {
     try {
       let response: { data: { token: string; users: any } };
-      response = await axios.get(`http://localhost:5000/users/getDelivery`, {
+      response = await axios.get(`${linkServer.link}users/getDelivery`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -166,7 +167,7 @@ export default function CardDeliverySecurity({
                   }
                   color="warning"
                   className="opacity-90 rounded-full w-[100%]"
-                // startContent={Icons.PlusIcon}
+                  // startContent={Icons.PlusIcon}
                 >
                   المخزن
                 </Button>

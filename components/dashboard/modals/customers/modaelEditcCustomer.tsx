@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
+import linkServer from "@/linkServer";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -91,7 +92,7 @@ export default function ModaelEditcCustomer({
         selectedValueValidity,
       };
       const response = await axios.post(
-        "http://localhost:5000/users/editemployee",
+        `${linkServer.link}users/editemployee`,
         data
       );
       if (response.data === "yes") {

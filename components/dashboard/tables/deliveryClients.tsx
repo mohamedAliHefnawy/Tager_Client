@@ -1,6 +1,7 @@
 //react
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
@@ -39,14 +40,11 @@ export default function DeliveryClients() {
     setLoading(true);
     try {
       let response: { data: { token: string; users: any } };
-      response = await axios.get(
-        "http://localhost:5000/users/getUsers",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}users/getUsers`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setEmployees(response.data.users);
     } catch (error) {
       console.log(error);

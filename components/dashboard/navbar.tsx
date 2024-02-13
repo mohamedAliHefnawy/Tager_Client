@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 // nextUi
 import {
@@ -64,7 +65,7 @@ export default function NavBar() {
         money: number,
       };
       const response = await axios.post(
-        "http://localhost:5000/users/acceptMoney",
+        `${linkServer.link}users/acceptMoney `,
         data
       );
       if (response.data === "yes") {
@@ -105,7 +106,7 @@ export default function NavBar() {
         money: number,
       };
       const response = await axios.post(
-        "http://localhost:5000/users/declineMoney",
+        `${linkServer.link}users/declineMoney`,
         data
       );
       if (response.data === "yes") {
@@ -129,7 +130,7 @@ export default function NavBar() {
     try {
       let response: { data: { token: string; notifications: any } };
       response = await axios.get(
-        "http://localhost:5000/notifications/getNotifications",
+        `${linkServer.link}notifications/getNotifications`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

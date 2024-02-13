@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { TwitterPicker } from "react-color";
+import linkServer from "@/linkServer";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -62,14 +63,11 @@ export default function Home() {
   const GetDataUser = async () => {
     try {
       let response: { data: { token: string; user: any } };
-      response = await axios.get(
-        `http://localhost:5000/users/getUser/${user}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}users/getUser/${user}`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setDataUser(response.data.user);
     } catch (error) {
       console.log(error);

@@ -4,6 +4,8 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import linkServer from "@/linkServer";
+
 
 //components
 import NavBar from "@/components/dashboard/navbar";
@@ -158,7 +160,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     try {
       let response: { data: { token: string; purchases: any } };
       response = await axios.get(
-        "http://localhost:5000/purchases/getpurchases",
+        `${linkServer.link}purchases/getpurchases`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

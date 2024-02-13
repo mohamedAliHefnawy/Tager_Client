@@ -6,7 +6,8 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";import linkServer from "@/linkServer";
+
 
 //nextUi
 import {
@@ -75,7 +76,7 @@ export default function Home() {
         data: { token: string; AllData: any };
       };
       response = await axios.get(
-        `http://localhost:5000/scanner/getOrdersInStore/${nameDelivery}`,
+        `${linkServer.link}scanner/getOrdersInStore/${nameDelivery}`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

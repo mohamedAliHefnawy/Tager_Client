@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import linkServer from "@/linkServer";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -77,7 +78,7 @@ export default function Home() {
   const AddPayment = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/payment/addpayment",
+        `${linkServer.link}payment/addpayment`,
         {
           name: namePayment,
         }
@@ -100,7 +101,7 @@ export default function Home() {
   const GetMethodPayment = async () => {
     try {
       let response: { data: { token: string; payment: any } };
-      response = await axios.get("http://localhost:5000/payment/getpayment", {
+      response = await axios.get(`${linkServer.link}payment/getpayment`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },
@@ -116,7 +117,7 @@ export default function Home() {
     try {
       const updatedPayment = methodPayment[index];
       const response = await axios.post(
-        "http://localhost:5000/payment/editpayment",
+        `${linkServer.link}payment/editpayment`,
         {
           id: updatedPayment._id,
           name: updatedPayment.name,

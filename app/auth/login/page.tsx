@@ -7,6 +7,7 @@ import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import linkServer from "@/linkServer";
 
 //nextUi
 import { Button } from "@nextui-org/react";
@@ -37,15 +38,24 @@ export default function Home() {
         name,
         password,
       };
-      const response = await axios.post(
-        "http://localhost:5000/users/login",
-        data
-      );
+      const response = await axios.post(`${linkServer.link}users/login`, data);
 
       const { validity, answer } = response.data;
 
       if (answer === "yes") {
         if (validity === "مندوب تسويق") {
+          Swal.fire({
+            icon: "success",
+            title: "تم  التسجيل بنجاح ",
+            text: "✓",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "حسنًا",
+          });
+          localStorage.setItem("user", name);
+          localStorage.setItem("userValidity", validity);
+          router.push("/");
+        }
+        if (validity === "زبون عادي") {
           Swal.fire({
             icon: "success",
             title: "تم  التسجيل بنجاح ",

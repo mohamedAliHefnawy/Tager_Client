@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 //Images
 import UserSignUp from "@/public/img/userSignUp.png";
@@ -32,17 +33,14 @@ export default function Home() {
   };
 
   const SignUp = async () => {
-    setCheck(true)
+    setCheck(true);
     try {
       const data = {
         name,
         phone,
         password,
       };
-      const response = await axios.post(
-        "http://localhost:5000/users/signUp",
-        data
-      );
+      const response = await axios.post(`${linkServer.link}users/signUp`, data);
 
       if (response.data === "yes") {
         Swal.fire({

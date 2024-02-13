@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 //nextUi
 import {
@@ -117,14 +118,11 @@ export default function Products() {
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get(
-        "http://localhost:5000/products/getProducts",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}products/getProducts`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setProducts(response.data.products);
       console.log(response.data);
     } catch (error) {

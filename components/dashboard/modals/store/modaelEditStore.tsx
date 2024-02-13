@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
+import linkServer from "@/linkServer";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -94,7 +95,7 @@ export default function ModelEditStore({
         priceDelivery,
       };
       const response = await axios.post(
-        "http://localhost:5000/stores/editStore",
+        `${linkServer.link}stores/editStore`,
         data
       );
       if (response.data === "yes") {

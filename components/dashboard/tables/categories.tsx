@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
@@ -57,14 +58,11 @@ export default function Categories() {
     setLoading(true);
     try {
       let response: { data: { token: string; categories: any } };
-      response = await axios.get(
-        "http://localhost:5000/categories/getCategories",
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}categories/getCategories`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setCategories(response.data.categories);
       console.log(response.data);
     } catch (error) {

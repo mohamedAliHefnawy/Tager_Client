@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
+import linkServer from "@/linkServer";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -153,7 +154,7 @@ export default function ModelEditCategory({
         active,
       };
       const response = await axios.post(
-        "http://localhost:5000/categories/editCatgory",
+        `${linkServer.link}categories/editCatgory  `,
         data
       );
       if (response.data === "yes") {

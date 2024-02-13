@@ -7,6 +7,8 @@ import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import linkServer from "@/linkServer";
+
 
 //nextUi
 import { Button } from "@nextui-org/react";
@@ -38,7 +40,7 @@ export default function Home() {
         password,
       };
       const response = await axios.post(
-        "http://localhost:5000/users/login",
+        `${linkServer.link}users/login`,
         data
       );
 

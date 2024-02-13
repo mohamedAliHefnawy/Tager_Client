@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -221,10 +222,7 @@ export default function ModelAddDeliveryClients(props: any) {
                      
                     </DropdownMenu>
                   </Dropdown> */}
-                  <Button
-                    color="warning"
-                    variant="bordered"
-                  >
+                  <Button color="warning" variant="bordered">
                     {selectedValue}
                   </Button>
                 </CardBody>
@@ -240,7 +238,7 @@ export default function ModelAddDeliveryClients(props: any) {
     try {
       const data = { name, phone, imageURL, password, selectedValue };
       const response = await axios.post(
-        "http://localhost:5000/users/addemployee",
+        `${linkServer.link}users/addemployee`,
         data
       );
       if (response.data === "yes") {

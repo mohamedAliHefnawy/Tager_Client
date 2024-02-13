@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import linkServer from "@/linkServer";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
@@ -53,7 +54,7 @@ export default function Stores() {
     setLoading(true);
     try {
       let response: { data: { token: string; stores: any } };
-      response = await axios.get("http://localhost:5000/stores/getStores", {
+      response = await axios.get(`${linkServer.link}stores/getStores`, {
         headers: {
           Authorization: `Bearer ${secretKey}`,
         },

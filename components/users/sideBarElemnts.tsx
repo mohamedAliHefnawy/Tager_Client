@@ -2,7 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "axios";import linkServer from "@/linkServer";
+
 
 //svg
 import { BackwardIcon } from "@/public/svg/backwardIcon";
@@ -32,7 +33,7 @@ export default function SideBarElemnts(props : any) {
     try {
       let response: { data: { token: string; categories: any } };
       response = await axios.get(
-        "http://localhost:5000/categories/getCategories",
+        `${linkServer.link}categories/getCategories`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,

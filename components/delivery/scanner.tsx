@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
+import linkServer from "@/linkServer";
 
 //nextUi
 import { useDisclosure } from "@nextui-org/react";
@@ -23,7 +24,7 @@ export default function QRScanner({ name }: { name: string }) {
         idOrder: scanResult,
       };
       const response = await axios.post(
-        "http://localhost:5000/scanner/addOrderWithDelivery",
+        `${linkServer.link}scanner/addOrderWithDelivery`,
         data
       );
 
@@ -83,7 +84,6 @@ export default function QRScanner({ name }: { name: string }) {
       ) : (
         <div id="reader"></div>
       )}
-
     </>
   );
 }
