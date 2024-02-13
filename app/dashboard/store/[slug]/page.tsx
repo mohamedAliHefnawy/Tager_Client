@@ -16,7 +16,14 @@ import Loading from "@/components/loading";
 
 //imges
 import error from "@/public/img/notfound.png";
-import { Card, CardBody, CardFooter, Pagination, Spinner } from "@nextui-org/react";
+import {
+  Avatar,
+  Card,
+  CardBody,
+  CardFooter,
+  Pagination,
+  Spinner,
+} from "@nextui-org/react";
 
 interface Employee {
   _id: string;
@@ -35,18 +42,34 @@ interface Stores {
   priceDelivery: string;
 }
 
-export default function Home() {
+interface Products {
+  _id: string;
+  name: string;
+  phone: string;
+  password: string;
+  validity: string;
+  image: string;
+  size: [{ store: [{ amount: number; nameStore: string }]; size: string }];
+  store: { amount: number }[];
+  [key: string]: any;
+}
+
+export default function ProductsInStore({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [stores, setStores] = useState<Stores[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [nameStore, setNameStore] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [showMessage, setShowMessage] = useState(true);
-  const itemsPerPage = 6;
-  const [nameStore, setNameStore] = useState("");
+  const itemsPerPage = 20;
+  const [products, setProducts] = useState<Products[]>([]);
 
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);
@@ -54,7 +77,7 @@ export default function Home() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const filteredCategories = stores.filter((store) => {
+  const filteredProductsInStore = products.filter((store) => {
     const lowerCaseSearchText = searchText.toLowerCase();
     return (
       (store.name && store.name.toLowerCase().includes(lowerCaseSearchText)) ||
@@ -65,26 +88,27 @@ export default function Home() {
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage);
   };
-  const currentItems = filteredCategories.slice(
+  const currentItems = filteredProductsInStore.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
 
-  const handleAddCategory = (newStore: Stores) => {
-    setStores((prevStores) => [...prevStores, newStore]);
-  };
-
-  const GetStores = async () => {
+  const GetProductsInStore = async () => {
     setLoading(true);
     try {
-      let response: { data: { token: string; stores: any } };
-      response = await axios.get(`${linkServer.link}stores/getStores`, {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
-      setStores(response.data.stores);
-      console.log(response.data);
+      let response: {
+        data: { token: string; final: any; Store: string };
+      };
+      response = await axios.get(
+        `${linkServer.link}stores/getProductsInStore/${params.slug}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+      setProducts(response.data.final);
+      setNameStore(response.data.Store);
     } catch (error) {
       console.log(error);
     } finally {
@@ -93,7 +117,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    GetStores();
+    GetProductsInStore();
   }, []);
 
   const Details = () => {
@@ -101,69 +125,70 @@ export default function Home() {
       <>
         <div className=" w-[100%]">
           <div className="flex justify-between items-center">
-            <div className="w-[50%]">
+            <div className="w-[100%]">
               <input
                 type="text"
                 placeholder=" بحث ..."
-                className="w-[30%] input"
+                className="w-[100%] input"
                 onChange={handleSearchChange}
                 value={searchText}
               />
             </div>
           </div>
           <div className="mt-3 ml-2 text-black opacity-60 text-sm">
-            <p>Total {filteredCategories.length} Store </p>
+            <p>Total {filteredProductsInStore.length} Products </p>
           </div>
 
           <div>
-            <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 mt-6">
+            <div className="gap-2 grid grid-cols-4 mt-6">
               {loading ? (
                 <div className="flex justify-center items-center h-[400px]">
                   <Spinner size="lg" />
                 </div>
-              ) : filteredCategories.length === 0 ? (
+              ) : filteredProductsInStore.length === 0 ? (
                 <p className="text-default-500">لا توجد نتائج للبحث</p>
               ) : (
-                currentItems.map((store, indexStore) => (
-                  <Card
-                    shadow="sm"
-                    key={indexStore}
-                    className="hover:cursor-pointer hover:translate-x-[-5px] transition-transform"
-                    // onFocus={message}
-                    // style={{ opacity: moneySafe.active === true ? 1 : 0.5 }}
-                    // isPressable={moneySafe.active === true}
-                    // onClick={() =>
-                    //   router.push(`/dashboard/moneySafe/${moneySafe._id}`)
-                    // }
-                  >
-                    <CardBody className="overflow-visible  p-6 flex flex-col items-end">
-                      <p className="flex mb-4">
-                        <span className="mr-2">{store.name}</span>
-                        <span className="opacity-65"> :- الإسم </span>
-                      </p>
-                      <p className="flex mb-4">
-                        <span className="mr-2">{store.gbs}</span>
-                        <span className="opacity-65"> :- المكان </span>
-                      </p>
-                      <p className="flex mb-4">
-                        <span className="mr-2">{store.priceDelivery}</span>
-                        <span className="opacity-65"> :- سعر التوصيل </span>
-                      </p>
-                    </CardBody>
-                  </Card>
-                ))
+                currentItems.map((product, indexProduct) => {
+                  return product.size.map((sizeItem, indexSize) => {
+                    const storeInfo = sizeItem.store.find(
+                      (store) => store.nameStore === nameStore
+                    );
+
+                    const availableAmount = storeInfo ? storeInfo.amount : 0;
+
+                    return (
+                      <div
+                        key={`${indexProduct}-${indexSize}`}
+                        className="flex justify-evenly items-center text-lg bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl h-20 py-5"
+                      >
+                        <p className="text-right text-lg mr-1 ">
+                          <span>
+                            {product.name} ({sizeItem.size}, {availableAmount})
+                          </span>
+                          <p className="flex justify-between">
+                            <span className="text-lg text-success-700 flex justify-end">
+                              <span className="mr-1">د.ل</span>
+                              <span>{product.price1}</span>
+                            </span>
+                          </p>
+                        </p>
+                        <p>
+                          <Avatar src={`${product.image[0]}`} size="lg" />
+                        </p>
+                      </div>
+                    );
+                  });
+                })
               )}
             </div>
-
-           
           </div>
-          <div className="pagination">
+          <div className="pagination mt-4">
             <Pagination
               className=" mb-3"
               showShadow
-              color="primary"
+              color="warning"
               variant="faded"
-              total={Math.ceil(filteredCategories.length / itemsPerPage)}
+              total={Math.ceil(filteredProductsInStore.length / itemsPerPage)}
               initialPage={currentPage}
               onChange={handlePageChange}
             />
@@ -202,7 +227,7 @@ export default function Home() {
                 <div className="w-[80%] h-5"></div>
                 <div className="w-[90%]  bg-slate-100 rounded-r-3xl  rounded-2xl p-6 min-h-screen">
                   <div className="w-[100%] flex justify-end">
-                    <Stores />
+                    <Details />
                   </div>
                 </div>
               </div>
