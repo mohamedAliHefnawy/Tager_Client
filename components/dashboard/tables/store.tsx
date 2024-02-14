@@ -19,6 +19,7 @@ import {
 //components
 import ModelAddStore from "../modals/store/modaelAddStore";
 import ModelEditStore from "../modals/store/modaelEditStore";
+import ModaelConvertStore from "../modals/store/modaelConvertStore";
 
 // import Sound from '@/public/mp3/'
 
@@ -49,7 +50,7 @@ export default function Stores() {
       router.push(`/dashboard/store/${storeId}`);
     }, 1000);
 
-    // <ReactAudioPlayer src="رابط ملف الصوت.mp3" autoPlay />;
+    // <ReactAudioPlayer src="@/public/mp3/1.mp3" autoPlay />;
   };
 
   const handleSearchChange = (e: any) => {
@@ -113,13 +114,16 @@ export default function Stores() {
               value={searchText}
             />
           </div>
-          <ModelAddStore
-            nameStoree={nameStore}
-            setNameStoree={setNameStore}
-            gbsStoree={nameStore}
-            setGbsStoree={setNameStore}
-            onAddStoree={handleAddCategory}
-          />
+          <div className="flex justify-between w-[25%]">
+            <ModelAddStore
+              nameStoree={nameStore}
+              setNameStoree={setNameStore}
+              gbsStoree={nameStore}
+              setGbsStoree={setNameStore}
+              onAddStoree={handleAddCategory}
+            />
+            
+          </div>
         </div>
         <div className="mt-3 ml-2 text-black opacity-60 text-sm">
           <p>Total {filteredCategories.length} Store </p>

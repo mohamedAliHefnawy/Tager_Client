@@ -13,6 +13,7 @@ import Stores from "@/components/dashboard/tables/store";
 import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "@/components/loading";
+import ModaelConvertStore from "@/components/dashboard/modals/store/modaelConvertStore";
 
 //imges
 import error from "@/public/img/notfound.png";
@@ -31,7 +32,7 @@ interface Employee {
   phone1: string;
   phone2: string;
   password: string;
-  image: string;
+  image: string[];
   validity: string;
 }
 
@@ -48,10 +49,17 @@ interface Products {
   phone: string;
   password: string;
   validity: string;
-  image: string;
+  image: string[];
   size: [{ store: [{ amount: number; nameStore: string }]; size: string }];
   store: { amount: number }[];
   [key: string]: any;
+}
+
+interface ReturnOrders {
+  idProduct: string;
+  imageProduct: string;
+  nameProduct: string;
+  size: [{ store: [{ amount: number; nameStore: string }]; size: string }];
 }
 
 export default function ProductsInStore({
@@ -59,10 +67,10 @@ export default function ProductsInStore({
 }: {
   params: { slug: string };
 }) {
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [stores, setStores] = useState<Stores[]>([]);
   const [searchText, setSearchText] = useState("");
   const [nameStore, setNameStore] = useState("");
@@ -70,6 +78,7 @@ export default function ProductsInStore({
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 20;
   const [products, setProducts] = useState<Products[]>([]);
+  const [returnOrders, setReturnOrders] = useState<ReturnOrders[]>([]);
 
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);
@@ -92,6 +101,37 @@ export default function ProductsInStore({
     indexOfFirstItem,
     indexOfLastItem
   );
+
+  const ReturnProductswithStore = (idProduct: string) => {
+    const productOrderId = products.find((item) => item._id === idProduct);
+
+    if (productOrderId) {
+      const isProductInReturnOrders = returnOrders.some(
+        (item) => item.idProduct === productOrderId._id
+      );
+
+      if (!isProductInReturnOrders) {
+        const updatedReturnOrders = [
+          ...returnOrders,
+          {
+            idProduct: productOrderId._id,
+            nameProduct: productOrderId.name,
+            imageProduct: productOrderId.image[0],
+            amount: productOrderId.amount || 0,
+            size: productOrderId.size || [],
+            store: nameStore || "",
+          },
+        ];
+
+        setReturnOrders(updatedReturnOrders);
+      } else {
+        const updatedReturnOrders = returnOrders.filter(
+          (item) => item.idProduct !== productOrderId._id
+        );
+        setReturnOrders(updatedReturnOrders);
+      }
+    }
+  };
 
   const GetProductsInStore = async () => {
     setLoading(true);
@@ -148,37 +188,53 @@ export default function ProductsInStore({
               ) : filteredProductsInStore.length === 0 ? (
                 <p className="text-default-500">لا توجد نتائج للبحث</p>
               ) : (
-                currentItems.map((product, indexProduct) => {
-                  return product.size.map((sizeItem, indexSize) => {
-                    const storeInfo = sizeItem.store.find(
-                      (store) => store.nameStore === nameStore
-                    );
-
-                    const availableAmount = storeInfo ? storeInfo.amount : 0;
-
-                    return (
-                      <div
-                        key={`${indexProduct}-${indexSize}`}
-                        className="flex justify-evenly items-center text-lg bg-warning-50 border-1 border-slate-200 p-2 rounded-2xl h-20 py-5"
-                      >
-                        <p className="text-right text-lg mr-1 ">
-                          <span>
-                            {product.name} ({sizeItem.size}, {availableAmount})
-                          </span>
-                          <p className="flex justify-between">
-                            <span className="text-lg text-success-700 flex justify-end">
-                              <span className="mr-1">د.ل</span>
-                              <span>{product.price1}</span>
-                            </span>
+                currentItems.map((product, indexProduct) => (
+                  <div
+                    key={indexProduct}
+                    onClick={() => ReturnProductswithStore(product._id)}
+                    className={`flex justify-between bg-warning-50 border-1 p-6 rounded-2xl hover:cursor-pointer ${
+                      returnOrders.some(
+                        (item) => item.idProduct === product._id
+                      )
+                        ? "border-danger-600"
+                        : ""
+                    }`}
+                  >
+                    <p className="text-right text-lg mr-1 w-[100%]">
+                      <span>
+                        <p className="flex items-center justify-evenly mb-4">
+                          <p>{product.name}</p>
+                          <p>
+                            <Avatar src={`${product.image[0]}`} size="lg" />
                           </p>
                         </p>
                         <p>
-                          <Avatar src={`${product.image[0]}`} size="lg" />
+                          {product.size.map((item, index) => {
+                            const storeInfo = item.store.find(
+                              (filteStore) => filteStore.nameStore === nameStore
+                            );
+                            const availableAmount = storeInfo
+                              ? storeInfo.amount
+                              : 0;
+
+                            return (
+                              <p
+                                key={index}
+                                className="flex items-center justify-evenly"
+                              >
+                                <p className="flex">({availableAmount})</p>
+                                <p className="flex">
+                                  <p className="mr-1">{item.size}</p>
+                                  <p> المقاس </p>
+                                </p>
+                              </p>
+                            );
+                          })}
                         </p>
-                      </div>
-                    );
-                  });
-                })
+                      </span>
+                    </p>
+                  </div>
+                ))
               )}
             </div>
           </div>
@@ -193,6 +249,12 @@ export default function ProductsInStore({
               onChange={handlePageChange}
             />
           </div>
+        </div>
+        <div className="ml-3">
+          <ModaelConvertStore
+            productsConvert={returnOrders}
+            storeWith={nameStore}
+          />
         </div>
       </>
     );
