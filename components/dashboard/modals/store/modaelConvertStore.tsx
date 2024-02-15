@@ -99,12 +99,7 @@ export default function ModaelConvertStore({
     }));
   };
 
-  const handleInputChange = (
-    productId: string,
-    // field: string,
-    value: number
-    // price: string
-  ) => {
+  const handleInputChange = (productId: string, value: number) => {
     setInputValues((prevValues) => {
       const newValues = {
         ...prevValues,
@@ -134,30 +129,26 @@ export default function ModaelConvertStore({
                   inputValues[item.idProduct] &&
                   inputValues[item.idProduct].amount
                 }
-                onChange={(e) =>
-                  handleInputChange(
-                    item.idProduct,
-                    // selectedStore,
-                    +e.target.value
-                    // movedProduct.price1
-                  )
-                }
+                onChange={(e) => {
+                  const value = +e.target.value;
+                  const Amount = item.size
+                    .filter((item2) => {
+                      const selectedSizes = (inputValues[item.idProduct]
+                        ?.size || []) as string[];
+                      return selectedSizes.includes(item2.size);
+                    })
+                    .map((item4) => {
+                      const foundStore = item4.store.find(
+                        (item5) => item5.nameStore === storeWith
+                      );
+                      return foundStore ? foundStore.amount : 0;
+                    });
+                  if (value <= +Amount && value > 0) {
+                    handleInputChange(item.idProduct, +e.target.value);
+                  }
+                }}
               />
             </p>
-            {inputValues[item.idProduct] && inputValues[item.idProduct].size}
-
-            {item.size
-              .filter(
-                (item2) =>
-                  item2.size === inputValues[item.idProduct]?.size &&
-                  inputValues[item.idProduct].size
-              )
-              .map((item4) => {
-                const foundStore = item4.store.find(
-                  (item5) => item5.nameStore === storeWith
-                );
-                return foundStore ? foundStore.amount : 0;
-              })}
 
             <p>
               <Dropdown>
@@ -178,9 +169,11 @@ export default function ModaelConvertStore({
                     handleStoreSelection(item.idProduct, selectedKeys)
                   }
                 >
-                  {stores.map((item) => (
-                    <DropdownItem key={item.gbs}>{item.gbs}</DropdownItem>
-                  ))}
+                  {stores
+                    .filter((nameStore) => nameStore.gbs !== storeWith)
+                    .map((item) => (
+                      <DropdownItem key={item.gbs}>{item.gbs}</DropdownItem>
+                    ))}
                 </DropdownMenu>
               </Dropdown>
             </p>
@@ -212,16 +205,14 @@ export default function ModaelConvertStore({
           </div>
           <p className="text-right text-lg mr-1">
             <span className="flex">
-              <span>({/* {item.} */}45)</span>
+              <span>
+                (
+                {inputValues[item.idProduct] &&
+                  inputValues[item.idProduct].size}
+                )
+              </span>
               <span>{item.nameProduct}</span>
             </span>
-            <p className="flex justify-between">
-              {/* <span className="text-[12px] text-success-700 flex justify-end">
-                <span className="mr-1">د.ل</span>
-                <span>{item.}</span>
-              </span> */}
-              {/* <span className="text-[12px]"> {item.size} </span> */}
-            </p>
           </p>
           <p>
             <Avatar src={`${item.imageProduct}`} size="lg" />
@@ -231,15 +222,15 @@ export default function ModaelConvertStore({
     </div>
   );
 
-  const AddStore = async () => {
+  const SendProducts = async () => {
+    console.log(inputValues);
     try {
       const data = {
-        nameStore,
-        gbsStore,
-        priceDelivery,
+        inputValues,
+        storeWith
       };
       const response = await axios.post(
-        `${linkServer.link}stores/addStore`,
+        `${linkServer.link}stores/convertProductsBetweenStores`,
         data
       );
       if (response.data === "yes") {
@@ -277,13 +268,13 @@ export default function ModaelConvertStore({
     GetStores();
   }, []);
 
-  useEffect(() => {
-    if (nameStore !== "" && gbsStore.trim() !== "" && priceDelivery !== "") {
-      setCloseBtn(false);
-    } else {
-      setCloseBtn(true);
-    }
-  }, [nameStore, gbsStore, priceDelivery]);
+  // useEffect(() => {
+  //   if (nameStore !== "" && gbsStore.trim() !== "" && priceDelivery !== "") {
+  //     setCloseBtn(false);
+  //   } else {
+  //     setCloseBtn(true);
+  //   }
+  // }, [nameStore, gbsStore, priceDelivery]);
 
   return (
     <>
@@ -314,11 +305,11 @@ export default function ModaelConvertStore({
                   إلغاء
                 </Button>
                 <Button
-                  color={closeBtn ? "default" : "warning"}
-                  disabled={closeBtn}
-                  onClick={AddStore}
+                  // color={closeBtn ? "default" : "warning"}
+                  // disabled={closeBtn}
+                  onClick={SendProducts}
                 >
-                  إضافة
+                  تحويل
                 </Button>
               </ModalFooter>
             </>
