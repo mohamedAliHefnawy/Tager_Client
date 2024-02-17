@@ -156,17 +156,19 @@ export default function NavBar({
               </p>
             </DropdownItem>
             <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">{Icons.BanknotesIcon}</p>
-                {userValidityy === "مندوب تسويق" && (
+              {userValidityy === "مندوب تسويق" && (
+                <p className="flex items-center ">
+                  <p className="text-[var(--mainColor)]">
+                    {Icons.BanknotesIcon}
+                  </p>
                   <p
                     onClick={() => setShowDev(!showDev)}
                     className="mr-1 text-slate-700"
                   >
                     المحفظة
                   </p>
-                )}
-              </p>
+                </p>
+              )}
             </DropdownItem>
             <DropdownItem key="1">
               <p className="flex items-center ">
@@ -239,10 +241,17 @@ export default function NavBar({
             <p className="text-slate-800 mr-2"> الصفحه الرئيسيه </p>
             {Icons.HomeIcon}
           </Link>
-          <Link href="/wallet" className="flex items-center justify-end mb-6">
-            <p className="text-slate-800 mr-2"> المحفظة </p>
-            {Icons.BanknotesIcon}
-          </Link>
+          {userValidityy === "مندوب تسويق" && (
+            <p className="flex items-center ">
+              <p className="text-[var(--mainColor)]">{Icons.BanknotesIcon}</p>
+              <p
+                onClick={() => setShowDev(!showDev)}
+                className="mr-1 text-slate-700"
+              >
+                المحفظة
+              </p>
+            </p>
+          )}
           <Link href="/fav" className="flex items-center justify-end mb-6">
             <p className="text-slate-800 mr-2"> المفضلة </p>
             {Icons.HeartIcon}
