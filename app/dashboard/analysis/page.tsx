@@ -5,6 +5,7 @@ import NavBar from "@/components/dashboard/navbar";
 import SideBar from "@/components/dashboard/sidebar";
 import Chart1 from "@/components/dashboard/chart1";
 import Chart2 from "@/components/dashboard/chart2";
+import Chart1_1 from "@/components/dashboard/chart1-1";
 import Chart3 from "@/components/dashboard/chart3";
 import Chart4 from "@/components/dashboard/chart4";
 import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
@@ -34,27 +35,7 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [employee, setEmployee] = useState<Employee | null>(null);
-
   const [loading, setLoading] = useState(true);
-
-  // const GetEmployees = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.get(
-  //       `https://server-clinic.vercel.app/employees/getemployee/${usernamee}`
-  //     );
-  //     setEmployee(response.data);
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   GetEmployees();
-  // }, []);
 
   useEffect(() => {
     if (nameAdmin) {
@@ -85,18 +66,18 @@ export default function Home() {
                 <div className="w-[80%] h-5"></div>
                 <div className="flex w-[90%]">
                   <div className="w-[50%] h-96 mr-4 bg-slate-100 rounded-r-3xl  rounded-2xl p-6">
-                    <Chart1 />
+                    <Chart1_1 />
                   </div>
                   <div className="w-[50%] h-96 bg-slate-100 rounded-r-3xl  rounded-2xl p-6">
                     <Chart2 />
                   </div>
                 </div>
                 <div className="flex w-[90%] mt-4">
-                  <div className="w-[50%] h-96 mr-4 bg-slate-100 rounded-r-3xl  rounded-2xl p-6">
+                  <div className="w-[50%] h-[430px] mr-4 bg-slate-100 rounded-r-3xl  rounded-2xl p-6">
                     <Chart3 />
                   </div>
-                  <div className="w-[50%] h-96 bg-slate-100 rounded-r-3xl  rounded-2xl p-6">
-                    <Chart4 />
+                  <div className="w-[50%] h-[430px] mr-4 bg-slate-100 rounded-r-3xl  rounded-2xl p-6">
+                    {/* <Chart4 /> */} <Chart1 />
                   </div>
                 </div>
               </div>

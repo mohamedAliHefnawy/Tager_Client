@@ -19,6 +19,7 @@ interface Employees {
   name: string;
   phone: string;
   password: string;
+  passwordMoneyStore: string;
   validity: string;
   image: string;
 }
@@ -134,12 +135,12 @@ export default function MarketingClients() {
                     <Avatar src={employees.image} />
                   </div>
                   <div className="w-[33%] flex justify-center">
-                    <Link
+                    <p
                       className="text-warning-500"
-                      href={`/dashboard/account/${employees.name}`}
+                      // href={`/dashboard/account/${employees.name}`}
                     >
                       {employees.name}
-                    </Link>
+                    </p>
                   </div>
                   <div className="w-[33%] flex justify-center">
                     <p> {employees.phone} </p>
@@ -159,6 +160,7 @@ export default function MarketingClients() {
                         phoneEmployee={employees.phone}
                         passwordEmployee={employees.password}
                         validitiyEmployee={employees.validity}
+                        passwordMoneyStoree={employees.passwordMoneyStore}
                       />
                     </div>
                   </div>

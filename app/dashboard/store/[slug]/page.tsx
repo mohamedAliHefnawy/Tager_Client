@@ -250,12 +250,12 @@ export default function ProductsInStore({
             />
           </div>
         </div>
-        <div className="ml-3">
+        {/* <div className="ml-3">
           <ModaelConvertStore
             productsConvert={returnOrders}
             storeWith={nameStore}
           />
-        </div>
+        </div> */}
       </>
     );
   };
@@ -288,9 +288,7 @@ export default function ProductsInStore({
                 <NavBar />
                 <div className="w-[80%] h-5"></div>
                 <div className="w-[90%]  bg-slate-100 rounded-r-3xl  rounded-2xl p-6 min-h-screen">
-                  <div className="w-[100%] flex justify-end">
-                    <Details />
-                  </div>
+                  <div className="w-[100%] flex justify-end">{Details()}</div>
                 </div>
               </div>
             </div>

@@ -11,6 +11,7 @@ import Loading from "@/components/loading";
 import MainSlider from "@/components/users/sliders/mainSlider";
 import ProductsSlider1 from "@/components/users/sliders/productsSlider1";
 import ProductsSlider2 from "@/components/users/sliders/productsSlider2";
+import ProductsSlider3 from "@/components/users/sliders/productsSlider3";
 import ElementsSlider from "@/components/users/sliders/elementsSlider";
 import Footer from "@/components/users/footer";
 
@@ -62,6 +63,10 @@ export default function Home() {
                 updateLengthInFavoutire={updateLengthInFavourite}
               />
               <ProductsSlider2
+                updateLengthInCart={undefined}
+                updateLengthInFavoutire={undefined}
+              />
+              <ProductsSlider3
                 updateLengthInCart={undefined}
                 updateLengthInFavoutire={undefined}
               />

@@ -64,7 +64,6 @@ export default function Categories() {
         },
       });
       setCategories(response.data.categories);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     } finally {

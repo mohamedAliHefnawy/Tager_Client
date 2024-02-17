@@ -44,6 +44,7 @@ export default function ModaelEditMarketingClients({
   imageEmployee,
   phoneEmployee,
   passwordEmployee,
+  passwordMoneyStoree,
   validitiyEmployee,
 }: {
   idEmployee: string;
@@ -51,6 +52,7 @@ export default function ModaelEditMarketingClients({
   imageEmployee: string;
   phoneEmployee: string;
   passwordEmployee: string;
+  passwordMoneyStoree: string;
   validitiyEmployee: string;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -59,6 +61,8 @@ export default function ModaelEditMarketingClients({
   const [name, setName] = useState(nameEmployee);
   const [phone, setPhone] = useState(phoneEmployee);
   const [password, setPassword] = useState(passwordEmployee);
+  const [passwordMoneyStore, setPasswordMoneyStore] =
+    useState(passwordMoneyStoree);
   const [closeBtn, setCloseBtn] = useState(true);
 
   const [generatedPassword, setGeneratedPassword] = useState(passwordEmployee);
@@ -90,6 +94,7 @@ export default function ModaelEditMarketingClients({
         phone,
         password,
         selectedValueValidity,
+        passwordMoneyStore,
       };
       const response = await axios.post(
         `${linkServer.link}users/editemployee`,
@@ -223,6 +228,13 @@ export default function ModaelEditMarketingClients({
                       placeholder="كلمه المرور"
                       onChange={(e) => setPassword(e.target.value)}
                     />
+                    <input
+                      type="name"
+                      className="input"
+                      defaultValue={passwordMoneyStore}
+                      placeholder="باسورد الخزينه"
+                      onChange={(e) => setPasswordMoneyStore(e.target.value)}
+                    />
                   </form>
                 </CardBody>
               </Card>
@@ -265,13 +277,14 @@ export default function ModaelEditMarketingClients({
       name.trim() !== nameEmployee ||
       phone.trim() !== phoneEmployee ||
       selectedValueValidity !== validitiyEmployee ||
+      passwordMoneyStore !== passwordMoneyStoree ||
       password !== passwordEmployee
     ) {
       setCloseBtn(false);
     } else {
       setCloseBtn(true);
     }
-  }, [name, phone, password, selectedValueValidity]);
+  }, [name, phone, password, selectedValueValidity, passwordMoneyStore]);
 
   return (
     <>

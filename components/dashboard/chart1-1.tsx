@@ -5,28 +5,28 @@ import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#00C49F", "pink"];
 
-interface BestMarketer {
+interface BestDelivery {
   name: string;
   ordersCount: number;
 }
 
-export default function Chart2() {
-  const [bestMarketer, setBestMarketer] = useState<BestMarketer[]>([]);
+export default function Chart1_1() {
+  const [bestDelivery, setBestDelivery] = useState<BestDelivery[]>([]);
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [loading, setLoading] = useState(true);
 
-  const GetBestMarketer = async () => {
+  const GetBestDelivery = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${linkServer.link}analysis/getBestMarketer`,
+        `${linkServer.link}analysis/getBestDelivery`,
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
           },
         }
       );
-      setBestMarketer(response.data.bestMarketer);
+      setBestDelivery(response.data.bestDelivery);
     } catch (error) {
       console.log(error);
     } finally {
@@ -35,10 +35,10 @@ export default function Chart2() {
   };
 
   useEffect(() => {
-    GetBestMarketer();
+    GetBestDelivery();
   }, []);
 
-  const data = bestMarketer.map((item) => ({
+  const data = bestDelivery.map((item) => ({
     name: item.name,
     uv: item.ordersCount,
     pv: 4000,
@@ -65,7 +65,7 @@ export default function Chart2() {
   return (
     <>
       <p className="w-[100%] text-center mb-5">
-        أكثر 5 مندوبين <span className="font-bold">تسويق</span> نشاطاَ
+        أكثر 5 مندوبين <span className="font-bold"> التوصيل </span> نشاطاَ
       </p>
 
       <BarChart

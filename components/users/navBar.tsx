@@ -1,10 +1,16 @@
 "use client";
 
 //react
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import axios from "axios";
+import linkServer from "@/linkServer";
+
+import useCheckLogin from "@/components/users/checkLogin/checkLogin";
+import ModelPasswordMoneyStore from "@/components/users/models/modelPasswordMoneyStore";
 
 //nextUi
 import {
@@ -21,6 +27,10 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
+  Modal,
+  ModalContent,
+  ModalBody,
+  useDisclosure,
 } from "@nextui-org/react";
 
 //svg
@@ -32,6 +42,8 @@ import { LogoutIcon } from "@/public/svg/logoutIcon";
 import { HeartIcon } from "@/public/svg/heartIcon";
 import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
 import { HomeIcon } from "@/public/svg/homeIcon";
+import { EyeIcon } from "@/public/svg/eyeIcon";
+import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
 
 //images
 import Logo from "@/public/img/hbaieb.png";
@@ -47,6 +59,12 @@ export default function NavBar({
 }) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
+  const [userr, userValidityy] = useCheckLogin();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [showDev, setShowDev] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
+  const [password, setPassword] = useState("");
+  const [check, setCheck] = useState(true);
 
   const Icons = {
     BarsarrowdownIcon: <BarsarrowdownIcon />,
@@ -57,12 +75,57 @@ export default function NavBar({
     HeartIcon: <HeartIcon />,
     ShoppingcartIcon: <ShoppingcartIcon />,
     HomeIcon: <HomeIcon />,
+    EyeIcon: <EyeIcon />,
+    EyeNotIcon: <EyeNotIcon />,
   };
 
   const Logout = () => {
     localStorage.removeItem("user");
     router.push("/auth/login");
   };
+
+  const Login = async () => {
+    try {
+      const data = {
+        name: userr,
+        password,
+      };
+      const response = await axios.post(
+        `${linkServer.link}users/loginMoneySafe`,
+        data
+      );
+
+      if (response.data === "yes") {
+        Swal.fire({
+          icon: "success",
+          title: "تم  التسجيل بنجاح ",
+          text: "✓",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+        router.push("/wallet");
+      }
+      if (response.data === "no") {
+        Swal.fire({
+          icon: "warning",
+          title: "كلمة المرور خاطئة",
+          text: "⤫",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (password.trim() !== "") {
+      setCheck(false);
+    } else {
+      setCheck(true);
+    }
+  }, [password]);
 
   return (
     <Navbar position="static">
@@ -95,9 +158,14 @@ export default function NavBar({
             <DropdownItem key="1">
               <p className="flex items-center ">
                 <p className="text-[var(--mainColor)]">{Icons.BanknotesIcon}</p>
-                <Link href="/wallet" className="mr-1 text-slate-700">
-                  المحفظة
-                </Link>
+                {userValidityy === "مندوب تسويق" && (
+                  <p
+                    onClick={() => setShowDev(!showDev)}
+                    className="mr-1 text-slate-700"
+                  >
+                    المحفظة
+                  </p>
+                )}
               </p>
             </DropdownItem>
             <DropdownItem key="1">
@@ -120,7 +188,7 @@ export default function NavBar({
         </Dropdown>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem className="mr-4">
+        <NavbarItem className="mr-4 mt-5">
           <Link color="foreground" href="/fav">
             {/* <Badge
               color="primary"
@@ -131,7 +199,7 @@ export default function NavBar({
             <span className="text-red-600 mr-3">{Icons.HeartIcon}</span>
           </Link>
         </NavbarItem>
-        <NavbarItem className="mr-4">
+        <NavbarItem className="mr-4 mt-5">
           <Link color="foreground" href="/cart">
             {/* <Badge
               color="primary"
@@ -189,6 +257,34 @@ export default function NavBar({
           </Link>
         </NavbarMenuItem>
       </NavbarMenu>
+      <div
+        className={`w-96 h-96 sm:w-[100%] max-sm:w-[100%] sm:mt-16 max-sm:mt-16 rounded-3xl border-1 border-warning-400 p-10 flex flex-col justify-center items-center  z-50 bg-white ${
+          showDev ? "absolute top-0 right-0" : "hidden"
+        }`}
+      >
+        <div className="flex justify-between items-center w-[100%]">
+          <input
+            type={showPassword ? "password" : "text"}
+            className="input w-full"
+            placeholder="أدخل الباسورد"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span className="relative bg-red-400">
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className={`absolute inset-y-0 right-0 flex items-center pr-4  pt-3 text-[var(--mainColor)] hover:cursor-pointer`}
+            >
+              {showPassword ? Icons.EyeIcon : Icons.EyeNotIcon}
+            </span>
+          </span>
+          <div>
+            <Button className="button" onClick={Login} disabled={check}>
+              دخول
+            </Button>
+          </div>
+        </div>
+      </div>
     </Navbar>
   );
 }
