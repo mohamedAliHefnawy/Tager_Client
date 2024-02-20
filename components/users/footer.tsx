@@ -11,6 +11,10 @@ export default function Footer() {
       <div
         className="flex max-lg:flex lg:flex md:flex sm:block max-sm:block w-[100%] z-40 justify-between bg-[#0d1929] p-[100px] pt-[30px]"
         style={{ direction: "rtl" }}
+      ></div>
+      {/* <div
+        className="flex max-lg:flex lg:flex md:flex sm:block max-sm:block w-[100%] z-40 justify-between bg-[#0d1929] p-[100px] pt-[30px]"
+        style={{ direction: "rtl" }}
       >
         <div className=" max-lg:w-[60%] lg:w-[60%] md:w-[90%] sm:w-[90%] max-sm:w-[90%] text-left">
           <p style={{ color: "white", fontSize: "22px" }}>شركة الحبايب</p>
@@ -93,7 +97,7 @@ export default function Footer() {
             </Link>{" "}
           </p>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

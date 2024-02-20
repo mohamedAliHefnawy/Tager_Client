@@ -11,6 +11,7 @@ import linkServer from "@/linkServer";
 import NavBar from "@/components/users/navBar";
 import Footer from "@/components/users/footer";
 import ButtonAddToCart from "@/components/users/addTo/cart";
+import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 
 //nextui
 import {
@@ -81,6 +82,7 @@ export default function MoadelOrderProducts({
   sizeProductss: Products[];
 }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const [user, userValidity] = useCheckLogin();
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [stores, setStores] = useState<Stores[]>([]);
@@ -178,7 +180,7 @@ export default function MoadelOrderProducts({
     const quantityValue =
       field === "quantity" ? value : currentInputValues.quantity;
 
-    const priceVall = validityUser === "زبون عادي" ? price3 : price2;
+    const priceVall = userValidity !== "مندوب تسويق" ? price3 : price2;
 
     if (
       +quantityValue >= 0 &&
@@ -245,7 +247,6 @@ export default function MoadelOrderProducts({
         },
       });
       setStores(response.data.stores);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -402,7 +403,7 @@ export default function MoadelOrderProducts({
                             handleInputChange(
                               item._id,
                               "price",
-                              validityUser === "زبون عادي"
+                              userValidity !== "مندوب تسويق"
                                 ? item.price3
                                 : item.price2,
                               item.price3,
@@ -456,14 +457,14 @@ export default function MoadelOrderProducts({
                   <p>{totalProfit}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
-              </div>
+              </div> */}
               <div className="flex justify-between px-8 py-4">
                 <p> ربح الادمن </p>
                 <p className="flex">
                   <p>{totalProfitAdmin}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
-              </div> */}
+              </div>
               <div className="flex justify-between px-8 py-4">
                 <p> سعر التوصيل </p>
                 <p className="flex">
@@ -508,6 +509,7 @@ export default function MoadelOrderProducts({
         phone2Client,
         store: selectedValueTo,
         address: addressClient,
+        userValidity,
         products,
         sizes: sizeProductss,
         amountAndPrice: inputValues,
@@ -516,8 +518,11 @@ export default function MoadelOrderProducts({
         imageURLCompany,
         color,
         totalPriceProducts: +totalAmount + +priceDeliveryStore,
-        gainMarketer: +totalProfit,
-        gainAdmin: +totalProfitAdmin,
+        gainMarketer: userValidity !== "مندوب تسويق" ? 0 : +totalProfit,
+        gainAdmin:
+          userValidity !== "مندوب تسويق"
+            ? +totalProfit + +totalProfitAdmin
+            : +totalProfitAdmin,
         marketer: nameUser,
         deliveryPrice: priceDeliveryStore,
       };

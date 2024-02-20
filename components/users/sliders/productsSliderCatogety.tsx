@@ -10,6 +10,7 @@ import linkServer from "@/linkServer";
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
+import Link from "next/link";
 
 interface Products {
   _id: string;
@@ -23,12 +24,16 @@ interface Products {
   active: boolean;
   size: [{ size: string }];
 }
-export default function ProductsSlider1({
-  updateLengthInCart,
-  updateLengthInFavoutire,
+
+interface ProductsSliderCatogetyProps {
+  catogeryName: string;
+  products: Products[]; // Assuming Products is the type for your product data
+}
+
+export default function ProductsSliderCatogety({
+  catogeryName,
 }: {
-  updateLengthInCart: any;
-  updateLengthInFavoutire: any;
+  catogeryName: string;
 }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const router = useRouter();
@@ -53,30 +58,33 @@ export default function ProductsSlider1({
   if (storedData2 !== null) {
     arrProductsInFavourite = JSON.parse(storedData2);
   }
-  const GetProducts = async () => {
+
+  const GetProductsCatogry = async () => {
     try {
       let response: { data: { token: string; products: any } };
-      response = await axios.get(`${linkServer.link}products/getProducts`, {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
+      response = await axios.get(
+        `${linkServer.link}products/getProductsCatogry/${catogeryName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
       setProducts(response.data.products);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    GetProducts();
-  }, []);
+    GetProductsCatogry();
+  }, [catogeryName]);
 
   const settings = {
     dots: true,
     infinite: true,
     speed: 1500,
-    slidesToShow: 6,
+    slidesToShow: 5,
     slidesToScroll: 1,
     responsive: [
       {
@@ -97,16 +105,18 @@ export default function ProductsSlider1({
   return (
     <>
       <div className="mt-10 w-[90%] flex justify-end">
-        <p className="bg-[var(--mainColorRgba)] rounded-full rounded-es-none p-4">
-          أكثر المنتجات مبيعاَ
-        </p>
+        <Link href={`/products/${catogeryName}`}>
+          <p className="bg-[var(--mainColorRgba)] hover:cursor-pointer hover:bg-warning-300  rounded-full rounded-es-none p-4">
+            {catogeryName}
+          </p>
+        </Link>
       </div>
 
       <div className=" w-[90%] pb-6 ">
         <div className="w-[100%]">
           <Slider {...settings}>
             {products.map((item, index) => (
-              <div key={index} className="p-8 py-3 mr-2 h-auto ">
+              <div key={index} className="p-8 py-3 mr-2 h-auto w-auto ">
                 <div className="flex justify-center rounded-2xl py-4">
                   <Image
                     className="w-[90%] h-36"
@@ -131,7 +141,7 @@ export default function ProductsSlider1({
                       <p className="mr-1">د.ل</p>
 
                       <p className="font-bold">
-                        {userValidity === "زبون عادي"
+                        {userValidity !== "مندوب تسويق"
                           ? item.price3
                           : item.price2}
                       </p>

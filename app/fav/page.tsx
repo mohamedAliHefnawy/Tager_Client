@@ -4,8 +4,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import axios from "axios";import linkServer from "@/linkServer";
-
+import axios from "axios";
+import linkServer from "@/linkServer";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -127,7 +127,7 @@ export default function Home() {
   const Body = () => {
     return (
       <>
-        <div className="w-[70%] flex justify-end mt-8">
+        <div className="w-[90%] flex justify-end mt-8">
           <div className="w-[100%]">
             <input
               type="text"
@@ -138,7 +138,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="gap-2 grid grid-cols-2 sm:grid-cols-6">
+        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-1 max-sm:grid-cols-1">
           {loading ? (
             <div className="flex justify-center items-center h-[400px]">
               <Spinner size="lg" color="warning" />

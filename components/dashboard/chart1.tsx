@@ -67,22 +67,26 @@ export default function Chart1() {
   ];
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart width={500} height={300} data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" className="mt-4">
-          <Label position="insideBottom" offset={-10} fill="#666" />
-        </XAxis>
-        <YAxis className="mt-3" />
-        <Line
-          type="monotoneX"
-          dataKey="pv"
-          stroke="var(--mainColor)"
-          strokeWidth={2}
-        />
+    <>
+      <p className="w-[100%] text-center mb-5">عدد الطلبيات خلال السنه</p>
 
-        <Tooltip />
-      </LineChart>
-    </ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart width={500} height={300} data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" className="mt-4">
+            <Label position="insideBottom" offset={-10} fill="#666" />
+          </XAxis>
+          <YAxis className="mt-3" />
+          <Line
+            type="monotoneX"
+            dataKey="pv"
+            stroke="var(--mainColor)"
+            strokeWidth={2}
+          />
+
+          <Tooltip />
+        </LineChart>
+      </ResponsiveContainer>
+    </>
   );
 }

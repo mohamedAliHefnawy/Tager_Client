@@ -9,6 +9,7 @@ import linkServer from "@/linkServer";
 //component
 import NavBar from "@/components/users/navBar";
 import Footer from "@/components/users/footer";
+import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 
 //nextui
 import {
@@ -67,6 +68,7 @@ export default function MoadelOrderProduct({
   storeProduct: any;
 }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const [user, userValidity] = useCheckLogin();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [stores, setStores] = useState<Stores[]>([]);
   const [nameClient, setNameClient] = useState("");
@@ -111,7 +113,6 @@ export default function MoadelOrderProduct({
         },
       });
       setStores(response.data.stores);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -371,8 +372,12 @@ export default function MoadelOrderProduct({
         amount: amountOrder,
         price: priceProduct,
         totalPriceProducts: +amountOrder * +priceProduct,
-        gainMarketer: +amountOrder * +gainProduct,
-        gainAdmin: profitAdmin,
+        gainMarketer:
+          userValidity !== "مندوب تسويق" ? 0 : +amountOrder * +gainProduct,
+        gainAdmin:
+          userValidity !== "مندوب تسويق"
+            ? +amountOrder * +gainProduct + profitAdmin
+            : +profitAdmin,
         marketer: nameUser,
         deliveryPrice: priceDeliveryStore,
       };

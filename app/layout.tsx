@@ -9,6 +9,7 @@ import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import 'react-awesome-slider/dist/styles.css'; 
 
 
 const cairo = Cairo({ subsets: ["arabic"] });

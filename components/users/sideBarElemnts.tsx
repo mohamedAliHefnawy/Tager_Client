@@ -2,8 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import axios from "axios";import linkServer from "@/linkServer";
-
+import axios from "axios";
+import linkServer from "@/linkServer";
 
 //svg
 import { BackwardIcon } from "@/public/svg/backwardIcon";
@@ -21,7 +21,7 @@ interface Categories {
   active: boolean;
 }
 
-export default function SideBarElemnts(props : any) {
+export default function SideBarElemnts(props: any) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [categories, setCategories] = useState<Categories[]>([]);
 
@@ -32,16 +32,12 @@ export default function SideBarElemnts(props : any) {
   const GetCategories = async () => {
     try {
       let response: { data: { token: string; categories: any } };
-      response = await axios.get(
-        `${linkServer.link}categories/getCategories`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}categories/getCategories`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setCategories(response.data.categories);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }

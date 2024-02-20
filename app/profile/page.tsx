@@ -36,7 +36,7 @@ import axios from "axios";
 
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [user] = useCheckLogin();
+  const [user, userValidity] = useCheckLogin();
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -213,65 +213,70 @@ export default function Home() {
                 </CardBody>
               </Card>
             </Tab>
-            <Tab key="3" title="الشركة">
-              <Card>
-                <CardBody>
-                  <div className="lg:flex md:flex sm:block max-sm:block items-start justify-between">
-                    <div className="pt-2 h-auto">
-                      <span className="w-[100%]">
-                        <TwitterPicker
-                          color={color}
-                          onChangeComplete={handleChangeComplete}
-                        />
-                      </span>
-                      <span
-                        className={`flex justify-center  mx-3 py-2 rounded-3xl`}
-                        style={{ backgroundColor: color }}
-                      >
-                        <label htmlFor="Photo" className="text-center ">
-                          <p className="bg-white my-4 p-3 rounded-full hover:cursor-pointer">
-                            {imageURLCompany ? (
-                              <span className="flex justify-center">
-                                <Avatar size="lg" src={imageURLCompany} />
-                              </span>
-                            ) : (
-                              <p className="text-slate-400 h-auto bg-white rounded-3xl text-9xl flex justify-center items-center">
-                                {Icons.PhotoIcon}
-                              </p>
-                            )}
-                          </p>
-                        </label>
-                        <input
-                          onChange={(e) => Upload(e.target.files)}
-                          type="file"
-                          name="Photo"
-                          id="Photo"
-                          className="hidden"
-                        />
-                      </span>
-                    </div>
-                    <div className=" lg:w-[70%] md:w-[70%] sm:w-[100%] max-sm:w-[100%]">
-                      <input
-                        type="text"
-                        className="input"
-                        placeholder="إسم الشركة"
-                        value={nameCompany}
-                        onChange={(e) => setNameCompany(e.target.value)}
-                      />
-                      <div className="lg:flex md:flex sm:block max-sm:block">
+
+            {userValidity !== "مندوب تسويق" ? (
+              <Tab key="4" title=""></Tab>
+            ) : (
+              <Tab key="3" title="الشركة">
+                <Card>
+                  <CardBody>
+                    <div className="lg:flex md:flex sm:block max-sm:block items-start justify-between">
+                      <div className="pt-2 h-auto">
+                        <span className="w-[100%]">
+                          <TwitterPicker
+                            color={color}
+                            onChangeComplete={handleChangeComplete}
+                          />
+                        </span>
+                        <span
+                          className={`flex justify-center  mx-3 py-2 rounded-3xl`}
+                          style={{ backgroundColor: color }}
+                        >
+                          <label htmlFor="Photo" className="text-center ">
+                            <p className="bg-white my-4 p-3 rounded-full hover:cursor-pointer">
+                              {imageURLCompany ? (
+                                <span className="flex justify-center">
+                                  <Avatar size="lg" src={imageURLCompany} />
+                                </span>
+                              ) : (
+                                <p className="text-slate-400 h-auto bg-white rounded-3xl text-9xl flex justify-center items-center">
+                                  {Icons.PhotoIcon}
+                                </p>
+                              )}
+                            </p>
+                          </label>
+                          <input
+                            onChange={(e) => Upload(e.target.files)}
+                            type="file"
+                            name="Photo"
+                            id="Photo"
+                            className="hidden"
+                          />
+                        </span>
+                      </div>
+                      <div className=" lg:w-[70%] md:w-[70%] sm:w-[100%] max-sm:w-[100%]">
                         <input
                           type="text"
-                          className="input mr-2"
-                          placeholder="رقم هاتف الشركة "
-                          value={phoneCompany}
-                          onChange={(e) => setPhoneCompany(e.target.value)}
+                          className="input"
+                          placeholder="إسم الشركة"
+                          value={nameCompany}
+                          onChange={(e) => setNameCompany(e.target.value)}
                         />
+                        <div className="lg:flex md:flex sm:block max-sm:block">
+                          <input
+                            type="text"
+                            className="input mr-2"
+                            placeholder="رقم هاتف الشركة "
+                            value={phoneCompany}
+                            onChange={(e) => setPhoneCompany(e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardBody>
-              </Card>
-            </Tab>
+                  </CardBody>
+                </Card>
+              </Tab>
+            )}
           </Tabs>
         </div>
       </>

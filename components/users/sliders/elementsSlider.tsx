@@ -22,17 +22,17 @@ export default function ElementsSlider() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 1500,
+    speed: 2000,
     autoplay: true,
     autoplaySpeed: 2000,
-    cssEase: "linear",
-    slidesToShow: 8,
+    // cssEase: "linear",
+    slidesToShow: categories.length,
     slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3,
         },
       },
       {
@@ -53,7 +53,6 @@ export default function ElementsSlider() {
         },
       });
       setCategories(response.data.categories);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +67,7 @@ export default function ElementsSlider() {
       <div className=" w-[90%] pb-6 ">
         <div className="mt-10 mb-4 w-[100%] flex justify-end">
           <Link href={`/products`}>
-            <p className="bg-[var(--mainColorRgba)] hover:cursor-pointer  rounded-full rounded-es-none p-4">
+            <p className="bg-[var(--mainColorRgba)] hover:cursor-pointer hover:bg-warning-300  rounded-full rounded-es-none p-4">
               كل الأقسام
             </p>
           </Link>
@@ -77,10 +76,10 @@ export default function ElementsSlider() {
           {categories.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col items-center justify-center w-auto hover:cursor-pointer"
+              className="flex items-center justify-center w-auto hover:cursor-pointer"
               onClick={() => router.push(`/products/${item.name}`)}
             >
-              <div className="rounded-full  w-28 h-28 border-1 border-[var(--mainColor)] bg-[var(--mainColorRgba)]">
+              <div className="rounded-full  w-28 h-28 sm:w-20 sm:h-20 max-sm:w-20 max-sm:h-20  border-1 border-[var(--mainColor)] bg-[var(--mainColorRgba)]">
                 <Image
                   src={item.image}
                   alt={"error"}
@@ -89,7 +88,7 @@ export default function ElementsSlider() {
                   className="w-[100%] h-[100%] rounded-full"
                 />
               </div>
-              <div className=" text-center mt-2 w-28">
+              <div className=" text-center mt-2 w-20">
                 <p>{item.name}</p>
               </div>
             </div>

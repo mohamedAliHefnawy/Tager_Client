@@ -52,7 +52,7 @@ interface Data {
 }
 
 export default function Home({ params }: { params: { slug: string } }) {
-  const [userName, userValidity] = useCheckLogin();
+  const [user, userValidity] = useCheckLogin();
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [products, setProducts] = useState<Data[]>([]);
   const [categories, setCategories] = useState<Data[]>([]);
@@ -166,9 +166,9 @@ export default function Home({ params }: { params: { slug: string } }) {
   }, []);
 
   useEffect(() => {
-    if (userName) {
+    if (user) {
       const timeoutId = setTimeout(() => {
-        setUsername(userName);
+        setUsername(user);
         setIsLoading(false);
       }, 2000);
 
@@ -176,18 +176,18 @@ export default function Home({ params }: { params: { slug: string } }) {
     } else {
       setIsLoading(false);
     }
-  }, [userName]);
+  }, [user]);
 
   return (
     <>
       <div>
         {isLoading ? (
           <Loading />
-        ) : userName ? (
+        ) : user ? (
           <>
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
-                user={userName}
+                user={user}
                 lengthProductsInCart={0}
                 lengthProductsInFavourite={0}
               />
@@ -294,7 +294,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                                       <p className="mr-1">د.ل</p>
 
                                       <p className="font-bold">
-                                        {userValidity === "زبون عادي"
+                                        {userValidity !== "مندوب تسويق"
                                           ? product.price3
                                           : product.price2}
                                       </p>

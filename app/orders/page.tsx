@@ -14,6 +14,7 @@ import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import DivCheck from "@/components/users/checkLogin/divCheck";
 import ModaelRecoveryProduct from "@/components/users/models/modaelRecoveryProduct";
 import ModaeEditOrderProduct from "@/components/users/models/modaeEditOrderProduct";
+import ModaelShowProductsOrder from "@/components/users/models/modaelShowProductsOrder";
 import ChatDivMarketer from "@/components/users/models/chatDiv";
 import Loading from "@/components/loading";
 
@@ -89,21 +90,9 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [showDivCaht, setShowDivCaht] = useState(true);
-  const [imgUser, setImgUser] = useState("");
-  const [imgCompany, setImgCompany] = useState("");
-  const [showPropver, setShowPropver] = useState(true);
   const [orders, setOrders] = useState<Orders[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-
-  const [color, setColor] = useState("#FF6900");
-  const handleChangeComplete = (newColor: any) => {
-    setColor(newColor.hex);
-  };
-  const [selected, setSelected] = React.useState("1");
-  const handleSelectionChange = (key: string | number) => {
-    setSelected(String(key));
-  };
 
   const Icons = {
     ShoppingcartIcon: <ShoppingcartIcon />,
@@ -125,28 +114,6 @@ export default function Home() {
   const currentItems = orders
     .filter((item) => item.marketer === username)
     .slice(indexOfFirstItem, indexOfLastItem);
-
-  const imagebase64 = async (file: any) => {
-    const reader = new FileReader();
-    await reader.readAsDataURL(file);
-    const data = new Promise((resolve, reject) => {
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (err) => reject(err);
-    });
-    return data;
-  };
-
-  const handleUploadImage = async (e: any) => {
-    const file = e.target.files[0];
-    const image = (await imagebase64(file)) as string;
-    setImgUser(image);
-  };
-
-  const handleUploadImageCompany = async (e: any) => {
-    const file = e.target.files[0];
-    const image = (await imagebase64(file)) as string;
-    setImgCompany(image);
-  };
 
   const Body = () => {
     return (
@@ -236,7 +203,7 @@ export default function Home() {
                         </PopoverTrigger>
                         <PopoverContent className=" border-1 border-[var(--mainColor)]">
                           <div className="px-1 py-2 ">
-                            {order.situationSteps[
+                            {/* {order.situationSteps[
                               order.situationSteps.length - 1
                             ].situation === "بإنتظار الموافقة" && (
                               <ModaeEditOrderProduct
@@ -249,9 +216,10 @@ export default function Home() {
                                 produts={order.products}
                                 userr={userValidity}
                               />
-                            )}
+                            )} */}
 
                             <ModaelRecoveryProduct />
+                            <ModaelShowProductsOrder produts={order.products} />
 
                             <ChatDivMarketer
                               marketer={username}

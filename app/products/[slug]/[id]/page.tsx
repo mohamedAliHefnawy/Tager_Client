@@ -67,7 +67,7 @@ interface Data {
 
 export default function Product({ params }: { params: { id: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [userName, userValidity] = useCheckLogin();
+  const [user, userValidity] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -168,35 +168,26 @@ export default function Product({ params }: { params: { id: string } }) {
 
   const handleColorClick = (selectedColor: any) => {
     setSelectedColor(selectedColor);
-
     const productWithSelectedColor = allProducts.find(
       (product) => product.color === selectedColor
     );
-
     if (productWithSelectedColor) {
       setDisplayedId(productWithSelectedColor._id);
       setDisplayedName(productWithSelectedColor.name);
-
       const priceForUser =
-        userValidity === "زبون عادي"
+        userValidity !== "مندوب تسويق"
           ? productWithSelectedColor.price3
           : productWithSelectedColor.price2;
-
       setDisplayedPrice(priceForUser);
       setDisplayedPriceRealy(productWithSelectedColor.price1);
-
       const gain = productWithSelectedColor.gainMarketer;
       setDisplayedGain(gain);
-
       const selectedProductImages = allProductsImages.filter(
         (item: any) => item.color === selectedColor
       );
-
       setProductImages(
         selectedProductImages.map((item: any) => item.image).flat() || []
       );
-
-      // setProductStore(productStoree);
     }
   };
 
@@ -235,12 +226,7 @@ export default function Product({ params }: { params: { id: string } }) {
           },
           0
         );
-        // const stores = selectedProductStore.store.reduce(
-        //   (acc: any, store: any) => {
-        //     return acc + store.amount;
-        //   },
-        //   0
-        // );
+
         return totalAmount;
       } else {
         return 0;
@@ -388,7 +374,7 @@ export default function Product({ params }: { params: { id: string } }) {
             <div className=" w-[100%]">
               {selectedColor ? (
                 <MoadelOrderProduct
-                  nameUser={userName}
+                  nameUser={user}
                   idProduct={displayedId}
                   nameProduct={displayedName}
                   priceProduct={displayedPrice}
@@ -435,10 +421,16 @@ export default function Product({ params }: { params: { id: string } }) {
             تفاصيل أكثر عن المنتج
           </p>
           <p className="p-4 w-[100%] text-right">
-            <p>{product.name}</p>
-            <p> {selectedSize}</p>
-            <p style={{ direction: "rtl" }}> اللون | {selectedColor}</p>
-            <p> الكمية | {availableQuantity}</p>
+            <p className="mb-2">{product.name}</p>
+            <p style={{ direction: "rtl" }} className="mb-2">
+              {" "}
+              المقاس | {selectedSize}
+            </p>
+            <p style={{ direction: "rtl" }} className="mb-2">
+              {" "}
+              اللون | {selectedColor}
+            </p>
+            {/* <p> الكمية | {availableQuantity}</p> */}
           </p>
         </div>
         <div className="w-[90%] h-1 bg-[var(--mainColor)] my-6"></div>
@@ -481,9 +473,9 @@ export default function Product({ params }: { params: { id: string } }) {
   });
 
   useEffect(() => {
-    if (userName) {
+    if (user) {
       const timeoutId = setTimeout(() => {
-        setUsername(userName);
+        setUsername(user);
         setIsLoading(false);
       }, 2000);
 
@@ -491,18 +483,18 @@ export default function Product({ params }: { params: { id: string } }) {
     } else {
       setIsLoading(false);
     }
-  }, [userName]);
+  }, [user]);
 
   return (
     <>
       <div>
         {isLoading ? (
           <Loading />
-        ) : userName ? (
+        ) : user ? (
           <>
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
-                user={userName}
+                user={user}
                 lengthProductsInCart={0}
                 lengthProductsInFavourite={0}
               />

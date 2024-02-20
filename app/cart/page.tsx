@@ -140,18 +140,18 @@ export default function Home() {
   const Body = () => {
     return (
       <>
-        <div className="w-[70%] flex justify-end mt-8">
+        <div className="w-[90%] flex justify-end mt-8">
           <div className="w-[100%]">
             <input
               type="text"
               placeholder=" بحث ..."
-              className="w-[30%] input"
+              className="w-[90%] input"
               onChange={handleSearchChange}
               value={searchText}
             />
           </div>
         </div>
-        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4  sm:grid-cols-2">
+        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-1 max-sm:grid-cols-1">
           {loading ? (
             <div className="flex justify-center items-center h-[400px]">
               <Spinner size="lg" color="warning" />
@@ -190,14 +190,13 @@ export default function Home() {
                       <p className="flex">
                         <p className="mr-1">د.ل</p>
                         <p className="font-bold">
-                          {userValidity === "زبون عادي"
+                          {userValidity !== "مندوب تسويق"
                             ? item.price3
                             : item.price2}
                         </p>
                       </p>
                       <p style={{ direction: "rtl" }} className="ml-2">
-                        {" "}
-                        السعر :{" "}
+                        السعر :
                       </p>
                     </p>
                     {/* <p className="flex">
