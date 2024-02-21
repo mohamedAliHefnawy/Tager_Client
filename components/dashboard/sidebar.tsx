@@ -176,7 +176,11 @@ export default function SideBar() {
           link="/dashboard/moneySafe"
           icon={icons.BuildinglibraryIcon}
         />
-
+        <ElementSideBar
+          name="الموردين"
+          link="/dashboard/suppliers"
+          icon={icons.UsergroupIcon}
+        />
         <ElementSideBar
           name="المشتريات"
           link="/dashboard/purchases"
