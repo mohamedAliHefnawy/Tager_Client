@@ -53,7 +53,7 @@ interface Row {
   regularCustomer: string;
   color: string;
   total: number;
-  size: [{ size: string }];
+  size: [{ size: string; store: [{ amount: number }] }];
   images: string[];
   dynamicInputs: string[];
 }
@@ -61,7 +61,7 @@ interface Row {
 interface Product {
   _id: string;
   name: string;
-  size: [{ size: string }];
+  size: [{ size: string; store: [{ amount: number }] }];
   color: string;
   name1Product: string;
   price1: string;
@@ -298,7 +298,17 @@ export default function ModaelAddPurchase({
 
                           <div className="w-[100%] flex justify-end">
                             <p className="flex">
-                              <p className="mr-2"> {product.price1} </p>
+                              <p className="mr-2">
+                                {product.size.reduce(
+                                  (calc, sum) =>
+                                    calc +
+                                    sum.store.reduce(
+                                      (calc2, sum2) => calc2 + sum2.amount,
+                                      0
+                                    ),
+                                  0
+                                )}
+                              </p>
                               <p> | الكمية الموجودة </p>
                             </p>
                           </div>
@@ -327,7 +337,18 @@ export default function ModaelAddPurchase({
                                     <div className="w-[20%]  ">
                                       <p className="flex justify-center">
                                         <p className="mr-1"> منتج</p>
-                                        <p> 0</p>
+                                        <p>
+                                          {products2.size.reduce(
+                                            (calc, sum) =>
+                                              calc +
+                                              sum.store.reduce(
+                                                (calc2, sum2) =>
+                                                  calc2 + sum2.amount,
+                                                0
+                                              ),
+                                            0
+                                          )}
+                                        </p>
                                       </p>
                                     </div>
                                   </div>

@@ -49,17 +49,17 @@ import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
 import Logo from "@/public/img/hbaieb.png";
 
 export default function NavBar({
-  user,
+  userr,
   lengthProductsInCart,
   lengthProductsInFavourite,
 }: {
-  user: any;
+  userr: any;
   lengthProductsInCart: number;
   lengthProductsInFavourite: number;
 }) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
-  const [userr, userValidityy] = useCheckLogin();
+  const [user, userValidity] = useCheckLogin();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [showDev, setShowDev] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
@@ -156,7 +156,9 @@ export default function NavBar({
               </p>
             </DropdownItem>
             <DropdownItem key="1">
-              {userValidityy === "مندوب تسويق" && (
+              {/* {userValidity}
+              {user} */}
+              {userValidity === "مندوب تسويق" && (
                 <p className="flex items-center ">
                   <p className="text-[var(--mainColor)]">
                     {Icons.BanknotesIcon}
@@ -241,7 +243,8 @@ export default function NavBar({
             <p className="text-slate-800 mr-2"> الصفحه الرئيسيه </p>
             {Icons.HomeIcon}
           </Link>
-          {userValidityy === "مندوب تسويق" && (
+          {/* {userValidity} */}
+          {userValidity === "مندوب تسويق" && (
             <Link href="/wallet" className="flex items-center justify-end mb-6">
               <p className="text-slate-800 mr-2"> المحفظة </p>
               {Icons.BanknotesIcon}
