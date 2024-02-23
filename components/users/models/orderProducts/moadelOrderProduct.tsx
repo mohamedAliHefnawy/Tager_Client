@@ -609,7 +609,7 @@ export default function MoadelOrderProducts({
             <>
               <ModalHeader className="flex flex-col gap-1">
                 <NavBar
-                  user={nameUser}
+                  userr={nameUser}
                   lengthProductsInCart={0}
                   lengthProductsInFavourite={0}
                 />

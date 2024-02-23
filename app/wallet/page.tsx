@@ -240,7 +240,7 @@ export default function Home() {
           <>
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
-                user={user}
+                userr={user}
                 lengthProductsInCart={0}
                 lengthProductsInFavourite={0}
               />
