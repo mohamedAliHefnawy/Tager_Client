@@ -81,7 +81,7 @@ export default function Home() {
           <>
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
-                user={userName}
+                userr={userName}
                 lengthProductsInCart={lenghtProductInCart}
                 lengthProductsInFavourite={lengthProductsInFavourite}
               />
