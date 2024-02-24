@@ -94,7 +94,6 @@ export default function ModaelAddPurchase({
   const [products, setProducts] = useState<Product[]>([]);
   const [stores, setStores] = useState<Product[]>([]);
   const [moneySafe, setMoneySafe] = useState<MoneySafe[]>([]);
-
   const [productsMoved, setProductsMoved] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [closeBtn, setCloseBtn] = useState(true);
@@ -220,7 +219,7 @@ export default function ModaelAddPurchase({
         [productId]: {
           ...prevValues[productId],
           [field]: value,
-          total: inputValue * itemPrice, // حساب إجمالي السعر هنا
+          total: inputValue * itemPrice,
         },
       };
 
@@ -254,11 +253,15 @@ export default function ModaelAddPurchase({
     const calculateTotal = () => {
       let total = 0;
       for (const productId in inputValues) {
+        const len =
+          (inputValues[productId]?.selectedSize &&
+            inputValues[productId]?.selectedSize.length) ||
+          0;
         if (
           inputValues.hasOwnProperty(productId) &&
           inputValues[productId]?.total
         ) {
-          total += inputValues[productId]?.total;
+          total += inputValues[productId]?.total * len;
         }
       }
       return total;
@@ -498,6 +501,8 @@ export default function ModaelAddPurchase({
                                 : inputValues[movedProduct._id]?.selectedSize
                                 ? "اختر"
                                 : "اختر"}
+
+                              {/* {inputValues[movedProduct._id]?.selectedSize} */}
                             </Button>
                           </DropdownTrigger>
 

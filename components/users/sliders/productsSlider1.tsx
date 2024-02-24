@@ -13,6 +13,12 @@ import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 
+//svg
+import { BackwardIcon } from "@/public/svg/backwardIcon";
+import { HeartIcon } from "@/public/svg/heartIcon";
+import { HeartIcon2 } from "@/public/svg/heartIcon2";
+import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
+
 interface Products {
   idProduct: string;
   image: string;
@@ -38,6 +44,22 @@ export default function ProductsSlider1({
   const [products, setProducts] = useState<Products[]>([]);
   const [cartLength, setCartLength] = useState(0);
 
+  const Icons = {
+    BackwardIcon: <BackwardIcon />,
+    HeartIcon: <HeartIcon />,
+    HeartIcon2: <HeartIcon2 />,
+    ShoppingcartIcon: <ShoppingcartIcon />,
+  };
+
+  const Sw = () => {
+    Swal.fire({
+      icon: "success",
+      title: "يجب الدخول لصفحة المنتج من المنتج الرئيسي",
+      text: "✓",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "حسنًا",
+    });
+  };
   const updateCartLength = (length: any) => {
     setCartLength(length);
   };
@@ -139,15 +161,7 @@ export default function ProductsSlider1({
                     </div>
                   ) : (
                     <div
-                      onClick={() =>
-                        Swal.fire({
-                          icon: "success",
-                          title: "يجب الدخول لصفحة المنتج من المنتج الرئيسي",
-                          text: "✓",
-                          confirmButtonColor: "#3085d6",
-                          confirmButtonText: "حسنًا",
-                        })
-                      }
+                      onClick={() => Sw()}
                       className="flex justify-center items-center hover:cursor-pointer "
                     >
                       <p> {item.name} </p>
@@ -167,19 +181,34 @@ export default function ProductsSlider1({
                     </p>
                   </div>
                   <div className="flex justify-evenly items-center mt-3 ">
-                    <ButtonAddToFavourite
-                      id={item.idProduct}
-                      index={index}
-                      updateParent={updateCartLength}
-                      size={item.size?.[0]?.size}
-                    />
+                    {item.idProduct === "" ? (
+                      <>
+                        <p
+                          className={`text-yellow-500 p-4 *:hover:cursor-pointer`}
+                        >
+                          {/* {Icons.HeartIcon} */}-
+                        </p>
+                        <p className={`text-[var(--mainColor)] p-4`}>
+                          {/* {Icons.ShoppingcartIcon} */}-
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <ButtonAddToFavourite
+                          id={item.idProduct}
+                          index={index}
+                          updateParent={updateCartLength}
+                          size={item.size}
+                        />
 
-                    <ButtonAddToCart
-                      id={item.idProduct}
-                      index={index}
-                      updateParent={updateCartLength}
-                      size={item.size?.[0]?.size}
-                    />
+                        <ButtonAddToCart
+                          id={item.idProduct}
+                          index={index}
+                          updateParent={updateCartLength}
+                          size={item.size}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

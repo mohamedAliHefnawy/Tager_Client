@@ -261,7 +261,7 @@ export default function Home() {
                         onChange={handleSliderChange}
                       />
                     </div>
-                    <div className="gap-2 w-[100%] grid grid-cols-1 lg:grid-cols-4 md:sm:grid-cols-4 sm:sm:grid-cols-1 max-sm:sm:grid-cols-1">
+                    <div className="gap-2 w-[100%] grid grid-cols-2 lg:grid-cols-4 md:sm:grid-cols-4 sm:sm:grid-cols-2 max-sm:sm:grid-cols-2">
                       <>
                         {loading ? (
                           <div className="flex justify-center items-center h-[400px]">

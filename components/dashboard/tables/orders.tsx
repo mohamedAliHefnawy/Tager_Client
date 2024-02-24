@@ -11,18 +11,23 @@ import { Avatar, Spinner, Pagination } from "@nextui-org/react";
 import PrintInvoice from "../modals/orders/printInvoice";
 import ModaelEditOrder from "../modals/orders/modaelEditOrder";
 import QrCode from "../modals/orders/qrCode";
-import ChatDiv from "../modals/orders/chatDiv";
+import ChatDiv from "@/components/chatDiv";
 import Scanner from "@/components/delivery/scanner";
 import QRCode from "qrcode.react";
+import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 
 //svg
 import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
 import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
 
 interface Messages {
-  admin: [{ message: string; person: string; date: string; time: string }];
-  marketer: [{ message: string; person: string; date: string; time: string }];
-  delivery: [{ message: string; person: string; date: string; time: string }];
+  message: string;
+  person: string;
+  valid: string;
+  seeMessage: boolean;
+
+  date: string;
+  time: string;
 }
 
 interface Orders {
@@ -30,6 +35,7 @@ interface Orders {
   nameClient: string;
   phone1Client: string;
   phone2Client: string;
+  PhoneCompany: string;
   store: string;
   address: string;
   marketer: string;
@@ -38,6 +44,7 @@ interface Orders {
   ImageURLCompany: string;
   NameCompany: string;
   ColorCompany: string;
+  DeliveryName: string;
   date: string;
   time: string;
   situationSteps: [{ situation: string; date: string; time: string }];
@@ -55,6 +62,8 @@ interface Orders {
 
 export default function Orders() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const [user, userValidity] = useCheckLogin();
+
   const nameAdmin = localStorage.getItem("nameAdmin");
   const [orders, setOrders] = useState<Orders[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -238,6 +247,7 @@ export default function Orders() {
                       <ModaelEditOrder
                         idOrder={order._id}
                         situationSteps={order.situationSteps}
+                        delivery={order.DeliveryName}
                         // sendDataToParent={receiveDataFromChild}
                       />
                     </div>
@@ -255,13 +265,15 @@ export default function Orders() {
                         phone2Cli={order.phone2Client}
                         totalPriceOrder={order.totalPriceProducts}
                         allProducts={order.products}
+                        phoneMarketer={order.PhoneCompany}
                       />
                     </div>
                     <div className="">
                       <QrCode idOrder={order._id} />
                     </div>
                     <ChatDiv
-                      admin={nameAdmin || ""}
+                      user={nameAdmin || ""}
+                      userValidity={userValidity}
                       idOrder={order._id}
                       chatMessages={order.chatMessages}
                     />

@@ -1,6 +1,5 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
@@ -8,16 +7,9 @@ import linkServer from "@/linkServer";
 import {
   Modal,
   ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
-  Button,
   useDisclosure,
-  Input,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
+  Badge,
 } from "@nextui-org/react";
 
 //svg
@@ -25,22 +17,34 @@ import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
 import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
 
 interface Messages {
-  admin: [{ message: string; person: string; date: string; time: string }];
-  marketer: [{ message: string; person: string; date: string; time: string }];
-  delivery: [{ message: string; person: string; date: string; time: string }];
+  message: string;
+  person: string;
+  valid: string;
+  seeMessage: boolean;
+  date: string;
+  time: string;
 }
 
 export default function ChatDiv({
-  admin,
+  user,
+  userValidity,
   idOrder,
   chatMessages,
 }: {
-  admin: string;
+  user: string;
+  userValidity: string;
   idOrder: string;
   chatMessages: Messages[];
 }) {
-  const [showDivCaht, setShowDivCaht] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
+  const [messages2, setMessages2] = useState({
+    message: "",
+    person: "",
+    valid: "",
+    date: "",
+    time: "",
+  });
+
   const [messageText, setMessageText] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
@@ -50,90 +54,43 @@ export default function ChatDiv({
     PaperAirplaneIcon: <PaperAirplaneIcon />,
   };
 
-  const parseDateTime = (dateString: string, timeString: string): number => {
-    const [day, month, year] = dateString.split("/");
-    const [time, period] = timeString.split(" ");
-    const [hours, minutes, seconds] = time.split(":");
-    const isPM = period === "PM";
-    const hours24 = isPM ? parseInt(hours, 10) + 12 : parseInt(hours, 10);
-
-    const dateTime = new Date(
-      +year,
-      +month - 1,
-      +day,
-      hours24,
-      parseInt(minutes, 10),
-      parseInt(seconds, 10)
-    );
-    return dateTime.getTime();
+  const ShowedOrlready = async () => {
+    onOpen();
+    try {
+      const response = await axios.post(
+        `${linkServer.link}orders/showedMessages`,
+        {
+          idOrder: idOrder,
+          user,
+          val: userValidity,
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  const today = new Date();
-  const todayDateString = `${
-    today.getMonth() + 1
-  }/${today.getDate()}/${today.getFullYear()}`;
-
-  const allMessages = messages.reduce(
-    (
-      acc: { message: string; person: string; date: string; time: string }[],
-      item: Messages
-    ) => {
-      acc.push(...item.admin, ...item.marketer, ...item.delivery);
-      return acc;
-    },
-    []
-  );
-
-  const sortedMessages = allMessages
-    .filter((item) => item.message !== "")
-    .sort((a, b) => {
-      const dateComparison =
-        a.date === todayDateString ? 1 : b.date === todayDateString ? -1 : 0;
-      const timeComparison =
-        parseDateTime(a.date, a.time) - parseDateTime(b.date, b.time);
-
-      return dateComparison === 0 ? timeComparison : dateComparison;
-    });
 
   const SendMessageApi = async (idOrder: string) => {
     try {
       const response = await axios.post(`${linkServer.link}orders/chatOrder`, {
         idOrder: idOrder,
         text: messageText,
-        val: "أدمن",
-        admin,
+        val: userValidity,
+        user,
       });
-
       const { answer, message } = response.data;
+      setMessages2(message);
 
       if (answer === "yes") {
         setMessages((prevMessages) => [
           ...prevMessages,
           {
-            admin: [
-              {
-                message: messageText,
-                person: admin,
-                date: new Date().toLocaleDateString(),
-                time: new Date().toLocaleTimeString(),
-              },
-            ],
-            marketer: [
-              {
-                message: "",
-                person: "",
-                date: "",
-                time: "",
-              },
-            ],
-            delivery: [
-              {
-                message: "",
-                person: "",
-                date: "",
-                time: "",
-              },
-            ],
+            message: messageText,
+            person: user,
+            valid: userValidity,
+            seeMessage: false,
+            date: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString(),
           },
         ]);
         setMessageText("");
@@ -157,16 +114,48 @@ export default function ChatDiv({
     }
   }, [messageText]);
 
+  const filteredMessages = messages.filter((message) => {
+    return (
+      (message.person !== user && message.valid !== userValidity) ||
+      message.seeMessage === false
+    );
+  });
+
   return (
     <>
-      <div>
-        <p
-          onClick={onOpen}
-          className="hover:cursor-pointer hover:opacity-75 bg-danger-200 p-3 mt-1 rounded-full border-1 border-danger-600 text-danger-900 ml-2"
+      {/* <div>
+        <Badge
+          content={filteredMessages.length}
+          color="warning"
+          placement="top-right"
         >
+          <p
+            onClick={ShowedOrlready}
+            className="p-4 rounded-full text-primary-600 hover:cursor-pointer"
+          >
+            {Icons.ChatbubbleleftrightIcon}
+          </p>
+        </Badge>
+      </div> */}
+
+      {/* <p
+        onClick={handlePrint}
+        className="hover:cursor-pointer hover:opacity-75 bg-primary-200 p-3 mt-1 rounded-full border-1 border-primary-600 text-primary-900"
+      > */}
+      <Badge
+        content={filteredMessages.length}
+        color="warning"
+        placement="top-right"
+        className="hover:cursor-pointer hover:opacity-75 bg-primary-200 p-3 mt-1 rounded-full border-1 border-primary-600 text-primary-900"
+      >
+        <p
+          onClick={ShowedOrlready}
+          className="ml-2 hover:cursor-pointer hover:opacity-75 bg-primary-200 p-3 mt-1 rounded-full border-1 border-primary-600 text-primary-900"
+          >
           {Icons.ChatbubbleleftrightIcon}
         </p>
-      </div>
+      </Badge>
+      {/* </p> */}
 
       <Modal
         isOpen={isOpen}
@@ -191,7 +180,7 @@ export default function ChatDiv({
                   </div>
                   <div className="flex justify-start w-[100%]">
                     <div>
-                      {sortedMessages.map((item, index) => (
+                      {messages.map((item, index) => (
                         <div key={index}>
                           <p className="bg-warning-200 p-4 rounded-2xl rounded-es-none w-auto mb-2">
                             <p className="mb-2 font-bold">{item.person}</p>

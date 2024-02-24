@@ -28,10 +28,12 @@ import { PencilIcon } from "../../../../public/svg/pencilIcon";
 
 export default function ModaelEditOrder({
   idOrder,
+  delivery,
   situationSteps,
 }: // sendDataToParent,
 {
   idOrder: string;
+  delivery: string;
   situationSteps: [{ situation: string; date: string; time: string }];
   // sendDataToParent: any;
 }) {
@@ -69,40 +71,6 @@ export default function ModaelEditOrder({
     } else {
       setSituation((prevSituation) => [...prevSituation, newSituationItem]);
     }
-
-    // if (newSituation === "تم القبول" || newSituation === "تم الرفض") {
-    //   setSituation((prevSituation) =>
-    //     prevSituation.filter(
-    //       (item) =>
-    //         item.situation !== "تم القبول" && item.situation !== "تم الرفض"
-    //     )
-    //   );
-    //   setSituation((prevSituation) => [...prevSituation, newSituationItem]);
-    // }
-
-    // if (newSituation === "تم الإسترجاع" || newSituation === "تم التوصيل") {
-    //   setSituation((prevSituation) =>
-    //     prevSituation.filter(
-    //       (item) =>
-    //         item.situation !== "تم الإسترجاع" && item.situation !== "تم التوصيل"
-    //     )
-    //   );
-    //   setSituation((prevSituation) => [...prevSituation, newSituationItem]);
-    // }
-
-    // if (newSituation === "تم الرفض") {
-    //   setSituation((prevSituation) =>
-    //     prevSituation.filter(
-    //       (item) =>
-    //         item.situation !== "مع الشحن" &&
-    //         item.situation !== "تم التوصيل" &&
-    //         item.situation !== "تم الإسترجاع" &&
-    //         item.situation !== "إسترجاع جزئي" &&
-    //         item.situation !== "تم إستلام الكاش"
-    //     )
-    //   );
-    //   setSituation((prevSituation) => [...prevSituation, newSituationItem]);
-    // }
   };
 
   const tabs = () => {
@@ -247,6 +215,7 @@ export default function ModaelEditOrder({
                         <div className="text-black text-lg pb-6">- - - - -</div>
 
                         <div className="flex flex-col items-center">
+                          <p className="font-bold">{delivery}</p>
                           <div
                             className={`border-1 border-warning-200 w-36 h-16 rounded-full flex justify-center items-center hover:cursor-pointer hover:bg-warning-100 ${
                               situation.some(
@@ -270,6 +239,7 @@ export default function ModaelEditOrder({
                               <p>-/--/----</p>
                             )}
                           </p>
+
                           <p className="w-[100%] text-center">
                             {situation.some(
                               (item) => item.situation === "مع الشحن"

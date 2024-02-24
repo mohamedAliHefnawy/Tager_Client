@@ -29,6 +29,7 @@ export default function PrintInvoice({
   addressCli,
   phone1Cli,
   phone2Cli,
+  phoneMarketer,
   totalPriceOrder,
   allProducts,
 }: {
@@ -42,6 +43,7 @@ export default function PrintInvoice({
   addressCli: String;
   phone1Cli: String;
   phone2Cli: String;
+  phoneMarketer: String;
   totalPriceOrder: number;
   allProducts: [
     {
@@ -119,52 +121,57 @@ export default function PrintInvoice({
               style={{ backgroundColor: `${colorCom ? colorCom : "#CCA330"} ` }}
             ></div>
           </div>
-          <div className="flex flex-col items-end">
-            <p className="flex">
-              <span className="mr-1">{nameCli}</span>
-              <span> | الإسم </span>
-            </p>
-            <p className="flex">
-              <span className="mr-1">{addressCli}</span>
-              <span> | العنوان </span>
-            </p>
-            <p className="flex">
-              <span className="mr-1">{phone1Cli}</span>
-              <span> | رقم هاتف أساسي </span>
-            </p>
-            <p className="flex">
-              <span className="mr-1">{phone2Cli}</span>
-              <span> | رقم هاتف إحتياطي </span>
-            </p>
-            <p className="flex">
-              <span className="mr-1">{dateOrd}</span>
-              <span> | التاريخ </span>
-            </p>
-            <p className="flex">
-              <span className="mr-1">{timeOrd}</span>
-              <span> | الوقت </span>
-            </p>
+          <div className="flex justify-between items-start">
+            <div>
+              <QRCode value={`${idOrder}`} />
+            </div>
+            <div className="flex flex-col items-end text-md">
+              <p className="flex">
+                <span className="mr-1">{nameCli}</span>
+                <span> | الإسم </span>
+              </p>
+              <p className="flex">
+                <span className="mr-1">{addressCli}</span>
+                <span> | العنوان </span>
+              </p>
+              <p className="flex">
+                <span className="mr-1">{phone1Cli}</span>
+                <span> | رقم هاتف أساسي </span>
+              </p>
+              <p className="flex">
+                <span className="mr-1">{phone2Cli}</span>
+                <span> | رقم هاتف إحتياطي </span>
+              </p>
+              <p className="flex">
+                <span className="mr-1">{dateOrd}</span>
+                <span> | التاريخ </span>
+              </p>
+              <p className="flex">
+                <span className="mr-1">{timeOrd}</span>
+                <span> | الوقت </span>
+              </p>
+            </div>
           </div>
           <div className="p-6">
             <div className="border-1 border-slate-600">
               <div className="flex justify-evenly items-center bg-slate-700 text-slate-200">
-                <p className="w-[20%] text-center">إسم المنتج</p>
-                <p className="w-[20%] text-center">السعر</p>
-                <p className="w-[20%] text-center">الكمية</p>
                 <p className="w-[20%] text-center">الإجمالي</p>
+                <p className="w-[20%] text-center">الكمية</p>
+                <p className="w-[20%] text-center">السعر</p>
+                <p className="w-[20%] text-center">إسم المنتج</p>
               </div>
               {allProducts.map((item, index) => (
                 <div
                   key={index}
                   className="flex justify-evenly items-center text-slate-600 p-2"
                 >
-                  <p className="w-[20%] text-center text-xl">
-                    {item.nameProduct}
-                  </p>
-                  <p className="w-[20%] text-center text-2xl">{item.price}</p>
-                  <p className="w-[20%] text-center text-2xl">{item.amount}</p>
                   <p className="w-[20%] text-center text-2xl">
                     {item.price * item.amount}
+                  </p>
+                  <p className="w-[20%] text-center text-2xl">{item.amount}</p>
+                  <p className="w-[20%] text-center text-2xl">{item.price}</p>
+                  <p className="w-[20%] text-center text-xl">
+                    {item.nameProduct}
                   </p>
                 </div>
               ))}
@@ -175,12 +182,16 @@ export default function PrintInvoice({
               className=" w-[30%] h-20 flex items-center justify-center"
               style={{ backgroundColor: `${colorCom ? colorCom : "#CCA330"} ` }}
             >
-              <span className="mr-1">د.ل</span>
+              <span className="mr-2">د.ل</span>
               <span>{totalPriceOrder}</span>
             </div>
           </div>
-          <div>
-            <QRCode value={`${idOrder}`} />
+          <div
+            className={`h-16 absolute bottom-0 w-[92%] opacity-50 flex justify-evenly items-center`}
+            style={{ backgroundColor: `${colorCom ? colorCom : "#CCA330"} ` }}
+          >
+            <p className="text-sm">faceBook | alhabieb.facebook</p>
+            <p className="text-sm">phoneMarketer | {phoneMarketer}</p>
           </div>
         </form>
 

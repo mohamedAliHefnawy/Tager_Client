@@ -81,7 +81,6 @@ export default function Supplier2() {
         }
       );
       setSupplier(response.data.suppliers);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     } finally {

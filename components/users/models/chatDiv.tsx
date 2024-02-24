@@ -31,6 +31,8 @@ export default function ChatDivMarketer({
   chatMessages: Messages[];
 }) {
   const [messages, setMessages] = useState<Messages[]>([]);
+  const [messages2, setMessages2] = useState<Messages>();
+
   const [messageText, setMessageText] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
@@ -93,7 +95,9 @@ export default function ChatDivMarketer({
         val: "مندوب تسويق",
         marketer,
       });
-      if (response.data === "yes") {
+      const { answer, message } = response.data;
+
+      if (answer === "yes") {
         setMessages((prevMessages) => [
           ...prevMessages,
           {
@@ -149,7 +153,7 @@ export default function ChatDivMarketer({
       <div>
         <p
           onClick={onOpen}
-          className="bg-primary-200 border-1 border-primary-300 mt-1 p-4 rounded-full text-primary-800 hover:cursor-pointer mb-1"
+          className="p-4 rounded-full text-primary-600 hover:cursor-pointer"
         >
           {Icons.ChatbubbleleftrightIcon}
         </p>

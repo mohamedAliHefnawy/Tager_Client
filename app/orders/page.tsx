@@ -13,10 +13,11 @@ import Footer from "@/components/users/footer";
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import DivCheck from "@/components/users/checkLogin/divCheck";
 import ModaelRecoveryProduct from "@/components/users/models/modaelRecoveryProduct";
-import ModaeEditOrderProduct from "@/components/users/models/modaeEditOrderProduct";
+import ModelDataDelivery from "@/components/users/models/modelDataDelivery";
 import ModaelShowProductsOrder from "@/components/users/models/modaelShowProductsOrder";
 import ChatDivMarketer from "@/components/users/models/chatDiv";
 import Loading from "@/components/loading";
+import ChatDiv from "@/components/chatDiv";
 
 //nextUi
 import {
@@ -24,7 +25,11 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  RadioGroup,
+  Radio,
   Spinner,
+  CheckboxGroup,
+  Checkbox,
 } from "@nextui-org/react";
 
 //svg
@@ -38,9 +43,13 @@ import { EllipsisverticalIcon } from "@/public/svg/ellipsisverticalIcon";
 import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
 
 interface Messages {
-  admin: [{ message: string; person: string; date: string; time: string }];
-  marketer: [{ message: string; person: string; date: string; time: string }];
-  delivery: [{ message: string; person: string; date: string; time: string }];
+  message: string;
+  person: string;
+  valid: string;
+  seeMessage: boolean;
+
+  date: string;
+  time: string;
 }
 
 interface Orders {
@@ -51,6 +60,8 @@ interface Orders {
   store: string;
   address: string;
   marketer: string;
+  DeliveryName: string;
+  DeliveryPhone: string;
   totalPriceProducts: number;
   gainMarketer: number;
   situation: string;
@@ -92,6 +103,10 @@ export default function Home() {
   const [showDivCaht, setShowDivCaht] = useState(true);
   const [orders, setOrders] = useState<Orders[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selected, setSelected] = React.useState([
+    "مع الشحن",
+    "بإنتظار الموافقة",
+  ]);
   const itemsPerPage = 6;
 
   const Icons = {
@@ -121,6 +136,54 @@ export default function Home() {
         <div className=" w-[100%] flex justify-center py-6">
           <p className="text-4xl">الطلبات</p>
         </div>
+        <div className="w-[100%] flex justify-center">
+          <div className="flex flex-col gap-3">
+            <CheckboxGroup
+              color="warning"
+              value={selected}
+              onValueChange={setSelected}
+              orientation="horizontal"
+              className="mb-4"
+            >
+              <Checkbox
+                className="mr-6 sm:mr-1 max-sm:mr-1"
+                value="بإنتظار الموافقة"
+              >
+                بإنتظار الموافقة
+              </Checkbox>
+              <Checkbox className="mr-6 sm:mr-1 max-sm:mr-1" value="تم القبول">
+                تم القبول
+              </Checkbox>
+              <Checkbox className="mr-6 sm:mr-1 max-sm:mr-1" value="تم الرفض">
+                تم الرفض
+              </Checkbox>
+              <Checkbox className="mr-6 sm:mr-1 max-sm:mr-1" value="مع الشحن">
+                مع الشحن
+              </Checkbox>
+              <Checkbox className="mr-6 sm:mr-1 max-sm:mr-1" value="تم التوصيل">
+                تم التوصيل
+              </Checkbox>
+              <Checkbox
+                className="mr-6 sm:mr-1 max-sm:mr-1"
+                value="تم الإسترجاع"
+              >
+                تم الإسترجاع
+              </Checkbox>
+              <Checkbox
+                className="mr-6 sm:mr-1 max-sm:mr-1"
+                value="إسترجاع جزئي"
+              >
+                إسترجاع جزئي
+              </Checkbox>
+              <Checkbox
+                className="mr-6 sm:mr-1 max-sm:mr-1"
+                value="تم إستلام الكاش"
+              >
+                تم إستلام الكاش
+              </Checkbox>
+            </CheckboxGroup>
+          </div>
+        </div>
         <div className="lg:p-20 md:p-20 lg:pt-0 md:pt-0 sm:p-0 max-sm:p-0 sm:pt-0 max-sm:pt-0 w-[100%] overflow-x-scroll">
           <table className="border-1 border-[var(--mainColor)] w-[100%] text-center p-4">
             <tr className="border-1 border-[var(--mainColor)] text-sm">
@@ -133,9 +196,7 @@ export default function Home() {
               <th className="border-1 border-[var(--mainColor)] w-36 mx-2">
                 الإجمالي
               </th>
-              {/* <th className="border-1 border-[var(--mainColor)] w-36 mx-2">
-                <p className="p-4">الربح</p>
-              </th> */}
+
               <th className="border-1 border-[var(--mainColor)] w-60 mx-2">
                 المكان
               </th>
@@ -145,6 +206,10 @@ export default function Home() {
               <th className="border-1 border-[var(--mainColor)] w-36 mx-2">
                 الحالة
               </th>
+              <th className="border-1 border-[var(--mainColor)]">
+                مندوب التوصيل
+              </th>
+              <th className="border-1 border-[var(--mainColor)]">chatRoom</th>
               <th className="border-1 border-[var(--mainColor)]">-</th>
             </tr>
 
@@ -154,85 +219,86 @@ export default function Home() {
               </div>
             ) : orders.filter((item) => item.marketer === username).length >
               0 ? (
-              currentItems.map((order, index) => (
-                <tr
-                  key={index}
-                  className="border-1 border-[var(--mainColor)] bg-[var(--mainColorRgbaa)]"
-                >
-                  <td className="border-1 border-[var(--mainColor)] w-48 mx-2">
-                    <p className="flex justify-center p-5">
-                      {order.nameClient}
-                    </p>
-                  </td>
-                  <td className="border-1 border-[var(--mainColor)]">
-                    <p className="p-4">{order.phone1Client}</p>
-                  </td>
-                  <td className="border-1 border-[var(--mainColor)]">
-                    <p className="flex justify-center p-3">
-                      <p className="mr-1">د.ل</p>
-                      <p>{order.totalPriceProducts}</p>
-                    </p>
-                  </td>
-                  {/* <td className="border-1 border-[var(--mainColor)]">
-                    <p className="flex justify-center p-3">
-                      <p className="mr-1">د.ل</p>
-                      <p>{order.gainMarketer}</p>
-                    </p>
-                  </td> */}
-                  <td className="border-1 border-[var(--mainColor)] p-3">
-                    <p className="flex justify-center p-3">{order.address}</p>
-                  </td>
-                  <td className="border-1 border-[var(--mainColor)] ">
-                    <p className="flex justify-center p-3">{order.date}</p>
-                  </td>
-                  <td className="border-1 border-[var(--mainColor)]">
-                    <p className="flex justify-center p-3">
-                      {
-                        order.situationSteps[order.situationSteps.length - 1]
-                          .situation
-                      }
-                    </p>
-                  </td>
-                  <td className="border-1 border-[var(--mainColor)]">
-                    <p className="flex justify-center p-3">
-                      <Popover>
-                        <PopoverTrigger>
-                          <span className="hover:cursor-pointer">
-                            {Icons.EllipsisverticalIcon}
-                          </span>
-                        </PopoverTrigger>
-                        <PopoverContent className=" border-1 border-[var(--mainColor)]">
-                          <div className="px-1 py-2 ">
-                            {/* {order.situationSteps[
-                              order.situationSteps.length - 1
-                            ].situation === "بإنتظار الموافقة" && (
-                              <ModaeEditOrderProduct
-                                id={order._id}
-                                name={order.nameClient}
-                                phone1={order.phone1Client}
-                                phone2={order.phone2Client}
-                                addres={order.address}
-                                store={order.store}
+              currentItems
+                .filter((item) =>
+                  selected.includes(
+                    item.situationSteps[item.situationSteps.length - 1]
+                      .situation
+                  )
+                )
+                .map((order, index) => (
+                  <tr
+                    key={index}
+                    className="border-1 border-[var(--mainColor)] bg-[var(--mainColorRgbaa)]"
+                  >
+                    <td className="border-1 border-[var(--mainColor)] w-48 mx-2">
+                      <p className="flex justify-center p-5">
+                        {order.nameClient}
+                      </p>
+                    </td>
+                    <td className="border-1 border-[var(--mainColor)]">
+                      <p className="p-4">{order.phone1Client}</p>
+                    </td>
+                    <td className="border-1 border-[var(--mainColor)]">
+                      <p className="flex justify-center p-3">
+                        <p className="mr-1">د.ل</p>
+                        <p>{order.totalPriceProducts}</p>
+                      </p>
+                    </td>
+
+                    <td className="border-1 border-[var(--mainColor)] p-3">
+                      <p className="flex justify-center p-3">{order.address}</p>
+                    </td>
+                    <td className="border-1 border-[var(--mainColor)] ">
+                      <p className="flex justify-center p-3">{order.date}</p>
+                    </td>
+                    <td className="border-1 border-[var(--mainColor)]">
+                      <p className="flex justify-center p-3">
+                        {
+                          order.situationSteps[order.situationSteps.length - 1]
+                            .situation
+                        }
+                      </p>
+                    </td>
+                    <td className="border-1 border-[var(--mainColor)]">
+                      <p className="flex justify-center p-3">
+                        <ModelDataDelivery
+                          nameDelivery={order.DeliveryName}
+                          phoneDelivery={order.DeliveryPhone}
+                        />
+                      </p>
+                    </td>
+                    <td className="border-1 border-[var(--mainColor)]">
+                      <p className="flex justify-center p-3">
+                        <ChatDiv
+                          user={username}
+                          userValidity={userValidity}
+                          idOrder={order._id}
+                          chatMessages={order.chatMessages}
+                        />
+                      </p>
+                    </td>
+                    <td className="border-1 border-[var(--mainColor)]">
+                      <p className="flex justify-center p-3">
+                        <Popover>
+                          <PopoverTrigger>
+                            <span className="hover:cursor-pointer">
+                              {Icons.EllipsisverticalIcon}
+                            </span>
+                          </PopoverTrigger>
+                          <PopoverContent className=" border-1 border-[var(--mainColor)]">
+                            <div className="px-1 py-2 ">
+                              <ModaelRecoveryProduct />
+                              <ModaelShowProductsOrder
                                 produts={order.products}
-                                userr={userValidity}
                               />
-                            )} */}
-
-                            <ModaelRecoveryProduct />
-                            <ModaelShowProductsOrder produts={order.products} />
-
-                            <ChatDivMarketer
-                              marketer={username}
-                              idOrder={order._id}
-                              chatMessages={order.chatMessages}
-                            />
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    </p>
-                  </td>
-                </tr>
-              ))
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      </p>
+                    </td>
+                  </tr>
+                ))
             ) : (
               <p className="p-4">لا يوجد طلبات</p>
             )}
@@ -280,30 +346,6 @@ export default function Home() {
       GetProductsInCart();
     }
   }, [user]);
-
-  // const GetOrders = async () => {
-  //   setLoading(true);
-  //   try {
-  //     let response: { data: { token: string; orders: any } };
-  //     response = await axios.get(
-  //       "${linkServer.link}orders/getOrders",
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${secretKey}`,
-  //         },
-  //       }
-  //     );
-  //     setOrders(response.data.orders);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   GetOrders();
-  // }, []);
 
   useEffect(() => {
     if (user) {
