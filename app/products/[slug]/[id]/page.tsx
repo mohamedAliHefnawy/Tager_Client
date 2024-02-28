@@ -8,6 +8,7 @@ import linkServer from "@/linkServer";
 
 //components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
+import useProducts from "@/components/users/checkLogin/carts";
 import DivCheck from "@/components/users/checkLogin/divCheck";
 import NavBar from "@/components/users/navBar";
 import Footer from "@/components/users/footer";
@@ -23,6 +24,7 @@ import { HeartIcon2 } from "@/public/svg/heartIcon2";
 
 //nextUi
 import { Button } from "@nextui-org/react";
+import CartIcon from "@/components/users/cart";
 
 interface Store {
   nameStore: string;
@@ -65,9 +67,16 @@ interface Data {
   __v: number;
 }
 
-export default function Product({ params }: { params: { id: string } }) {
+export default function Product({
+  params,
+  updateLengthInCart,
+}: {
+  params: { id: string };
+  updateLengthInCart: any;
+}) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user, userValidity] = useCheckLogin();
+  const [products] = useProducts();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -93,12 +102,15 @@ export default function Product({ params }: { params: { id: string } }) {
   const [displayedGain, setDisplayedGain] = useState(0);
   const [displayedId, setDisplayedId] = useState("");
   const [displayedName, setDisplayedName] = useState("");
+  const [cartLength, setCartLength] = useState(0);
 
-  const Icons = {
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    HeartIcon: <HeartIcon />,
-    HeartIcon2: <HeartIcon2 />,
+  const updateCartLength = (length: any) => {
+    setCartLength(length);
   };
+
+  // useEffect(() => {
+  //   updateLengthInCart(cartLength);
+  // }, [cartLength]);
 
   const settings = {
     dots: true,
@@ -304,6 +316,7 @@ export default function Product({ params }: { params: { id: string } }) {
                 {/* قطعة */}
               </p>
             </p>
+            {/* {cartLength} */}
             <p className="my-1 mt-6 text-[var(--mainColor)] text-lg">
               <p style={{ direction: "rtl" }}>الأحجام :</p>
             </p>
@@ -348,8 +361,8 @@ export default function Product({ params }: { params: { id: string } }) {
               ))}
             </p>
             <div className="flex items-center justify-end my-10">
-              {/* {displayedId}
-              {selectedSize} */}
+              {/* {displayedId} */}
+              {/* {selectedSize} */}
 
               {availableQuantity === 0 ? (
                 <p className="text-red-500">غير متوفر</p>
@@ -365,7 +378,7 @@ export default function Product({ params }: { params: { id: string } }) {
                   <ButtonAddToCart
                     id={displayedId}
                     index={""}
-                    updateParent={0}
+                    updateParent={updateCartLength}
                     size={selectedSize}
                   />
                 </>
@@ -423,11 +436,9 @@ export default function Product({ params }: { params: { id: string } }) {
           <p className="p-4 w-[100%] text-right">
             <p className="mb-2">{product.name}</p>
             <p style={{ direction: "rtl" }} className="mb-2">
-              {" "}
               المقاس | {selectedSize}
             </p>
             <p style={{ direction: "rtl" }} className="mb-2">
-              {" "}
               اللون | {selectedColor}
             </p>
             {/* <p> الكمية | {availableQuantity}</p> */}
@@ -495,11 +506,15 @@ export default function Product({ params }: { params: { id: string } }) {
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
                 userr={user}
-                lengthProductsInCart={0}
+                lengthProductsInCart={cartLength}
                 lengthProductsInFavourite={0}
               />
               <Body />
-
+              <CartIcon
+                userr={user}
+                lengthProductsInCart={cartLength}
+                lengthProductsInFavourite={0}
+              />
               <Footer />
             </div>
           </>

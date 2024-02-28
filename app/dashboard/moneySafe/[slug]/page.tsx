@@ -56,7 +56,7 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [loading, setLoading] = useState(true);
   const [moneySafe, setMoneySafe] = useState<MoneySafeDetails>();
   const [currentPage, setCurrentPage] = useState(1);
-  const ItemsPerPage = 3;
+  const ItemsPerPage = 5;
 
   const totalPages = Math.ceil((moneySafe?.money?.length || 0) / ItemsPerPage);
   const indexOfLastItem = currentPage * ItemsPerPage;
@@ -130,8 +130,8 @@ export default function Home({ params }: { params: { slug: string } }) {
 
                       <div className="w-[20%] text-center">
                         <div className="flex justify-center">
-                          <p className="mr-1"> د.ل </p>
                           <p>{item.value}</p>
+                          <p className="mr-1"> د.ل </p>
                         </div>
                       </div>
 

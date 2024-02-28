@@ -1,7 +1,8 @@
 //react
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import { toast } from "react-toastify";
 
 //components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
@@ -23,18 +24,19 @@ export default function ButtonAddToCart({
   index: any;
   updateParent: any;
 }) {
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user] = useCheckLogin();
-
+  const [loading, setLoading] = useState(true);
+  const [len, setLen] = useState(0);
   let arrProductsInCart: any[] = [];
   const storedData = localStorage.getItem("productsCart");
 
   if (storedData !== null) {
     arrProductsInCart = JSON.parse(storedData);
   }
+  const suma = len + arrProductsInCart.length;
 
-  const [lenghtProductInCart, setLenghtProductInCart] = useState(
-    arrProductsInCart.length
-  );
+  const [lenghtProductInCart, setLenghtProductInCart] = useState(suma);
 
   const Icons = {
     BackwardIcon: <BackwardIcon />,
@@ -43,7 +45,37 @@ export default function ButtonAddToCart({
     ShoppingcartIcon: <ShoppingcartIcon />,
   };
 
+  const GetProductsInCart = useCallback(async () => {
+    setLoading(true);
+    try {
+      let response: {
+        data: { token: string; combinedProducts: any; combinedProducts2: any };
+      };
+      response = await axios.get(
+        `${linkServer.link}cart/getProductsInCart/${user}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+      setLen(response.data.combinedProducts.length);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [setLoading, user, secretKey]);
+
+  useEffect(() => {
+    if (user) {
+      GetProductsInCart();
+    }
+  }, [user, GetProductsInCart]);
+
   const addToCart = async (idProduct: any, sizeProduct: any) => {
+    toast.success("تم إضافة المنتج بنجاح  ✓");
     try {
       const response = await axios.post(
         `${linkServer.link}cart/addProductToCart`,
@@ -58,7 +90,10 @@ export default function ButtonAddToCart({
       if (response.data === "noExit") {
         if (!arrProductsInCart.includes(idProduct)) {
           arrProductsInCart.push(idProduct);
-          setLenghtProductInCart(arrProductsInCart.length);
+          updateParent(arrProductsInCart.length + len);
+          // toast.success("تم إضافة المنتج بنجاح  ✓");
+          // window.location.reload();
+          // alert("sd");
           localStorage.setItem(
             "productsCart",
             JSON.stringify(arrProductsInCart)
@@ -69,17 +104,19 @@ export default function ButtonAddToCart({
         const updatedCart = arrProductsInCart.filter(
           (productId) => productId !== idProduct
         );
-        setLenghtProductInCart(arrProductsInCart.length - 1);
+        updateParent(arrProductsInCart.length - 1 + len);
         localStorage.setItem("productsCart", JSON.stringify(updatedCart));
+        // toast.success("تم إضافة المنتج بنجاح  ✓");
+        // window.location.reload();
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  // useEffect(() => {
-  //   updateParent(arrProductsInCart.length);
-  // }, [arrProductsInCart]);
+  useEffect(() => {
+    setLenghtProductInCart(lenghtProductInCart);
+  }, [arrProductsInCart]);
 
   return (
     <>
@@ -93,8 +130,10 @@ export default function ButtonAddToCart({
           } hover:cursor-pointer`}
         >
           {Icons.ShoppingcartIcon}
+          {/* {lenghtProductInCart} */}
         </p>
       </p>
+      {/* <div className="absolute z-50 bg-red-500 top-0 right-0">12</div> */}
     </>
   );
 }

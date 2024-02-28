@@ -36,11 +36,12 @@ import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
 import { DeleteIcon } from "@/public/svg/deleteIcon";
 import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
 import { HeartIcon } from "@/public/svg/heartIcon";
+import CartIcon from "@/components/users/cart";
 
 interface Data {
   _id: string;
   name: string;
-  size: string[];
+  size: [{ size: string }];
   color: string;
   name1Product: string;
   price1: number;
@@ -52,7 +53,11 @@ interface Data {
   catogry: string | undefined;
 }
 
-export default function Home() {
+export default function Home({
+  updateLengthInCart,
+}: {
+  updateLengthInCart: any;
+}) {
   const [user, userValidity] = useCheckLogin();
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [products, setProducts] = useState<Data[]>([]);
@@ -184,7 +189,6 @@ export default function Home() {
   //   // arrProductsInCart,
   //   updateLengthInCart,
   //   // arrProductsInFavourite,
-  //   updateLengthInFavoutire,
   // ]);
 
   return (
@@ -197,7 +201,7 @@ export default function Home() {
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
                 userr={user}
-                lengthProductsInCart={lenghtProductInCart}
+                lengthProductsInCart={cartLength}
                 lengthProductsInFavourite={lengthProductsInFavourite}
               />
               <>
@@ -290,7 +294,7 @@ export default function Home() {
                                         `/products/${product.catogry}/${product._id}`
                                       )
                                     }
-                                    className="flex justify-center items-center hover:cursor-pointer "
+                                    className="flex justify-center items-center hover:cursor-pointer text-sm "
                                   >
                                     <p> {product.name} </p>
                                     <p className="text-[var(--mainColor)] ml-1">
@@ -313,18 +317,26 @@ export default function Home() {
                                       id={product._id}
                                       index={index}
                                       updateParent={updateCartLength}
-                                      size={undefined}
+                                      size={product.size[0].size}
                                     />
 
                                     <ButtonAddToCart
                                       id={product._id}
                                       index={index}
                                       updateParent={updateCartLength}
-                                      size={undefined}
+                                      size={product.size[0].size}
                                     />
                                   </div>
                                 </div>
                               </div>
+
+                              <CartIcon
+                                userr={user}
+                                lengthProductsInCart={cartLength}
+                                lengthProductsInFavourite={
+                                  lengthProductsInFavourite
+                                }
+                              />
                             </>
                           ))
                         )}

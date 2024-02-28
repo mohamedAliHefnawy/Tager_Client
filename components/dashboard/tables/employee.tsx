@@ -31,7 +31,7 @@ export default function Employees() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const itemsPerPage = 4;
+  const itemsPerPage = 6;
 
   const icons = {
     SearchIcon: <SearchIcon />,
@@ -70,6 +70,8 @@ export default function Employees() {
           employees.name.toLowerCase().includes(lowerCaseSearchText)) ||
         (employees.password &&
           employees.password.toLowerCase().includes(lowerCaseSearchText)) ||
+        (employees.validity &&
+          employees.validity.toLowerCase().includes(lowerCaseSearchText)) ||
         (employees.phone &&
           employees.phone.toLowerCase().includes(lowerCaseSearchText))
       );
@@ -102,7 +104,7 @@ export default function Employees() {
           </div>
           <ModelAddEmplyee titleButton="إضافة موظف" inputName="إسم الموظف" />
         </div>
-        <div className="mt-3 ml-2 text-slate-300 text-xs">
+        <div className="mt-3 ml-2 text-slate-600 text-xs">
           <p>Total {filteredEmployees.length} Employees</p>
         </div>
 
@@ -176,9 +178,9 @@ export default function Employees() {
       </div>
       <div className="pagination">
         <Pagination
-          className="fixed bottom-0 mb-3"
+          className="my-3"
           showShadow
-          color="primary"
+          color="warning"
           total={Math.ceil(filteredEmployees.length / itemsPerPage)}
           initialPage={currentPage}
           onChange={handlePageChange}

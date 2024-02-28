@@ -31,22 +31,9 @@ import { ArrowtrendingdownIcon } from "../../public/svg/arrowtrendingdownIcon";
 //component
 import Link from "next/link";
 
-interface Employee {
-  _id: string;
-  name: string;
-  phone1: string;
-  phone2: string;
-  password: string;
-  image: string;
-  validity: string;
-}
-
 export default function SideBar() {
-  const usernamee = localStorage.getItem("username");
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [employee, setEmployee] = useState<Employee | null>(null);
-
+  
   const handleLogout = () => {
     localStorage.removeItem("nameAdmin");
     router.push("/dashboard");
@@ -74,25 +61,6 @@ export default function SideBar() {
     ArrowtrendingdownIcon: <ArrowtrendingdownIcon />,
     ProductsIcon: <ProductsIcon />,
   };
-
-  const GetEmployees = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `https://server-clinic.vercel.app/employees/getemployee/${usernamee}`
-      );
-      setEmployee(response.data);
-      // console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    GetEmployees();
-  }, []);
 
   const ElementSideBar = (props: any) => {
     return (
@@ -219,7 +187,7 @@ export default function SideBar() {
 
         <div
           onClick={handleLogout}
-          className="p-4 pl-5 m-1 cursor-pointer text-white text-sm flex items-center hover:bg-red-500 opacity-[0.7] rounded-2xl hover:font-bold "
+          className="p-4 pl-5 m-1 cursor-pointer text-slate-700 text-sm flex items-center hover:text-red-500 opacity-[0.7] rounded-2xl hover:font-bold "
         >
           <ArrowUturnDownIcon />
           <p className="block hover:font-bold ml-3">تسجيل خروج</p>

@@ -124,7 +124,6 @@ export default function Products() {
         },
       });
       setProducts(response.data.products);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -219,25 +218,15 @@ export default function Products() {
                     </div>
                     <div className="w-[30%]  ">
                       <p className="flex justify-center">
-                        {/* <p className="mr-1"> منتج</p> */}
-                        <p>
-                          {product.size.map((item, index) => {
-                            const totalAmount = item.store.reduce(
-                              (accumulator, currentValue) => {
-                                return accumulator + currentValue.amount;
-                              },
+                        {product.size.reduce(
+                          (calc, sum) =>
+                            calc +
+                            sum.store.reduce(
+                              (calc2, sum2) => calc2 + sum2.amount,
                               0
-                            );
-
-                            return (
-                              <div key={index}>
-                                <p>
-                                  {item.size}:{totalAmount}
-                                </p>
-                              </div>
-                            );
-                          })}
-                        </p>
+                            ),
+                          0
+                        )}
                       </p>
                     </div>
 
@@ -289,28 +278,15 @@ export default function Products() {
                             </div>
                             <div className="w-[30%]  ">
                               <p className="flex justify-center">
-                                {/* <p className="mr-1"> منتج</p> */}
-                                <p>
-                                  {products2.size.map((item, index) => {
-                                    const totalAmount = item.store.reduce(
-                                      (accumulator, currentValue) => {
-                                        return (
-                                          accumulator + currentValue.amount
-                                        );
-                                      },
+                                {products2.size.reduce(
+                                  (calc, sum) =>
+                                    calc +
+                                    sum.store.reduce(
+                                      (calc2, sum2) => calc2 + sum2.amount,
                                       0
-                                    );
-
-                                    return (
-                                      <div key={index}>
-                                        <p>
-                                          {/* {item.size}: */}
-                                          {totalAmount}
-                                        </p>
-                                      </div>
-                                    );
-                                  })}
-                                </p>
+                                    ),
+                                  0
+                                )}
                               </p>
                             </div>
                             <div className="w-[10%] text-right">

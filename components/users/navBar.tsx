@@ -1,7 +1,7 @@
 "use client";
 
 //react
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -47,6 +47,7 @@ import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
 
 //images
 import Logo from "@/public/img/hbaieb.png";
+import CartIcon from "./cart";
 
 export default function NavBar({
   userr,
@@ -57,6 +58,8 @@ export default function NavBar({
   lengthProductsInCart: number;
   lengthProductsInFavourite: number;
 }) {
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
+
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
   const [user, userValidity] = useCheckLogin();
@@ -65,6 +68,7 @@ export default function NavBar({
   const [showPassword, setShowPassword] = useState(true);
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState(true);
+  const [len, setLen] = useState(0);
 
   const Icons = {
     BarsarrowdownIcon: <BarsarrowdownIcon />,
@@ -83,6 +87,32 @@ export default function NavBar({
     localStorage.removeItem("user");
     router.push("/auth/login");
   };
+
+  const GetProductsInCart = useCallback(async () => {
+    try {
+      let response: {
+        data: { token: string; combinedProducts: any; combinedProducts2: any };
+      };
+      response = await axios.get(
+        `${linkServer.link}cart/getProductsInCart/${user}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+      setLen(response.data.combinedProducts.length);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [user, secretKey]);
+
+  useEffect(() => {
+    if (user) {
+      GetProductsInCart();
+    }
+  }, [user, GetProductsInCart]);
 
   const Login = async () => {
     try {
@@ -128,170 +158,173 @@ export default function NavBar({
   }, [password]);
 
   return (
-    <Navbar position="static">
-      <NavbarBrand>
-        <Dropdown>
-          <DropdownTrigger>
-            <Button
-              variant="bordered"
-              color="warning"
-              startContent={Icons.BarsarrowdownIcon}
+    <>
+      <Navbar className="bg-white">
+        <NavbarBrand>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                variant="bordered"
+                color="warning"
+                startContent={Icons.BarsarrowdownIcon}
+              >
+                <p className="text-slate-800" style={{ direction: "rtl" }}>
+                  مرحباَ بك {user}
+                </p>
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Static Actions"
+              style={{ direction: "rtl" }}
+              className="border-1 bg-[var(--mainColorRgba)] rounded-lg"
             >
-              <p className="text-slate-800" style={{ direction: "rtl" }}>
-                مرحباَ بك {user}
-              </p>
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            aria-label="Static Actions"
-            style={{ direction: "rtl" }}
-            className="border-1 bg-[var(--mainColorRgba)] rounded-lg"
-          >
-            <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">{Icons.UserIcon}</p>
-                <Link href="/profile" className="mr-1 text-slate-700">
-                  حسابي
-                </Link>
-              </p>
-            </DropdownItem>
-            <DropdownItem key="1">
-              {/* {userValidity}
-              {user} */}
-              {userValidity === "مندوب تسويق" && (
+              <DropdownItem key="1">
                 <p className="flex items-center ">
-                  <p className="text-[var(--mainColor)]">
-                    {Icons.BanknotesIcon}
+                  <p className="text-[var(--mainColor)]">{Icons.UserIcon}</p>
+                  <Link href="/profile" className="mr-1 text-slate-700">
+                    حسابي
+                  </Link>
+                </p>
+              </DropdownItem>
+              <DropdownItem key="1">
+                {/* {userValidity} */}
+                {/* {user} */}
+                {userValidity === "مندوب تسويق" && (
+                  <p className="flex items-center ">
+                    <p className="text-[var(--mainColor)]">
+                      {Icons.BanknotesIcon}
+                    </p>
+                    <p
+                      onClick={() => setShowDev(!showDev)}
+                      className="mr-1 text-slate-700"
+                    >
+                      المحفظة
+                    </p>
                   </p>
-                  <p
-                    onClick={() => setShowDev(!showDev)}
-                    className="mr-1 text-slate-700"
-                  >
-                    المحفظة
+                )}
+              </DropdownItem>
+              <DropdownItem key="1">
+                <p className="flex items-center ">
+                  <p className="text-[var(--mainColor)]">{Icons.TagIcon}</p>
+                  <Link href="/orders" className="mr-1 text-slate-700">
+                    الطلبات
+                  </Link>
+                </p>
+              </DropdownItem>
+              <DropdownItem key="logout" className="text-danger" color="danger">
+                <p className="flex items-center ">
+                  <p>{Icons.LogoutIcon}</p>
+                  <p onClick={() => Logout()} className="mr-1">
+                    تسجيل خروج
                   </p>
                 </p>
-              )}
-            </DropdownItem>
-            <DropdownItem key="1">
-              <p className="flex items-center ">
-                <p className="text-[var(--mainColor)]">{Icons.TagIcon}</p>
-                <Link href="/orders" className="mr-1 text-slate-700">
-                  الطلبات
-                </Link>
-              </p>
-            </DropdownItem>
-            <DropdownItem key="logout" className="text-danger" color="danger">
-              <p className="flex items-center ">
-                <p>{Icons.LogoutIcon}</p>
-                <p onClick={() => Logout()} className="mr-1">
-                  تسجيل خروج
-                </p>
-              </p>
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem className="mr-4 mt-5">
-          <Link color="foreground" href="/fav">
-            {/* <Badge
-              color="primary"
-              content={lengthProductsInFavourite}
-              shape="circle"
-            >
-        </Badge> */}
-            <span className="text-red-600 mr-3">{Icons.HeartIcon}</span>
-          </Link>
-        </NavbarItem>
-        <NavbarItem className="mr-4 mt-5">
-          <Link color="foreground" href="/cart">
-            {/* <Badge
-              color="primary"
-              content={lengthProductsInCart}
-              shape="circle"
-            >
-        </Badge> */}
-            <span className="text-slate-600 mr-3">
-              {Icons.ShoppingcartIcon}
-            </span>
-          </Link>
-        </NavbarItem>
-        <NavbarItem className="ml-4">
-          <Link
-            color="foreground"
-            href="/"
-            className="text-[var(--mainColor)] flex items-center"
-          >
-            <p>الصفحة الرئيسيه</p>
-            <p> {Icons.HomeIcon}</p>
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="lg:flex md:flex max-md:flex sm:hidden max-sm:hidden">
-          <Image src={Logo} width={100} height={100} alt={"error"} />
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarMenuToggle
-        className="lg:hidden md:hidden max-md:hidden sm:flex max-sm:flex"
-        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-      />
-
-      <NavbarMenu>
-        <NavbarMenuItem className="text-right pr-3 text-lg pt-5">
-          <Link href="/" className="flex items-center justify-end mb-6">
-            <p className="text-slate-800 mr-2"> الصفحه الرئيسيه </p>
-            {Icons.HomeIcon}
-          </Link>
-          {/* {userValidity} */}
-          {userValidity === "مندوب تسويق" && (
-            <Link href="/wallet" className="flex items-center justify-end mb-6">
-              <p className="text-slate-800 mr-2"> المحفظة </p>
-              {Icons.BanknotesIcon}
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </NavbarBrand>
+        <NavbarContent className="hidden sm:flex gap-4" justify="center">
+          <NavbarItem className="mr-4 mt-5">
+            <Link color="foreground" href="/fav">
+              {/* <p>{lengthProductsInFavourite}</p> */}
+              <span className="text-red-600 mr-3 mt-5">{Icons.HeartIcon}</span>
             </Link>
-          )}
-          <Link href="/fav" className="flex items-center justify-end mb-6">
-            <p className="text-slate-800 mr-2"> المفضلة </p>
-            {Icons.HeartIcon}
-          </Link>
-          <Link href="/cart" className="flex items-center justify-end mb-6">
-            <p className="text-slate-800 mr-2"> السلة </p>
-            {Icons.ShoppingcartIcon}
-          </Link>
-          <Link href="/orders" className="flex items-center justify-end mb-6">
-            <p className="text-slate-800 mr-2"> الطلبات </p>
-            {Icons.TagIcon}
-          </Link>
-        </NavbarMenuItem>
-      </NavbarMenu>
-      <div
-        className={`w-96 h-96 sm:w-[100%] max-sm:w-[100%] sm:mt-16 max-sm:mt-16 rounded-3xl border-1 border-warning-400 p-10 flex flex-col justify-center items-center  z-50 bg-white ${
-          showDev ? "absolute top-0 right-0" : "hidden"
-        }`}
-      >
-        <div className="flex justify-between items-center w-[100%]">
-          <input
-            type={showPassword ? "password" : "text"}
-            className="input w-full"
-            placeholder="أدخل الباسورد"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <span className="relative bg-red-400">
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className={`absolute inset-y-0 right-0 flex items-center pr-4  pt-3 text-[var(--mainColor)] hover:cursor-pointer`}
+            {/* {len} */}
+          </NavbarItem>
+          <NavbarItem className="mr-4 mt-5">
+            <Link color="foreground" href="/cart">
+              <p className="bg-warning-100 rounded-full flex justify-center items-center text-warning-600">
+                {lengthProductsInCart + len}
+              </p>
+              <span className="text-slate-600 mr-3">
+                {Icons.ShoppingcartIcon}
+              </span>
+            </Link>
+          </NavbarItem>
+          <NavbarItem className="ml-4">
+            <Link
+              color="foreground"
+              href="/"
+              className="text-[var(--mainColor)] flex items-center"
             >
-              {showPassword ? Icons.EyeIcon : Icons.EyeNotIcon}
+              <p>الصفحة الرئيسيه</p>
+              <p> {Icons.HomeIcon}</p>
+            </Link>
+          </NavbarItem>
+        </NavbarContent>
+        <NavbarContent justify="end">
+          <NavbarItem className="lg:flex md:flex max-md:flex sm:hidden max-sm:hidden">
+            <Image src={Logo} width={100} height={100} alt={"error"} />
+          </NavbarItem>
+          {/* <CartIcon
+            userr={user}
+            lengthProductsInCart={lengthProductsInCart}
+            lengthProductsInFavourite={lengthProductsInFavourite}
+          /> */}
+        </NavbarContent>
+        <NavbarMenuToggle
+          className="lg:hidden md:hidden max-md:hidden sm:flex max-sm:flex"
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        />
+
+        <NavbarMenu>
+          <NavbarMenuItem className="text-right pr-3 text-lg pt-5">
+            <Link href="/" className="flex items-center justify-end mb-6">
+              <p className="text-slate-800 mr-2"> الصفحه الرئيسيه </p>
+              {Icons.HomeIcon}
+            </Link>
+            {userValidity === "مندوب تسويق" && (
+              <p className="flex items-center justify-end mb-6 text-slate-800">
+                <p onClick={() => setShowDev(!showDev)} className=" mr-2">
+                  المحفظة
+                </p>
+                <p className="">{Icons.BanknotesIcon}</p>
+              </p>
+            )}
+
+            <Link href="/fav" className="flex items-center justify-end mb-6">
+              <p className="text-slate-800 mr-2"> المفضلة </p>
+              {Icons.HeartIcon}
+            </Link>
+            <Link href="/cart" className="flex items-center justify-end mb-6">
+              <p className="text-slate-800 mr-2"> السلة </p>
+              {Icons.ShoppingcartIcon}
+            </Link>
+            <Link href="/orders" className="flex items-center justify-end mb-6">
+              <p className="text-slate-800 mr-2"> الطلبات </p>
+              {Icons.TagIcon}
+            </Link>
+          </NavbarMenuItem>
+        </NavbarMenu>
+        <div
+          className={`w-96 h-96 sm:w-[100%] max-sm:w-[100%] sm:mt-16 max-sm:mt-16 rounded-3xl border-1 border-warning-400 p-10 flex flex-col justify-center items-center  z-50 bg-white ${
+            showDev ? "absolute top-0 right-0" : "hidden"
+          }`}
+        >
+          <div className="flex justify-between items-center w-[100%]">
+            <input
+              type={showPassword ? "password" : "text"}
+              className="input w-full"
+              placeholder="أدخل الباسورد"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span className="relative bg-red-400">
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className={`absolute inset-y-0 right-0 flex items-center pr-4  pt-3 text-[var(--mainColor)] hover:cursor-pointer`}
+              >
+                {showPassword ? Icons.EyeIcon : Icons.EyeNotIcon}
+              </span>
             </span>
-          </span>
-          <div>
-            <Button className="button" onClick={Login} disabled={check}>
-              دخول
-            </Button>
+            <div>
+              <Button className="button" onClick={Login} disabled={check}>
+                دخول
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-    </Navbar>
+        {/* <div className=" bg-red-400 absolute z-50 bottom-0 right-0">12</div> */}
+      </Navbar>
+    </>
   );
 }

@@ -138,7 +138,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-1 max-sm:grid-cols-1">
+        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2 max-sm:grid-cols-2">
           {loading ? (
             <div className="flex justify-center items-center h-[400px]">
               <Spinner size="lg" color="warning" />
@@ -160,7 +160,7 @@ export default function Home() {
                     // onClick={() =>
                     //   router.push(`/products/${item.catogry}/${item._id}`)
                     // }
-                    className="flex justify-center items-center "
+                    className="flex justify-center items-center text-sm"
                   >
                     <p> {item.name} </p>
                     <p className="text-[var(--mainColor)] ml-1"> ☍ </p>
@@ -169,7 +169,7 @@ export default function Home() {
                     <p className="flex ">
                       <p className="mr-1">د.ل</p>
 
-                      <p className="font-bold">
+                      <p className="font-bold text-sm">
                         {userValidity === "زبون عادي"
                           ? item.price3
                           : item.price2}

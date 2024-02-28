@@ -107,7 +107,6 @@ export default function Home() {
         },
       });
       setMethodPayment(response.data.payment);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }

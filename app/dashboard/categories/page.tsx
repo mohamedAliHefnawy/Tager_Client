@@ -40,7 +40,6 @@ export default function Home() {
   //       `https://server-clinic.vercel.app/employees/getemployee/${usernamee}`
   //     );
   //     setEmployee(response.data);
-  //     console.log(response.data);
   //   } catch (error) {
   //     console.log(error);
   //   } finally {

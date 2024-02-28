@@ -32,7 +32,7 @@ import NavBar from "@/components/delivery/navBar";
 import useCheckLogin from "@/components/delivery/checkLogin/checkLogin";
 import DivCheck from "@/components/delivery/checkLogin/divCheck";
 import Loading from "@/components/loading";
-import ChatDiv from "@/components/delivery/chatDiv";
+import ChatDiv from "@/components/chatDiv";
 
 interface Orders {
   idProduct: string;
@@ -78,7 +78,7 @@ interface ReturnOrders {
 
 export default function Home({ params }: { params: { slug: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [nameDelivery] = useCheckLogin();
+  const [nameDelivery, valDelivery] = useCheckLogin();
   const [nameDeliveryy, setNameDeliveryy] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -263,8 +263,9 @@ export default function Home({ params }: { params: { slug: string } }) {
           <div className="mt-4">
             <div className="p-6 pb-1 pt-0 flex justify-between items-center">
               <ChatDiv
+                user={nameDelivery}
+                userValidity={valDelivery}
                 idOrder={order?._id}
-                delivery={nameDeliveryy}
                 chatMessages={order?.chatMessages}
               />
               <p>

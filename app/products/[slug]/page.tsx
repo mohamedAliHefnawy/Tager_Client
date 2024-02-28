@@ -36,11 +36,12 @@ import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
 import { DeleteIcon } from "@/public/svg/deleteIcon";
 import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
 import { HeartIcon } from "@/public/svg/heartIcon";
+import CartIcon from "@/components/users/cart";
 
 interface Data {
   _id: string;
   name: string;
-  size: [{ amount: number }];
+  size: [{ amount: number; size: string }];
   color: string;
   name1Product: string;
   price1: string;
@@ -188,7 +189,7 @@ export default function Home({ params }: { params: { slug: string } }) {
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
                 userr={user}
-                lengthProductsInCart={0}
+                lengthProductsInCart={cartLength}
                 lengthProductsInFavourite={0}
               />
               <>
@@ -251,6 +252,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                         className="w-[100%]"
                         onChange={handleSliderChange}
                       />
+                      {/* {cartLength} */}
                     </div>
                     <div className="gap-2 w-[100%] grid grid-cols-2 lg:grid-cols-4 md:sm:grid-cols-4 sm:sm:grid-cols-2 max-sm:sm:grid-cols-2">
                       <>
@@ -281,12 +283,11 @@ export default function Home({ params }: { params: { slug: string } }) {
                                         `/products/${product.catogry}/${product._id}`
                                       )
                                     }
-                                    className="flex justify-center items-center hover:cursor-pointer "
+                                    className="flex justify-center items-center hover:cursor-pointer text-sm "
                                   >
                                     <p> {product.name} </p>
                                     <p className="text-[var(--mainColor)] ml-1">
-                                      {" "}
-                                      ☍{" "}
+                                      ☍
                                     </p>
                                   </div>
                                   <div className="flex justify-center items-center  ">
@@ -310,13 +311,18 @@ export default function Home({ params }: { params: { slug: string } }) {
 
                                     <ButtonAddToCart
                                       id={product._id}
-                                      index={index}
+                                      index={""}
                                       updateParent={updateCartLength}
-                                      size={undefined}
+                                      size={product.size[0].size}
                                     />
                                   </div>
                                 </div>
                               </div>
+                              <CartIcon
+                                userr={user}
+                                lengthProductsInCart={cartLength}
+                                lengthProductsInFavourite={0}
+                              />
                             </>
                           ))
                         )}

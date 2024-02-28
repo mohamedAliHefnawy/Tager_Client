@@ -168,7 +168,6 @@ export default function Home({ params }: { params: { slug: string } }) {
         }
       );
       setPurchasess(response.data.purchases);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     } finally {

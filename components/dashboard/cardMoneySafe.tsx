@@ -110,7 +110,7 @@ export default function CardMoneySafe() {
 
         <ModaelConvertMoney />
       </div>
-      <div className="my-3 ml-2 text-slate-300 text-xs">
+      <div className="my-3 ml-2 text-slate-600 text-xs">
         <p>Total {filteredMoneySafe.length} MoneySafes </p>
       </div>
       <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
@@ -133,18 +133,25 @@ export default function CardMoneySafe() {
               }
             >
               <CardBody className="overflow-visible  p-0">
-                <Image
-                  alt={moneySafe.name}
-                  className="w-full object-cover h-[140px]"
-                  src={moneySafe.image}
-                />
+                <div className="w-[100%] flex justify-center p-4">
+                  <Image
+                    alt={moneySafe.name}
+                    className="w-full object-cover h-[120px]"
+                    src={moneySafe.image}
+                  />
+                </div>
               </CardBody>
               <CardFooter className="text-small justify-between">
-                {moneySafe.money.reduce(
-                  (total, item) => total + +item.value,
-                  0
-                )}
-                د.ل
+                <p className="flex ">
+                  <span className="mr-2"> د.ل</span>
+                  <span>
+                    {moneySafe.money.reduce(
+                      (total, item) => total + +item.value,
+                      0
+                    )}
+                  </span>
+                </p>
+
                 <div className="flex items-center">
                   <b>{moneySafe.name}</b>
 

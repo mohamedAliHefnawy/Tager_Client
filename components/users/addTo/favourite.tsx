@@ -12,6 +12,18 @@ import { HeartIcon } from "@/public/svg/heartIcon";
 import { HeartIcon2 } from "@/public/svg/heartIcon2";
 import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
 
+interface Products {
+  _id: string;
+  name: string;
+  phone: string;
+  password: string;
+  validity: string;
+  image: string;
+  price2: number;
+  price3: number;
+  size: [{ size: string }];
+}
+
 export default function ButtonAddToFavourite({
   id,
   size,
@@ -24,6 +36,9 @@ export default function ButtonAddToFavourite({
   updateParent: any;
 }) {
   const [user] = useCheckLogin();
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const [products, setProducts] = useState<Products[]>([]);
+  const [len, setLen] = useState(0);
 
   let arrProductsInFavourite: any[] = [];
   const storedData = localStorage.getItem("productsFavourite");
@@ -42,6 +57,31 @@ export default function ButtonAddToFavourite({
     HeartIcon2: <HeartIcon2 />,
     ShoppingcartIcon: <ShoppingcartIcon />,
   };
+
+  const GetProductsInCart = async () => {
+    try {
+      let response: {
+        data: { token: string; combinedProducts: any };
+      };
+      response = await axios.get(
+        `${linkServer.link}favourite/getProductsInFavourite/${user}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+      setLen(response.data.combinedProducts.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      GetProductsInCart();
+    }
+  }, [user]);
 
   const addToFavourite = async (idProduct: any, sizeProduct: any) => {
     try {
@@ -79,6 +119,10 @@ export default function ButtonAddToFavourite({
     }
   };
 
+  useEffect(() => {
+    setLenghtProductInFavourite(lenghtProductInFavourite);
+  }, [arrProductsInFavourite]);
+
   return (
     <>
       <p
@@ -90,6 +134,7 @@ export default function ButtonAddToFavourite({
         } hover:cursor-pointer`}
       >
         {Icons.HeartIcon}
+        
       </p>
     </>
   );

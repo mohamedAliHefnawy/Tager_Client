@@ -43,6 +43,7 @@ export default function ProductsSlider1({
   const [userName, userValidity] = useCheckLogin();
   const [products, setProducts] = useState<Products[]>([]);
   const [cartLength, setCartLength] = useState(0);
+  const [favLength, setFavLength] = useState(0);
 
   const Icons = {
     BackwardIcon: <BackwardIcon />,
@@ -60,9 +61,11 @@ export default function ProductsSlider1({
       confirmButtonText: "حسنًا",
     });
   };
+
   const updateCartLength = (length: any) => {
     setCartLength(length);
   };
+
 
   let arrProductsInCart: any[] = [];
   const storedData1 = localStorage.getItem("productsCart");
@@ -120,9 +123,15 @@ export default function ProductsSlider1({
     ],
   };
 
-  const Toast = () => {
-    toast.success("يجب الدخول لصفحة المنتج من المنتج الرئيسي");
-  };
+
+
+  useEffect(() => {
+    updateLengthInCart(cartLength);
+  }, [cartLength]);
+
+  useEffect(() => {
+    updateLengthInFavoutire(favLength);
+  }, [favLength]);
 
   return (
     <>
@@ -154,7 +163,7 @@ export default function ProductsSlider1({
                           `/products/${item.catogry}/${item.idProduct}`
                         )
                       }
-                      className="flex justify-center items-center hover:cursor-pointer "
+                      className="flex justify-center items-center hover:cursor-pointer text-sm "
                     >
                       <p> {item.name} </p>
                       <p className="text-[var(--mainColor)] ml-1"> ☍ </p>
@@ -162,7 +171,7 @@ export default function ProductsSlider1({
                   ) : (
                     <div
                       onClick={() => Sw()}
-                      className="flex justify-center items-center hover:cursor-pointer "
+                      className="flex justify-center items-center hover:cursor-pointer text-sm "
                     >
                       <p> {item.name} </p>
                       <p className="text-[var(--mainColor)] ml-1"> ☍ </p>

@@ -131,7 +131,7 @@ export default function ProductsSliderCatogety({
                     onClick={() =>
                       router.push(`/products/${item.catogry}/${item._id}`)
                     }
-                    className="flex justify-center items-center hover:cursor-pointer "
+                    className="flex justify-center items-center hover:cursor-pointer text-sm "
                   >
                     <p> {item.name} </p>
                     <p className="text-[var(--mainColor)] ml-1"> ☍ </p>

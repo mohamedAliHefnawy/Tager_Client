@@ -1,7 +1,7 @@
 "use client";
 
 // react
-import { useEffect, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
@@ -95,7 +95,7 @@ export default function Home() {
       );
   };
 
-  const GetProductsInCart = async () => {
+  const GetProductsInCart = useCallback(async () => {
     setLoading(true);
     try {
       let response: {
@@ -116,13 +116,13 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [setLoading, setProducts, setSizes, user, secretKey]);
 
   useEffect(() => {
     if (user) {
       GetProductsInCart();
     }
-  }, [user]);
+  }, [user, GetProductsInCart]);
 
   useEffect(() => {
     if (user) {
@@ -151,7 +151,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-1 max-sm:grid-cols-1">
+        <div className="gap-2 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2 max-sm:grid-cols-2">
           {loading ? (
             <div className="flex justify-center items-center h-[400px]">
               <Spinner size="lg" color="warning" />
@@ -178,7 +178,7 @@ export default function Home() {
                     // onClick={() =>
                     //   router.push(`/products/${item.catogry}/${item._id}`)
                     // }
-                    className="flex justify-center items-center text-lg"
+                    className="flex justify-center items-center text-sm"
                   >
                     <p> {item.name} </p>
                     {/* <p> {Size(item._id)} </p> */}
@@ -189,15 +189,15 @@ export default function Home() {
                     <p className="flex">
                       <p className="flex">
                         <p className="mr-1">د.ل</p>
-                        <p className="font-bold">
+                        <p className="font-bold text-sm">
                           {userValidity !== "مندوب تسويق"
                             ? item.price3
                             : item.price2}
                         </p>
                       </p>
-                      <p style={{ direction: "rtl" }} className="ml-2">
+                      {/* <p style={{ direction: "rtl" }} className="ml-2">
                         السعر :
-                      </p>
+                      </p> */}
                     </p>
                     {/* <p className="flex">
                       <p className="flex">

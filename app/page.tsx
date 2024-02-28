@@ -1,7 +1,7 @@
 "use client";
 
 // react
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
@@ -15,6 +15,7 @@ import ProductsSlider1 from "@/components/users/sliders/productsSlider1";
 import ProductsSliderCatogety from "@/components/users/sliders/productsSliderCatogety";
 import ElementsSlider from "@/components/users/sliders/elementsSlider";
 import Footer from "@/components/users/footer";
+import CartIcon from "@/components/users/cart";
 
 interface Categories {
   _id: string;
@@ -29,8 +30,9 @@ export default function Home() {
   const [categories, setCategories] = useState<Categories[]>([]);
   const [userName, userValidity] = useCheckLogin();
   const [username, setUsername] = useState("");
+  const [len, setLen] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [lenghtProductInCart, setLenghtProductInCart] = useState(0);
+  const [lenghtProductInCart, setLenghtProductInCart] = useState(len);
   const [lengthProductsInFavourite, setLengthProductsInFavourite] = useState(0);
 
   const updateLengthInCart = (newLength: any) => {
@@ -40,6 +42,32 @@ export default function Home() {
   const updateLengthInFavourite = (newLength: any) => {
     setLengthProductsInFavourite(newLength);
   };
+
+  const GetProductsInCart = useCallback(async () => {
+    try {
+      let response: {
+        data: { token: string; combinedProducts: any; combinedProducts2: any };
+      };
+      response = await axios.get(
+        `${linkServer.link}cart/getProductsInCart/${userName}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+      setLen(response.data.combinedProducts.length);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [userName, secretKey]);
+
+  useEffect(() => {
+    if (userName) {
+      GetProductsInCart();
+    }
+  }, [userName, GetProductsInCart]);
 
   const GetCategories = async () => {
     try {
@@ -81,6 +109,12 @@ export default function Home() {
           <>
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
+                userr={userName}
+                lengthProductsInCart={lenghtProductInCart}
+                lengthProductsInFavourite={lengthProductsInFavourite}
+              />
+              {/* {lenghtProductInCart} */}
+              <CartIcon
                 userr={userName}
                 lengthProductsInCart={lenghtProductInCart}
                 lengthProductsInFavourite={lengthProductsInFavourite}

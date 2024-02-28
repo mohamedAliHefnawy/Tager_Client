@@ -51,7 +51,9 @@ export default function Home() {
           confirmButtonText: "حسنًا",
         });
         localStorage.setItem("user", name);
-        router.push("/");
+        // localStorage.setItem("userValidity", validity);
+
+        router.push("/auth/login");
       }
       if (response.data === "no") {
         Swal.fire({

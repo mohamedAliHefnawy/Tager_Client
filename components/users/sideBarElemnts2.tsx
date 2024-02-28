@@ -33,7 +33,6 @@ export default function SideBarElemnts(props: any) {
         },
       });
       setCategories(response.data.categories);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }

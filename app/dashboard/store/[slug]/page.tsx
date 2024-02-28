@@ -250,12 +250,12 @@ export default function ProductsInStore({
             />
           </div>
         </div>
-        {/* <div className="ml-3">
+        <div className="ml-3">
           <ModaelConvertStore
             productsConvert={returnOrders}
             storeWith={nameStore}
           />
-        </div> */}
+        </div>
       </>
     );
   };

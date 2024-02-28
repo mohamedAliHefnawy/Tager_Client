@@ -70,7 +70,7 @@ export default function ModaelConvertStore({
   const [nameStore, setNameStore] = useState("");
   const [gbsStore, setGbsStore] = useState("");
   const [priceDelivery, setPriceDelivery] = useState("");
-  const [closeBtn, setCloseBtn] = useState(true);
+  const [closeBtn, setCloseBtn] = useState(false);
   const [inputValues, setInputValues] = useState<InputValues>({});
   const [stores, setStores] = useState<Stores[]>([]);
 
@@ -223,27 +223,25 @@ export default function ModaelConvertStore({
   );
 
   const SendProducts = async () => {
-    console.log(inputValues);
+    setCloseBtn(true);
     try {
       const data = {
         inputValues,
-        storeWith
+        storeWith,
       };
       const response = await axios.post(
         `${linkServer.link}stores/convertProductsBetweenStores`,
         data
       );
-      if (response.data === "yes") {
-        toast.success("تم إضافة المخزن بنجاح ✓");
-      }
-      if (response.data === "nameUse") {
+      if (response.data === "done") {
         Swal.fire({
-          icon: "warning",
-          title: "هذا المخزن مستخدم من قبل ",
-          text: "⤫",
+          icon: "success",
+          title: "تم التحويل بنجاح ",
+          text: "✓",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
         });
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
@@ -305,8 +303,8 @@ export default function ModaelConvertStore({
                   إلغاء
                 </Button>
                 <Button
-                  // color={closeBtn ? "default" : "warning"}
-                  // disabled={closeBtn}
+                  color={closeBtn ? "default" : "warning"}
+                  disabled={closeBtn}
                   onClick={SendProducts}
                 >
                   تحويل
