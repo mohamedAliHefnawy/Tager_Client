@@ -67,13 +67,7 @@ interface Data {
   __v: number;
 }
 
-export default function Product({
-  params,
-  updateLengthInCart,
-}: {
-  params: { id: string };
-  updateLengthInCart: any;
-}) {
+export default function Product({ params }: { params: { id: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user, userValidity] = useCheckLogin();
   const [products] = useProducts();
@@ -107,10 +101,6 @@ export default function Product({
   const updateCartLength = (length: any) => {
     setCartLength(length);
   };
-
-  // useEffect(() => {
-  //   updateLengthInCart(cartLength);
-  // }, [cartLength]);
 
   const settings = {
     dots: true,
