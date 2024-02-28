@@ -96,7 +96,10 @@ export default function QRScanner({ name }: { name: string }) {
       ) : (
         <QrScanner
           audio
-          onDecode={(result) => console.log(result)}
+          onDecode={(result) => {
+            setScanResult(result);
+            ScannerOrder();
+          }}
           onError={(error) => console.log(error?.message)}
         />
       )}
