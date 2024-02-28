@@ -53,11 +53,7 @@ interface Data {
   catogry: string | undefined;
 }
 
-export default function Home({
-  updateLengthInCart,
-}: {
-  updateLengthInCart: any;
-}) {
+export default function Home() {
   const [user, userValidity] = useCheckLogin();
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [products, setProducts] = useState<Data[]>([]);
