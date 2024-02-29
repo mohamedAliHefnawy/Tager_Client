@@ -21,6 +21,9 @@ interface Data {
   money: [
     {
       money: number;
+      moneyMarketer: number;
+      moneyDelivery: number;
+      marketer: string;
       notes: string;
       date: string;
       time: string;
@@ -39,22 +42,29 @@ export default function Home() {
   const [closeBtn, setCloseBtn] = useState(true);
   const [dataUser, setDataUser] = useState<Data>();
 
-  const router = useRouter();
-
   const TotalMoney = dataUser?.money
     .filter((money) => money.acceptMoney === true)
     .reduce((calc, alt) => calc + alt.money, 0);
+
+  const TotalMoneyMarkerter = dataUser?.money
+    .filter((money) => money.acceptMoney === true)
+    .reduce((calc, alt) => calc + alt.moneyMarketer, 0);
+
+  const TotalMoneyMDelivery = dataUser?.money
+    .filter((money) => money.acceptMoney === true)
+    .reduce((calc, alt) => calc + alt.moneyDelivery, 0);
 
   const SendMoney = async () => {
     setCloseBtn(true);
     try {
       const data = {
         person: nameDelivery,
-        message: `تم تحويل مبلغ قدرة ${TotalMoney} د.ل من مندوب التوصيل ${nameDelivery}`,
+        marketer: dataUser?.money[dataUser?.money.length - 1].marketer,
+        message: `تم تحويل مبلغ قدرة ${TotalMoney} د.ل من مندوب التوصيل ${nameDelivery} --1${TotalMoneyMarkerter}--2${TotalMoneyMDelivery}--`,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
         notes: notesSend,
-        orders: 12,
+        orders: 0,
       };
 
       const response = await axios.post(

@@ -28,6 +28,7 @@ interface Notifications {
   message: string;
   date: string;
   time: string;
+  marketer: string;
   notes: string;
   person: string;
 }
@@ -47,11 +48,21 @@ export default function NavBar() {
   const AcceptMoney = async (
     person: string,
     message: string,
-    idMessage: string
+    idMessage: string,
+    marketer: string
   ) => {
     const regex = /\d+/;
     let number = 0;
     const match = message.match(regex);
+
+    const [firstNumber, secondNumber] = message
+      .match(/--(\d+)--(\d+)--/)
+      ?.slice(1)
+      .map((number) => parseInt(number, 10)) || [0, 0];
+
+    const marketerMoney = parseInt(String(firstNumber).substring(1));
+    const deliveryMoney = parseInt(String(secondNumber).substring(1));
+
     if (match) {
       number = parseInt(match[0], 10);
     } else {
@@ -62,7 +73,10 @@ export default function NavBar() {
         id: idMessage,
         nameDelivery: person,
         nameAdmin: usernamee,
+        marketer: marketer,
         money: number,
+        marketerMoney,
+        deliveryMoney,
       };
       const response = await axios.post(
         `${linkServer.link}users/acceptMoney `,
@@ -182,7 +196,10 @@ export default function NavBar() {
 
                         {item.message.startsWith("تم تحويل مبلغ قدرة") ? (
                           <>
-                            {item.message}
+                            <span className="">
+                              {item.message.replace(/--\d+--\d+--/, "")}
+                            </span>
+
                             <p
                               onClick={() =>
                                 DeclineMoney(
@@ -197,7 +214,12 @@ export default function NavBar() {
                             </p>
                             <p
                               onClick={() =>
-                                AcceptMoney(item.person, item.message, item._id)
+                                AcceptMoney(
+                                  item.person,
+                                  item.message,
+                                  item._id,
+                                  item.marketer
+                                )
                               }
                               className="text-success-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-success-50 rounded-full p-4"
                             >

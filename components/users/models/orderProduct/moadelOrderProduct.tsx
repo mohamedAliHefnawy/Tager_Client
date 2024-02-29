@@ -5,6 +5,7 @@ import Image from "next/image";
 import Confetti from "react-confetti";
 import Swal from "sweetalert2";
 import linkServer from "@/linkServer";
+import { useRouter } from "next/navigation";
 
 //component
 import NavBar from "@/components/users/navBar";
@@ -69,6 +70,7 @@ export default function MoadelOrderProduct({
 }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user, userValidity] = useCheckLogin();
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [stores, setStores] = useState<Stores[]>([]);
   const [nameClient, setNameClient] = useState("");
@@ -386,10 +388,7 @@ export default function MoadelOrderProduct({
         data
       );
       if (response.data === "yes") {
-        handleSuccess();
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        router.push("/orders");
       }
     } catch (error) {
       console.error(error);

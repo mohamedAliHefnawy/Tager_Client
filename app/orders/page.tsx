@@ -220,12 +220,12 @@ export default function Home() {
             ) : orders.filter((item) => item.marketer === username).length >
               0 ? (
               currentItems
-                .filter((item) =>
-                  selected.includes(
-                    item.situationSteps[item.situationSteps.length - 1]
-                      .situation
-                  )
-                )
+                // .filter((item) =>
+                //   selected.includes(
+                //     item.situationSteps[item.situationSteps.length - 1]
+                //       .situation
+                //   )
+                // )
                 .map((order, index) => (
                   <tr
                     key={index}

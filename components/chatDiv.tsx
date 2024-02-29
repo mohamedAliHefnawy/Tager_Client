@@ -123,25 +123,6 @@ export default function ChatDiv({
 
   return (
     <>
-      {/* <div>
-        <Badge
-          content={filteredMessages.length}
-          color="warning"
-          placement="top-right"
-        >
-          <p
-            onClick={ShowedOrlready}
-            className="p-4 rounded-full text-primary-600 hover:cursor-pointer"
-          >
-            {Icons.ChatbubbleleftrightIcon}
-          </p>
-        </Badge>
-      </div> */}
-
-      {/* <p
-        onClick={handlePrint}
-        className="hover:cursor-pointer hover:opacity-75 bg-primary-200 p-3 mt-1 rounded-full border-1 border-primary-600 text-primary-900"
-      > */}
       <Badge
         content={filteredMessages.length}
         color="warning"
@@ -151,7 +132,7 @@ export default function ChatDiv({
         <p
           onClick={ShowedOrlready}
           className="ml-2 hover:cursor-pointer hover:opacity-75 bg-primary-200 p-3 mt-1 rounded-full border-1 border-primary-600 text-primary-900"
-          >
+        >
           {Icons.ChatbubbleleftrightIcon}
         </p>
       </Badge>

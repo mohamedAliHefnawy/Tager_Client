@@ -458,13 +458,13 @@ export default function MoadelOrderProducts({
                   <p className="mr-1">د.ل</p>
                 </p>
               </div> */}
-              <div className="flex justify-between px-8 py-4">
+              {/* <div className="flex justify-between px-8 py-4">
                 <p> ربح الادمن </p>
                 <p className="flex">
                   <p>{totalProfitAdmin}</p>
                   <p className="mr-1">د.ل</p>
                 </p>
-              </div>
+              </div> */}
               <div className="flex justify-between px-8 py-4">
                 <p> سعر التوصيل </p>
                 <p className="flex">
@@ -531,10 +531,7 @@ export default function MoadelOrderProducts({
         data
       );
       if (response.data === "yes") {
-        handleSuccess();
-        setTimeout(() => {
-          router.push("/orders");
-        }, 2000);
+        router.push("/orders");
       }
     } catch (error) {
       console.error(error);
