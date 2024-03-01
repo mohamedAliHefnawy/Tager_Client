@@ -98,13 +98,13 @@ export default function Home() {
                     <div className="bg-slate-100 lg:w-[35%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] flex flex-col items-center p-4 text-2xl rounded-full">
                       <p>أرباح جاهزة للسحب</p>
                     </div>
-                    <div className="bg-slate-100 w-[35%] flex flex-col items-center p-4 mt-1 rounded-3xl">
+                    <div className="bg-slate-100 lg:w-[35%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] flex flex-col items-center p-4 mt-1 rounded-3xl">
                       <p className="flex text-xl">
                         <p className="mr-1">د.ل</p>
                         <p>{TotalMoney}</p>
                       </p>
                       <div className="mt-4">
-                        <ModaelPullMoney />
+                        <ModaelPullMoney totalMoney={TotalMoney || 0} />
                       </div>
                     </div>
                   </div>

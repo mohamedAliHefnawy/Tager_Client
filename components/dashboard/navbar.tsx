@@ -100,24 +100,37 @@ export default function NavBar() {
   };
 
   const DeclineMoney = async (
-    idMessage: string,
     person: string,
-    message: string
+    message: string,
+    idMessage: string,
+    marketer: string
   ) => {
+    const regex = /\d+/;
+    let number = 0;
+    const match = message.match(regex);
+
+    const [firstNumber, secondNumber] = message
+      .match(/--(\d+)--(\d+)--/)
+      ?.slice(1)
+      .map((number) => parseInt(number, 10)) || [0, 0];
+
+    const marketerMoney = parseInt(String(firstNumber).substring(1));
+    const deliveryMoney = parseInt(String(secondNumber).substring(1));
+
+    if (match) {
+      number = parseInt(match[0], 10);
+    } else {
+      console.log("لم يتم العثور على أي رقم في النص");
+    }
     try {
-      const regex = /\d+/;
-      let number = 0;
-      const match = message.match(regex);
-      if (match) {
-        number = parseInt(match[0], 10);
-      } else {
-        console.log("لم يتم العثور على أي رقم في النص");
-      }
       const data = {
         id: idMessage,
         nameDelivery: person,
         nameAdmin: usernamee,
+        marketer: marketer,
         money: number,
+        marketerMoney,
+        deliveryMoney,
       };
       const response = await axios.post(
         `${linkServer.link}users/declineMoney`,
@@ -203,9 +216,10 @@ export default function NavBar() {
                             <p
                               onClick={() =>
                                 DeclineMoney(
-                                  item._id,
                                   item.person,
-                                  item.message
+                                  item.message,
+                                  item._id,
+                                  item.marketer
                                 )
                               }
                               className="text-danger-600 text-lg mr-6 mb-2 hover:cursor-pointer hover:bg-danger-50 rounded-full p-4"

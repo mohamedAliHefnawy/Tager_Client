@@ -33,7 +33,7 @@ import Link from "next/link";
 
 export default function SideBar() {
   const router = useRouter();
-  
+
   const handleLogout = () => {
     localStorage.removeItem("nameAdmin");
     router.push("/dashboard");
@@ -143,6 +143,11 @@ export default function SideBar() {
           name="الخزينه"
           link="/dashboard/moneySafe"
           icon={icons.BuildinglibraryIcon}
+        />
+        <ElementSideBar
+          name="طلبات السحب"
+          link="/dashboard/withdrawalRequests"
+          icon={icons.BanknotesIcon}
         />
         <ElementSideBar
           name="الموردين"

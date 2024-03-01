@@ -78,6 +78,7 @@ interface ReturnOrders {
 
 export default function Home({ params }: { params: { slug: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const router = useRouter();
   const [nameDelivery, valDelivery] = useCheckLogin();
   const [nameDeliveryy, setNameDeliveryy] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -192,7 +193,7 @@ export default function Home({ params }: { params: { slug: string } }) {
       );
       if (response.data === "yes") {
         toast.success("تم عمل الشراء بنجاح ✓");
-        window.location.reload();
+        router.push("/delivery/moneySafe");
       }
       if (response.data === "no") {
         alert("توجد مشكلة ما. حاول مرة أخرى 😓");

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
+import linkServer from "@/linkServer";
 
 //nextui
 import {
@@ -27,26 +28,43 @@ import { ConvertIcon } from "@/public/svg/convertIcon";
 import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
 import { ShoppingbagIcon } from "@/public/svg/shoppingbagIcon";
 
-export default function ModaelPullMoney(props: any) {
+//components
+import useCheckLogin from "@/components/users/checkLogin/checkLogin";
+import Swal from "sweetalert2";
+
+interface MoneySafe {
+  _id: string;
+  name: string;
+  money: [{ value: string; notes: string }];
+  active: Boolean;
+  image: string;
+}
+
+export default function ModaelPullMoney({
+  totalMoney,
+}: {
+  totalMoney: number;
+}) {
+  const secretKey = "#@6585c49f88fe0cd0da1359a7";
+  const [moneySafe, setMoneySafe] = useState<MoneySafe[]>([]);
+  const [user, userValidity] = useCheckLogin();
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
-  const [selectedProducts, setSelectedProducts] = React.useState<string[]>([
-    "إختر طريقة الدفع",
-  ]);
+  const [money, setMoney] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
-  const handleSelectionChangeProducts = (selectedItems: any) => {
-    if (Array.isArray(selectedItems)) {
-      setSelectedProducts(selectedItems);
-    } else {
-      const keysArray = Array.from(selectedItems);
-      const stringKeysArray = keysArray.map(String);
-      setSelectedProducts(stringKeysArray);
-    }
+  const [selectedPayment, setSelectedPayment] = React.useState(
+    new Set(["إختر طريقة الدفع"])
+  );
+
+  const handleSelectionChange = (selectedItems: string[]) => {
+    setSelectedPayment(new Set(selectedItems));
   };
 
-  const selectedValueProducts = React.useMemo(
-    () => Array.from(selectedProducts).join(", ").replaceAll("_", " "),
-    [selectedProducts]
+  const selectedValuePayment = React.useMemo(
+    () => Array.from(selectedPayment).join(", ").replaceAll("_", " "),
+    [selectedPayment]
   );
 
   const Icons = {
@@ -63,17 +81,26 @@ export default function ModaelPullMoney(props: any) {
       <>
         <div className="p-4">
           <input
-            type="text"
+            type="number"
             className="input"
             placeholder="المبلغ المراد سحبة"
+            value={money}
+            onChange={(e) => {
+              const value = +e.target.value;
+              if (value <= +totalMoney) {
+                setMoney(value.toString());
+              }
+            }}
           />
           <div className="my-3 flex items-center">
             <input
-              type="number"
+              type="string"
               className="input mr-2"
               placeholder="رقم الهاتف"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
-            <Dropdown className="bg-[var(--mainColor)] w-[200%] relative right-24">
+            <Dropdown className=" w-[200%] relative right-24">
               <DropdownTrigger>
                 <Button
                   startContent={Icons.ArrowUturnDownIcon}
@@ -81,27 +108,21 @@ export default function ModaelPullMoney(props: any) {
                   color="warning"
                   className="capitalize w-[100%] h-16 mt-5"
                 >
-                  {selectedValueProducts}
+                  {selectedValuePayment}
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
-                aria-label="Single selection example"
                 variant="flat"
                 disallowEmptySelection
                 selectionMode="single"
-                selectedKeys={selectedProducts}
+                selectedKeys={selectedPayment}
                 onSelectionChange={(keys: string[] | any) =>
-                  handleSelectionChangeProducts(keys)
+                  handleSelectionChange(keys)
                 }
               >
-                <DropdownItem>12</DropdownItem>
-                {/* {methodPayment
-                    .filter((payment) => payment.active === true)
-                    .map((payment) => (
-                      <DropdownItem key={payment.name}>
-                        {payment.name}
-                      </DropdownItem>
-                    ))} */}
+                {moneySafe.map((item) => (
+                  <DropdownItem key={item.name}>{item.name}</DropdownItem>
+                ))}
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -110,6 +131,63 @@ export default function ModaelPullMoney(props: any) {
     );
   };
 
+  const RequestWithdraw = async () => {
+    setCloseBtn(true);
+    try {
+      const data = { money, marketer: user, phoneNumber, selectedValuePayment };
+      const response = await axios.post(
+        `${linkServer.link}withdrawalRequests/addwithdrawalRequest`,
+        data
+      );
+      if (response.data === "yes") {
+        Swal.fire({
+          icon: "success",
+          title: "تم الطلب بنجاح",
+          text: "✓",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+        });
+        window.location.reload();
+
+      }
+      if (response.data === "no") {
+        alert("توجد مشكلة ما. حاول مرة أخرى 😓");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const GetMoneySafe = async () => {
+    try {
+      let response: { data: { token: string; payment: any } };
+      response = await axios.get(`${linkServer.link}payment/getpayment`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
+      setMoneySafe(response.data.payment);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    GetMoneySafe();
+  }, []);
+
+  useEffect(() => {
+    if (
+      money.trim() !== "" &&
+      selectedValuePayment !== "إختر طريقة الدفع" &&
+      phoneNumber.trim() !== ""
+    ) {
+      setCloseBtn(false);
+    } else {
+      setCloseBtn(true);
+    }
+  }, [money, selectedValuePayment, phoneNumber]);
   return (
     <>
       <Button
@@ -140,9 +218,9 @@ export default function ModaelPullMoney(props: any) {
                   إلغاء
                 </Button>
                 <Button
-                // color={closeBtn ? "default" : "primary"}
-                // disabled={closeBtn}
-                // onClick={BuyBroducts}
+                  color={closeBtn ? "default" : "warning"}
+                  disabled={closeBtn}
+                  onClick={RequestWithdraw}
                 >
                   تأكيدالسحب
                 </Button>
