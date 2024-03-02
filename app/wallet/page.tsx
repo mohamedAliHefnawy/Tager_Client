@@ -40,6 +40,14 @@ interface Data {
   ];
 }
 
+interface withdrawalRequests {
+  sumMoney: number;
+  marketer: string;
+  pymentMethod: string;
+  phoneNumber: string;
+  situation: string;
+}
+
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user] = useCheckLogin();
@@ -48,9 +56,7 @@ export default function Home() {
   const [imgUser, setImgUser] = useState("");
   const [imgCompany, setImgCompany] = useState("");
   const [dataUser, setDataUser] = useState<Data>();
-
-  const [color, setColor] = useState("#FF6900");
-
+  const [withdrawUser, setWithdrawUser] = useState<withdrawalRequests[]>([]);
   const [selected, setSelected] = React.useState("1");
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
@@ -74,9 +80,29 @@ export default function Home() {
     }
   };
 
+  const GetWithdrawUser = async () => {
+    try {
+      let response: {
+        data: { token: string; withdrawalRequestsMarketer: any };
+      };
+      response = await axios.get(
+        `${linkServer.link}withdrawalRequests/getWithdrawalRequestsMarketer/${user}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+      setWithdrawUser(response.data.withdrawalRequestsMarketer);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       GetDataUser();
+      GetWithdrawUser();
     }
   }, [user]);
 
@@ -121,94 +147,72 @@ export default function Home() {
                       <p className="w-[15%]">طريقة الدفع</p>
                       <p className="w-[15%]">المبلغ</p>
                     </div>
-                    <div className="bg-slate-100 rounded-3xl py-3 mt-4">
-                      <div className="flex justify-evenly ">
-                        <p className="text-success-500 w-[15%]">
-                          تم التحويل بنجاح
-                        </p>
-                        <p className="w-[15%]">01022595631</p>
-                        <p className="w-[15%]">فوادفون كاش</p>
-                        <p className="flex w-[15%]">
-                          <p className="mr-1">د.ل</p>
-                          <p>100</p>
-                        </p>
-                      </div>
-                      <div className="flex justify-evenly mt-3">
-                        <p className="text-warning-500 w-[15%]">في الإنتظار</p>
-                        <p className="w-[15%]">01022595631</p>
-                        <p className="w-[15%]">فوادفون كاش</p>
-                        <p className="flex w-[15%]">
-                          <p className="mr-1">د.ل</p>
-                          <p>122</p>
-                        </p>
-                      </div>
-                    </div>
+
+                    {withdrawUser
+                      .slice()
+                      .reverse()
+                      .map((item, indexItem) => (
+                        <div
+                          key={indexItem}
+                          className="bg-slate-100 rounded-3xl py-3 mt-4"
+                        >
+                          <div className="flex justify-evenly ">
+                            {item.situation === "في الإنتظار" ? (
+                              <p className="text-warning-500 w-[15%]">
+                                {item.situation}
+                              </p>
+                            ) : (
+                              <p className="text-success-500 w-[15%]">
+                                {item.situation}
+                              </p>
+                            )}
+                            <p className="w-[15%]">{item.phoneNumber}</p>
+                            <p className="w-[15%]">{item.pymentMethod}</p>
+                            <p className="flex w-[15%]">
+                              <p className="mr-1">د.ل</p>
+                              <p>{item.sumMoney}</p>
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                   </div>
-                  <div className="lg:hidden md:hidden sm:block max-sm:block">
-                    <div className="  rounded-3xl bg-slate-100 p-6">
-                      <p className="flex justify-end">
-                        <p className="flex mr-2">
-                          <p>د.ل</p>
-                          <p>100</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>المبلغ |</p>
-                      </p>
-                      <p className="flex justify-end my-3">
-                        <p className="flex mr-2">
-                          <p>01022595631</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>رقم الهاتف |</p>
-                      </p>
-                      <p className="flex justify-end">
-                        <p className="flex mr-2">
-                          <p className="text-success-500">تم التحويل بنجاح</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>الحالة |</p>
-                      </p>
-                    </div>
-                    <div className=" rounded-3xl bg-slate-100 p-6">
-                      <p className="flex justify-end">
-                        <p className="flex mr-2">
-                          <p>د.ل</p>
-                          <p>100</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>المبلغ |</p>
-                      </p>
-                      <p className="flex justify-end my-3">
-                        <p className="flex mr-2">
-                          <p>01022595631</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>رقم الهاتف |</p>
-                      </p>
-                      <p className="flex justify-end">
-                        <p className="flex mr-2">
-                          <p className="text-warning-500">في الإنتظار</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>الحالة |</p>
-                      </p>
-                    </div>
-                    <div className=" rounded-3xl bg-slate-100 p-6">
-                      <p className="flex justify-end">
-                        <p className="flex mr-2">
-                          <p>د.ل</p>
-                          <p>100</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>المبلغ |</p>
-                      </p>
-                      <p className="flex justify-end my-3">
-                        <p className="flex mr-2">
-                          <p>01022595631</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>رقم الهاتف |</p>
-                      </p>
-                      <p className="flex justify-end">
-                        <p className="flex mr-2">
-                          <p className="text-warning-500">في الإنتظار</p>
-                        </p>
-                        <p style={{ direction: "rtl" }}>الحالة |</p>
-                      </p>
-                    </div>
-                  </div>
+
+                  {withdrawUser
+                    .slice()
+                    .reverse()
+                    .map((item, indexItem) => (
+                      <div className="lg:hidden md:hidden sm:block max-sm:block">
+                        <div className="  rounded-3xl bg-slate-100 p-6 mb-3">
+                          <p className="flex justify-end">
+                            <p className="flex mr-2">
+                              <p className="mr-2">د.ل</p>
+                              <p>{item.sumMoney}</p>
+                            </p>
+                            <p style={{ direction: "rtl" }}>المبلغ |</p>
+                          </p>
+                          <p className="flex justify-end my-3">
+                            <p className="flex mr-2">
+                              <p>{item.phoneNumber}</p>
+                            </p>
+                            <p style={{ direction: "rtl" }}>رقم الهاتف |</p>
+                          </p>
+                          <p className="flex justify-end">
+                            <p className="flex mr-2">
+                              {item.situation === "في الإنتظار" ? (
+                                <p className="text-warning-500">
+                                  {item.situation}
+                                </p>
+                              ) : (
+                                <p className="text-success-500">
+                                  {item.situation}
+                                </p>
+                              )}
+                            </p>
+                            <p style={{ direction: "rtl" }}>الحالة |</p>
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                 </CardBody>
               </Card>
             </Tab>

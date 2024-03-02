@@ -20,19 +20,27 @@ import {
   CardBody,
 } from "@nextui-org/react";
 
+//components
+import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
+
+
 //svgIcons
 import { PlusIcon } from "../../../../public/svg/plusIcon";
 import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
 import { PhotoIcon } from "../../../../public/svg/photoIcon";
 import { PencilIcon } from "../../../../public/svg/pencilIcon";
+import { BanknotesIcon } from "../../../../public/svg/banknotesIcon";
 
 export default function ModelwithdrawalRequests({
-  idOrder,
-  delivery,
+  idWithdrawalRequests,
+  PaymentWithdrawalRequests,
+  moneyWithdrawalRequests,
 }: {
-  idOrder: string;
-  delivery: string;
+  idWithdrawalRequests: string;
+  PaymentWithdrawalRequests: string;
+  moneyWithdrawalRequests: number;
 }) {
+  const [nameAdmin] = useCheckLogin();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
   const [selected, setSelected] = React.useState("1");
@@ -49,82 +57,43 @@ export default function ModelwithdrawalRequests({
     FingerPrintIcon: <FingerPrintIcon />,
     PhotoIcon: <PhotoIcon />,
     PencilIcon: <PencilIcon />,
+    BanknotesIcon: <BanknotesIcon />,
   };
 
-  const ChangeSituation = (newSituation: string) => {
-    const newSituationItem = {
-      situation: newSituation,
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
-    };
-    const isAlreadySelected = situation.some(
-      (item) => item.situation === newSituation
-    );
-    if (isAlreadySelected) {
-      setSituation((prevSituation) =>
-        prevSituation.filter((item) => item.situation !== newSituation)
+  const Confirm = async () => {
+    try {
+      const data = {
+        idWithdrawalRequests,
+        PaymentWithdrawalRequests,
+        moneyWithdrawalRequests,
+        nameAdmin
+      };
+      const response = await axios.post(
+        `${linkServer.link}withdrawalRequests/confirmPayment`,
+        data
       );
-    } else {
-      setSituation((prevSituation) => [...prevSituation, newSituationItem]);
+      if (response.data === "yes") {
+        window.location.reload();
+      }
+      if (response.data === "no") {
+        alert("توجد مشكلة ما. حاول مرة أخرى 😓");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
-
-  const tabs = () => {
-    return <>12</>;
-  };
-
-  // const EditOrder = async () => {
-  //   setCloseBtn(true);
-  //   try {
-  //     const data = { idOrder: idOrder, situationOrder: situation };
-  //     const response = await axios.post(
-  //       `${linkServer.link}orders/editOrderSituation`,
-  //       data
-  //     );
-  //     if (response.data === "yes") {
-  //       // alert("تم تعديل الصنف بنجاح ✓");
-  //       // sendDataToParent({
-  //       //   orderId: order._id,
-  //       //   data: situation[situation.length - 1].situation,
-  //       // });
-  //       window.location.reload();
-  //     }
-  //     if (response.data === "no") {
-  //       alert("توجد مشكلة ما. حاول مرة أخرى 😓");
-  //       window.location.reload();
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (situationSteps) {
-  //     setSituation(situationSteps);
-  //   }
-  // }, [situationSteps]);
-
-  // useEffect(() => {
-  //   if (
-  //     situation !== situationSteps &&
-  //     situationSteps[situationSteps.length - 1].situation !== "تم إستلام الكاش"
-  //   ) {
-  //     setCloseBtn(false);
-  //   } else {
-  //     setCloseBtn(true);
-  //   }
-  // }, [situation]);
 
   return (
     <>
       <p
         onClick={onOpen}
-        className="hover:cursor-pointer hover:opacity-75 bg-warning-200 p-3 mt-1 rounded-full border-1 border-warning-600 text-warning-900"
+        className="hover:cursor-pointer hover:opacity-75 bg-success-200 p-3 mt-1 rounded-full border-1 border-success-600 text-success-900"
       >
-        {icons.PencilIcon}
+        {icons.BanknotesIcon}
       </p>
       <Modal
-        size="5xl"
+        size="md"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}
@@ -132,10 +101,22 @@ export default function ModelwithdrawalRequests({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                تعديل الطلبية
-              </ModalHeader>
-              <ModalBody>{tabs()}</ModalBody>
+              <ModalHeader className="flex flex-col gap-1">تأكيد !</ModalHeader>
+              <ModalBody>
+                <p className="flex">
+                  <span className="mr-1 font-bold">
+                    {PaymentWithdrawalRequests}
+                  </span>
+                  <span>
+                    سيتم خصم مبلغ قيمته
+                    <span className="mx-1 font-bold">
+                      <span>{moneyWithdrawalRequests}</span>
+                      <span>د.ل</span>
+                    </span>
+                    من محفظة
+                  </span>
+                </p>
+              </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   إلغاء
@@ -143,10 +124,10 @@ export default function ModelwithdrawalRequests({
                 <Button
                   color="warning"
                   // disabled={closeBtn}
-                  // onClick={EditOrder}/
+                  onClick={Confirm}
                   onPress={onClose}
                 >
-                  تعديل
+                  تأكيد
                 </Button>
               </ModalFooter>
             </>

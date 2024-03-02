@@ -148,7 +148,6 @@ export default function ModaelPullMoney({
           confirmButtonText: "حسنًا",
         });
         window.location.reload();
-
       }
       if (response.data === "no") {
         alert("توجد مشكلة ما. حاول مرة أخرى 😓");

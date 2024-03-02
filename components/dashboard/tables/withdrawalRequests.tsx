@@ -20,7 +20,7 @@ import QrCode from "../modals/orders/qrCode";
 import ChatDiv from "@/components/chatDiv";
 import Scanner from "@/components/delivery/scanner";
 import QRCode from "qrcode.react";
-import useCheckLogin from "@/components/users/checkLogin/checkLogin";
+import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 
 //svg
 import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
@@ -40,6 +40,7 @@ interface WithdrawalRequests {
   _id: string;
   sumMoney: number;
   pymentMethod: string;
+  marketer: string;
   phoneNumber: string;
   situation: string;
 }
@@ -55,10 +56,7 @@ export default function WithdrawalRequests() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = React.useState([
-    // "مع الشحن",
-    "بإنتظار الموافقة",
-  ]);
+  const [selected, setSelected] = React.useState(["في الإنتظار"]);
   const itemsPerPage = 6;
   const router = useRouter();
 
@@ -73,24 +71,33 @@ export default function WithdrawalRequests() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const filteredOrders = withdrawalRequests.filter((withdrawalRequest) => {
-    const lowerCaseSearchText = searchText.toLowerCase();
-    return (
-      // (withdrawalRequest.sumMoney &&
-      //   withdrawalRequest.sumMoney.includes(lowerCaseSearchText)) ||
-      (withdrawalRequest.pymentMethod &&
-        withdrawalRequest.pymentMethod
-          .toString()
-          .includes(lowerCaseSearchText)) ||
-      (withdrawalRequest.phoneNumber &&
-        withdrawalRequest.phoneNumber.toString().includes(lowerCaseSearchText))
-    );
-  });
+  const filteredWithdrawalRequests = withdrawalRequests
+    .filter((item) => selected.includes(item.situation))
+    .filter((withdrawalRequest) => {
+      const lowerCaseSearchText = searchText.toLowerCase();
+      return (
+        (withdrawalRequest.pymentMethod &&
+          withdrawalRequest.pymentMethod
+            .toString()
+            .includes(lowerCaseSearchText)) ||
+        (withdrawalRequest.marketer &&
+          withdrawalRequest.marketer
+            .toString()
+            .includes(lowerCaseSearchText)) ||
+        (withdrawalRequest.phoneNumber &&
+          withdrawalRequest.phoneNumber
+            .toString()
+            .includes(lowerCaseSearchText))
+      );
+    });
 
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage);
   };
-  const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredWithdrawalRequests.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   const GetwithdrawalRequests = async () => {
     setLoading(true);
@@ -138,74 +145,37 @@ export default function WithdrawalRequests() {
               >
                 <Checkbox
                   className="mr-6 sm:mr-1 max-sm:mr-1"
-                  value="بإنتظار الموافقة"
+                  value="في الإنتظار"
                 >
-                  بإنتظار الموافقة
+                  في الإنتظار
                 </Checkbox>
                 <Checkbox
                   className="mr-6 sm:mr-1 max-sm:mr-1"
-                  value="تم القبول"
+                  value="تم التحويل"
                 >
-                  تم القبول
-                </Checkbox>
-                <Checkbox className="mr-6 sm:mr-1 max-sm:mr-1" value="تم الرفض">
-                  تم الرفض
-                </Checkbox>
-                <Checkbox className="mr-6 sm:mr-1 max-sm:mr-1" value="مع الشحن">
-                  مع الشحن
-                </Checkbox>
-                <Checkbox
-                  className="mr-6 sm:mr-1 max-sm:mr-1"
-                  value="تم التوصيل"
-                >
-                  تم التوصيل
-                </Checkbox>
-                <Checkbox
-                  className="mr-6 sm:mr-1 max-sm:mr-1"
-                  value="تم الإسترجاع"
-                >
-                  تم الإسترجاع
-                </Checkbox>
-                <Checkbox
-                  className="mr-6 sm:mr-1 max-sm:mr-1"
-                  value="إسترجاع جزئي"
-                >
-                  إسترجاع جزئي
-                </Checkbox>
-                <Checkbox
-                  className="mr-6 sm:mr-1 max-sm:mr-1"
-                  value="تم إستلام الكاش"
-                >
-                  تم إستلام الكاش
+                  تم التحويل
                 </Checkbox>
               </CheckboxGroup>
             </div>
           </div>
-          {/* <ModelAddStore
-            nameStoree={nameStore}
-            setNameStoree={setNameStore}
-            gbsStoree={nameStore}
-            setGbsStoree={setNameStore}
-            onAddStoree={handleAddCategory}
-          /> */}
         </div>
         <div className="mt-3 ml-2 text-black opacity-60 text-sm">
-          <p>Total {filteredOrders.length} Orders </p>
+          <p>Total {filteredWithdrawalRequests.length} withdrawalRequests </p>
         </div>
 
         <div>
           <div className="flex items-center mt-4 mb-3 p-4 pr-10 pl-10 bg-[var(--mainColorRgba)] shadow-lg shadow-[var(--mainColorRgba)] rounded-2xl text-black opacity-75">
             <div className="w-[25%] text-center">
-              <p>إسم العميل</p>
+              <p>مندوب التسويق</p>
+            </div>
+            <div className="w-[25%] text-center">
+              <p>طريقة الدفع</p>
+            </div>
+            <div className="w-[25%] text-center">
+              <p>المبلغ</p>
             </div>
             <div className="w-[25%] text-center">
               <p>رقم الهاتف</p>
-            </div>
-            <div className="w-[25%] text-center">
-              <p>العنوان</p>
-            </div>
-            <div className="w-[25%] text-center">
-              <p>مندوب التسويق</p>
             </div>
             <div className="w-[25%] text-center">
               <p>الحالة</p>
@@ -223,36 +193,45 @@ export default function WithdrawalRequests() {
                 className="flex items-center  p-4 pr-10 pl-10 bg-[var(--mainColorRgbaa)] shadow-lg rounded-2xl border-1 mb-1 border-[var(--mainColor)] text-black opacity-75"
               >
                 <div className="w-[25%] text-center">
-                  <p
-                    className="hover:cursor-pointer"
-                    onClick={() =>
-                      router.push(`/dashboard/orders/${withdrawalRequest._id}`)
-                    }
-                  >
-                    {withdrawalRequest.sumMoney}
+                  <p>{withdrawalRequest.marketer}</p>
+                </div>
+                <div className="w-[25%] text-center">
+                  <p>{withdrawalRequest.pymentMethod}</p>
+                </div>
+                <div className="w-[25%] text-center">
+                  <p className="flex justify-center">
+                    <span className="mr-1">د.ل</span>
+                    <span>{withdrawalRequest.sumMoney}</span>
                   </p>
                 </div>
                 <div className="w-[25%] text-center">
-                  <p>{withdrawalRequest.sumMoney}</p>
+                  <p>{withdrawalRequest.phoneNumber}</p>
                 </div>
                 <div className="w-[25%] text-center">
-                  <p>{withdrawalRequest.sumMoney}</p>
-                </div>
-                <div className="w-[25%] text-center">
-                  <p>{withdrawalRequest.sumMoney}</p>
-                </div>
-                <div className="w-[25%] text-center">
-                  <p>12</p>
+                  <p>
+                    {withdrawalRequest.situation === "في الإنتظار" ? (
+                      <p className="text-warning-600">
+                        {withdrawalRequest.situation}
+                      </p>
+                    ) : (
+                      <p className="text-success-600">
+                        {withdrawalRequest.situation}
+                      </p>
+                    )}
+                  </p>
                 </div>
 
                 <div className="w-[33%] text-right">
                   <div className="flex justify-center items-center">
                     <div>
                       <ModelwithdrawalRequests
-                        idOrder={withdrawalRequest._id}
-                        // situationSteps={withdrawalRequest._id}
-                        delivery={withdrawalRequest._id}
-                        // sendDataToParent={receiveDataFromChild}
+                        idWithdrawalRequests={withdrawalRequest._id}
+                        PaymentWithdrawalRequests={
+                          withdrawalRequest.pymentMethod
+                        }
+                        moneyWithdrawalRequests={
+                          withdrawalRequest.sumMoney
+                        }
                       />
                     </div>
                   </div>
@@ -267,7 +246,7 @@ export default function WithdrawalRequests() {
             showShadow
             color="primary"
             variant="faded"
-            total={Math.ceil(filteredOrders.length / itemsPerPage)}
+            total={Math.ceil(filteredWithdrawalRequests.length / itemsPerPage)}
             initialPage={currentPage}
             onChange={handlePageChange}
           />
