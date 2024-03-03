@@ -63,7 +63,6 @@ export default function NavBar({
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
   const [user, userValidity] = useCheckLogin();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [showDev, setShowDev] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
   const [password, setPassword] = useState("");

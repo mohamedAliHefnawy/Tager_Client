@@ -39,9 +39,7 @@ export default function Home() {
         password,
       };
       const response = await axios.post(`${linkServer.link}users/login`, data);
-
       const { validity, answer } = response.data;
-
       if (answer === "yes") {
         if (validity === "مندوب تسويق" || validity === "زبون عادي") {
           Swal.fire({
@@ -80,16 +78,6 @@ export default function Home() {
           icon: "error",
           title: "هذا المستخدم غير موجود",
           text: "⤫",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-      }
-
-      if (answer === "error") {
-        Swal.fire({
-          icon: "error",
-          title: "توجد مشكلة ما. حاول مرة أخرى",
-          text: "😓",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
         });

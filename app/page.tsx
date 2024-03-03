@@ -28,7 +28,7 @@ interface Categories {
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [categories, setCategories] = useState<Categories[]>([]);
-  const [userName, userValidity] = useCheckLogin();
+  const [user] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [len, setLen] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -49,7 +49,7 @@ export default function Home() {
         data: { token: string; combinedProducts: any; combinedProducts2: any };
       };
       response = await axios.get(
-        `${linkServer.link}cart/getProductsInCart/${userName}`,
+        `${linkServer.link}cart/getProductsInCart/${user}`,
 
         {
           headers: {
@@ -61,13 +61,13 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
-  }, [userName, secretKey]);
+  }, [user, secretKey]);
 
   useEffect(() => {
-    if (userName) {
+    if (user) {
       GetProductsInCart();
     }
-  }, [userName, GetProductsInCart]);
+  }, [user, GetProductsInCart]);
 
   const GetCategories = async () => {
     try {
@@ -88,9 +88,9 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (userName) {
+    if (user) {
       const timeoutId = setTimeout(() => {
-        setUsername(userName);
+        setUsername(user);
         setIsLoading(false);
       }, 2000);
 
@@ -98,24 +98,23 @@ export default function Home() {
     } else {
       setIsLoading(false);
     }
-  }, [userName]);
+  }, [user]);
 
   return (
     <>
       <div>
         {isLoading ? (
           <Loading />
-        ) : userName ? (
+        ) : user ? (
           <>
             <div className="w-[100%] flex-col flex items-center">
               <NavBar
-                userr={userName}
+                userr={user}
                 lengthProductsInCart={lenghtProductInCart}
                 lengthProductsInFavourite={lengthProductsInFavourite}
               />
-              {/* {lenghtProductInCart} */}
               <CartIcon
-                userr={userName}
+                userr={user}
                 lengthProductsInCart={lenghtProductInCart}
                 lengthProductsInFavourite={lengthProductsInFavourite}
               />

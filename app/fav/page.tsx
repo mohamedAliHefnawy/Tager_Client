@@ -105,11 +105,11 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      GetProductsInCart();
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     GetProductsInCart();
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     if (user) {
