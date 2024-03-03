@@ -1,7 +1,7 @@
 "use client";
 
 // react
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { TwitterPicker } from "react-color";
 import { getUnixTime } from "date-fns";
@@ -335,7 +335,7 @@ export default function Home() {
     }
   };
 
-  const GetDataUser = async () => {
+  const GetDataUser = useCallback(async () => {
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(`${linkServer.link}users/getUser/${user}`, {
@@ -344,7 +344,6 @@ export default function Home() {
         },
       });
       setDataUser(response.data.user);
-      // setNewName(response.data.user.name);
       setPhoneMarketer(response.data.user.phone);
       setImageURLMarketr(response.data.user.image);
       setPhoneCompany(response.data.user.phoneCompany);
@@ -354,11 +353,12 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
-  };
-
+  }, [user, secretKey]); // Add dependencies here
+  
   useEffect(() => {
     GetDataUser();
-  }, []);
+  }, [GetDataUser]);
+  
 
   // useEffect(() => {
   //   if (newName === "") {
@@ -369,19 +369,24 @@ export default function Home() {
   // }, [newName]);
 
   useEffect(() => {
-    if (user) {
-      const timeoutId = setTimeout(() => {
-        setUsername(user);
-        // setNewName(user);
+    const fetchData = async () => {
+      if (user) {
+        const timeoutId = setTimeout(async () => {
+          setUsername(user);
+          // setNewName(user);
+          setIsLoading(false);
+          await GetDataUser();
+        }, 2000);
+  
+        return () => clearTimeout(timeoutId);
+      } else {
         setIsLoading(false);
-      }, 2000);
-      GetDataUser();
-
-      return () => clearTimeout(timeoutId);
-    } else {
-      setIsLoading(false);
-    }
-  }, [user]);
+      }
+    };
+  
+    fetchData();
+  }, [user, GetDataUser]);
+  
 
   return (
     <>

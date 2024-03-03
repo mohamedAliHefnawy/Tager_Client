@@ -175,7 +175,9 @@ export default function ModelEditCategory({
     } else {
       setCloseBtn(true);
     }
-  }, [imageURL, nameCatogry]);
+  }, [imageURL, nameCatogry, active, imageCategoryy, nameCategoryy]);
+  
+  
 
   return (
     <>

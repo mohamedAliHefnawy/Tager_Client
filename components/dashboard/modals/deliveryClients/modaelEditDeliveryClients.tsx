@@ -271,7 +271,16 @@ export default function ModaelEditDeliveryClients({
     } else {
       setCloseBtn(true);
     }
-  }, [name, phone, password, selectedValueValidity]);
+  }, [
+    name,
+    phone,
+    password,
+    selectedValueValidity,
+    nameEmployee,
+    phoneEmployee,
+    validitiyEmployee,
+    passwordEmployee,
+  ]);
 
   return (
     <>

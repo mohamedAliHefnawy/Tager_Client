@@ -1,7 +1,7 @@
 "use client";
 
 import { Html5QrcodeScanner } from "html5-qrcode";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -29,7 +29,7 @@ export default function QRScanner({ name }: { name: string }) {
     console.error(error);
   };
 
-  const ScannerOrder = async () => {
+  const ScannerOrder = useCallback(async () => {
     try {
       const data = {
         deliveryName: name,
@@ -55,7 +55,7 @@ export default function QRScanner({ name }: { name: string }) {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [name, scanResult, router]);
 
   // useEffect(() => {
   //   scanner = new Html5QrcodeScanner(
@@ -87,7 +87,7 @@ export default function QRScanner({ name }: { name: string }) {
     if (scanResult) {
       ScannerOrder();
     }
-  }, [scanResult]);
+  }, [scanResult, ScannerOrder]);
 
   return (
     <>

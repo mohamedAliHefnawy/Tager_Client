@@ -1,7 +1,7 @@
 "use client";
 
 // react
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { TwitterPicker } from "react-color";
 import linkServer from "@/linkServer";
@@ -66,45 +66,45 @@ export default function Home() {
     .filter((money) => money.acceptMoney === true)
     .reduce((calc, alt) => calc + alt.money, 0);
 
-  const GetDataUser = async () => {
-    try {
-      let response: { data: { token: string; user: any } };
-      response = await axios.get(`${linkServer.link}users/getUser/${user}`, {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
-      setDataUser(response.data.user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const GetWithdrawUser = async () => {
-    try {
-      let response: {
-        data: { token: string; withdrawalRequestsMarketer: any };
-      };
-      response = await axios.get(
-        `${linkServer.link}withdrawalRequests/getWithdrawalRequestsMarketer/${user}`,
-        {
+    const GetDataUser = useCallback(async () => {
+      try {
+        let response: { data: { token: string; user: any } };
+        response = await axios.get(`${linkServer.link}users/getUser/${user}`, {
           headers: {
             Authorization: `Bearer ${secretKey}`,
           },
-        }
-      );
-      setWithdrawUser(response.data.withdrawalRequestsMarketer);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+        });
+        setDataUser(response.data.user);
+      } catch (error) {
+        console.log(error);
+      }
+    }, [user, secretKey, setDataUser]);
+
+    const GetWithdrawUser = useCallback(async () => {
+      try {
+        let response: {
+          data: { token: string; withdrawalRequestsMarketer: any };
+        };
+        response = await axios.get(
+          `${linkServer.link}withdrawalRequests/getWithdrawalRequestsMarketer/${user}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setWithdrawUser(response.data.withdrawalRequestsMarketer);
+      } catch (error) {
+        console.log(error);
+      }
+    }, [ user, secretKey, setWithdrawUser]);
 
   useEffect(() => {
     if (user) {
       GetDataUser();
       GetWithdrawUser();
     }
-  }, [user]);
+  }, [user, GetDataUser, GetWithdrawUser]);
 
   const tabs = () => {
     return (

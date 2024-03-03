@@ -1,12 +1,12 @@
-//react
-import React, { useState, useEffect } from "react";
+// react
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
-//components
+// components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 
-//svg
+// svg
 import { BackwardIcon } from "@/public/svg/backwardIcon";
 import { HeartIcon } from "@/public/svg/heartIcon";
 import { HeartIcon2 } from "@/public/svg/heartIcon2";
@@ -40,12 +40,10 @@ export default function ButtonAddToFavourite({
   const [products, setProducts] = useState<Products[]>([]);
   const [len, setLen] = useState(0);
 
-  let arrProductsInFavourite: any[] = [];
-  const storedData = localStorage.getItem("productsFavourite");
-
-  if (storedData !== null) {
-    arrProductsInFavourite = JSON.parse(storedData);
-  }
+  const [arrProductsInFavourite, setArrProductsInFavourite] = useState(() => {
+    const storedData = localStorage.getItem("productsFavourite");
+    return storedData !== null ? JSON.parse(storedData) : [];
+  });
 
   const [lenghtProductInFavourite, setLenghtProductInFavourite] = useState(
     arrProductsInFavourite.length
@@ -58,7 +56,7 @@ export default function ButtonAddToFavourite({
     ShoppingcartIcon: <ShoppingcartIcon />,
   };
 
-  const GetProductsInCart = async () => {
+  const GetProductsInFavourite = useCallback(async () => {
     try {
       let response: {
         data: { token: string; combinedProducts: any };
@@ -75,13 +73,13 @@ export default function ButtonAddToFavourite({
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [user, setLen, secretKey]);
 
   useEffect(() => {
     if (user) {
-      GetProductsInCart();
+      GetProductsInFavourite();
     }
-  }, [user]);
+  }, [user, GetProductsInFavourite]);
 
   const addToFavourite = async (idProduct: any, sizeProduct: any) => {
     try {
@@ -96,11 +94,12 @@ export default function ButtonAddToFavourite({
 
       if (response.data === "noExit") {
         if (!arrProductsInFavourite.includes(idProduct)) {
-          arrProductsInFavourite.push(idProduct);
-          setLenghtProductInFavourite(arrProductsInFavourite.length);
+          const updatedFavourite = [...arrProductsInFavourite, idProduct];
+          setArrProductsInFavourite(updatedFavourite);
+          updateParent(updatedFavourite.length);
           localStorage.setItem(
             "productsFavourite",
-            JSON.stringify(arrProductsInFavourite)
+            JSON.stringify(updatedFavourite)
           );
         }
       }
@@ -108,7 +107,8 @@ export default function ButtonAddToFavourite({
         const updatedFavourite = arrProductsInFavourite.filter(
           (productId: any) => productId !== idProduct
         );
-        setLenghtProductInFavourite(arrProductsInFavourite.length - 1);
+        setArrProductsInFavourite(updatedFavourite);
+        updateParent(updatedFavourite.length);
         localStorage.setItem(
           "productsFavourite",
           JSON.stringify(updatedFavourite)
@@ -120,8 +120,8 @@ export default function ButtonAddToFavourite({
   };
 
   useEffect(() => {
-    setLenghtProductInFavourite(lenghtProductInFavourite);
-  }, [arrProductsInFavourite]);
+    setLenghtProductInFavourite(arrProductsInFavourite.length);
+  }, [arrProductsInFavourite, setLenghtProductInFavourite]);
 
   return (
     <>
@@ -134,7 +134,6 @@ export default function ButtonAddToFavourite({
         } hover:cursor-pointer`}
       >
         {Icons.HeartIcon}
-        
       </p>
     </>
   );

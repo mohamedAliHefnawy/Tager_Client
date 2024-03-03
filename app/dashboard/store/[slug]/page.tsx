@@ -1,7 +1,7 @@
 "use client";
 
 // react
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
@@ -133,7 +133,7 @@ export default function ProductsInStore({
     }
   };
 
-  const GetProductsInStore = async () => {
+  const fetchDataProductsInStore = useCallback(async () => {
     setLoading(true);
     try {
       let response: {
@@ -154,11 +154,10 @@ export default function ProductsInStore({
     } finally {
       setLoading(false);
     }
-  };
-
+  }, [params.slug, secretKey]);
   useEffect(() => {
-    GetProductsInStore();
-  }, []);
+    fetchDataProductsInStore();
+  }, [fetchDataProductsInStore]);
 
   const Details = () => {
     return (

@@ -395,30 +395,32 @@ export default function MoadelOrderProduct({
     }
   };
 
-  const GetDataUser = async () => {
-    try {
-      let response: { data: { token: string; user: any } };
-      response = await axios.get(
-        `${linkServer.link}users/getUser/${nameUser}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-
-      setPhoneCompany(response.data.user.phoneCompany);
-      setNameCompany(response.data.user.nameCompany);
-      setImageURLCompany(response.data.user.imageCompany);
-      setColor(response.data.user.colorCompany);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    GetDataUser();
-  }, []);
+    const fetchData = async () => {
+      try {
+        let response: { data: { token: string; user: any } };
+        response = await axios.get(
+          `${linkServer.link}users/getUser/${nameUser}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+  
+        setPhoneCompany(response.data.user.phoneCompany);
+        setNameCompany(response.data.user.nameCompany);
+        setImageURLCompany(response.data.user.imageCompany);
+        setColor(response.data.user.colorCompany);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    if (nameUser) {
+      fetchData();
+    }
+  }, [nameUser, secretKey]);
 
   useEffect(() => {
     if (

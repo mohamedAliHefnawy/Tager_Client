@@ -204,28 +204,34 @@ export default function Home({ params }: { params: { slug: string } }) {
     }
   };
 
-  const GetOrder = async () => {
-    setLoading(true);
-    try {
-      let response: {
-        data: { token: string; order: any };
-      };
-      response = await axios.get(
-        `${linkServer.link}scanner/getOrder/${params.slug}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setOrder(response.data.order);
-      // setNoReturnOrders(response.data.order?.products);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let response: {
+          data: { token: string; order: any };
+        };
+        response = await axios.get(
+          `${linkServer.link}scanner/getOrder/${params.slug}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setOrder(response.data.order);
+        // setNoReturnOrders(response.data.order?.products);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (nameDelivery) {
+      fetchData();
     }
-  };
+  }, [nameDelivery, params.slug, secretKey]);
 
   useEffect(() => {
     if (selectedValueSituationOrder !== "تغيير حالة الطلبية") {
@@ -234,12 +240,6 @@ export default function Home({ params }: { params: { slug: string } }) {
       setCloseBtn(true);
     }
   }, [selectedValueSituationOrder]);
-
-  useEffect(() => {
-    if (nameDelivery) {
-      GetOrder();
-    }
-  }, [nameDelivery]);
 
   useEffect(() => {
     if (nameDelivery) {

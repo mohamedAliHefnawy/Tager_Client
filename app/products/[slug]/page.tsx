@@ -1,7 +1,7 @@
 "use client";
 
 // react
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -125,7 +125,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     indexOfLastItem
   );
 
-  const GetProducts = async () => {
+  const GetProducts = useCallback(async () => {
     setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
@@ -145,26 +145,37 @@ export default function Home({ params }: { params: { slug: string } }) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const GetCategories = async () => {
-    try {
-      let response: { data: { token: string; categories: any } };
-      response = await axios.get(`${linkServer.link}categories/getCategories`, {
-        headers: {
-          Authorization: `Bearer ${secretKey}`,
-        },
-      });
-      setCategories(response.data.categories);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, [params.slug, secretKey, setProducts, setLoading]);
 
   useEffect(() => {
     GetProducts();
-    GetCategories();
-  }, []);
+  }, [GetProducts]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response: { data: { token: string; categories: any } };
+        response = await axios.get(
+          `${linkServer.link}categories/getCategories`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setCategories(response.data.categories);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const fetchDataAndProducts = async () => {
+      await GetProducts();
+      fetchData();
+    };
+
+    fetchDataAndProducts();
+  }, [secretKey, GetProducts]);
 
   useEffect(() => {
     if (user) {

@@ -319,33 +319,33 @@ export default function Home() {
     );
   };
 
-  const GetProductsInCart = async () => {
-    setLoading(true);
-    try {
-      let response: {
-        data: { token: string; ordersData: any };
-      };
-      response = await axios.get(
-        `${linkServer.link}scanner/getOrders/${user}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setOrders(response.data.ordersData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let response: {
+          data: { token: string; ordersData: any };
+        };
+        response = await axios.get(
+          `${linkServer.link}scanner/getOrders/${user}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setOrders(response.data.ordersData);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (user) {
-      GetProductsInCart();
+      fetchData();
     }
-  }, [user]);
+  }, [user, secretKey]);
 
   useEffect(() => {
     if (user) {

@@ -14,7 +14,7 @@ import DivCheck from "../../../../components/dashboard/checkLogin/divCheck";
 import Loading from "../loading";
 
 // react
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 //imgaes
@@ -312,7 +312,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     }
   };
 
-  const GetMoneySafeOne = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(
@@ -324,11 +324,10 @@ export default function Home({ params }: { params: { slug: string } }) {
     } finally {
       setLoading(false);
     }
-  };
-
+  }, [params.slug]);
   useEffect(() => {
-    GetMoneySafeOne();
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     if (num.trim() !== "" && num.trim() !== "0") {

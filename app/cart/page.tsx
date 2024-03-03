@@ -83,17 +83,23 @@ export default function Home() {
     setProducts(updatedProducts);
   };
 
-  const Size = (id: any) => {
-    return sizes.find((item2) => item2[0] === id)?.[1];
-  };
+  const Size = useCallback(
+    (id: any): any | undefined => {
+      return sizes.find((item2) => item2[0] === id)?.[1];
+    },
+    [sizes]
+  );
 
-  const Amount = (size: any, id: any) => {
-    return size
-      .filter((item2: any) => item2.size === Size(id))
-      .map((item3: any) =>
-        item3.store.reduce((acc: any, calc: any) => acc + calc.amount, 0)
-      );
-  };
+  const Amount = useCallback(
+    (size: any[], id: any, sizes: Products[]) => {
+      return size
+        .filter((item2) => item2.size === Size(id))
+        .map((item3) =>
+          item3.store.reduce((acc: number, calc: any) => acc + calc.amount, 0)
+        );
+    },
+    [Size] // زرع 'Size' كتبعية هنا
+  );
 
   const GetProductsInCart = useCallback(async () => {
     setLoading(true);
@@ -167,22 +173,16 @@ export default function Home() {
                     width={100}
                     height={100}
                   />
-                  {/* {Size(item._id)} */}
-                  {/* {products.map((item) => item._id)} */}
                 </div>
                 <div className=" rounded-2xl py-2 mt-2">
                   <div className="text-red-500 flex justify-center py-2">
-                    {Amount(item.size, item._id) <= 0 && <p>غير متوفر</p>}
+                    {Array.isArray(Amount(item.size, item._id, sizes)) &&
+                      Amount(item.size, item._id, sizes).length === 0 && (
+                        <p>غير متوفر</p>
+                      )}
                   </div>
-                  <div
-                    // onClick={() =>
-                    //   router.push(`/products/${item.catogry}/${item._id}`)
-                    // }
-                    className="flex justify-center items-center text-sm"
-                  >
+                  <div className="flex justify-center items-center text-sm">
                     <p> {item.name} </p>
-                    {/* <p> {Size(item._id)} </p> */}
-
                     <p className="text-[var(--mainColor)] ml-1"> ☍ </p>
                   </div>
                   <div className="flex flex-col items-center">
@@ -265,13 +265,14 @@ export default function Home() {
 
   useEffect(() => {
     const unavailableProductsCount = currentItems.reduce((count, item) => {
-      if (Amount(item.size, item._id) <= 0) {
+      const amountResult = Amount(item.size, item._id, sizes);
+      if (Array.isArray(amountResult) && amountResult.some((val) => val <= 0)) {
         return count + 1;
       }
       return count;
     }, 0);
     setCounter(unavailableProductsCount);
-  }, [currentItems]);
+  }, [currentItems, Amount, sizes]);
 
   return (
     <>

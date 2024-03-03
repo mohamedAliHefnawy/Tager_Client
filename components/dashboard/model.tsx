@@ -115,7 +115,8 @@ export default function Model() {
     } else {
       setCheck(true);
     }
-  }, [name]);
+  }, [name, usernamee]);
+  
 
   return (
     <>

@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 
 export default function useProducts() {
   const [products, setProducts] = useState("");
-  let arrProductsInCart: any[] = [];
+  const [arrProductsInCart, setArrProductsInCart] = useState([]);
 
   useEffect(() => {
     const storedData1 = localStorage.getItem("productsCart");
     if (storedData1 !== null) {
-      arrProductsInCart = JSON.parse(storedData1);
+      setArrProductsInCart(JSON.parse(storedData1));
     }
     setProducts(storedData1 ?? "");
 

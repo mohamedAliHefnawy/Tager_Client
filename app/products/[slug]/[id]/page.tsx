@@ -2,9 +2,10 @@
 
 //react
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Slider from "react-slick";
 import linkServer from "@/linkServer";
+import Image from "next/image";
 
 //components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
@@ -278,10 +279,12 @@ export default function Product({ params }: { params: { id: string } }) {
                       key={index}
                       className="flex justify-center items-center"
                     >
-                      <img
+                      <Image
                         src={img}
                         alt={`Slide ${index + 1}`}
-                        className="object-cover w-[100%]"
+                        width={100}
+                        height={100}
+                        className="w-[100%] h-96"
                       />
                     </div>
                   ))}
@@ -407,10 +410,13 @@ export default function Product({ params }: { params: { id: string } }) {
                       key={index}
                       className="flex justify-center items-center"
                     >
-                      <img
+                      <Image
                         src={img}
                         alt={`Slide ${index + 1}`}
-                        className="object-cover w-[100%]"
+                        width={100}
+                        height={100}
+                        className="w-[100%]"
+                        // layout="fill"
                       />
                     </div>
                   ))}
@@ -439,7 +445,7 @@ export default function Product({ params }: { params: { id: string } }) {
     );
   };
 
-  const GetProducts = async () => {
+  const GetProducts = useCallback(async () => {
     setLoading(true);
     try {
       let response: { data: { token: string; product: any } };
@@ -463,11 +469,19 @@ export default function Product({ params }: { params: { id: string } }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    params.id,
+    secretKey,
+    setProduct,
+    setDisplayedPrice,
+    setProductImages,
+    setSelectedSize,
+    setLoading,
+  ]);
 
   useEffect(() => {
     GetProducts();
-  }, []);
+  }, [GetProducts]);
 
   useEffect(() => {
     selectedSize !== null && selectedColor !== null;

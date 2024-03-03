@@ -116,7 +116,14 @@ export default function ModelEditStore({
     } else {
       setCloseBtn(true);
     }
-  }, [nameStore, gbsStore, priceDelivery]);
+  }, [
+    nameStore,
+    gbsStore,
+    priceDelivery,
+    nameStoree,
+    gbsStoree,
+    priceDeliveryy,
+  ]);
 
   return (
     <>

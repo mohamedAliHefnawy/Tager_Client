@@ -286,7 +286,16 @@ export default function ModelEditEmplyee({
     } else {
       setCloseBtn(true);
     }
-  }, [name, phone, password, selectedValueValidity]);
+  }, [
+    name,
+    phone,
+    password,
+    selectedValueValidity,
+    nameEmployee,
+    phoneEmployee,
+    validitiyEmployee,
+    passwordEmployee,
+  ]);
 
   return (
     <>

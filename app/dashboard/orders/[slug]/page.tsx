@@ -2,11 +2,10 @@
 
 //react
 import { format, isValid, parse } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
-
 
 //components
 import NavBar from "../../../../components/dashboard/navbar";
@@ -303,7 +302,7 @@ export default function Home({ params }: { params: { slug: string } }) {
     );
   };
 
-  const GetStore = async () => {
+  const fetchDataStore = useCallback(async () => {
     setLoading(true);
     try {
       let response: { data: { token: string; order: any } };
@@ -321,11 +320,11 @@ export default function Home({ params }: { params: { slug: string } }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.slug, secretKey]);
 
   useEffect(() => {
-    GetStore();
-  }, []);
+    fetchDataStore();
+  }, [fetchDataStore]);
 
   useEffect(() => {
     if (nameAdmin) {

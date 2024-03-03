@@ -1,13 +1,8 @@
-//react
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
 import { toast } from "react-toastify";
-
-//components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
-
-//svg
 import { BackwardIcon } from "@/public/svg/backwardIcon";
 import { HeartIcon } from "@/public/svg/heartIcon";
 import { HeartIcon2 } from "@/public/svg/heartIcon2";
@@ -28,12 +23,11 @@ export default function ButtonAddToCart({
   const [user] = useCheckLogin();
   const [loading, setLoading] = useState(true);
   const [len, setLen] = useState(0);
-  let arrProductsInCart: any[] = [];
-  const storedData = localStorage.getItem("productsCart");
+  const [arrProductsInCart, setArrProductsInCart] = useState(() => {
+    const storedData = localStorage.getItem("productsCart");
+    return storedData !== null ? JSON.parse(storedData) : [];
+  });
 
-  if (storedData !== null) {
-    arrProductsInCart = JSON.parse(storedData);
-  }
   const suma = len + arrProductsInCart.length;
 
   const [lenghtProductInCart, setLenghtProductInCart] = useState(suma);
@@ -53,7 +47,6 @@ export default function ButtonAddToCart({
       };
       response = await axios.get(
         `${linkServer.link}cart/getProductsInCart/${user}`,
-
         {
           headers: {
             Authorization: `Bearer ${secretKey}`,
@@ -82,7 +75,6 @@ export default function ButtonAddToCart({
         {
           idProduct,
           size: sizeProduct,
-
           user: user,
         }
       );
@@ -91,9 +83,6 @@ export default function ButtonAddToCart({
         if (!arrProductsInCart.includes(idProduct)) {
           arrProductsInCart.push(idProduct);
           updateParent(arrProductsInCart.length + len);
-          // toast.success("تم إضافة المنتج بنجاح  ✓");
-          // window.location.reload();
-          // alert("sd");
           localStorage.setItem(
             "productsCart",
             JSON.stringify(arrProductsInCart)
@@ -102,12 +91,11 @@ export default function ButtonAddToCart({
       }
       if (response.data === "exitSure") {
         const updatedCart = arrProductsInCart.filter(
-          (productId) => productId !== idProduct
+          (productId: string) => productId !== idProduct
         );
+
         updateParent(arrProductsInCart.length - 1 + len);
         localStorage.setItem("productsCart", JSON.stringify(updatedCart));
-        // toast.success("تم إضافة المنتج بنجاح  ✓");
-        // window.location.reload();
       }
     } catch (error) {
       console.log(error);
@@ -115,7 +103,7 @@ export default function ButtonAddToCart({
   };
 
   useEffect(() => {
-    setLenghtProductInCart(lenghtProductInCart);
+    setLenghtProductInCart(arrProductsInCart.length);
   }, [arrProductsInCart]);
 
   return (
@@ -130,10 +118,8 @@ export default function ButtonAddToCart({
           } hover:cursor-pointer`}
         >
           {Icons.ShoppingcartIcon}
-          {/* {lenghtProductInCart} */}
         </p>
       </p>
-      {/* <div className="absolute z-50 bg-red-500 top-0 right-0">12</div> */}
     </>
   );
 }

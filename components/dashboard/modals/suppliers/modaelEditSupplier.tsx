@@ -195,7 +195,7 @@ export default function ModelEditSupplier({
     } else {
       setCloseBtn(true);
     }
-  }, [name, phone, imageURL]);
+  }, [name, phone, imageURL, nameSupplier, phoneSupplier, imageSupplier]);
 
   return (
     <>

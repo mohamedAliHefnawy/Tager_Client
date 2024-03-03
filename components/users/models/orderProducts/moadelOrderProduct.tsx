@@ -1,5 +1,5 @@
 //react
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Confetti from "react-confetti";
@@ -538,7 +538,7 @@ export default function MoadelOrderProducts({
     }
   };
 
-  const GetDataUser = async () => {
+  const GetDataUser = useCallback(async () => {
     try {
       let response: { data: { token: string; user: any } };
       response = await axios.get(
@@ -557,11 +557,11 @@ export default function MoadelOrderProducts({
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [nameUser, setPhoneCompany, setNameCompany, setImageURLCompany, setColor]);
 
   useEffect(() => {
     GetDataUser();
-  }, []);
+  }, [GetDataUser]);
 
   useEffect(() => {
     if (Productss) {

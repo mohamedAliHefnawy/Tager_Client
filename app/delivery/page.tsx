@@ -43,28 +43,29 @@ export default function Home() {
       const { validity, answer } = response.data;
 
       if (answer === "yes") {
-        Swal.fire({
-          icon: "success",
-          title: "تم  التسجيل بنجاح ",
-          text: "✓",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
         if (validity === "مندوب توصيل") {
-          localStorage.setItem("nameDelivery", name);
-          localStorage.setItem("valDelivery", validity);
+          Swal.fire({
+            icon: "success",
+            title: "تم التسجيل بنجاح",
+            text: "✓",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "حسنًا",
+          });
+          localStorage.setItem("user", name);
+          localStorage.setItem("userValidity", validity);
           router.push("/delivery/mainPage");
         } else {
           Swal.fire({
             icon: "error",
-            title: " ليس لك الصلاحية للدخول لهذه الصفحة",
+            title: "ليس لك الصلاحية للدخول لهذه الصفحة",
             text: "⤫",
             confirmButtonColor: "#3085d6",
             confirmButtonText: "حسنًا",
           });
         }
       }
-      if (answer === "no") {
+
+      if (response.data === "no") {
         Swal.fire({
           icon: "warning",
           title: "كلمة المرور خاطئة",
@@ -73,20 +74,12 @@ export default function Home() {
           confirmButtonText: "حسنًا",
         });
       }
+
       if (answer === "notFoundUser") {
         Swal.fire({
           icon: "error",
           title: "هذا المستخدم غير موجود",
           text: "⤫",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-      }
-      if (answer === "error") {
-        Swal.fire({
-          icon: "error",
-          title: "توجد مشكلة ما. حاول مرة أخرى ",
-          text: "😓",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
         });

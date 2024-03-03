@@ -127,11 +127,13 @@ export default function ProductsSlider1({
 
   useEffect(() => {
     updateLengthInCart(cartLength);
-  }, [cartLength]);
+  }, [cartLength, updateLengthInCart]);
+  
 
   useEffect(() => {
     updateLengthInFavoutire(favLength);
-  }, [favLength]);
+  }, [favLength, updateLengthInFavoutire]);
+  
 
   return (
     <>

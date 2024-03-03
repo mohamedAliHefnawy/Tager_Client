@@ -52,33 +52,33 @@ export default function Home() {
   const [orders, setOrders] = useState<Orders[]>([]);
   const router = useRouter();
 
-  const GetProductsInCart = async () => {
-    setLoading(true);
-    try {
-      let response: {
-        data: { token: string; ordersData: any };
-      };
-      response = await axios.get(
-        `${linkServer.link}scanner/getOrders/${nameDelivery}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setOrders(response.data.ordersData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let response: {
+          data: { token: string; ordersData: any };
+        };
+        response = await axios.get(
+          `${linkServer.link}scanner/getOrders/${nameDelivery}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setOrders(response.data.ordersData);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (nameDelivery) {
-      GetProductsInCart();
+      fetchData();
     }
-  }, [nameDelivery]);
+  }, [nameDelivery, secretKey]);
 
   useEffect(() => {
     if (nameDelivery) {

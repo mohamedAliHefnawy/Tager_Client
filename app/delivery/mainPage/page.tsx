@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
 
-
 //nextUi
 import {
   Dropdown,
@@ -63,33 +62,39 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<Orders[]>([]);
 
-  const GetProductsInCart = async () => {
-    setLoading(true);
-    try {
-      let response: {
-        data: { token: string; ordersData: any };
-      };
-      response = await axios.get(
-        `${linkServer.link}scanner/getOrders/${nameDelivery}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setOrders(response.data.ordersData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let response: {
+          data: { token: string; ordersData: any };
+        };
+        response = await axios.get(
+          `${linkServer.link}scanner/getOrders/${nameDelivery}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setOrders(response.data.ordersData);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (nameDelivery) {
-      GetProductsInCart();
+      fetchData();
     }
-  }, [nameDelivery]);
+  }, [nameDelivery, secretKey]);
+
+  // useEffect(() => {
+  //   if (nameDelivery) {
+  //     GetProductsInCart();
+  //   }
+  // }, [nameDelivery]);
 
   useEffect(() => {
     if (nameDelivery) {
@@ -153,7 +158,9 @@ export default function Home() {
                   </div>
                 ))
             ) : (
-              <p className="text-center w-[100%] p-10 text-danger-600">لا يوجد طلبيات</p>
+              <p className="text-center w-[100%] p-10 text-danger-600">
+                لا يوجد طلبيات
+              </p>
             )}
           </div>
         </>

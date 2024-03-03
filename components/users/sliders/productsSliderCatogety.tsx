@@ -59,26 +59,29 @@ export default function ProductsSliderCatogety({
     arrProductsInFavourite = JSON.parse(storedData2);
   }
 
-  const GetProductsCatogry = async () => {
-    try {
-      let response: { data: { token: string; products: any } };
-      response = await axios.get(
-        `${linkServer.link}products/getProductsCatogry/${catogeryName}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setProducts(response.data.products);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    GetProductsCatogry();
-  }, [catogeryName]);
+    const fetchData = async () => {
+      try {
+        let response: { data: { token: string; products: any } };
+        response = await axios.get(
+          `${linkServer.link}products/getProductsCatogry/${catogeryName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setProducts(response.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    if (catogeryName) {
+      fetchData();
+    }
+  }, [catogeryName, secretKey]);
+  
 
   const settings = {
     dots: true,

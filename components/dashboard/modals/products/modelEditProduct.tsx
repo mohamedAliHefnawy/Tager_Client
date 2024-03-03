@@ -674,9 +674,11 @@ export default function ModelEditProduct({
                             row.images.length > 0 &&
                             row.images.map((url, fileIndex) => (
                               <div key={fileIndex} className="mr-2">
-                                <img
+                                <Image
                                   src={url}
                                   alt={`الصورة المحددة ${fileIndex + 1}`}
+                                  width={64} // Set your preferred width
+                                  height={64} // Set your preferred height
                                   className="w-16 h-16 object-cover rounded-full"
                                 />
                               </div>
@@ -807,7 +809,17 @@ export default function ModelEditProduct({
         catogry: "",
       });
     }
-  }, [sizeProductt, nameCategoryy, nameProductt, colorProductt]);
+  }, [
+    sizeProductt,
+    nameCategoryy,
+    nameProductt,
+    colorProductt,
+    price4Productt,
+    imagesProductt,
+    price1Productt,
+    price2Productt,
+    price3Productt,
+  ]);
 
   useEffect(() => {
     if (allProductt) {

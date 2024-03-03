@@ -321,24 +321,32 @@ export default function Home({ params }: { params: { slug: string } }) {
     }
   };
 
-  const GetDataDelivery = async () => {
-    try {
-      let response: { data: { token: string; AllData: any } };
-      response = await axios.get(
-        `${linkServer.link}users/getDeliveryProductStore/${params.slug}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setDataDelivery(response.data.AllData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response: { data: { token: string; AllData: any } };
+        response = await axios.get(
+          `${linkServer.link}users/getDeliveryProductStore/${params.slug}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setDataDelivery(response.data.AllData);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (returnOrders.length > 0) {
+      setCloseBtn(false);
+    } else {
+      fetchData();
     }
-  };
+  }, [returnOrders, params.slug, secretKey]);
 
   useEffect(() => {
     if (returnOrders.length > 0) {
@@ -346,9 +354,9 @@ export default function Home({ params }: { params: { slug: string } }) {
     }
   }, [returnOrders]);
 
-  useEffect(() => {
-    GetDataDelivery();
-  }, []);
+  // useEffect(() => {
+  //   GetDataDelivery();
+  // }, []);
 
   useEffect(() => {
     if (nameAdmin) {

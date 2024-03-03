@@ -15,7 +15,7 @@ import DivCheck from "../../../../components/dashboard/checkLogin/divCheck";
 import Loading from "../loading";
 
 // react
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 //imgaes
@@ -321,34 +321,28 @@ export default function Home({ params }: { params: { slug: string } }) {
     }
   };
 
-  const GetDataDelivery = async () => {
-    try {
-      let response: { data: { token: string; AllData: any } };
-      response = await axios.get(
-        `${linkServer.link}users/getDeliveryProductStore/${params.slug}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setDataDelivery(response.data.AllData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (returnOrders.length > 0) {
-      setCloseBtn(false);
-    }
-  }, [returnOrders]);
+    const fetchData = async () => {
+      try {
+        let response: { data: { token: string; AllData: any } };
+        response = await axios.get(
+          `${linkServer.link}users/getDeliveryProductStore/${params.slug}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setDataDelivery(response.data.AllData);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    GetDataDelivery();
-  }, []);
+    fetchData();
+  }, [params.slug, secretKey]);
 
   useEffect(() => {
     if (nameAdmin) {

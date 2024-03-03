@@ -674,9 +674,11 @@ export default function ModelAddProduct({
                             row.images.length > 0 &&
                             row.images.map((url, fileIndex) => (
                               <div key={fileIndex} className="mr-2">
-                                <img
+                                <Image
                                   src={url}
                                   alt={`الصورة المحددة ${fileIndex + 1}`}
+                                  width={64}
+                                  height={64}
                                   className="w-16 h-16 object-cover rounded-full"
                                 />
                               </div>

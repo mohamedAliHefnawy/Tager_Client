@@ -86,22 +86,28 @@ export default function Home() {
     }
   };
 
-  const GetDataUser = async () => {
-    try {
-      let response: { data: { token: string; user: any } };
-      response = await axios.get(
-        `${linkServer.link}users/getUser/${nameDelivery}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setDataUser(response.data.user);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response: { data: { token: string; user: any } };
+        response = await axios.get(
+          `${linkServer.link}users/getUser/${nameDelivery}`,
+          {
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+            },
+          }
+        );
+        setDataUser(response.data.user);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (nameDelivery) {
+      fetchData();
     }
-  };
+  }, [nameDelivery, secretKey]);
 
   useEffect(() => {
     const moneyArray = dataUser?.money || [];
@@ -116,11 +122,11 @@ export default function Home() {
     }
   }, [dataUser]);
 
-  useEffect(() => {
-    if (nameDelivery) {
-      GetDataUser();
-    }
-  }, [nameDelivery]);
+  // useEffect(() => {
+  //   if (nameDelivery) {
+  //     GetDataUser();
+  //   }
+  // }, [nameDelivery]);
 
   useEffect(() => {
     if (nameDelivery) {

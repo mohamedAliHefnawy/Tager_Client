@@ -277,14 +277,26 @@ export default function ModaelEditMarketingClients({
       name.trim() !== nameEmployee ||
       phone.trim() !== phoneEmployee ||
       selectedValueValidity !== validitiyEmployee ||
-      passwordMoneyStore !== passwordMoneyStoree ||
-      password !== passwordEmployee
+      password !== passwordEmployee ||
+      passwordMoneyStore !== passwordMoneyStoree
     ) {
       setCloseBtn(false);
     } else {
       setCloseBtn(true);
     }
-  }, [name, phone, password, selectedValueValidity, passwordMoneyStore]);
+  }, [
+    name,
+    phone,
+    password,
+    selectedValueValidity,
+    passwordEmployee,
+    passwordMoneyStore,
+    passwordMoneyStoree, // Include the missing dependency
+    nameEmployee,
+    phoneEmployee,
+    validitiyEmployee,
+  ]);
+  
 
   return (
     <>
