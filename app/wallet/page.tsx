@@ -2,9 +2,8 @@
 
 // react
 import React, { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
-import { TwitterPicker } from "react-color";
 import linkServer from "@/linkServer";
+import axios from "axios";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -15,16 +14,7 @@ import ModaelPullMoney from "@/components/users/models/modaelPullMoney";
 import Loading from "@/components/loading";
 
 //nextUi
-import { Avatar, Card, CardBody, Tab, Tabs } from "@nextui-org/react";
-
-//svg
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { DeleteIcon } from "@/public/svg/deleteIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { EyeIcon } from "@/public/svg/eyeIcon";
-import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
-import { PencilIcon } from "@/public/svg/pencilIcon";
-import axios from "axios";
+import { Card, CardBody, Tab, Tabs } from "@nextui-org/react";
 
 interface Data {
   _id: string;
@@ -53,8 +43,6 @@ export default function Home() {
   const [user] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [imgUser, setImgUser] = useState("");
-  const [imgCompany, setImgCompany] = useState("");
   const [dataUser, setDataUser] = useState<Data>();
   const [withdrawUser, setWithdrawUser] = useState<withdrawalRequests[]>([]);
   const [selected, setSelected] = React.useState("1");
@@ -66,38 +54,38 @@ export default function Home() {
     .filter((money) => money.acceptMoney === true)
     .reduce((calc, alt) => calc + alt.money, 0);
 
-    const GetDataUser = useCallback(async () => {
-      try {
-        let response: { data: { token: string; user: any } };
-        response = await axios.get(`${linkServer.link}users/getUser/${user}`, {
+  const GetDataUser = useCallback(async () => {
+    try {
+      let response: { data: { token: string; user: any } };
+      response = await axios.get(`${linkServer.link}users/getUser/${user}`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
+      setDataUser(response.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [user, secretKey, setDataUser]);
+
+  const GetWithdrawUser = useCallback(async () => {
+    try {
+      let response: {
+        data: { token: string; withdrawalRequestsMarketer: any };
+      };
+      response = await axios.get(
+        `${linkServer.link}withdrawalRequests/getWithdrawalRequestsMarketer/${user}`,
+        {
           headers: {
             Authorization: `Bearer ${secretKey}`,
           },
-        });
-        setDataUser(response.data.user);
-      } catch (error) {
-        console.log(error);
-      }
-    }, [user, secretKey, setDataUser]);
-
-    const GetWithdrawUser = useCallback(async () => {
-      try {
-        let response: {
-          data: { token: string; withdrawalRequestsMarketer: any };
-        };
-        response = await axios.get(
-          `${linkServer.link}withdrawalRequests/getWithdrawalRequestsMarketer/${user}`,
-          {
-            headers: {
-              Authorization: `Bearer ${secretKey}`,
-            },
-          }
-        );
-        setWithdrawUser(response.data.withdrawalRequestsMarketer);
-      } catch (error) {
-        console.log(error);
-      }
-    }, [ user, secretKey, setWithdrawUser]);
+        }
+      );
+      setWithdrawUser(response.data.withdrawalRequestsMarketer);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [user, secretKey, setWithdrawUser]);
 
   useEffect(() => {
     if (user) {

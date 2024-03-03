@@ -11,7 +11,6 @@ import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "@/components/loading";
 
-
 //imges
 import error from "../../../public/img/notfound.png";
 
@@ -29,27 +28,6 @@ export default function Home() {
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [employee, setEmployee] = useState<Employee | null>(null);
-
-  const [loading, setLoading] = useState(true);
-
-  // const GetEmployees = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.get(
-  //       `https://server-clinic.vercel.app/employees/getemployee/${usernamee}`
-  //     );
-  //     setEmployee(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   GetEmployees();
-  // }, []);
 
   useEffect(() => {
     if (nameAdmin) {

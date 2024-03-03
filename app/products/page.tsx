@@ -20,7 +20,6 @@ import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 //nextUi
 import {
   Slider,
-  Card,
   Dropdown,
   DropdownTrigger,
   Button,
@@ -66,7 +65,6 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [cartLength, setCartLength] = useState(0);
-  const [lenghtProductInCart, setLenghtProductInCart] = useState(0);
   const [lengthProductsInFavourite, setLengthProductsInFavourite] = useState(0);
 
   const updateCartLength = (length: any) => {
@@ -177,16 +175,6 @@ export default function Home() {
       setIsLoading(false);
     }
   }, [user]);
-
-  // useEffect(() => {
-  //   updateLengthInCart(cartLength);
-  //   // updateLengthInFavoutire(arrProductsInFavourite.length);
-  // }, [
-  //   // arrProductsInCart,
-  //   updateLengthInCart,
-  //   // arrProductsInFavourite,
-  // ]);
-
   return (
     <>
       <div>

@@ -42,7 +42,6 @@ export default function Home() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [counter, setCounter] = useState(0);
-  const router = useRouter();
   const itemsPerPage = 20;
 
   const handleSearchChange = (e: any) => {
@@ -62,13 +61,6 @@ export default function Home() {
         product.phone.toLowerCase().includes(lowerCaseSearchText))
     );
   });
-
-  const handleAddToCart = (idToRemove: any) => {
-    const updatedProducts = products.filter(
-      (product) => product._id !== idToRemove
-    );
-    setProducts(updatedProducts);
-  };
 
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage);
@@ -98,7 +90,7 @@ export default function Home() {
           item3.store.reduce((acc: number, calc: any) => acc + calc.amount, 0)
         );
     },
-    [Size] // زرع 'Size' كتبعية هنا
+    [Size]
   );
 
   const GetProductsInCart = useCallback(async () => {
@@ -195,20 +187,7 @@ export default function Home() {
                             : item.price2}
                         </p>
                       </p>
-                      {/* <p style={{ direction: "rtl" }} className="ml-2">
-                        السعر :
-                      </p> */}
                     </p>
-                    {/* <p className="flex">
-                      <p className="flex">
-                        <p className="mr-1">د.ل</p>
-                        <p className="font-bold">{item.gainMarketer}</p>
-                      </p>
-                      <p style={{ direction: "rtl" }} className="ml-2">
-                        {" "}
-                        الربح :{" "}
-                      </p>
-                    </p> */}
                   </div>
                   <div className="flex justify-evenly items-center mt-3 ">
                     <ButtonAddToFavourite

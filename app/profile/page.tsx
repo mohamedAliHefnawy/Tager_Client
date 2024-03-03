@@ -20,8 +20,6 @@ import { analytics } from "@/fireBase/fireBaseConfig";
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-//compenents
-
 //nextUi
 import { Avatar, Card, CardBody, Tab, Tabs } from "@nextui-org/react";
 
@@ -40,12 +38,10 @@ export default function Home() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [name, setName] = useState(user);
   const [newName, setNewName] = useState(user);
   const [nameCompany, setNameCompany] = useState("");
   const [phoneMarketer, setPhoneMarketer] = useState("");
   const [phoneCompany, setPhoneCompany] = useState("");
-  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [passwordNew, setPasswordNew] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -56,7 +52,6 @@ export default function Home() {
   const [imageURLMarketr, setImageURLMarketr] = useState("");
   const [imgCompany, setImgCompany] = useState("");
   const [imageURLCompany, setImageURLCompany] = useState("");
-  const [closeBtn, setCloseBtn] = useState(true);
 
   const imagebase64 = async (file: any) => {
     const reader = new FileReader();
@@ -358,15 +353,6 @@ export default function Home() {
   useEffect(() => {
     GetDataUser();
   }, [GetDataUser]);
-  
-
-  // useEffect(() => {
-  //   if (newName === "") {
-  //     setCloseBtn(true);
-  //   } else {
-  //     setCloseBtn(false);
-  //   }
-  // }, [newName]);
 
   useEffect(() => {
     const fetchData = async () => {

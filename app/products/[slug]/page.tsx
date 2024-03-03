@@ -20,7 +20,6 @@ import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 //nextUi
 import {
   Slider,
-  Card,
   Dropdown,
   DropdownTrigger,
   Button,
@@ -263,7 +262,6 @@ export default function Home({ params }: { params: { slug: string } }) {
                         className="w-[100%]"
                         onChange={handleSliderChange}
                       />
-                      {/* {cartLength} */}
                     </div>
                     <div className="gap-2 w-[100%] grid grid-cols-2 lg:grid-cols-4 md:sm:grid-cols-4 sm:sm:grid-cols-2 max-sm:sm:grid-cols-2">
                       <>

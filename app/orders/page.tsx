@@ -2,8 +2,6 @@
 
 // react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { TwitterPicker } from "react-color";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
@@ -15,7 +13,6 @@ import DivCheck from "@/components/users/checkLogin/divCheck";
 import ModaelRecoveryProduct from "@/components/users/models/modaelRecoveryProduct";
 import ModelDataDelivery from "@/components/users/models/modelDataDelivery";
 import ModaelShowProductsOrder from "@/components/users/models/modaelShowProductsOrder";
-import ChatDivMarketer from "@/components/users/models/chatDiv";
 import Loading from "@/components/loading";
 import ChatDiv from "@/components/chatDiv";
 
@@ -25,8 +22,6 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  RadioGroup,
-  Radio,
   Spinner,
   CheckboxGroup,
   Checkbox,
@@ -47,7 +42,6 @@ interface Messages {
   person: string;
   valid: string;
   seeMessage: boolean;
-
   date: string;
   time: string;
 }
@@ -108,7 +102,6 @@ export default function Home() {
     "بإنتظار الموافقة",
   ]);
   const itemsPerPage = 6;
-
   const Icons = {
     ShoppingcartIcon: <ShoppingcartIcon />,
     DeleteIcon: <DeleteIcon />,
@@ -219,86 +212,77 @@ export default function Home() {
               </div>
             ) : orders.filter((item) => item.marketer === username).length >
               0 ? (
-              currentItems
-                // .filter((item) =>
-                //   selected.includes(
-                //     item.situationSteps[item.situationSteps.length - 1]
-                //       .situation
-                //   )
-                // )
-                .map((order, index) => (
-                  <tr
-                    key={index}
-                    className="border-1 border-[var(--mainColor)] bg-[var(--mainColorRgbaa)]"
-                  >
-                    <td className="border-1 border-[var(--mainColor)] w-48 mx-2">
-                      <p className="flex justify-center p-5">
-                        {order.nameClient}
-                      </p>
-                    </td>
-                    <td className="border-1 border-[var(--mainColor)]">
-                      <p className="p-4">{order.phone1Client}</p>
-                    </td>
-                    <td className="border-1 border-[var(--mainColor)]">
-                      <p className="flex justify-center p-3">
-                        <p className="mr-1">د.ل</p>
-                        <p>{order.totalPriceProducts}</p>
-                      </p>
-                    </td>
+              currentItems.map((order, index) => (
+                <tr
+                  key={index}
+                  className="border-1 border-[var(--mainColor)] bg-[var(--mainColorRgbaa)]"
+                >
+                  <td className="border-1 border-[var(--mainColor)] w-48 mx-2">
+                    <p className="flex justify-center p-5">
+                      {order.nameClient}
+                    </p>
+                  </td>
+                  <td className="border-1 border-[var(--mainColor)]">
+                    <p className="p-4">{order.phone1Client}</p>
+                  </td>
+                  <td className="border-1 border-[var(--mainColor)]">
+                    <p className="flex justify-center p-3">
+                      <p className="mr-1">د.ل</p>
+                      <p>{order.totalPriceProducts}</p>
+                    </p>
+                  </td>
 
-                    <td className="border-1 border-[var(--mainColor)] p-3">
-                      <p className="flex justify-center p-3">{order.address}</p>
-                    </td>
-                    <td className="border-1 border-[var(--mainColor)] ">
-                      <p className="flex justify-center p-3">{order.date}</p>
-                    </td>
-                    <td className="border-1 border-[var(--mainColor)]">
-                      <p className="flex justify-center p-3">
-                        {
-                          order.situationSteps[order.situationSteps.length - 1]
-                            .situation
-                        }
-                      </p>
-                    </td>
-                    <td className="border-1 border-[var(--mainColor)]">
-                      <p className="flex justify-center p-3">
-                        <ModelDataDelivery
-                          nameDelivery={order.DeliveryName}
-                          phoneDelivery={order.DeliveryPhone}
-                        />
-                      </p>
-                    </td>
-                    <td className="border-1 border-[var(--mainColor)]">
-                      <p className="flex justify-center p-3">
-                        <ChatDiv
-                          user={username}
-                          userValidity={userValidity}
-                          idOrder={order._id}
-                          chatMessages={order.chatMessages}
-                        />
-                      </p>
-                    </td>
-                    <td className="border-1 border-[var(--mainColor)]">
-                      <p className="flex justify-center p-3">
-                        <Popover>
-                          <PopoverTrigger>
-                            <span className="hover:cursor-pointer">
-                              {Icons.EllipsisverticalIcon}
-                            </span>
-                          </PopoverTrigger>
-                          <PopoverContent className=" border-1 border-[var(--mainColor)]">
-                            <div className="px-1 py-2 ">
-                              <ModaelRecoveryProduct />
-                              <ModaelShowProductsOrder
-                                produts={order.products}
-                              />
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-                      </p>
-                    </td>
-                  </tr>
-                ))
+                  <td className="border-1 border-[var(--mainColor)] p-3">
+                    <p className="flex justify-center p-3">{order.address}</p>
+                  </td>
+                  <td className="border-1 border-[var(--mainColor)] ">
+                    <p className="flex justify-center p-3">{order.date}</p>
+                  </td>
+                  <td className="border-1 border-[var(--mainColor)]">
+                    <p className="flex justify-center p-3">
+                      {
+                        order.situationSteps[order.situationSteps.length - 1]
+                          .situation
+                      }
+                    </p>
+                  </td>
+                  <td className="border-1 border-[var(--mainColor)]">
+                    <p className="flex justify-center p-3">
+                      <ModelDataDelivery
+                        nameDelivery={order.DeliveryName}
+                        phoneDelivery={order.DeliveryPhone}
+                      />
+                    </p>
+                  </td>
+                  <td className="border-1 border-[var(--mainColor)]">
+                    <p className="flex justify-center p-3">
+                      <ChatDiv
+                        user={username}
+                        userValidity={userValidity}
+                        idOrder={order._id}
+                        chatMessages={order.chatMessages}
+                      />
+                    </p>
+                  </td>
+                  <td className="border-1 border-[var(--mainColor)]">
+                    <p className="flex justify-center p-3">
+                      <Popover>
+                        <PopoverTrigger>
+                          <span className="hover:cursor-pointer">
+                            {Icons.EllipsisverticalIcon}
+                          </span>
+                        </PopoverTrigger>
+                        <PopoverContent className=" border-1 border-[var(--mainColor)]">
+                          <div className="px-1 py-2 ">
+                            <ModaelRecoveryProduct />
+                            <ModaelShowProductsOrder produts={order.products} />
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </p>
+                  </td>
+                </tr>
+              ))
             ) : (
               <p className="p-4">لا يوجد طلبات</p>
             )}

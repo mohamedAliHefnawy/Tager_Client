@@ -2,7 +2,6 @@
 
 // react
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
@@ -16,23 +15,7 @@ import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 import Loading from "@/components/loading";
 
-import {
-  Avatar,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Pagination,
-  Spinner,
-} from "@nextui-org/react";
-
-// imgaes
-import medicine from "@/public/img/element.png";
-
-//svg
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { DeleteIcon } from "@/public/svg/deleteIcon";
-import Link from "next/link";
+import { Pagination, Spinner } from "@nextui-org/react";
 
 interface Products {
   _id: string;
@@ -105,12 +88,6 @@ export default function Home() {
     }
   };
 
-  // useEffect(() => {
-  //   if (user) {
-  //     GetProductsInCart();
-  //   }
-  // }, [user]);
-
   useEffect(() => {
     if (user) {
       const timeoutId = setTimeout(() => {
@@ -156,19 +133,13 @@ export default function Home() {
                   />
                 </div>
                 <div className=" rounded-2xl py-2 mt-2">
-                  <div
-                    // onClick={() =>
-                    //   router.push(`/products/${item.catogry}/${item._id}`)
-                    // }
-                    className="flex justify-center items-center text-sm"
-                  >
+                  <div className="flex justify-center items-center text-sm">
                     <p> {item.name} </p>
                     <p className="text-[var(--mainColor)] ml-1"> ☍ </p>
                   </div>
                   <div className="flex justify-center items-center  ">
                     <p className="flex ">
                       <p className="mr-1">د.ل</p>
-
                       <p className="font-bold text-sm">
                         {userValidity === "زبون عادي"
                           ? item.price3

@@ -7,7 +7,6 @@ import Chart1 from "@/components/dashboard/chart1";
 import Chart2 from "@/components/dashboard/chart2";
 import Chart1_1 from "@/components/dashboard/chart1-1";
 import Chart3 from "@/components/dashboard/chart3";
-import Chart4 from "@/components/dashboard/chart4";
 import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "../loading";
@@ -15,7 +14,6 @@ import Loading from "../loading";
 // react
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import axios from "axios";
 
 //imges
 import error from "../../../public/img/notfound.png";
@@ -34,8 +32,6 @@ export default function Home() {
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [employee, setEmployee] = useState<Employee | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (nameAdmin) {
@@ -77,7 +73,7 @@ export default function Home() {
                     <Chart3 />
                   </div>
                   <div className="w-[50%] h-[430px] mr-4 bg-slate-100 rounded-r-3xl  rounded-2xl p-6">
-                    {/* <Chart4 /> */} <Chart1 />
+                    <Chart1 />
                   </div>
                 </div>
               </div>

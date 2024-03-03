@@ -18,11 +18,6 @@ import MoadelOrderProduct from "@/components/users/models/orderProduct/moadelOrd
 import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 
-// svgIcon
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { HeartIcon2 } from "@/public/svg/heartIcon2";
-
 //nextUi
 import { Button } from "@nextui-org/react";
 import CartIcon from "@/components/users/cart";
@@ -215,13 +210,6 @@ export default function Product({ params }: { params: { id: string } }) {
           );
         }
       );
-
-      const selectedProductStore = productWithSelectedColor.size.find(
-        (size: any) => {
-          return size.size === selectedSize && size.store;
-        }
-      );
-
       if (selectedProductSize) {
         const totalAmount = selectedProductSize.store.reduce(
           (acc: any, store: any) => {
@@ -306,10 +294,8 @@ export default function Product({ params }: { params: { id: string } }) {
                 ) : (
                   <p className="text-danger-600">غير متوفر</p>
                 )}
-                {/* قطعة */}
               </p>
             </p>
-            {/* {cartLength} */}
             <p className="my-1 mt-6 text-[var(--mainColor)] text-lg">
               <p style={{ direction: "rtl" }}>الأحجام :</p>
             </p>
@@ -354,9 +340,6 @@ export default function Product({ params }: { params: { id: string } }) {
               ))}
             </p>
             <div className="flex items-center justify-end my-10">
-              {/* {displayedId} */}
-              {/* {selectedSize} */}
-
               {availableQuantity === 0 ? (
                 <p className="text-red-500">غير متوفر</p>
               ) : (
@@ -416,7 +399,6 @@ export default function Product({ params }: { params: { id: string } }) {
                         width={100}
                         height={100}
                         className="w-[100%]"
-                        // layout="fill"
                       />
                     </div>
                   ))}
@@ -437,7 +419,6 @@ export default function Product({ params }: { params: { id: string } }) {
             <p style={{ direction: "rtl" }} className="mb-2">
               اللون | {selectedColor}
             </p>
-            {/* <p> الكمية | {availableQuantity}</p> */}
           </p>
         </div>
         <div className="w-[90%] h-1 bg-[var(--mainColor)] my-6"></div>
