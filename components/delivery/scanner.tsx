@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
 import linkServer from "@/linkServer";
-import { QrScanner } from "@yudiel/react-qr-scanner";
+import { Scanner } from "@yudiel/react-qr-scanner";
 
 //nextUi
 import { useDisclosure } from "@nextui-org/react";
@@ -94,14 +94,21 @@ export default function QRScanner({ name }: { name: string }) {
       {scanResult ? (
         <p className="text-center">يرجي الإنتظار</p>
       ) : (
-        <QrScanner
-          audio
-          onDecode={(result) => {
+        <Scanner
+          onResult={(result) => {
             setScanResult(result);
             ScannerOrder();
           }}
           onError={(error) => console.log(error?.message)}
         />
+        // <QrScanner
+        //   audio
+        //   onDecode={(result) => {
+        //     setScanResult(result);
+        //     ScannerOrder();
+        //   }}
+        //   onError={(error) => console.log(error?.message)}
+        // />
       )}
     </>
   );
