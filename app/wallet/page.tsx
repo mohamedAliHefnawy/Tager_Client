@@ -181,7 +181,10 @@ export default function Home() {
                     .slice()
                     .reverse()
                     .map((item, indexItem) => (
-                      <div className="lg:hidden md:hidden sm:block max-sm:block">
+                      <div
+                        key={indexItem}
+                        className="lg:hidden md:hidden sm:block max-sm:block"
+                      >
                         <div className="  rounded-3xl bg-slate-100 p-6 mb-3">
                           <p className="flex justify-end">
                             <p className="flex mr-2">
