@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
 import { toast } from "react-toastify";
@@ -11,22 +11,24 @@ import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
 export default function ButtonAddToCart({
   id,
   size,
+  index,
   updateParent,
 }: {
   id: any;
   size: any;
+  index: any;
   updateParent: any;
 }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user] = useCheckLogin();
   const [loading, setLoading] = useState(true);
   const [len, setLen] = useState(0);
-  const [productsCart, setProductsCart] = useState(() => {
+  const [arrProductsInCart, setArrProductsInCart] = useState(() => {
     const storedData = localStorage.getItem("productsCart");
     return storedData !== null ? JSON.parse(storedData) : [];
   });
 
-  const suma = len + productsCart.length;
+  const suma = len + arrProductsInCart.length;
 
   const [lenghtProductInCart, setLenghtProductInCart] = useState(suma);
 
@@ -78,21 +80,22 @@ export default function ButtonAddToCart({
       );
 
       if (response.data === "noExit") {
-        // alert(productsCart);
-        // toast.success("تم إضافة المنتج بنجاح  ✓");
-        // if (!productsCart.includes(idProduct)) {
-        //   setProductsCart([...productsCart, idProduct]);
-        //   updateParent(productsCart.length + len + 1);
-        // }
-        setLen(len + 1)
-      } else if (response.data === "exitSure") {
-        // alert(productsCart);
-        setLen(len + 1)
-        // const updatedCart = productsCart.filter(
-        //   (productId: string) => productId !== idProduct
-        // );
-        // setProductsCart(updatedCart);
-        // updateParent(updatedCart.length + len);
+        if (!arrProductsInCart.includes(idProduct)) {
+          arrProductsInCart.push(idProduct);
+          updateParent(arrProductsInCart.length + len);
+          localStorage.setItem(
+            "productsCart",
+            JSON.stringify(arrProductsInCart)
+          );
+        }
+      }
+      if (response.data === "exitSure") {
+        const updatedCart = arrProductsInCart.filter(
+          (productId: string) => productId !== idProduct
+        );
+
+        updateParent(arrProductsInCart.length - 1 + len);
+        localStorage.setItem("productsCart", JSON.stringify(updatedCart));
       }
     } catch (error) {
       console.log(error);
@@ -100,9 +103,8 @@ export default function ButtonAddToCart({
   };
 
   useEffect(() => {
-    setLenghtProductInCart(len);
-    // localStorage.setItem("productsCart", JSON.stringify(productsCart));
-  }, [productsCart]);
+    setLenghtProductInCart(arrProductsInCart.length);
+  }, [arrProductsInCart]);
 
   return (
     <>
@@ -110,7 +112,7 @@ export default function ButtonAddToCart({
         <p
           onClick={() => addToCart(id, size)}
           className={`${
-            productsCart.includes(id)
+            arrProductsInCart.includes(id)
               ? "bg-[var(--mainColorRgba)] text-[var(--mainColor)] p-4 rounded-full"
               : "text-[var(--mainColor)] p-4"
           } hover:cursor-pointer`}
