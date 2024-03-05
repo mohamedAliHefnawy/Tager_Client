@@ -274,14 +274,25 @@ export default function Home({ params }: { params: { slug: string } }) {
                   <span className="mr-1">{order?.nameClient}</span>
                   <span className="opacity-80"> : الإسم </span>
                 </span>
-                <span className="flex justify-end text-[14px] mb-2">
-                  <span className="mr-1">{order?.phone1Client}</span>
+                <span className="flex justify-end text-[14px] mb-2 ">
+                  <a
+                    href={`tel:${order?.phone1Client}`}
+                    className="mr-1 text-blue-400"
+                  >
+                    {order?.phone1Client}
+                  </a>
                   <span className="opacity-80"> : الهاتف 1 </span>
                 </span>
-                <span className="flex justify-end text-[14px] mb-2">
-                  <span className="mr-1">{order?.phone2Client}</span>
+                <span className="flex justify-end text-[14px] ">
+                  <a
+                    href={`tel:${order?.phone2Client}`}
+                    className="mr-1 mb-2 text-blue-400 "
+                  >
+                    {order?.phone2Client}
+                  </a>
                   <span className="opacity-80"> : الهاتف 2 </span>
                 </span>
+
                 <span className="flex justify-end text-[14px] mb-2">
                   <span className="mr-1">{order?.address}</span>
                   <span className="opacity-80"> : العنوان </span>

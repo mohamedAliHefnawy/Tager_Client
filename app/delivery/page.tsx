@@ -51,8 +51,8 @@ export default function Home() {
             confirmButtonColor: "#3085d6",
             confirmButtonText: "حسنًا",
           });
-          localStorage.setItem("user", name);
-          localStorage.setItem("userValidity", validity);
+          localStorage.setItem("nameDelivery", name);
+          localStorage.setItem("valDelivery", validity);
           router.push("/delivery/mainPage");
         } else {
           Swal.fire({
