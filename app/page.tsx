@@ -32,7 +32,7 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [len, setLen] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [lenghtProductInCart, setLenghtProductInCart] = useState(len);
+  const [lenghtProductInCart, setLenghtProductInCart] = useState(0);
   const [lengthProductsInFavourite, setLengthProductsInFavourite] = useState(0);
 
   const updateLengthInCart = (newLength: any) => {
@@ -108,6 +108,7 @@ export default function Home() {
         ) : user ? (
           <>
             <div className="w-[100%] flex-col flex items-center">
+              {/* {lenghtProductInCart} */}
               <NavBar
                 userr={user}
                 lengthProductsInCart={lenghtProductInCart}

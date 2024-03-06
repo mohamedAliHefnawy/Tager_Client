@@ -11,6 +11,7 @@ import { BackwardIcon } from "@/public/svg/backwardIcon";
 import { HeartIcon } from "@/public/svg/heartIcon";
 import { HeartIcon2 } from "@/public/svg/heartIcon2";
 import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
+import Swal from "sweetalert2";
 
 interface Products {
   _id: string;
@@ -93,26 +94,50 @@ export default function ButtonAddToFavourite({
       );
 
       if (response.data === "noExit") {
-        if (!arrProductsInFavourite.includes(idProduct)) {
-          const updatedFavourite = [...arrProductsInFavourite, idProduct];
-          setArrProductsInFavourite(updatedFavourite);
-          updateParent(updatedFavourite.length);
-          localStorage.setItem(
-            "productsFavourite",
-            JSON.stringify(updatedFavourite)
-          );
-        }
+        Swal.fire({
+          icon: "success",
+          title: "تم إضافه المنتج للمفضلة",
+          text: "✓",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+          position: "top-right",
+          timer: 4000,
+          timerProgressBar: true,
+          toast: true,
+          showConfirmButton: false,
+        });
+        // if (!arrProductsInFavourite.includes(idProduct)) {
+        //   const updatedFavourite = [...arrProductsInFavourite, idProduct];
+        //   setArrProductsInFavourite(updatedFavourite);
+        //   updateParent(updatedFavourite.length);
+        //   localStorage.setItem(
+        //     "productsFavourite",
+        //     JSON.stringify(updatedFavourite)
+        //   );
+        // }
       }
       if (response.data === "exitSure") {
-        const updatedFavourite = arrProductsInFavourite.filter(
-          (productId: any) => productId !== idProduct
-        );
-        setArrProductsInFavourite(updatedFavourite);
-        updateParent(updatedFavourite.length);
-        localStorage.setItem(
-          "productsFavourite",
-          JSON.stringify(updatedFavourite)
-        );
+        Swal.fire({
+          icon: "error",
+          title: "تم إزالة المنتج من المفضلة",
+          text: "✓",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+          position: "top-right",
+          timer: 4000,
+          timerProgressBar: true,
+          toast: true,
+          showConfirmButton: false,
+        });
+        // const updatedFavourite = arrProductsInFavourite.filter(
+        //   (productId: any) => productId !== idProduct
+        // );
+        // setArrProductsInFavourite(updatedFavourite);
+        // updateParent(updatedFavourite.length);
+        // localStorage.setItem(
+        //   "productsFavourite",
+        //   JSON.stringify(updatedFavourite)
+        // );
       }
     } catch (error) {
       console.log(error);
@@ -127,11 +152,13 @@ export default function ButtonAddToFavourite({
     <>
       <p
         onClick={() => addToFavourite(id, size)}
-        className={`${
-          arrProductsInFavourite.includes(id)
-            ? "text-yellow-500 p-4"
-            : "text-red-500 p-4"
-        } hover:cursor-pointer`}
+        className="p-4 hover:cursor-pointer"
+
+        // className={`${
+        //   arrProductsInFavourite.includes(id)
+        //     ? "text-yellow-500 p-4"
+        //     : "text-red-500 p-4"
+        // } hover:cursor-pointer`}
       >
         {Icons.HeartIcon}
       </p>

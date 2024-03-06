@@ -232,7 +232,7 @@ export default function NavBar({
           <NavbarItem className="mr-4 mt-5">
             <Link color="foreground" href="/cart">
               <p className="bg-warning-100 rounded-full flex justify-center items-center text-warning-600">
-                {lengthProductsInCart + len}
+                {lengthProductsInCart ? lengthProductsInCart : len}
               </p>
               <span className="text-slate-600 mr-3">
                 {Icons.ShoppingcartIcon}

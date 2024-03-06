@@ -509,17 +509,17 @@ export default function ModelEditProduct({
                               setSizeProduct(updatedSizes);
                             }}
                           />
-                          <p
+                          {/* <p
                             className="text-danger-600 opacity-50 mt-2 hover:cursor-pointer"
                             onClick={() => handleRemoveSize(index)}
                           >
                             {Icons.DeleteIcon}
-                          </p>
+                          </p> */}
                         </div>
                       ))}
 
                       {/* {sizeProductt.map((item) => item.size)} */}
-                      <Button onClick={handleAddSize}>إضافة مقاس</Button>
+                      {/* <Button onClick={handleAddSize}>إضافة مقاس</Button> */}
                     </div>
                   </div>
                 </div>
@@ -637,23 +637,23 @@ export default function ModelEditProduct({
                                 className="inputTrue mt-2"
                                 placeholder={`المقاس ${inputIndex + 1}`}
                               />
-                              <p
+                              {/* <p
                                 className="text-danger-600 opacity-50 mt-2 hover:cursor-pointer"
                                 onClick={() =>
                                   handleDeleteInputSize(index, inputIndex)
                                 }
                               >
                                 {Icons.DeleteIcon}
-                              </p>
+                              </p> */}
                             </div>
                           ))}
 
-                          <Button
+                          {/* <Button
                             className="mt-2 w-[100%]"
                             onClick={() => addDynamicInput(index)}
                           >
                             إضافة مقاس
-                          </Button>
+                          </Button> */}
                         </div>
                       </td>
 

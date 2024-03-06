@@ -66,7 +66,6 @@ export default function ProductsSlider1({
     setCartLength(length);
   };
 
-
   let arrProductsInCart: any[] = [];
   const storedData1 = localStorage.getItem("productsCart");
 
@@ -123,17 +122,13 @@ export default function ProductsSlider1({
     ],
   };
 
-
-
   useEffect(() => {
     updateLengthInCart(cartLength);
   }, [cartLength, updateLengthInCart]);
-  
 
   useEffect(() => {
     updateLengthInFavoutire(favLength);
   }, [favLength, updateLengthInFavoutire]);
-  
 
   return (
     <>

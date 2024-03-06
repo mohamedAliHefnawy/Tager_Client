@@ -27,7 +27,7 @@ interface Products {
 
 interface ProductsSliderCatogetyProps {
   catogeryName: string;
-  products: Products[]; // Assuming Products is the type for your product data
+  products: Products[]; 
 }
 
 export default function ProductsSliderCatogety({

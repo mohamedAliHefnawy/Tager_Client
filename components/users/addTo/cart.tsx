@@ -7,6 +7,7 @@ import { BackwardIcon } from "@/public/svg/backwardIcon";
 import { HeartIcon } from "@/public/svg/heartIcon";
 import { HeartIcon2 } from "@/public/svg/heartIcon2";
 import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
+import Swal from "sweetalert2";
 
 export default function ButtonAddToCart({
   id,
@@ -22,15 +23,7 @@ export default function ButtonAddToCart({
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user] = useCheckLogin();
   const [loading, setLoading] = useState(true);
-  const [len, setLen] = useState(0);
-  const [arrProductsInCart, setArrProductsInCart] = useState(() => {
-    const storedData = localStorage.getItem("productsCart");
-    return storedData !== null ? JSON.parse(storedData) : [];
-  });
-
-  const suma = len + arrProductsInCart.length;
-
-  const [lenghtProductInCart, setLenghtProductInCart] = useState(suma);
+  const [lenghtProductInCart, setLenghtProductInCart] = useState(0);
 
   const Icons = {
     BackwardIcon: <BackwardIcon />,
@@ -53,7 +46,7 @@ export default function ButtonAddToCart({
           },
         }
       );
-      setLen(response.data.combinedProducts.length);
+      setLenghtProductInCart(response.data.combinedProducts.length);
     } catch (error) {
       console.log(error);
     } finally {
@@ -68,7 +61,6 @@ export default function ButtonAddToCart({
   }, [user, GetProductsInCart]);
 
   const addToCart = async (idProduct: any, sizeProduct: any) => {
-    toast.success("تم إضافة المنتج بنجاح  ✓");
     try {
       const response = await axios.post(
         `${linkServer.link}cart/addProductToCart`,
@@ -80,43 +72,61 @@ export default function ButtonAddToCart({
       );
 
       if (response.data === "noExit") {
-        if (!arrProductsInCart.includes(idProduct)) {
-          arrProductsInCart.push(idProduct);
-          updateParent(arrProductsInCart.length + len);
-          localStorage.setItem(
-            "productsCart",
-            JSON.stringify(arrProductsInCart)
-          );
-        }
+        Swal.fire({
+          icon: "success",
+          title: "تم إضافه المنتج للسله",
+          text: "✓",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+          position: "top-right",
+          timer: 4000,
+          timerProgressBar: true,
+          toast: true,
+          showConfirmButton: false,
+        });
+
+        updateParent(lenghtProductInCart);
+        setLenghtProductInCart(lenghtProductInCart + 1);
       }
       if (response.data === "exitSure") {
-        const updatedCart = arrProductsInCart.filter(
-          (productId: string) => productId !== idProduct
-        );
+        Swal.fire({
+          icon: "error",
+          title: "تم إزالة المنتج من السلة",
+          text: "✓",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "حسنًا",
+          position: "top-right",
+          timer: 4000,
+          timerProgressBar: true,
+          toast: true,
+          showConfirmButton: false,
+        });
 
-        updateParent(arrProductsInCart.length - 1 + len);
-        localStorage.setItem("productsCart", JSON.stringify(updatedCart));
+        // setLenghtProductInCart(lenghtProductInCart - 1);
+        updateParent(lenghtProductInCart);
+        setLenghtProductInCart(lenghtProductInCart - 1);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    setLenghtProductInCart(arrProductsInCart.length);
-  }, [arrProductsInCart]);
-
   return (
     <>
       <p className="ml-1" style={{ direction: "rtl" }}>
+        {/* {divToast()} */}
         <p
           onClick={() => addToCart(id, size)}
-          className={`${
-            arrProductsInCart.includes(id)
-              ? "bg-[var(--mainColorRgba)] text-[var(--mainColor)] p-4 rounded-full"
-              : "text-[var(--mainColor)] p-4"
-          } hover:cursor-pointer`}
+          className="p-4 hover:cursor-pointer"
+          //   className={
+          //     `${
+          //     arrProductsInCart.includes(id)
+          //       ? "bg-[var(--mainColorRgba)] text-[var(--mainColor)] p-4 rounded-full"
+          //       : "text-[var(--mainColor)] p-4"
+          //   } hover:cursor-pointer`
+          // }
         >
+          {lenghtProductInCart}
           {Icons.ShoppingcartIcon}
         </p>
       </p>
