@@ -320,6 +320,7 @@ export default function Product({ params }: { params: { id: string } }) {
               <p style={{ direction: "rtl" }}>الألوان :</p>
             </p>
             <p className="flex justify-end mt-4">
+              {/* <p className="mr-10">{cartLength}</p> */}
               {allColors.map((color, index) => (
                 <span key={index} className="mr-6 hover:cursor-pointer">
                   <div
@@ -380,6 +381,7 @@ export default function Product({ params }: { params: { id: string } }) {
                   className="w-[100%] opacity-50 bg-slate-800 rounded-2xl text-white text-center"
                 >
                   أطلب الآن
+                  {/* {cartLength} */}
                 </Button>
               )}
             </div>

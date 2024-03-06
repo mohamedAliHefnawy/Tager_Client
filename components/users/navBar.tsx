@@ -68,6 +68,8 @@ export default function NavBar({
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState(true);
   const [len, setLen] = useState(0);
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [lengthProductsInCartt, setLengthProductsInCartt] = useState(0);
 
   const Icons = {
     BarsarrowdownIcon: <BarsarrowdownIcon />,
@@ -113,6 +115,18 @@ export default function NavBar({
     }
   }, [user, GetProductsInCart]);
 
+  useEffect(() => {
+    const fetchLengthProductsInCart = async () => {
+      const updatedLength = len;
+      if (updatedLength !== 0) {
+        setLengthProductsInCartt(updatedLength);
+      }
+      setInitialLoad(false);
+    };
+
+    fetchLengthProductsInCart();
+  }, []);
+
   const Login = async () => {
     try {
       const data = {
@@ -147,6 +161,12 @@ export default function NavBar({
       console.error(error);
     }
   };
+
+  // useEffect(() => {
+  //   if (lengthProductsInCart !== 0) {
+  //     setLen(lengthProductsInCart);
+  //   }
+  // }, [lengthProductsInCart]);
 
   useEffect(() => {
     if (password.trim() !== "") {
@@ -237,6 +257,7 @@ export default function NavBar({
               <span className="text-slate-600 mr-3">
                 {Icons.ShoppingcartIcon}
               </span>
+              {/* {lengthProductsInCart} */}
             </Link>
           </NavbarItem>
           <NavbarItem className="ml-4">

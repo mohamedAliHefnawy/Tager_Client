@@ -74,7 +74,7 @@ export default function ButtonAddToCart({
       if (response.data === "noExit") {
         Swal.fire({
           icon: "success",
-          title: "تم إضافه المنتج للسله",
+          title: "تم إضافة المنتج للسلة",
           text: "✓",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
@@ -85,10 +85,9 @@ export default function ButtonAddToCart({
           showConfirmButton: false,
         });
 
-        updateParent(lenghtProductInCart);
-        setLenghtProductInCart(lenghtProductInCart + 1);
-      }
-      if (response.data === "exitSure") {
+        updateParent((prev: number) => prev + 1);
+        setLenghtProductInCart((prev) => prev + 1);
+      } else if (response.data === "exitSure") {
         Swal.fire({
           icon: "error",
           title: "تم إزالة المنتج من السلة",
@@ -102,9 +101,8 @@ export default function ButtonAddToCart({
           showConfirmButton: false,
         });
 
-        // setLenghtProductInCart(lenghtProductInCart - 1);
-        updateParent(lenghtProductInCart);
-        setLenghtProductInCart(lenghtProductInCart - 1);
+        updateParent((prev: number) => Math.max(prev - 1, 0));
+        setLenghtProductInCart((prev) => Math.max(prev - 1, 0));
       }
     } catch (error) {
       console.log(error);
@@ -114,19 +112,11 @@ export default function ButtonAddToCart({
   return (
     <>
       <p className="ml-1" style={{ direction: "rtl" }}>
-        {/* {divToast()} */}
         <p
           onClick={() => addToCart(id, size)}
           className="p-4 hover:cursor-pointer"
-          //   className={
-          //     `${
-          //     arrProductsInCart.includes(id)
-          //       ? "bg-[var(--mainColorRgba)] text-[var(--mainColor)] p-4 rounded-full"
-          //       : "text-[var(--mainColor)] p-4"
-          //   } hover:cursor-pointer`
-          // }
         >
-          {lenghtProductInCart}
+          {/* {lenghtProductInCart} */}
           {Icons.ShoppingcartIcon}
         </p>
       </p>

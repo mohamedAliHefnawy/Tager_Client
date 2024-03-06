@@ -27,13 +27,15 @@ interface Products {
 
 interface ProductsSliderCatogetyProps {
   catogeryName: string;
-  products: Products[]; 
+  products: Products[];
 }
 
 export default function ProductsSliderCatogety({
   catogeryName,
+  updateLengthInCart,
 }: {
   catogeryName: string;
+  updateLengthInCart: any;
 }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const router = useRouter();
@@ -44,20 +46,6 @@ export default function ProductsSliderCatogety({
   const updateCartLength = (length: any) => {
     setCartLength(length);
   };
-
-  let arrProductsInCart: any[] = [];
-  const storedData1 = localStorage.getItem("productsCart");
-
-  if (storedData1 !== null) {
-    arrProductsInCart = JSON.parse(storedData1);
-  }
-
-  let arrProductsInFavourite: any[] = [];
-  const storedData2 = localStorage.getItem("productsFavourite");
-
-  if (storedData2 !== null) {
-    arrProductsInFavourite = JSON.parse(storedData2);
-  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,12 +64,11 @@ export default function ProductsSliderCatogety({
         console.log(error);
       }
     };
-  
+
     if (catogeryName) {
       fetchData();
     }
   }, [catogeryName, secretKey]);
-  
 
   const settings = {
     dots: true,
@@ -104,6 +91,10 @@ export default function ProductsSliderCatogety({
       },
     ],
   };
+
+  useEffect(() => {
+    updateLengthInCart(cartLength);
+  }, [cartLength, updateLengthInCart]);
 
   return (
     <>

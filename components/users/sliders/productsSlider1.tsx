@@ -45,13 +45,6 @@ export default function ProductsSlider1({
   const [cartLength, setCartLength] = useState(0);
   const [favLength, setFavLength] = useState(0);
 
-  const Icons = {
-    BackwardIcon: <BackwardIcon />,
-    HeartIcon: <HeartIcon />,
-    HeartIcon2: <HeartIcon2 />,
-    ShoppingcartIcon: <ShoppingcartIcon />,
-  };
-
   const Sw = () => {
     Swal.fire({
       icon: "success",
@@ -66,19 +59,6 @@ export default function ProductsSlider1({
     setCartLength(length);
   };
 
-  let arrProductsInCart: any[] = [];
-  const storedData1 = localStorage.getItem("productsCart");
-
-  if (storedData1 !== null) {
-    arrProductsInCart = JSON.parse(storedData1);
-  }
-
-  let arrProductsInFavourite: any[] = [];
-  const storedData2 = localStorage.getItem("productsFavourite");
-
-  if (storedData2 !== null) {
-    arrProductsInFavourite = JSON.parse(storedData2);
-  }
   const GetProducts = async () => {
     try {
       let response: { data: { token: string; top5Products: any } };
@@ -126,10 +106,6 @@ export default function ProductsSlider1({
     updateLengthInCart(cartLength);
   }, [cartLength, updateLengthInCart]);
 
-  useEffect(() => {
-    updateLengthInFavoutire(favLength);
-  }, [favLength, updateLengthInFavoutire]);
-
   return (
     <>
       <div className="mt-10 w-[90%] flex justify-end">
@@ -144,6 +120,7 @@ export default function ProductsSlider1({
             {products.map((item, index) => (
               <div key={index} className="p-8 py-3 mr-2 h-auto ">
                 <div className="flex justify-center rounded-2xl py-4">
+                  {/* {cartLength} */}
                   <Image
                     className="w-[90%] h-36"
                     src={item.image}

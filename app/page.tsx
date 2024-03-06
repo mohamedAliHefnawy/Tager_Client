@@ -33,10 +33,15 @@ export default function Home() {
   const [len, setLen] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [lenghtProductInCart, setLenghtProductInCart] = useState(0);
+  const [lenghtProductInCart2, setLenghtProductInCart2] = useState(0);
   const [lengthProductsInFavourite, setLengthProductsInFavourite] = useState(0);
 
-  const updateLengthInCart = (newLength: any) => {
+  const updateLengthInCart1 = (newLength: any) => {
     setLenghtProductInCart(newLength);
+  };
+
+  const updateLengthInCart2 = (newLength: any) => {
+    setLenghtProductInCart2(newLength);
   };
 
   const updateLengthInFavourite = (newLength: any) => {
@@ -111,9 +116,12 @@ export default function Home() {
               {/* {lenghtProductInCart} */}
               <NavBar
                 userr={user}
-                lengthProductsInCart={lenghtProductInCart}
+                lengthProductsInCart={
+                  lenghtProductInCart2 + lenghtProductInCart
+                }
                 lengthProductsInFavourite={lengthProductsInFavourite}
               />
+
               <CartIcon
                 userr={user}
                 lengthProductsInCart={lenghtProductInCart}
@@ -121,13 +129,20 @@ export default function Home() {
               />
               <MainSlider />
               <ElementsSlider />
+              {/* {lenghtProductInCart2 + lenghtProductInCart} */}
               <ProductsSlider1
-                updateLengthInCart={updateLengthInCart}
+                updateLengthInCart={updateLengthInCart1}
+                key={0}
                 updateLengthInFavoutire={updateLengthInFavourite}
               />
 
+              {/* {lenghtProductInCart2 + lenghtProductInCart} */}
               {categories.map((item, index) => (
-                <ProductsSliderCatogety key={index} catogeryName={item.name} />
+                <ProductsSliderCatogety
+                  updateLengthInCart={updateLengthInCart2}
+                  key={index}
+                  catogeryName={item.name}
+                />
               ))}
 
               <Footer />
