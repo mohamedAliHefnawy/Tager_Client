@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -26,11 +27,6 @@ import {
   useDisclosure,
   Avatar,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
 
 interface Stores {
   _id: string;
@@ -59,12 +55,6 @@ export default function ModelAddCategory({
   const [gbsStore, setGbsStore] = useState("");
   const [priceDelivery, setPriceDelivery] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-  };
 
   const Body = () => (
     <div className="p-4 flex flex-col items-center">

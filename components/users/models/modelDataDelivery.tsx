@@ -1,8 +1,6 @@
 //react
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+import React from "react";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -10,18 +8,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
-  Button,
   useDisclosure,
-  Input,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
 } from "@nextui-org/react";
-
-//svg
-import { EyeIcon } from "@/public/svg/eyeIcon";
 
 export default function ModelDataDelivery({
   nameDelivery,
@@ -31,16 +19,13 @@ export default function ModelDataDelivery({
   phoneDelivery: string;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [closeBtn, setCloseBtn] = useState(true);
-  const router = useRouter();
-
-  const Icons = {
-    EyeIcon: <EyeIcon />,
-  };
 
   return (
     <>
-      <p onClick={onOpen} className="mr-1 hover:cursor-pointer text-warning-500 p-4">
+      <p
+        onClick={onOpen}
+        className="mr-1 hover:cursor-pointer text-warning-500 p-4"
+      >
         {Icons.EyeIcon}
       </p>
 

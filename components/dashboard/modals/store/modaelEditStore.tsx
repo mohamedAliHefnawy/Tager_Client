@@ -1,19 +1,10 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
-import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
-
-//fireBase
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
-//compenents
-import { analytics } from "@/fireBase/fireBaseConfig";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -25,12 +16,6 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { PencilIcon } from "../../../../public/svg/pencilIcon";
 
 export default function ModelEditStore({
   idStoree,
@@ -48,13 +33,6 @@ export default function ModelEditStore({
   const [gbsStore, setGbsStore] = useState(gbsStoree);
   const [closeBtn, setCloseBtn] = useState(true);
   const [priceDelivery, setPriceDelivery] = useState(priceDeliveryy);
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    PencilIcon: <PencilIcon />,
-  };
 
   const Body = () => (
     <div className="p-4 flex flex-col items-center">

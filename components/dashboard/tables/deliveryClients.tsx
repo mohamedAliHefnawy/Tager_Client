@@ -2,13 +2,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
-
-//svgIcons
-import { SearchIcon } from "../../../public/svg/searchIcon";
-import { EllipsisverticalIcon } from "../../../public/svg/ellipsisverticalIcon";
 
 //components
 import ModelAddDeliveryClients from "../modals/deliveryClients/modaelAddDeliveryClients";
@@ -30,11 +27,6 @@ export default function DeliveryClients() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
   const [loading, setLoading] = useState(true);
-
-  const icons = {
-    SearchIcon: <SearchIcon />,
-    EllipsisverticalIcon: <EllipsisverticalIcon />,
-  };
 
   const GetEmployees = async () => {
     setLoading(true);

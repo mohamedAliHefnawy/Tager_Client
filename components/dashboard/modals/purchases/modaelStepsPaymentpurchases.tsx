@@ -1,7 +1,5 @@
 //react
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import axios from "axios";
+import React from "react";
 
 //nextui
 import {
@@ -14,10 +12,6 @@ import {
   useDisclosure,
   Avatar,
 } from "@nextui-org/react";
-
-//svgIcon
-import { DeleteIcon } from "../../../../public/svg/deleteIcon";
-import { BanknotesIcon } from "../../../../public/svg/banknotesIcon";
 
 export default function ModaelStepsPaymentpurchases({
   paymentSteps,
@@ -40,7 +34,6 @@ export default function ModaelStepsPaymentpurchases({
   ];
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [discountedTotal, setDiscountedTotal] = useState(0);
 
   return (
     <>

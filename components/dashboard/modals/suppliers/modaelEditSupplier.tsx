@@ -4,6 +4,7 @@ import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -20,23 +21,8 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
-  CardBody,
-  Card,
-  Tab,
-  Tabs,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
   Avatar,
-  DropdownItem,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { PencilIcon } from "../../../../public/svg/pencilIcon";
 
 export default function ModelEditSupplier({
   idSupplier,
@@ -55,13 +41,6 @@ export default function ModelEditSupplier({
   const [name, setName] = useState(nameSupplier);
   const [phone, setPhone] = useState(phoneSupplier);
   const [closeBtn, setCloseBtn] = useState(true);
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    PencilIcon: <PencilIcon />,
-  };
 
   const EditEmployee = async () => {
     try {

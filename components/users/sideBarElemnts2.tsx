@@ -5,9 +5,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
-//svg
-import { BackwardIcon } from "@/public/svg/backwardIcon";
-
 interface Categories {
   _id: string;
   image: string;
@@ -19,10 +16,6 @@ interface Categories {
 export default function SideBarElemnts(props: any) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [categories, setCategories] = useState<Categories[]>([]);
-
-  const Icons = {
-    BackwardIcon: <BackwardIcon />,
-  };
 
   const GetCategories = async () => {
     try {

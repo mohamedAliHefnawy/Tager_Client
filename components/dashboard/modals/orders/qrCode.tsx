@@ -1,6 +1,7 @@
 //react
 import React from "react";
 import QRCode from "qrcode.react";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -11,22 +12,10 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
 } from "@nextui-org/react";
-
-//svg
-import { QrCodeIcon } from "@/public/svg/qrCodeIcon";
 
 export default function QrCode({ idOrder }: { idOrder: String }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const icons = {
-    QrCodeIcon: <QrCodeIcon />,
-  };
 
   return (
     <>
@@ -34,7 +23,7 @@ export default function QrCode({ idOrder }: { idOrder: String }) {
         onClick={onOpen}
         className="hover:cursor-pointer hover:opacity-75 bg-success-200 p-3 mt-1 rounded-full border-1 border-success-600 text-success-900"
       >
-        {icons.QrCodeIcon}
+        {Icons.QrCodeIcon}
       </p>
       <Modal
         size="sm"

@@ -1,19 +1,11 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
-//fireBase
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
-//compenents
-import { analytics } from "@/fireBase/fireBaseConfig";
 
 //nextui
 import {
@@ -30,11 +22,6 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
 
 interface ReturnOrders {
   idProduct: string;
@@ -73,12 +60,6 @@ export default function ModaelConvertStore({
   const [closeBtn, setCloseBtn] = useState(false);
   const [inputValues, setInputValues] = useState<InputValues>({});
   const [stores, setStores] = useState<Stores[]>([]);
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-  };
 
   const handleStoreSelection = (productId: any, selectedKeys: any) => {
     setInputValues((prevValues) => ({

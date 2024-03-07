@@ -1,16 +1,14 @@
 //react
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 import Confetti from "react-confetti";
-import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //component
 import NavBar from "@/components/users/navBar";
 import Footer from "@/components/users/footer";
-import ButtonAddToCart from "@/components/users/addTo/cart";
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 
 //nextui
@@ -29,16 +27,9 @@ import {
   Avatar,
 } from "@nextui-org/react";
 
-// imgaes
-import product from "@/public/img/blue-t-shirt.jpg";
 
-//svgIcon
-import { DeleteIcon } from "../../../../public/svg/deleteIcon";
-import { BanknotesIcon } from "../../../../public/svg/banknotesIcon";
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { HeartIcon2 } from "@/public/svg/heartIcon2";
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
+
+
 
 interface Stores {
   _id: string;
@@ -118,23 +109,10 @@ export default function MoadelOrderProducts({
   const handleSelectionChangeTo = (selectedItems: string[]) => {
     setSelectedKeysTo(selectedItems);
   };
-  const Icons = {
-    DeleteIcon: <DeleteIcon />,
-    BanknotesIcon: <BanknotesIcon />,
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    HeartIcon: <HeartIcon />,
-    HeartIcon2: <HeartIcon2 />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-  };
 
   const Size = (id: any) => {
     return sizeProductss.find((item2) => item2[0] === id)?.[1];
   };
-
-  // const priceVal =
-  //   validityUser === "زبون عادي"
-  //     ? products.map((item) => item.price3)
-  //     : products.map((item) => item.price2);
 
   const Amount = (productId: any) => {
     const amount =

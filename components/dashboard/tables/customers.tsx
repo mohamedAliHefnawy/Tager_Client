@@ -1,24 +1,16 @@
 //react
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextUi
 import {
-  Input,
   Avatar,
   Spinner,
   Pagination,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Button,
-} from "@nextui-org/react";
 
-//svgIcons
-import { SearchIcon } from "../../../public/svg/searchIcon";
-import { EllipsisverticalIcon } from "../../../public/svg/ellipsisverticalIcon";
+} from "@nextui-org/react";
 
 //components
 import ModaelEditcCustomer from "../modals/customers/modaelEditcCustomer";

@@ -1,8 +1,8 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -13,11 +13,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
+
   Tab,
   Card,
   Tabs,
@@ -26,16 +22,6 @@ import {
   Spinner,
 } from "@nextui-org/react";
 
-//svgIcons
-import { PlusIcon } from "@/public/svg/plusIcon";
-import { FingerPrintIcon } from "@/public/svg/fingerprintIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { ConvertIcon } from "@/public/svg/convertIcon";
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
-import { ShoppingbagIcon } from "@/public/svg/shoppingbagIcon";
-import { ReceiptrefundIcon } from "@/public/svg/receiptrefundIcon";
-import { PencilIcon } from "@/public/svg/pencilIcon";
-import { SearchIcon } from "@/public/svg/searchIcon";
 
 // imgaes
 import product from "@/public/img/blue-t-shirt.jpg";
@@ -140,18 +126,6 @@ export default function ModaeEditOrderProduct({
     () => Array.from(selectedProducts).join(", ").replaceAll("_", " "),
     [selectedProducts]
   );
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    ConvertIcon: <ConvertIcon />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-    ShoppingbagIcon: <ShoppingbagIcon />,
-    ReceiptrefundIcon: <ReceiptrefundIcon />,
-    PencilIcon: <PencilIcon />,
-    SearchIcon: <SearchIcon />,
-  };
 
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);

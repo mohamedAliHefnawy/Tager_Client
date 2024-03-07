@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextUi
 import {
@@ -18,20 +19,13 @@ import PrintInvoice from "../modals/orders/printInvoice";
 import ModaelEditOrder from "../modals/orders/modaelEditOrder";
 import QrCode from "../modals/orders/qrCode";
 import ChatDiv from "@/components/chatDiv";
-import Scanner from "@/components/delivery/scanner";
-import QRCode from "qrcode.react";
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
-
-//svg
-import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
-import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
 
 interface Messages {
   message: string;
   person: string;
   valid: string;
   seeMessage: boolean;
-
   date: string;
   time: string;
 }
@@ -75,20 +69,12 @@ export default function Orders() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = React.useState([
-    // "مع الشحن",
-    "بإنتظار الموافقة",
-  ]);
+  const [selected, setSelected] = React.useState(["بإنتظار الموافقة"]);
   const itemsPerPage = 6;
   const router = useRouter();
 
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);
-  };
-
-  const Icons = {
-    ChatbubbleleftrightIcon: <ChatbubbleleftrightIcon />,
-    PaperAirplaneIcon: <PaperAirplaneIcon />,
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;

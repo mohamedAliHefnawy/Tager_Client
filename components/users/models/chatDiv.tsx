@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -10,10 +11,6 @@ import {
   ModalBody,
   useDisclosure,
 } from "@nextui-org/react";
-
-//svg
-import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
-import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
 
 interface Messages {
   admin: [{ message: string; person: string; date: string; time: string }];
@@ -31,16 +28,10 @@ export default function ChatDivMarketer({
   chatMessages: Messages[];
 }) {
   const [messages, setMessages] = useState<Messages[]>([]);
-  const [messages2, setMessages2] = useState<Messages>();
 
   const [messageText, setMessageText] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
-
-  const Icons = {
-    ChatbubbleleftrightIcon: <ChatbubbleleftrightIcon />,
-    PaperAirplaneIcon: <PaperAirplaneIcon />,
-  };
 
   const parseDateTime = (dateString: string, timeString: string): number => {
     const [day, month, year] = dateString.split("/");

@@ -2,9 +2,9 @@
 
 //React
 import React, { useEffect, useState } from "react";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Icons from "@/iconsSvg";
 
 //nextUi
 import {
@@ -15,19 +15,6 @@ import {
   Button,
 } from "@nextui-org/react";
 
-//svg
-import { BarsarrowdownIcon } from "@/public/svg/barsarrowdownIcon";
-import { UserIcon } from "@/public/svg/userIcon";
-import { BanknotesIcon } from "@/public/svg/banknotesIcon";
-import { TagIcon } from "@/public/svg/tagIcon";
-import { LogoutIcon } from "@/public/svg/logoutIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { HomeIcon } from "@/public/svg/homeIcon";
-import { ChevrondownIcon } from "@/public/svg/chevrondownIcon";
-import { MapIcon } from "@/public/svg/mapIcon";
-import { BuildingstorefrontIcon } from "@/public/svg/buildingstorefrontIcon";
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
 
 //components
 import useCheckLogin from "@/components/delivery/checkLogin/checkLogin";
@@ -36,21 +23,6 @@ export default function NavBar() {
   const router = useRouter();
   const [nameDelivery] = useCheckLogin();
   const [nameDeliveryy, setNameDeliveryy] = useState("");
-
-  const Icons = {
-    BarsarrowdownIcon: <BarsarrowdownIcon />,
-    UserIcon: <UserIcon />,
-    BanknotesIcon: <BanknotesIcon />,
-    TagIcon: <TagIcon />,
-    LogoutIcon: <LogoutIcon />,
-    HeartIcon: <HeartIcon />,
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    HomeIcon: <HomeIcon />,
-    ChevrondownIcon: <ChevrondownIcon />,
-    MapIcon: <MapIcon />,
-    BuildingstorefrontIcon: <BuildingstorefrontIcon />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-  };
 
   const Logout = () => {
     localStorage.removeItem("nameDelivery");

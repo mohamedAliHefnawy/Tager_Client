@@ -1,7 +1,6 @@
 //react
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
 
 //nextUi
@@ -14,27 +13,7 @@ import {
 } from "@nextui-org/react";
 
 //components
-import PrintInvoice from "../modals/orders/printInvoice";
 import ModelwithdrawalRequests from "../modals/withdrawalRequests/modelwithdrawalRequests";
-import QrCode from "../modals/orders/qrCode";
-import ChatDiv from "@/components/chatDiv";
-import Scanner from "@/components/delivery/scanner";
-import QRCode from "qrcode.react";
-import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
-
-//svg
-import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
-import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
-
-interface Messages {
-  message: string;
-  person: string;
-  valid: string;
-  seeMessage: boolean;
-
-  date: string;
-  time: string;
-}
 
 interface WithdrawalRequests {
   _id: string;
@@ -47,9 +26,6 @@ interface WithdrawalRequests {
 
 export default function WithdrawalRequests() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [user, userValidity] = useCheckLogin();
-
-  const nameAdmin = localStorage.getItem("nameAdmin");
   const [withdrawalRequests, setWithdrawalRequests] = useState<
     WithdrawalRequests[]
   >([]);
@@ -58,15 +34,9 @@ export default function WithdrawalRequests() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = React.useState(["في الإنتظار"]);
   const itemsPerPage = 6;
-  const router = useRouter();
 
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);
-  };
-
-  const Icons = {
-    ChatbubbleleftrightIcon: <ChatbubbleleftrightIcon />,
-    PaperAirplaneIcon: <PaperAirplaneIcon />,
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -229,9 +199,7 @@ export default function WithdrawalRequests() {
                         PaymentWithdrawalRequests={
                           withdrawalRequest.pymentMethod
                         }
-                        moneyWithdrawalRequests={
-                          withdrawalRequest.sumMoney
-                        }
+                        moneyWithdrawalRequests={withdrawalRequest.sumMoney}
                       />
                     </div>
                   </div>

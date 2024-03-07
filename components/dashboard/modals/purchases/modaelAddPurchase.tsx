@@ -4,6 +4,7 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -25,13 +26,6 @@ import {
   DropdownItem,
   Pagination,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "@/public/svg/plusIcon";
-import { FingerPrintIcon } from "@/public/svg/fingerprintIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { ShoppingbagIcon } from "@/public/svg/shoppingbagIcon";
-import { DeleteIcon } from "@/public/svg/deleteIcon";
 
 interface Supplier {
   _id: string;
@@ -121,15 +115,6 @@ export default function ModaelAddPurchase({
   }>({});
 
   const ItemsPerPage = 6;
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    DeleteIcon: <DeleteIcon />,
-    ShoppingbagIcon: <ShoppingbagIcon />,
-  };
-
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);
   };

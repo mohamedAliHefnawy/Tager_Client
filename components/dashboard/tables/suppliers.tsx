@@ -1,15 +1,10 @@
 //react
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
-
-//svgIcons
-import { SearchIcon } from "../../../public/svg/searchIcon";
-import { EllipsisverticalIcon } from "../../../public/svg/ellipsisverticalIcon";
 
 //components
 import ModelAddSupplier from "../modals/suppliers/modaelAddSupplier";

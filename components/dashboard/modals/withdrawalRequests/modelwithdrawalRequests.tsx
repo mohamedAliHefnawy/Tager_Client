@@ -1,8 +1,8 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -13,23 +13,10 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
 } from "@nextui-org/react";
 
 //components
 import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
-
-
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { PencilIcon } from "../../../../public/svg/pencilIcon";
-import { BanknotesIcon } from "../../../../public/svg/banknotesIcon";
 
 export default function ModelwithdrawalRequests({
   idWithdrawalRequests,
@@ -42,23 +29,7 @@ export default function ModelwithdrawalRequests({
 }) {
   const [nameAdmin] = useCheckLogin();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [closeBtn, setCloseBtn] = useState(true);
   const [selected, setSelected] = React.useState("1");
-  const [situation, setSituation] = React.useState<
-    { situation: string; date: string; time: string }[]
-  >([]);
-
-  const handleSelectionChange = (key: string | number) => {
-    setSelected(String(key));
-  };
-
-  const icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    PencilIcon: <PencilIcon />,
-    BanknotesIcon: <BanknotesIcon />,
-  };
 
   const Confirm = async () => {
     try {
@@ -66,7 +37,7 @@ export default function ModelwithdrawalRequests({
         idWithdrawalRequests,
         PaymentWithdrawalRequests,
         moneyWithdrawalRequests,
-        nameAdmin
+        nameAdmin,
       };
       const response = await axios.post(
         `${linkServer.link}withdrawalRequests/confirmPayment`,
@@ -90,7 +61,7 @@ export default function ModelwithdrawalRequests({
         onClick={onOpen}
         className="hover:cursor-pointer hover:opacity-75 bg-success-200 p-3 mt-1 rounded-full border-1 border-success-600 text-success-900"
       >
-        {icons.BanknotesIcon}
+        {Icons.BanknotesIcon}
       </p>
       <Modal
         size="md"

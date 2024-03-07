@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Confetti from "react-confetti";
-import Swal from "sweetalert2";
 import linkServer from "@/linkServer";
 import { useRouter } from "next/navigation";
+import Icons from "@/iconsSvg";
 
 //component
 import NavBar from "@/components/users/navBar";
@@ -27,16 +27,6 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 
-// imgaes
-import product from "@/public/img/blue-t-shirt.jpg";
-
-//svgIcon
-import { DeleteIcon } from "../../../../public/svg/deleteIcon";
-import { BanknotesIcon } from "../../../../public/svg/banknotesIcon";
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { HeartIcon2 } from "@/public/svg/heartIcon2";
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
 
 interface Stores {
   _id: string;
@@ -78,7 +68,6 @@ export default function MoadelOrderProduct({
   const [phone2Client, setPhone2Client] = useState("");
   const [addressClient, setAddressClient] = useState("");
   const [amountOrder, setAmountOrder] = useState("");
-  const [priceOrder, setPriceOrder] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
   const [showConfetti, setShowConfetti] = React.useState(false);
   const [imageURLCompany, setImageURLCompany] = useState("");
@@ -97,15 +86,7 @@ export default function MoadelOrderProduct({
   const handleSelectionChangeTo = (selectedItems: string[]) => {
     setSelectedKeysTo(selectedItems);
   };
-  const Icons = {
-    DeleteIcon: <DeleteIcon />,
-    BanknotesIcon: <BanknotesIcon />,
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    HeartIcon: <HeartIcon />,
-    HeartIcon2: <HeartIcon2 />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-  };
-
+ 
   const GetStores = async () => {
     try {
       let response: { data: { token: string; stores: any } };

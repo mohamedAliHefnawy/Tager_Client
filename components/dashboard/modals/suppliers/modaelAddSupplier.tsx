@@ -4,6 +4,7 @@ import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
 import Swal from "sweetalert2";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -14,16 +15,6 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
-  CardHeader,
-  DropdownTrigger,
-  DropdownItem,
-  DropdownMenu,
-  Dropdown,
   Avatar,
 } from "@nextui-org/react";
 
@@ -33,25 +24,13 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 //compenents
 import { analytics } from "@/fireBase/fireBaseConfig";
 
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-
 export default function ModelAddSupplier() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [imageURL, setImageURL] = useState("");
   const [img, setImg] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [generatedPassword, setGeneratedPassword] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-  };
 
   const imagebase64 = async (file: any) => {
     const reader = new FileReader();

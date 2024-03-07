@@ -1,9 +1,6 @@
 //react
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import axios from "axios";
-import Swal from "sweetalert2";
-
+import React, { useState } from "react";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -16,16 +13,6 @@ import {
   useDisclosure,
   Avatar,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "@/public/svg/plusIcon";
-import { FingerPrintIcon } from "@/public/svg/fingerprintIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { ConvertIcon } from "@/public/svg/convertIcon";
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
-import { ShoppingbagIcon } from "@/public/svg/shoppingbagIcon";
-import { ReceiptrefundIcon } from "@/public/svg/receiptrefundIcon";
-import { CircleStackIcon } from "@/public/svg/circleStackIcon";
 
 interface Products {
   idProduct: string;
@@ -50,36 +37,9 @@ export default function ModaelShowProductsOrder({
   produts: Products[];
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [closeBtn, setCloseBtn] = useState(true);
   const [selectedProducts, setSelectedProducts] = React.useState<string[]>([
     "إختر طريقة الدفع",
   ]);
-
-  const handleSelectionChangeProducts = (selectedItems: any) => {
-    if (Array.isArray(selectedItems)) {
-      setSelectedProducts(selectedItems);
-    } else {
-      const keysArray = Array.from(selectedItems);
-      const stringKeysArray = keysArray.map(String);
-      setSelectedProducts(stringKeysArray);
-    }
-  };
-
-  const selectedValueProducts = React.useMemo(
-    () => Array.from(selectedProducts).join(", ").replaceAll("_", " "),
-    [selectedProducts]
-  );
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    ConvertIcon: <ConvertIcon />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-    ShoppingbagIcon: <ShoppingbagIcon />,
-    ReceiptrefundIcon: <ReceiptrefundIcon />,
-    CircleStackIcon: <CircleStackIcon />,
-  };
 
   const body = () => {
     return (

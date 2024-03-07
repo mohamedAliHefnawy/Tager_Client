@@ -1,8 +1,8 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -13,20 +13,11 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "@/public/svg/plusIcon";
-import { FingerPrintIcon } from "@/public/svg/fingerprintIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { ConvertIcon } from "@/public/svg/convertIcon";
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
-import { ShoppingbagIcon } from "@/public/svg/shoppingbagIcon";
 
 //components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
@@ -66,15 +57,6 @@ export default function ModaelPullMoney({
     () => Array.from(selectedPayment).join(", ").replaceAll("_", " "),
     [selectedPayment]
   );
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    ConvertIcon: <ConvertIcon />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-    ShoppingbagIcon: <ShoppingbagIcon />,
-  };
 
   const body = () => {
     return (

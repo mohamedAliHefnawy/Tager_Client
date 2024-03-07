@@ -1,9 +1,10 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
+import Swal from "sweetalert2";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -16,15 +17,6 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
-//svgIcons
-import { PlusIcon } from "@/public/svg/plusIcon";
-import { FingerPrintIcon } from "@/public/svg/fingerprintIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { ConvertIcon } from "@/public/svg/convertIcon";
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
-import { ShoppingbagIcon } from "@/public/svg/shoppingbagIcon";
-import { ReceiptrefundIcon } from "@/public/svg/receiptrefundIcon";
-import Swal from "sweetalert2";
 
 export default function ModaelRecoveryProduct(props: any) {
   const [user, userValidity] = useCheckLogin();
@@ -35,17 +27,6 @@ export default function ModaelRecoveryProduct(props: any) {
   ]);
 
   const [notes, setNotes] = useState("");
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    ConvertIcon: <ConvertIcon />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-    ShoppingbagIcon: <ShoppingbagIcon />,
-    ReceiptrefundIcon: <ReceiptrefundIcon />,
-  };
-
   const RecoveryOrder = async () => {
     try {
       const data = {

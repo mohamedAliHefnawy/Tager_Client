@@ -1,15 +1,10 @@
 //react
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
-
-//svgIcons
-import { SearchIcon } from "../../../public/svg/searchIcon";
-import { EllipsisverticalIcon } from "../../../public/svg/ellipsisverticalIcon";
 
 //components
 import ModaelEditMarketingClients from "../modals/marketingClients/modaelEditMarketingClients";
@@ -94,7 +89,6 @@ export default function MarketingClients() {
               value={searchText}
             />
           </div>
-          {/* <ModelAddEmplyee titleButton="إضافة موظف" inputName="إسم الموظف" /> */}
         </div>
         <div className="mt-3 ml-2 text-slate-300 text-xs">
           <p>Total {filteredEmployees.length} Employees</p>
@@ -135,12 +129,7 @@ export default function MarketingClients() {
                     <Avatar src={employees.image} />
                   </div>
                   <div className="w-[33%] flex justify-center">
-                    <p
-                      className="text-warning-500"
-                      // href={`/dashboard/account/${employees.name}`}
-                    >
-                      {employees.name}
-                    </p>
+                    <p className="text-warning-500">{employees.name}</p>
                   </div>
                   <div className="w-[33%] flex justify-center">
                     <p> {employees.phone} </p>

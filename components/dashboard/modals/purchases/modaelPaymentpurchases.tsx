@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -19,9 +20,6 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 
-//svgIcon
-import { DeleteIcon } from "../../../../public/svg/deleteIcon";
-import { BanknotesIcon } from "../../../../public/svg/banknotesIcon";
 
 interface MoneySafe {
   _id: string;
@@ -59,11 +57,6 @@ export default function ModelPaymentpurchases({
   const [selectedPayment, setSelectedPayment] = React.useState(
     new Set([moneySafee])
   );
-
-  const icons = {
-    DeleteIcon: <DeleteIcon />,
-    BanknotesIcon: <BanknotesIcon />,
-  };
 
   const selectedValuePayment = React.useMemo(
     () => Array.from(selectedPayment).join(", ").replaceAll("_", " "),
@@ -140,7 +133,7 @@ export default function ModelPaymentpurchases({
         onClick={onOpen}
         className="hover:cursor-pointer hover:opacity-75 bg-warning-200 p-3 rounded-full border-1 border-warning-600 text-warning-900"
       >
-        {icons.BanknotesIcon}
+        {Icons.BanknotesIcon}
       </p>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

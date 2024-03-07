@@ -2,33 +2,11 @@
 
 //react
 import React, { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
 import axios from "axios";
 import linkServer from "@/linkServer";
-
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
-import ModelPasswordMoneyStore from "@/components/users/models/modelPasswordMoneyStore";
-
-//nextUi
-import { Navbar, useDisclosure } from "@nextui-org/react";
-
-//svg
-import { BarsarrowdownIcon } from "@/public/svg/barsarrowdownIcon";
-import { UserIcon } from "@/public/svg/userIcon";
-import { BanknotesIcon } from "@/public/svg/banknotesIcon";
-import { TagIcon } from "@/public/svg/tagIcon";
-import { LogoutIcon } from "@/public/svg/logoutIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { HomeIcon } from "@/public/svg/homeIcon";
-import { EyeIcon } from "@/public/svg/eyeIcon";
-import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
-
-//images
-import Logo from "@/public/img/hbaieb.png";
+import Icons from "@/iconsSvg";
 
 export default function CartIcon({
   userr,
@@ -42,19 +20,6 @@ export default function CartIcon({
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [user, userValidity] = useCheckLogin();
   const [len, setLen] = useState(0);
-
-  const Icons = {
-    BarsarrowdownIcon: <BarsarrowdownIcon />,
-    UserIcon: <UserIcon />,
-    BanknotesIcon: <BanknotesIcon />,
-    TagIcon: <TagIcon />,
-    LogoutIcon: <LogoutIcon />,
-    HeartIcon: <HeartIcon />,
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    HomeIcon: <HomeIcon />,
-    EyeIcon: <EyeIcon />,
-    EyeNotIcon: <EyeNotIcon />,
-  };
 
   const GetProductsInCart = useCallback(async () => {
     try {

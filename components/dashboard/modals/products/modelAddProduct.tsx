@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
 import { TwitterPicker } from "react-color";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -30,14 +31,6 @@ import {
   Tab,
   CardBody,
 } from "@nextui-org/react";
-
-//primerRact
-
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { DeleteIcon } from "../../../../public/svg/deleteIcon";
 
 interface Categories {
   _id: string;
@@ -225,13 +218,6 @@ export default function ModelAddProduct({
     } else {
       console.error("Invalid color object:", color);
     }
-  };
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    DeleteIcon: <DeleteIcon />,
   };
 
   const generateUniqueFileName = (file: File) => {
