@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
+import Icons from "@/iconsSvg";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -26,10 +27,6 @@ import {
   Avatar,
 } from "@nextui-org/react";
 
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
 
 interface Stores {
   _id: string;
@@ -53,16 +50,6 @@ export default function ModaelDeliverySecurity({
   ];
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [nameStore, setNameStore] = useState("");
-  const [gbsStore, setGbsStore] = useState("");
-  const [priceDelivery, setPriceDelivery] = useState("");
-  const [closeBtn, setCloseBtn] = useState(true);
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-  };
 
   const Body = () => (
     <div className="p-10 flex flex-col items-center">

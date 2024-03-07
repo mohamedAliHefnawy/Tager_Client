@@ -3,17 +3,10 @@ import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
 import QRCode from "qrcode.react";
+import Icons from "@/iconsSvg";
 
 //nextui
-import { Avatar, Button, CheckboxGroup, Checkbox } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { ArrowUturnDownIcon } from "../../../../public/svg/arrowUturnDownIcon";
-import { ArrowspointinginIcon } from "../../../../public/svg/arrowspointinginIcon";
-import { PrinterIcon } from "../../../../public/svg/printerIcon";
+import { Avatar } from "@nextui-org/react";
 
 //images
 import Hbaieb from "@/public/img/hbaieb.png";
@@ -55,15 +48,6 @@ export default function PrintInvoice({
     }
   ];
 }) {
-  const icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-    ArrowspointinginIcon: <ArrowspointinginIcon />,
-    PrinterIcon: <PrinterIcon />,
-  };
-
   const printRef = useRef<HTMLFormElement | null>(null);
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
@@ -75,7 +59,7 @@ export default function PrintInvoice({
         onClick={handlePrint}
         className="hover:cursor-pointer hover:opacity-75 bg-primary-200 p-3 mt-1 rounded-full border-1 border-primary-600 text-primary-900"
       >
-        {icons.PrinterIcon}
+        {Icons.PrinterIcon}
       </p>
 
       <div className="hidden">

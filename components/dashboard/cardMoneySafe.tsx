@@ -5,23 +5,10 @@ import axios from "axios";
 import linkServer from "@/linkServer";
 
 //nextUi
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Image,
-  Input,
-  Spinner,
-} from "@nextui-org/react";
-
-//svgIcons
-import { SearchIcon } from "../../public/svg/searchIcon";
-import { EllipsisverticalIcon } from "../../public/svg/ellipsisverticalIcon";
-import { ConvertIcon } from "../../public/svg/convertIcon";
+import { Card, CardBody, CardFooter, Image, Spinner } from "@nextui-org/react";
 
 //components
-import ModaelConvertMoney from "../../components/dashboard/modals/convertMoney/modaelConvertMoney";
+import ModaelConvertMoney from "@/components/dashboard/modals/convertMoney/modaelConvertMoney";
 
 interface MoneySafe {
   _id: string;
@@ -36,16 +23,9 @@ export default function CardMoneySafe() {
   const [moneySafe, setMoneySafe] = useState<MoneySafe[]>([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pressable, setPressable] = useState(true);
   const itemsPerPage = 1000000;
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-
-  const icons = {
-    SearchIcon: <SearchIcon />,
-    EllipsisverticalIcon: <EllipsisverticalIcon />,
-    ConvertIcon: <ConvertIcon />,
-  };
 
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);

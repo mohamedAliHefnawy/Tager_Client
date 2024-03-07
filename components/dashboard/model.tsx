@@ -1,7 +1,7 @@
 //react
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import axios from "axios";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -17,10 +17,6 @@ import {
 
 //component
 import checkLogin from "./checkLogin/checkLogin";
-
-//svgIcon
-import { ArrowUturnUpIcon } from "../../public/svg/arrowUturnUpIcon";
-import { PhotoIcon } from "../../public/svg/photoIcon";
 
 export default function Model() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -45,70 +41,6 @@ export default function Model() {
     setImg(image);
   };
 
-  //   const SendData = async () => {
-  //     try {
-  //       const usernamee = localStorage.getItem("username");
-  //       const data = { usernamee };
-  //       const response = await axios.post(
-  //         "https://ibrahim-abo-zeid-server.vercel.app/admins/getAvaterAdmin",
-  //         data
-  //       );
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   const EditData = async () => {
-  //     try {
-  //       const usernamee = localStorage.getItem("username");
-  //       const data = { usernamee, name, img };
-  //       const response = await axios.post(
-  //         "https://ibrahim-abo-zeid-server.vercel.app/admins/upload",
-  //         data
-  //       );
-  //       if (response.data === "newName") {
-  //         localStorage.setItem("username", name);
-  //         window.location.reload();
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   const GetImage = async () => {
-  //     try {
-  //       const usernamee = localStorage.getItem("username");
-  //       if (!usernamee) {
-  //         console.error("الاسم غير موجود في التخزين المحلي.");
-  //         return;
-  //       }
-
-  //       const data = { usernamee };
-  //       const response = await axios.post(
-  //         "https://ibrahim-abo-zeid-server.vercel.app/admins/getAvatarAdmin",
-  //         data
-  //       );
-
-  //       if (response.data.image) {
-  //         setImg(response.data.image);
-  //       } else {
-  //         console.log("لم يتم العثور على الصورة.");
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     SendData();
-  //     EditData();
-  //     GetImage();
-  //   }, []);
-
-  const icons = {
-    PhotoIcon: <PhotoIcon />,
-  };
-
   useEffect(() => {
     if (name.trim() !== usernamee) {
       setCheck(false);
@@ -116,12 +48,10 @@ export default function Model() {
       setCheck(true);
     }
   }, [name, usernamee]);
-  
 
   return (
     <>
       <Button onPress={onOpen} variant="faded" color="primary">
-        {/* <ArrowUturnUpIcon /> */}
         <p> تعديل البيانات </p>
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -149,7 +79,7 @@ export default function Model() {
                         className="rounded-full"
                       />
                     ) : (
-                      icons.PhotoIcon
+                      Icons.PhotoIcon
                     )}
                   </label>
                   <input

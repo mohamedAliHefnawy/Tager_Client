@@ -4,6 +4,7 @@ import Image from "next/image";
 import axios from "axios";
 import Swal from "sweetalert2";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -21,12 +22,6 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { ConvertIcon } from "../../../../public/svg/convertIcon";
-import { ArrowUturnDownIcon } from "../../../../public/svg/arrowUturnDownIcon";
 
 //images
 import exChange from "../../../../public/img/exchange.png";
@@ -64,13 +59,7 @@ export default function ModaelConvertMoney(props: any) {
     "إختر المحفظه ال تريد التحويل إليها",
   ]);
 
-  const icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    ConvertIcon: <ConvertIcon />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-  };
+  
 
   const handleSelectionChangeFrom = (selectedItems: string[]) => {
     setSelectedKeysFrom(selectedItems);
@@ -109,7 +98,7 @@ export default function ModaelConvertMoney(props: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button
-                  startContent={icons.ArrowUturnDownIcon}
+                  startContent={Icons.ArrowUturnDownIcon}
                   variant="bordered"
                   color="warning"
                   className="capitalize w-[100%] "
@@ -176,7 +165,7 @@ export default function ModaelConvertMoney(props: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button
-                  startContent={icons.ArrowUturnDownIcon}
+                  startContent={Icons.ArrowUturnDownIcon}
                   variant="bordered"
                   color="warning"
                   className="capitalize w-[100%] "
@@ -319,7 +308,7 @@ export default function ModaelConvertMoney(props: any) {
     <>
       <Button
         onPress={onOpen}
-        startContent={icons.ConvertIcon}
+        startContent={Icons.ConvertIcon}
         color="warning"
         className="mt-4 h-14"
       >

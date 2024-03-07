@@ -10,19 +10,9 @@ import {
   Card,
   CardBody,
   CardFooter,
-  Image,
-  Input,
   Spinner,
   Avatar,
 } from "@nextui-org/react";
-
-//svgIcons
-import { SearchIcon } from "../../public/svg/searchIcon";
-import { EllipsisverticalIcon } from "../../public/svg/ellipsisverticalIcon";
-import { ConvertIcon } from "../../public/svg/convertIcon";
-
-//components
-import ModaelShowReturn from "@/components/dashboard/modals/returns/modaelShowReturn";
 
 interface Data {
   _id: string;
@@ -103,8 +93,6 @@ export default function CardDeliverySecurity({
             value={searchText}
           />
         </div>
-
-        {/* <ModaelConvertMoney /> */}
       </div>
       <div className="my-3 ml-2 text-slate-600 text-xs">
         <p>Total {dataDeliveries.length} Deliveries </p>
@@ -167,7 +155,6 @@ export default function CardDeliverySecurity({
                   }
                   color="warning"
                   className="opacity-90 rounded-full w-[100%]"
-                  // startContent={Icons.PlusIcon}
                 >
                   المخزن
                 </Button>

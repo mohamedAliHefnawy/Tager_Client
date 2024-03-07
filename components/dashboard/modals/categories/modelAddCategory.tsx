@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -26,11 +27,6 @@ import {
   useDisclosure,
   Avatar,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "@/public/svg/plusIcon";
-import { FingerPrintIcon } from "@/public/svg/fingerprintIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
 
 interface Categories {
   _id: string;
@@ -61,11 +57,7 @@ export default function ModelAddCategory({
   const [closeBtn, setCloseBtn] = useState(true);
   const [imageURL, setImageURL] = useState("");
 
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-  };
+ 
 
   const imagebase64 = async (file: any) => {
     const reader = new FileReader();

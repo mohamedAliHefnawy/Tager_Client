@@ -34,9 +34,11 @@ export default function Home() {
 
   const Login = async () => {
     try {
+      const NameTrim = name.trim();
+      const PasswordTrim = password.trim();
       const data = {
-        name,
-        password,
+        name: NameTrim,
+        password: PasswordTrim,
       };
       const response = await axios.post(`${linkServer.link}users/login`, data);
 

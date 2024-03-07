@@ -11,6 +11,7 @@ import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 import Link from "next/link";
+import AliceCarousel from "react-alice-carousel";
 
 interface Products {
   _id: string;
@@ -25,10 +26,6 @@ interface Products {
   size: [{ size: string }];
 }
 
-interface ProductsSliderCatogetyProps {
-  catogeryName: string;
-  products: Products[];
-}
 
 export default function ProductsSliderCatogety({
   catogeryName,
@@ -46,6 +43,74 @@ export default function ProductsSliderCatogety({
   const updateCartLength = (length: any) => {
     setCartLength(length);
   };
+
+  const responsive = {
+    0: {
+      items: 2,
+    },
+    576: {
+      items: 2,
+    },
+    768: {
+      items: 4,
+    },
+    992: {
+      items: 5,
+    },
+    1200: {
+      items: 6,
+    },
+  };
+
+  const items = products.map((item, index) => (
+    <div
+      key={index}
+      className="p-8 py-3 mr-2 h-auto w-auto flex flex-col items-center "
+    >
+      <div className="flex justify-center rounded-2xl py-4">
+        <Image
+          className="w-[90%] h-36"
+          src={item.image[0]}
+          alt={"error"}
+          width={100}
+          height={100}
+        />
+      </div>
+      <div className=" rounded-2xl py-2 mt-2">
+        <div
+          onClick={() => router.push(`/products/${item.catogry}/${item._id}`)}
+          className="flex justify-center items-center hover:cursor-pointer text-sm "
+        >
+          <p> {item.name} </p>
+          <p className="text-[var(--mainColor)] ml-1"> ☍ </p>
+        </div>
+        <div className="flex justify-center items-center  ">
+          <p className="flex ">
+            <p className="mr-1">د.ل</p>
+
+            <p className="font-bold">
+              {userValidity !== "مندوب تسويق" ? item.price3 : item.price2}
+            </p>
+          </p>
+        </div>
+        <div className="flex justify-evenly items-center mt-3 ">
+          <ButtonAddToFavourite
+            id={item._id}
+            index={index}
+            updateParent={updateCartLength}
+            size={item.size?.[0]?.size}
+          />
+
+          <ButtonAddToCart
+            id={item._id}
+            index={index}
+            updateParent={updateCartLength}
+            size={item.size?.[0]?.size}
+          />
+        </div>
+      </div>
+    </div>
+  ));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,28 +135,6 @@ export default function ProductsSliderCatogety({
     }
   }, [catogeryName, secretKey]);
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 1500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 1000,
-        settings: {
-          slidesToShow: 5,
-        },
-      },
-    ],
-  };
-
   useEffect(() => {
     updateLengthInCart(cartLength);
   }, [cartLength, updateLengthInCart]);
@@ -108,58 +151,14 @@ export default function ProductsSliderCatogety({
 
       <div className=" w-[90%] pb-6 ">
         <div className="w-[100%]">
-          <Slider {...settings}>
-            {products.map((item, index) => (
-              <div key={index} className="p-8 py-3 mr-2 h-auto w-auto ">
-                <div className="flex justify-center rounded-2xl py-4">
-                  <Image
-                    className="w-[90%] h-36"
-                    src={item.image[0]}
-                    alt={"error"}
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <div className=" rounded-2xl py-2 mt-2">
-                  <div
-                    onClick={() =>
-                      router.push(`/products/${item.catogry}/${item._id}`)
-                    }
-                    className="flex justify-center items-center hover:cursor-pointer text-sm "
-                  >
-                    <p> {item.name} </p>
-                    <p className="text-[var(--mainColor)] ml-1"> ☍ </p>
-                  </div>
-                  <div className="flex justify-center items-center  ">
-                    <p className="flex ">
-                      <p className="mr-1">د.ل</p>
-
-                      <p className="font-bold">
-                        {userValidity !== "مندوب تسويق"
-                          ? item.price3
-                          : item.price2}
-                      </p>
-                    </p>
-                  </div>
-                  <div className="flex justify-evenly items-center mt-3 ">
-                    <ButtonAddToFavourite
-                      id={item._id}
-                      index={index}
-                      updateParent={updateCartLength}
-                      size={item.size?.[0]?.size}
-                    />
-
-                    <ButtonAddToCart
-                      id={item._id}
-                      index={index}
-                      updateParent={updateCartLength}
-                      size={item.size?.[0]?.size}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </Slider>
+          <AliceCarousel
+            responsive={responsive}
+            mouseTracking
+            autoPlay
+            autoPlayInterval={3000}
+            items={items}
+            disableButtonsControls
+          />
         </div>
       </div>
     </>

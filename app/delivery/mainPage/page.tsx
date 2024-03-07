@@ -4,33 +4,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
 
 //nextUi
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-  Avatar,
-} from "@nextui-org/react";
-
-//svg
-import { BarsarrowdownIcon } from "@/public/svg/barsarrowdownIcon";
-import { UserIcon } from "@/public/svg/userIcon";
-import { BanknotesIcon } from "@/public/svg/banknotesIcon";
-import { TagIcon } from "@/public/svg/tagIcon";
-import { LogoutIcon } from "@/public/svg/logoutIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { HomeIcon } from "@/public/svg/homeIcon";
-import { ChevrondownIcon } from "@/public/svg/chevrondownIcon";
-import { MapIcon } from "@/public/svg/mapIcon";
-import { BuildingstorefrontIcon } from "@/public/svg/buildingstorefrontIcon";
+import { Avatar } from "@nextui-org/react";
 
 //images
 import Logo from "@/public/img/hbaieb.png";
@@ -89,12 +66,6 @@ export default function Home() {
       fetchData();
     }
   }, [nameDelivery, secretKey]);
-
-  // useEffect(() => {
-  //   if (nameDelivery) {
-  //     GetProductsInCart();
-  //   }
-  // }, [nameDelivery]);
 
   useEffect(() => {
     if (nameDelivery) {

@@ -95,20 +95,23 @@ export default function QRScanner({ name }: { name: string }) {
         <p className="text-center">يرجي الإنتظار</p>
       ) : (
         <Scanner
+          // options={{
+
+          // }}
+          enabled={false}
+          components={{
+            audio: true,
+            torch: true,
+            onOff: true,
+            tracker: true,
+            // count: true,
+          }}
           onResult={(result) => {
             setScanResult(result);
             ScannerOrder();
           }}
           onError={(error) => console.log(error?.message)}
         />
-        // <QrScanner
-        //   audio
-        //   onDecode={(result) => {
-        //     setScanResult(result);
-        //     ScannerOrder();
-        //   }}
-        //   onError={(error) => console.log(error?.message)}
-        // />
       )}
     </>
   );

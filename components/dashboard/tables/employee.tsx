@@ -6,14 +6,9 @@ import linkServer from "@/linkServer";
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
 
-//svgIcons
-import { SearchIcon } from "../../../public/svg/searchIcon";
-import { EllipsisverticalIcon } from "../../../public/svg/ellipsisverticalIcon";
-
 //components
 import ModelAddEmplyee from "../modals/employee/modaelAddEmplyee";
 import ModelEditEmplyee from "../modals/employee/modaelEditEmplyee";
-import Link from "next/link";
 
 interface Employees {
   _id: string;
@@ -26,17 +21,11 @@ interface Employees {
 
 export default function Employees() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const usernamee = localStorage.getItem("nameAdmin");
   const [employees, setEmployees] = useState<Employees[]>([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 6;
-
-  const icons = {
-    SearchIcon: <SearchIcon />,
-    EllipsisverticalIcon: <EllipsisverticalIcon />,
-  };
 
   const GetEmployees = async () => {
     setLoading(true);

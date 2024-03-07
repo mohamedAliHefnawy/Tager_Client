@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -23,12 +24,6 @@ import { Avatar, Button, Input } from "@nextui-org/react";
 
 //imgaes
 import error from "@/public/img/notfound.png";
-
-//svgIcons
-import { PlusIcon } from "@/public/svg/plusIcon";
-import { FingerPrintIcon } from "@/public/svg/fingerprintIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { PencilIcon } from "@/public/svg/pencilIcon";
 
 interface Payment {
   _id: string;
@@ -61,13 +56,6 @@ export default function Home() {
   );
   const [closeBtn, setCloseBtn] = useState(true);
   const [msg, setMsg] = useState("");
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    PencilIcon: <PencilIcon />,
-  };
 
   const handleNameChange = (index: number, value: string) => {
     const updatedMethodPayments = [...methodPayment];

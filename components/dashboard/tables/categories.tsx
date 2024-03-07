@@ -55,7 +55,6 @@ export default function Categories() {
   };
 
   const GetCategories = async () => {
-    setLoading(true);
     try {
       let response: { data: { token: string; categories: any } };
       response = await axios.get(`${linkServer.link}categories/getCategories`, {
@@ -66,8 +65,6 @@ export default function Categories() {
       setCategories(response.data.categories);
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -117,11 +114,12 @@ export default function Categories() {
 
             <div className="w-[33%] text-right"></div>
           </div>
-          {loading ? (
-            <div className="flex justify-center items-center h-[400px]">
-              <Spinner size="lg" color="warning" />
-            </div>
-          ) : (
+          {
+            // loading ? (
+            //   <div className="flex justify-center items-center h-[400px]">
+            //     <Spinner size="lg" color="warning" />
+            //   </div>
+            // ) : (
             currentItems.map((category, index) => (
               <div
                 key={index}
@@ -159,7 +157,8 @@ export default function Categories() {
                 </div>
               </div>
             ))
-          )}
+            // )
+          }
         </div>
         <div className="pagination">
           <Pagination

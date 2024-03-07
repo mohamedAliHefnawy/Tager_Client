@@ -8,13 +8,12 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //Images
 import UserSignUp from "@/public/img/userSignUp.png";
 
-//icons
-import { EyeIcon } from "@/public/svg/eyeIcon";
-import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
+//nextUi
 import { Button } from "@nextui-org/react";
 
 export default function Home() {
@@ -27,18 +26,17 @@ export default function Home() {
   const [showPasswordConfirn, setShowPasswordConfirn] = useState(true);
   const router = useRouter();
 
-  const Icons = {
-    EyeIcon: <EyeIcon />,
-    EyeNotIcon: <EyeNotIcon />,
-  };
-
   const SignUp = async () => {
     setCheck(true);
     try {
+      const NameTrim = name.trim();
+      const PasswordTrim = password.trim();
+      const PhoneTrim = phone.trim();
+
       const data = {
-        name,
-        phone,
-        password,
+        name: NameTrim,
+        phone: PhoneTrim,
+        password: PasswordTrim,
       };
       const response = await axios.post(`${linkServer.link}users/signUp`, data);
 

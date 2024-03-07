@@ -6,6 +6,7 @@ import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -16,6 +17,7 @@ import Loading from "@/components/loading";
 import SideBarElemnts2 from "@/components/users/sideBarElemnts2";
 import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
+import CartIcon from "@/components/users/cart";
 
 //nextUi
 import {
@@ -29,13 +31,6 @@ import {
   Pagination,
   Spinner,
 } from "@nextui-org/react";
-
-//svg
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { DeleteIcon } from "@/public/svg/deleteIcon";
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import CartIcon from "@/components/users/cart";
 
 interface Data {
   _id: string;
@@ -72,13 +67,6 @@ export default function Home({ params }: { params: { slug: string } }) {
     string[]
   >(["إختر القسم التي تريده"]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const Icons = {
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    DeleteIcon: <DeleteIcon />,
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-    HeartIcon: <HeartIcon />,
-  };
 
   const selectedValueCategory = React.useMemo(
     () => Array.from(selectedKeyCategory).join(", ").replaceAll("_", " "),

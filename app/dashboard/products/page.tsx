@@ -15,23 +15,10 @@ import Loading from "@/components/loading";
 //imges
 import error from "../../../public/img/notfound.png";
 
-interface Employee {
-  _id: string;
-  name: string;
-  phone1: string;
-  phone2: string;
-  password: string;
-  image: string;
-  validity: string;
-}
-
 export default function Home() {
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [employee, setEmployee] = useState<Employee | null>(null);
-
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (nameAdmin) {

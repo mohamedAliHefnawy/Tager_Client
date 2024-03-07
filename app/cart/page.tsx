@@ -2,7 +2,6 @@
 
 // react
 import { useEffect, useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
@@ -16,7 +15,6 @@ import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 import MoadelOrderProducts from "@/components/users/models/orderProducts/moadelOrderProduct";
 import Loading from "@/components/loading";
-
 import { Pagination, Spinner } from "@nextui-org/react";
 
 interface Products {

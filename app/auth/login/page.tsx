@@ -8,17 +8,13 @@ import axios from "axios";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextUi
 import { Button } from "@nextui-org/react";
 
 //Images
-import error from "@/public/img/notfound.png";
 import UserLogin from "@/public/img/userLogin.png";
-
-//icons
-import { EyeIcon } from "@/public/svg/eyeIcon";
-import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -27,17 +23,16 @@ export default function Home() {
   const [showPassword, setShowPassword] = useState(true);
   const router = useRouter();
 
-  const Icons = {
-    EyeIcon: <EyeIcon />,
-    EyeNotIcon: <EyeNotIcon />,
-  };
 
   const Login = async () => {
     try {
+      const NameTrim = name.trim();
+      const PasswordTrim = password.trim();
       const data = {
-        name,
-        password,
+        name: NameTrim,
+        password: PasswordTrim,
       };
+
       const response = await axios.post(`${linkServer.link}users/login`, data);
       const { validity, answer } = response.data;
       if (answer === "yes") {

@@ -14,7 +14,6 @@ import DivCheck from "@/components/users/checkLogin/divCheck";
 import ButtonAddToCart from "@/components/users/addTo/cart";
 import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 import Loading from "@/components/loading";
-
 import { Pagination, Spinner } from "@nextui-org/react";
 
 interface Products {

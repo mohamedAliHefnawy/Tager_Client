@@ -5,9 +5,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { TwitterPicker } from "react-color";
 import { getUnixTime } from "date-fns";
+import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -22,15 +24,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 //nextUi
 import { Avatar, Card, CardBody, Tab, Tabs } from "@nextui-org/react";
-
-//svg
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { DeleteIcon } from "@/public/svg/deleteIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { EyeIcon } from "@/public/svg/eyeIcon";
-import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
-import { PencilIcon } from "@/public/svg/pencilIcon";
-import axios from "axios";
 
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
@@ -119,15 +112,6 @@ export default function Home() {
   const [selected, setSelected] = React.useState("1");
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
-  };
-
-  const Icons = {
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    DeleteIcon: <DeleteIcon />,
-    PhotoIcon: <PhotoIcon />,
-    EyeIcon: <EyeIcon />,
-    EyeNotIcon: <EyeNotIcon />,
-    PencilIcon: <PencilIcon />,
   };
 
   const tabs = () => {
@@ -348,8 +332,8 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
-  }, [user, secretKey]); // Add dependencies here
-  
+  }, [user, secretKey]);
+
   useEffect(() => {
     GetDataUser();
   }, [GetDataUser]);
@@ -359,20 +343,18 @@ export default function Home() {
       if (user) {
         const timeoutId = setTimeout(async () => {
           setUsername(user);
-          // setNewName(user);
           setIsLoading(false);
           await GetDataUser();
         }, 2000);
-  
+
         return () => clearTimeout(timeoutId);
       } else {
         setIsLoading(false);
       }
     };
-  
+
     fetchData();
   }, [user, GetDataUser]);
-  
 
   return (
     <>

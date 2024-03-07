@@ -40,31 +40,34 @@ export default function Home() {
 
   const Login = async () => {
     try {
+      const NameTrim = name.trim();
+      const PasswordTrim = password.trim();
       const data = {
-        name,
-        password,
+        name: NameTrim,
+        password: PasswordTrim,
       };
+
       const response = await axios.post(`${linkServer.link}users/login`, data);
 
       const { validity, answer } = response.data;
 
       if (answer === "yes") {
-        setTimeout(() => {
-          if (validity === "أدمن") {
-            handleSuccess();
-            localStorage.setItem("nameAdmin", name);
-            localStorage.setItem("valAdmin", validity);
-            router.push("/dashboard/analysis");
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "انت ليس لك الصلاحية للدخول للوحة التحكم",
-              text: "⤫",
-              confirmButtonColor: "#3085d6",
-              confirmButtonText: "حسنًا",
-            });
-          }
-        }, 3000);
+        // setTimeout(() => {
+        if (validity === "أدمن") {
+          // handleSuccess();
+          localStorage.setItem("nameAdmin", name);
+          localStorage.setItem("valAdmin", validity);
+          router.push("/dashboard/analysis");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "انت ليس لك الصلاحية للدخول للوحة التحكم",
+            text: "⤫",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "حسنًا",
+          });
+        }
+        // }, 3000);
       }
       if (response.data === "noPassword") {
         Swal.fire({

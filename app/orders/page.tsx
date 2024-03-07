@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //components
 import NavBar from "@/components/users/navBar";
@@ -27,15 +28,6 @@ import {
   Checkbox,
 } from "@nextui-org/react";
 
-//svg
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { DeleteIcon } from "@/public/svg/deleteIcon";
-import { PhotoIcon } from "@/public/svg/photoIcon";
-import { EyeIcon } from "@/public/svg/eyeIcon";
-import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
-import { PencilIcon } from "@/public/svg/pencilIcon";
-import { EllipsisverticalIcon } from "@/public/svg/ellipsisverticalIcon";
-import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
 
 interface Messages {
   message: string;
@@ -102,16 +94,7 @@ export default function Home() {
     "بإنتظار الموافقة",
   ]);
   const itemsPerPage = 6;
-  const Icons = {
-    ShoppingcartIcon: <ShoppingcartIcon />,
-    DeleteIcon: <DeleteIcon />,
-    PhotoIcon: <PhotoIcon />,
-    EyeIcon: <EyeIcon />,
-    EyeNotIcon: <EyeNotIcon />,
-    PencilIcon: <PencilIcon />,
-    EllipsisverticalIcon: <EllipsisverticalIcon />,
-    ChatbubbleleftrightIcon: <ChatbubbleleftrightIcon />,
-  };
+  
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -120,7 +103,11 @@ export default function Home() {
   };
 
   const currentItems = orders
-    .filter((item) => item.marketer === username)
+    .filter((item) =>
+      selected.includes(
+        item.situationSteps[item.situationSteps.length - 1].situation
+      )
+    )
     .slice(indexOfFirstItem, indexOfLastItem);
 
   const Body = () => {
@@ -206,12 +193,7 @@ export default function Home() {
               <th className="border-1 border-[var(--mainColor)]">-</th>
             </tr>
 
-            {loading ? (
-              <div className="flex justify-center items-center h-[400px]">
-                <Spinner size="lg" color="warning" />
-              </div>
-            ) : orders.filter((item) => item.marketer === username).length >
-              0 ? (
+            {orders.length > 0 ? (
               currentItems.map((order, index) => (
                 <tr
                   key={index}

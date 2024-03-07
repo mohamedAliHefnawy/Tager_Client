@@ -1,28 +1,16 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
   Modal,
   ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
-  Button,
   useDisclosure,
-  Input,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
 } from "@nextui-org/react";
-
-//svg
-import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
-import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
 
 interface Messages {
   admin: [{ message: string; person: string; date: string; time: string }];
@@ -39,16 +27,10 @@ export default function ChatDiv({
   idOrder: string;
   chatMessages: Messages[];
 }) {
-  const [showDivCaht, setShowDivCaht] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
   const [messageText, setMessageText] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
-
-  const Icons = {
-    ChatbubbleleftrightIcon: <ChatbubbleleftrightIcon />,
-    PaperAirplaneIcon: <PaperAirplaneIcon />,
-  };
 
   const parseDateTime = (dateString: string, timeString: string): number => {
     const [day, month, year] = dateString.split("/");

@@ -1,12 +1,11 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
-import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -27,12 +26,6 @@ import {
   Switch,
 } from "@nextui-org/react";
 
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { PencilIcon } from "../../../../public/svg/pencilIcon";
-
 export default function ModelEditCategory({
   idCategoryy,
   nameCategoryy,
@@ -51,13 +44,6 @@ export default function ModelEditCategory({
   const [closeBtn, setCloseBtn] = useState(true);
   const [imageURL, setImageURL] = useState(imageCategoryy);
   const [active, setActive] = React.useState(activeCategoryy);
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    PencilIcon: <PencilIcon />,
-  };
 
   const imagebase64 = async (file: any) => {
     const reader = new FileReader();
@@ -176,8 +162,6 @@ export default function ModelEditCategory({
       setCloseBtn(true);
     }
   }, [imageURL, nameCatogry, active, imageCategoryy, nameCategoryy]);
-  
-  
 
   return (
     <>

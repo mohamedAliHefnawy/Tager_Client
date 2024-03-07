@@ -9,7 +9,9 @@ import axios from "axios";
 import NavBar from "@/components/users/navBar";
 import Footer from "@/components/users/footer";
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
+import useCheckLoginWallet from "@/components/users/checkLogin/checkLoginWallet";
 import DivCheck from "@/components/users/checkLogin/divCheck";
+import DivCheckWallet from "@/components/users/checkLogin/divCheckWallet";
 import ModaelPullMoney from "@/components/users/models/modaelPullMoney";
 import Loading from "@/components/loading";
 
@@ -40,12 +42,14 @@ interface withdrawalRequests {
 
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [user] = useCheckLogin();
+  const [user, userValidity] = useCheckLogin();
+  const [userWallet, userValidityWallet] = useCheckLoginWallet();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [dataUser, setDataUser] = useState<Data>();
   const [withdrawUser, setWithdrawUser] = useState<withdrawalRequests[]>([]);
   const [selected, setSelected] = React.useState("1");
+
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
   };
@@ -233,22 +237,26 @@ export default function Home() {
           <Loading />
         ) : user ? (
           <>
-            <div className="w-[100%] flex-col flex items-center">
-              <NavBar
-                userr={user}
-                lengthProductsInCart={0}
-                lengthProductsInFavourite={0}
-              />
-              <div className=" w-[100%] lg:mb-96 md:mb-[500px] sm:mb-[500px] max-sm:mb-[500px] ">
-                <div className="bg-[var(--mainColorRgba)] w-[100%] h-60 flex justify-center items-end">
-                  <div className=" lg:flex md:block sm:block max-sm:block justify-between lg:w-[70%] md:w-[70%] sm:w-[90%] max-sm:w-[90%]  h-auto z-50  border-2 border-dashed bg-white border-[var(--mainColor)] rounded-3xl absolute top-40 ">
-                    <div className="  w-[100%] p-4">{tabs()}</div>
+            {userWallet ? (
+              <div className="w-[100%] flex-col flex items-center">
+                <NavBar
+                  userr={user}
+                  lengthProductsInCart={0}
+                  lengthProductsInFavourite={0}
+                />
+                <div className=" w-[100%] lg:mb-96 md:mb-[500px] sm:mb-[500px] max-sm:mb-[500px] ">
+                  <div className="bg-[var(--mainColorRgba)] w-[100%] h-60 flex justify-center items-end">
+                    <div className=" lg:flex md:block sm:block max-sm:block justify-between lg:w-[70%] md:w-[70%] sm:w-[90%] max-sm:w-[90%]  h-auto z-50  border-2 border-dashed bg-white border-[var(--mainColor)] rounded-3xl absolute top-40 ">
+                      <div className="  w-[100%] p-4">{tabs()}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <Footer />
-            </div>
+                <Footer />
+              </div>
+            ) : (
+              <DivCheckWallet />
+            )}
           </>
         ) : (
           <DivCheck link="/doctor" />

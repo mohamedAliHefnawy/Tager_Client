@@ -1,24 +1,10 @@
 //react
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
 //nextUi
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Image,
-  Input,
-  Spinner,
-} from "@nextui-org/react";
-
-//svgIcons
-import { SearchIcon } from "../../public/svg/searchIcon";
-import { EllipsisverticalIcon } from "../../public/svg/ellipsisverticalIcon";
-import { ConvertIcon } from "../../public/svg/convertIcon";
+import { Card, CardBody, CardFooter, Spinner } from "@nextui-org/react";
 
 //components
 import ModaelShowReturn from "@/components/dashboard/modals/returns/modaelShowReturn";
@@ -47,18 +33,9 @@ interface ReturnOrders {
 export default function CardReturnSafe() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [returnOrders, setReturnOrders] = useState<ReturnOrders[]>([]);
-  const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pressable, setPressable] = useState(true);
   const itemsPerPage = 1000000;
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  const icons = {
-    SearchIcon: <SearchIcon />,
-    EllipsisverticalIcon: <EllipsisverticalIcon />,
-    ConvertIcon: <ConvertIcon />,
-  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -89,19 +66,6 @@ export default function CardReturnSafe() {
 
   return (
     <>
-      <div className="flex justify-between">
-        {/* <div className="w-[70%]">
-          <input
-            type="text"
-            placeholder="بحث ..."
-            className="input"
-            onChange={handleSearchChange}
-            value={searchText}
-          />
-        </div>
-
-        <ModaelConvertMoney /> */}
-      </div>
       <div className="my-3 ml-2 text-slate-600 text-xs">
         <p>Total {returnOrders.length} OrderReturns </p>
       </div>

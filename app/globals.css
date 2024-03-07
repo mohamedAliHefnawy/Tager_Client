@@ -1,8 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "react-alice-carousel/lib/alice-carousel.css";
 
 /* @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300&display=swap"); */
+
+.swiper {
+  width: 600px;
+  height: 300px;
+}
 
 :root {
   --mainColor: #cca330;
@@ -14,7 +20,6 @@
 ::-webkit-scrollbar {
   width: 10px;
 }
-
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--mainColor);

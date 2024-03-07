@@ -3,38 +3,10 @@
 //React
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
-import Link from "next/link";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";import linkServer from "@/linkServer";
-
+import linkServer from "@/linkServer";
 
 //nextUi
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-  Avatar,
-  Textarea,
-} from "@nextui-org/react";
-
-//svg
-import { BarsarrowdownIcon } from "@/public/svg/barsarrowdownIcon";
-import { UserIcon } from "@/public/svg/userIcon";
-import { BanknotesIcon } from "@/public/svg/banknotesIcon";
-import { TagIcon } from "@/public/svg/tagIcon";
-import { LogoutIcon } from "@/public/svg/logoutIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import { HomeIcon } from "@/public/svg/homeIcon";
-import { ChevrondownIcon } from "@/public/svg/chevrondownIcon";
-import { MapIcon } from "@/public/svg/mapIcon";
-import { BuildingstorefrontIcon } from "@/public/svg/buildingstorefrontIcon";
-
-//images
-import Logo from "@/public/img/hbaieb.png";
+import { Avatar } from "@nextui-org/react";
 
 //components
 import NavBar from "@/components/delivery/navBar";
@@ -84,7 +56,7 @@ export default function Home() {
             },
           }
         );
-  
+
         setProductsOrders(response.data.AllData);
       } catch (error) {
         console.log(error);
@@ -92,7 +64,7 @@ export default function Home() {
         setLoading(false);
       }
     };
-  
+
     if (nameDelivery) {
       fetchData();
     }
@@ -129,7 +101,7 @@ export default function Home() {
                     key={indexItem}
                     className=" p-1 my-3 w-[100%] flex flex-col justify-center items-center  border-1 border-warning-200 rounded-xl mr-1"
                   >
-                    {item.nameProduct &&
+                    {item.nameProduct && (
                       <div className="flex justify-end w-[100%] mb-3 p-1">
                         <p className="text-right text-[12px] mr-1">
                           <span>
@@ -147,11 +119,13 @@ export default function Home() {
                           <Avatar src={`${item.imageProduct}`} size="sm" />
                         </p>
                       </div>
-                    } 
-                    {
-                      item.products &&
+                    )}
+                    {item.products &&
                       item.products.map((product, indexProduct) => (
-                        <div key={indexProduct} className="flex justify-end w-[100%] mb-3 p-1">
+                        <div
+                          key={indexProduct}
+                          className="flex justify-end w-[100%] mb-3 p-1"
+                        >
                           <p className="text-right text-[12px] mr-1">
                             <span>
                               {product.nameProduct} ({product.amount})
@@ -161,17 +135,16 @@ export default function Home() {
                                 <span className="mr-1">د.ل</span>
                                 <span>{product.price}</span>
                               </span>
-                              <span className="text-[12px]">{product.size}</span>
+                              <span className="text-[12px]">
+                                {product.size}
+                              </span>
                             </p>
                           </p>
                           <p>
                             <Avatar src={`${product.imageProduct}`} size="sm" />
                           </p>
                         </div>
-                      ))
-                    }
-
-
+                      ))}
                   </div>
                 ))
             ) : (

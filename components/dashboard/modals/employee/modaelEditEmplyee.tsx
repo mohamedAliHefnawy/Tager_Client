@@ -4,6 +4,7 @@ import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //fireBase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -31,12 +32,6 @@ import {
   Avatar,
   DropdownItem,
 } from "@nextui-org/react";
-
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { PencilIcon } from "../../../../public/svg/pencilIcon";
 
 export default function ModelEditEmplyee({
   idEmployee,
@@ -69,13 +64,6 @@ export default function ModelEditEmplyee({
   const [selectedValidity, setSelectedValidity] = React.useState(
     new Set([validitiyEmployee])
   );
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    PencilIcon: <PencilIcon />,
-  };
 
   const selectedValueValidity = React.useMemo(
     () => Array.from(selectedValidity).join(", ").replaceAll("_", " "),

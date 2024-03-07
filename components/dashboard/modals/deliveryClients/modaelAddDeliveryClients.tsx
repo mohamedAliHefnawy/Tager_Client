@@ -4,6 +4,7 @@ import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -33,18 +34,12 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 //compenents
 import { analytics } from "@/fireBase/fireBaseConfig";
 
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-
 export default function ModelAddDeliveryClients(props: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [imageURL, setImageURL] = useState("");
   const [img, setImg] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [generatedPassword, setGeneratedPassword] = useState("");
   const [password, setPassword] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
   const [selected, setSelected] = React.useState("1");
@@ -60,31 +55,6 @@ export default function ModelAddDeliveryClients(props: any) {
     () => Array.from(selectedValidity).join(", ").replaceAll("_", " "),
     [selectedValidity]
   );
-
-  const Icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-  };
-
-  function generateStrongPassword() {
-    const length = 12;
-    const charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-    let password = "";
-
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset[randomIndex];
-    }
-
-    return password;
-  }
-
-  const generatePassword = () => {
-    const newPassword = generateStrongPassword();
-    setGeneratedPassword(newPassword);
-  };
 
   const imagebase64 = async (file: any) => {
     const reader = new FileReader();

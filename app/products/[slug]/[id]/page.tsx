@@ -21,6 +21,7 @@ import ButtonAddToFavourite from "@/components/users/addTo/favourite";
 //nextUi
 import { Button } from "@nextui-org/react";
 import CartIcon from "@/components/users/cart";
+import AliceCarousel from "react-alice-carousel";
 
 interface Store {
   nameStore: string;
@@ -96,15 +97,6 @@ export default function Product({ params }: { params: { id: string } }) {
 
   const updateCartLength = (length: any) => {
     setCartLength(length);
-  };
-
-  const settings = {
-    dots: true,
-    dotsClass: "slick-dots slick-thumb",
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
   };
 
   const allSizes = Array.from(
@@ -254,29 +246,27 @@ export default function Product({ params }: { params: { id: string } }) {
   const availableQuantity = getAvailableQuantity(selectedColor, selectedSize);
   const availableStores = getAvailableStores(selectedColor, selectedSize);
 
+  const items =
+    productImages &&
+    productImages.map((img, index) => (
+      <div key={index} className="flex justify-center items-center">
+        <img
+          src={img}
+          alt={`Slide ${index + 1}`}
+          width={100}
+          height={100}
+          className="w-[100%]"
+        />
+      </div>
+    ));
+
   const Body = () => {
     return (
       <>
         <div className="py-20 px-6  lg:flex md:flex sm:block max-sm:block justify-end w-[100%]">
           <div className="lg:hidden md:hidden sm:flex max-sm:flex lg:w-[33%] md:w-[33%] sm:w-[90%] max-sm:w-[90%] h-auto flex justify-center p-6">
             <div className="w-[100%]">
-              <Slider {...settings}>
-                {productImages &&
-                  productImages.map((img, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-center items-center"
-                    >
-                      <Image
-                        src={img}
-                        alt={`Slide ${index + 1}`}
-                        width={100}
-                        height={100}
-                        className="w-[100%] h-96"
-                      />
-                    </div>
-                  ))}
-              </Slider>
+              <AliceCarousel mouseTracking items={items} />
             </div>
           </div>
           <div className="p-6">
@@ -320,7 +310,6 @@ export default function Product({ params }: { params: { id: string } }) {
               <p style={{ direction: "rtl" }}>الألوان :</p>
             </p>
             <p className="flex justify-end mt-4">
-              {/* <p className="mr-10">{cartLength}</p> */}
               {allColors.map((color, index) => (
                 <span key={index} className="mr-6 hover:cursor-pointer">
                   <div
@@ -388,23 +377,7 @@ export default function Product({ params }: { params: { id: string } }) {
           </div>
           <div className="lg:flex md:flex sm:hidden max-sm:hidden h-auto w-auto flex justify-center p-6">
             <div className="w-96">
-              <Slider {...settings}>
-                {productImages &&
-                  productImages.map((img, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-center items-center"
-                    >
-                      <Image
-                        src={img}
-                        alt={`Slide ${index + 1}`}
-                        width={100}
-                        height={100}
-                        className="w-[100%]"
-                      />
-                    </div>
-                  ))}
-              </Slider>
+              <AliceCarousel mouseTracking items={items} />
             </div>
           </div>
         </div>

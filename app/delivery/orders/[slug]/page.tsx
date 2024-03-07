@@ -3,12 +3,10 @@
 //React
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
-import Link from "next/link";
-import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextUi
 import {
@@ -18,14 +16,7 @@ import {
   DropdownItem,
   Button,
   Avatar,
-  Textarea,
 } from "@nextui-org/react";
-
-//svg
-import { ArrowUturnDownIcon } from "@/public/svg/arrowUturnDownIcon";
-
-//images
-import Logo from "@/public/img/hbaieb.png";
 
 //components
 import NavBar from "@/components/delivery/navBar";
@@ -91,10 +82,6 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [selectedSituationOrder, setSelectedSituationOrder] = React.useState<
     string[]
   >(["تغيير حالة الطلبية"]);
-
-  const Icons = {
-    ArrowUturnDownIcon: <ArrowUturnDownIcon />,
-  };
 
   const selectedValueSituationOrder = React.useMemo(
     () => Array.from(selectedSituationOrder).join(", ").replaceAll("_", " "),

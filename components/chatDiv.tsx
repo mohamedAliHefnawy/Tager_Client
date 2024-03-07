@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -11,10 +12,6 @@ import {
   useDisclosure,
   Badge,
 } from "@nextui-org/react";
-
-//svg
-import { ChatbubbleleftrightIcon } from "@/public/svg/chatbubbleleftrightIcon";
-import { PaperAirplaneIcon } from "@/public/svg/paperAirplaneIcon";
 
 interface Messages {
   message: string;
@@ -49,10 +46,6 @@ export default function ChatDiv({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
 
-  const Icons = {
-    ChatbubbleleftrightIcon: <ChatbubbleleftrightIcon />,
-    PaperAirplaneIcon: <PaperAirplaneIcon />,
-  };
 
   const ShowedOrlready = async () => {
     onOpen();

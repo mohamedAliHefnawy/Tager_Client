@@ -115,7 +115,6 @@ export default function Products() {
   };
 
   const GetProducts = async () => {
-    setLoading(true);
     try {
       let response: { data: { token: string; products: any } };
       response = await axios.get(`${linkServer.link}products/getProducts`, {
@@ -126,8 +125,6 @@ export default function Products() {
       setProducts(response.data.products);
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -183,11 +180,12 @@ export default function Products() {
 
             <div className="w-[10%] text-right"></div>
           </div>
-          {loading ? (
-            <div className="flex justify-center items-center h-[400px]">
-              <Spinner size="lg" color="warning" />
-            </div>
-          ) : (
+          {
+            // loading ? (
+            //   <div className="flex justify-center items-center h-[400px]">
+            //     <Spinner size="lg" color="warning" />
+            //   </div>
+            // ) : (
             currentItems.map((product, index) => (
               <>
                 <div
@@ -307,7 +305,8 @@ export default function Products() {
                 </div>
               </>
             ))
-          )}
+            // )
+          }
         </div>
         <div className="pagination">
           <Pagination

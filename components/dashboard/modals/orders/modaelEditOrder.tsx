@@ -1,8 +1,8 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextui
 import {
@@ -20,22 +20,14 @@ import {
   CardBody,
 } from "@nextui-org/react";
 
-//svgIcons
-import { PlusIcon } from "../../../../public/svg/plusIcon";
-import { FingerPrintIcon } from "../../../../public/svg/fingerprintIcon";
-import { PhotoIcon } from "../../../../public/svg/photoIcon";
-import { PencilIcon } from "../../../../public/svg/pencilIcon";
-
 export default function ModaelEditOrder({
   idOrder,
   delivery,
   situationSteps,
-}: // sendDataToParent,
-{
+}: {
   idOrder: string;
   delivery: string;
   situationSteps: [{ situation: string; date: string; time: string }];
-  // sendDataToParent: any;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
@@ -46,13 +38,6 @@ export default function ModaelEditOrder({
 
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
-  };
-
-  const icons = {
-    PlusIcon: <PlusIcon />,
-    FingerPrintIcon: <FingerPrintIcon />,
-    PhotoIcon: <PhotoIcon />,
-    PencilIcon: <PencilIcon />,
   };
 
   const ChangeSituation = (newSituation: string) => {
@@ -483,24 +468,13 @@ export default function ModaelEditOrder({
     }
   }, [situationSteps]);
 
-  // useEffect(() => {
-  //   if (
-  //     situation !== situationSteps &&
-  //     situationSteps[situationSteps.length - 1].situation !== "تم إستلام الكاش"
-  //   ) {
-  //     setCloseBtn(false);
-  //   } else {
-  //     setCloseBtn(true);
-  //   }
-  // }, [situation]);
-
   return (
     <>
       <p
         onClick={onOpen}
         className="hover:cursor-pointer hover:opacity-75 bg-warning-200 p-3 mt-1 rounded-full border-1 border-warning-600 text-warning-900"
       >
-        {icons.PencilIcon}
+        {Icons.PencilIcon}
       </p>
       <Modal
         size="5xl"
