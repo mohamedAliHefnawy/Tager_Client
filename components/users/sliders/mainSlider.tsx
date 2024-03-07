@@ -3,28 +3,22 @@ import React from "react";
 import Image from "next/image";
 import Slider from "react-slick";
 //images
-import Img from "@/public/img/bambooWatch.jpg";
 import Img2 from "@/public/img/blue-t-shirt.jpg";
 import Img3 from "@/public/img/bg.png";
 import Img4 from "@/public/img/bg-2222.png";
 import Img5 from "@/public/img/bg-3333.png";
 
 export default function MainSlider() {
+
   const settings = {
     dots: true,
     infinite: true,
-    
     speed: 1500,
     slidesToShow: 1,
     slidesToScroll: 1,
   };
 
-  const images = [
-    <Image src={Img2} alt={"error"} className="w-[100%] h-60" />,
-    <Image src={Img3} alt={"error"} className="w-[100%] h-60" />,
-    <Image src={Img4} alt={"error"} className="w-[100%] h-60" />,
-    <Image src={Img5} alt={"error"} className="w-[100%] h-60" />,
-  ];
+
   const productTemplate = () => {
     return (
       <div className="flex mx-auto">
