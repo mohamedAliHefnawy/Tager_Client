@@ -27,7 +27,6 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 
-
 interface Stores {
   _id: string;
   name: string;
@@ -86,7 +85,7 @@ export default function MoadelOrderProduct({
   const handleSelectionChangeTo = (selectedItems: string[]) => {
     setSelectedKeysTo(selectedItems);
   };
- 
+
   const GetStores = async () => {
     try {
       let response: { data: { token: string; stores: any } };
@@ -216,14 +215,6 @@ export default function MoadelOrderProduct({
                 placeholder="سعر بيع القطعة"
                 value={priceProduct}
                 disabled
-                // onChange={(e) => {
-                //   const value = +e.target.value;
-                //   if (value >= 0) {
-                //     setPriceOrder(e.target.value);
-                //   } else {
-                //     setPriceOrder("");
-                //   }
-                // }}
               />
             </div>
           </div>
@@ -249,11 +240,6 @@ export default function MoadelOrderProduct({
                       <p>من فضلك إختر المكان</p>
                     ) : (
                       <p>
-                        {/* متوفر
-                        {amountStore.length > 0
-                          ? amountStore[0] - +amountOrder
-                          : 0}
-                        <span className="mr-1">قطعة</span> */}
                         {amountStore.length > 0 ? (
                           <p className="text-success-600">متوفر</p>
                         ) : (
@@ -266,12 +252,7 @@ export default function MoadelOrderProduct({
                     <span className="flex">
                       <p>{priceProduct}</p>
                       <p className="mr-1">د.ل</p>
-                      {/* الربح : */}
                     </span>
-                    {/* <span className="flex mr-1">
-                      <p>{gainProduct}</p>
-                      <p className="mr-1">د.ل</p>
-                    </span> */}
                   </p>
                 </div>
               </div>
@@ -283,23 +264,7 @@ export default function MoadelOrderProduct({
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
-              {/* <div className="flex justify-between px-8 py-4">
-                <p> صافي الربح </p>
-                <p className="flex">
-                  <p>{+amountOrder * +gainProduct}</p>
-                  <p className="mr-1">د.ل</p>
-                </p>
-              </div>
-              <div className="flex justify-between px-8 py-4">
-                <p> صافي الربح للادمن </p>
-                <p className="flex">
-                  <p>{(+amountOrder * +priceProduct ) - (+amountOrder * +priceProductRealy) - (+amountOrder * +gainProduct)}</p>
-                  <p>{priceProductRealy}</p>
-                  <p>{priceProduct}</p>
-                  <p className="mr-1">د.ل</p>
-                </p>
-              </div> */}
-              {/* {profitAdmin} */}
+
               <div className="flex justify-between px-8 py-4">
                 <p> سعر التوصيل </p>
                 <p className="flex">
@@ -330,10 +295,6 @@ export default function MoadelOrderProduct({
         </div>
       </>
     );
-  };
-
-  const handleSuccess = () => {
-    setShowConfetti(true);
   };
 
   const AddStore = async () => {
@@ -388,7 +349,7 @@ export default function MoadelOrderProduct({
             },
           }
         );
-  
+
         setPhoneCompany(response.data.user.phoneCompany);
         setNameCompany(response.data.user.nameCompany);
         setImageURLCompany(response.data.user.imageCompany);
@@ -397,7 +358,7 @@ export default function MoadelOrderProduct({
         console.log(error);
       }
     };
-  
+
     if (nameUser) {
       fetchData();
     }

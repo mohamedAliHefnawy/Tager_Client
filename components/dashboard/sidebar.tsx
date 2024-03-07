@@ -9,7 +9,6 @@ import Icons from "@/iconsSvg";
 
 export default function SideBar() {
   const router = useRouter();
-
   const handleLogout = () => {
     localStorage.removeItem("nameAdmin");
     router.push("/dashboard");

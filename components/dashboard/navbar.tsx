@@ -2,7 +2,6 @@
 
 // react
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import axios from "axios";
 import linkServer from "@/linkServer";
@@ -13,15 +12,14 @@ import {
   User,
   Spinner,
   Badge,
-  Button,
   PopoverContent,
   Popover,
   PopoverTrigger,
 } from "@nextui-org/react";
 
 // svgIcons
-import { BellalertIcon } from "../../public/svg/bellalertIcon";
-import { BackwardIcon } from "../../public/svg/backwardIcon";
+import { BellalertIcon } from "@/public/svg/bellalertIcon";
+import { BackwardIcon } from "@/public/svg/backwardIcon";
 
 interface Notifications {
   _id: string;
@@ -38,7 +36,6 @@ export default function NavBar() {
   const [loading, setLoading] = useState(true);
   const usernamee = localStorage.getItem("nameAdmin");
   const [notifications, setNotifications] = useState<Notifications[]>([]);
-  const router = useRouter();
 
   const icons = {
     BellalertIcon: <BellalertIcon />,

@@ -1,6 +1,5 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
@@ -95,7 +94,6 @@ export default function ModelEditSupplier({
     if (selectedFiles && selectedFiles.length > 0) {
       const file = selectedFiles[0];
       const fileName = generateUniqueFileName(file);
-
       const fileRef = ref(analytics, `elhbaieb/${fileName}`);
       const data = await uploadBytes(fileRef, file);
       const url = await getDownloadURL(data.ref);
@@ -110,22 +108,6 @@ export default function ModelEditSupplier({
       <>
         <form className="flex flex-col justify-center items-center">
           <div className="w-[100%] flex justify-center">
-            {/* {!img ? (
-                        <label
-                          htmlFor="img"
-                          className="p-10 rounded-full text-black hover:cursor-pointer  bg-[var(--mainColorRgba)] border-1 border-[var(--mainColor)]"
-                        >
-                          <Avatar size="lg" src={img} />
-                        </label>
-                      ) : (
-                        <label
-                          htmlFor="img"
-                          className="p-0 rounded-full text-black hover:cursor-pointer  bg-[var(--mainColorRgba)] border-1 border-[var(--mainColor)]"
-                        >
-                          <Avatar size="lg" src={img} />
-                        </label>
-                      )} */}
-
             <label
               htmlFor="img"
               className="p-0 rounded-full text-black hover:cursor-pointer  bg-[var(--mainColorRgba)] border-1 border-[var(--mainColor)]"

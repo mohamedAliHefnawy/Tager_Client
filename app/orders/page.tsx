@@ -23,11 +23,9 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Spinner,
   CheckboxGroup,
   Checkbox,
 } from "@nextui-org/react";
-
 
 interface Messages {
   message: string;
@@ -94,7 +92,6 @@ export default function Home() {
     "بإنتظار الموافقة",
   ]);
   const itemsPerPage = 6;
-  
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;

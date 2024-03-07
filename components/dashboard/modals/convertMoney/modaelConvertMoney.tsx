@@ -22,12 +22,11 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 
-
 //images
-import exChange from "../../../../public/img/exchange.png";
+import exChange from "@/public/img/exchange.png";
 
 //compentes
-import useCheckLogin from "../../../../components/dashboard/checkLogin/checkLogin";
+import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 
 interface MoneyItem {
   value: string;
@@ -58,8 +57,6 @@ export default function ModaelConvertMoney(props: any) {
   const [selectedKeysTo, setSelectedKeysTo] = React.useState<string[]>([
     "إختر المحفظه ال تريد التحويل إليها",
   ]);
-
-  
 
   const handleSelectionChangeFrom = (selectedItems: string[]) => {
     setSelectedKeysFrom(selectedItems);

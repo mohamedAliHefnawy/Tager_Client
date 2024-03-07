@@ -7,27 +7,20 @@ import { format, isValid, parse } from "date-fns";
 import linkServer from "@/linkServer";
 
 //components
-import NavBar from "../../../../components/dashboard/navbar";
-import SideBar from "../../../../components/dashboard/sidebar";
-import useCheckLogin from "../../../../components/dashboard/checkLogin/checkLogin";
-import DivCheck from "../../../../components/dashboard/checkLogin/divCheck";
-import Loading from "../loading";
+import NavBar from "@/components/dashboard/navbar";
+import SideBar from "@/components/dashboard/sidebar";
+import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
+import DivCheck from "@/components/dashboard/checkLogin/divCheck";
+import Loading from "@/components/loading";
 
 // react
 import { useCallback, useEffect, useState } from "react";
-import Swal from "sweetalert2";
 
 //imgaes
-import error from "../../../../public/img/notfound.png";
+import error from "@/public/img/notfound.png";
 
 //nextUi
-import {
-  Button,
-  Input,
-  Pagination,
-  Spinner,
-  Textarea,
-} from "@nextui-org/react";
+import { Button, Pagination, Spinner, Textarea } from "@nextui-org/react";
 
 interface MoneyItem {
   value: string;

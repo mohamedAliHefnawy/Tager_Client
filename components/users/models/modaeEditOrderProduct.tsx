@@ -13,7 +13,6 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-
   Tab,
   Card,
   Tabs,
@@ -21,10 +20,6 @@ import {
   Avatar,
   Spinner,
 } from "@nextui-org/react";
-
-
-// imgaes
-import product from "@/public/img/blue-t-shirt.jpg";
 
 interface Products {
   idProduct: string;
@@ -91,47 +86,23 @@ export default function ModaeEditOrderProduct({
   const [produtss, setProdutss] = useState<Products[]>([]);
   const [allProduts, setAllProduts] = useState<Products[]>([]);
   const [allProduts2, setAllProduts2] = useState<Products2[]>([]);
-  //DELTE
   const [newProducts, setNewProducts] = useState<Products[]>([]);
   const [newProducts2, setNewProducts2] = useState<Products[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: string }>(
     {}
   );
-  const [lenAmountEqualZero, setLenAmountEqualZero] = useState(0);
   const [totalPriceOrder, setTotalPriceOrder] = useState(0);
   const [gainMarketer, setGainMarketer] = useState(0);
   const [amountInput, setAmountInput] = useState<{ [key: string]: string }>({});
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
-  const itemsPerPage = 6;
-  const [selectedProducts, setSelectedProducts] = React.useState<string[]>([
-    "إختر طريقة الدفع",
-  ]);
   const [selected, setSelected] = React.useState("1");
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
   };
 
-  const handleSelectionChangeProducts = (selectedItems: any) => {
-    if (Array.isArray(selectedItems)) {
-      setSelectedProducts(selectedItems);
-    } else {
-      const keysArray = Array.from(selectedItems);
-      const stringKeysArray = keysArray.map(String);
-      setSelectedProducts(stringKeysArray);
-    }
-  };
-
-  const selectedValueProducts = React.useMemo(
-    () => Array.from(selectedProducts).join(", ").replaceAll("_", " "),
-    [selectedProducts]
-  );
-
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);
   };
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const filteredProducts = allProduts2.filter((product) => {
     const lowerCaseSearchText = searchText.toLowerCase();
     return (
@@ -349,7 +320,6 @@ export default function ModaeEditOrderProduct({
                             <div className="flex lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
                               <div className="w-24 h-20 rounded-full">
                                 <Avatar size="lg" src={item.imageProduct} />
-                                {/* {item.gainMarketer} */}
                                 <span
                                   onClick={() =>
                                     RomveProducWithOrder(item.idProduct)
@@ -364,8 +334,6 @@ export default function ModaeEditOrderProduct({
                                   {item.nameProduct}
                                 </p>
                                 <p className="flex">
-                                  {/* {item.amount} */}
-                                  {/* {gainMarketer} */}
                                   <span>
                                     {item.amount > 0 ? (
                                       <p className="text-success-700">متوفر</p>
@@ -390,7 +358,6 @@ export default function ModaeEditOrderProduct({
                                 className="input"
                                 placeholder="الكمية"
                                 value={amountInput[item._id] || ""}
-                                // defaultValue={item.amount}
                                 onChange={(e) =>
                                   handleAmountChange(item._id, e, item.amount)
                                 }
@@ -411,7 +378,6 @@ export default function ModaeEditOrderProduct({
             </Tab>
             <Tab key="3" title="إضافة منتجات">
               <Card>
-                {/* {lenAmountEqualZero} */}
                 <CardBody>
                   {loading ? (
                     <div className="flex justify-center items-center h-[400px]">
@@ -555,7 +521,6 @@ export default function ModaeEditOrderProduct({
 
   useEffect(() => {
     if (produts) {
-      // setProdutss(produts);
       setNewProducts2(produts);
     }
   }, [produts]);

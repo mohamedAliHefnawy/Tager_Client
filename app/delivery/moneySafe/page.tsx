@@ -3,10 +3,7 @@
 //React
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
-import Link from "next/link";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
 
 //components
@@ -38,7 +35,6 @@ export default function Home() {
   const [nameDeliveryy, setNameDeliveryy] = useState("");
   const [notesSend, setNotesSend] = useState("لا يوجد ملاحظة");
   const [isLoading, setIsLoading] = useState(true);
-  const [loading, setLoading] = useState(true);
   const [closeBtn, setCloseBtn] = useState(true);
   const [dataUser, setDataUser] = useState<Data>();
 
@@ -121,12 +117,6 @@ export default function Home() {
       setCloseBtn(true);
     }
   }, [dataUser]);
-
-  // useEffect(() => {
-  //   if (nameDelivery) {
-  //     GetDataUser();
-  //   }
-  // }, [nameDelivery]);
 
   useEffect(() => {
     if (nameDelivery) {

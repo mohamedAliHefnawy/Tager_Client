@@ -1,6 +1,5 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
@@ -15,16 +14,10 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
   Tabs,
   Tab,
   Card,
   CardBody,
-  CardHeader,
-  DropdownTrigger,
-  DropdownItem,
-  DropdownMenu,
-  Dropdown,
   Avatar,
 } from "@nextui-org/react";
 
@@ -46,7 +39,6 @@ export default function ModelAddDeliveryClients(props: any) {
   const [selectedValidity, setSelectedValidity] = React.useState(
     new Set(["مندوب توصيل"])
   );
-
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
   };
@@ -90,7 +82,6 @@ export default function ModelAddDeliveryClients(props: any) {
       const data = await uploadBytes(fileRef, file);
       const url = await getDownloadURL(data.ref);
       setImageURL(url);
-      console.log(url);
     } else {
       alert("Please select a file");
     }
@@ -168,30 +159,6 @@ export default function ModelAddDeliveryClients(props: any) {
             <Tab key="3" title="الصلاحيات">
               <Card>
                 <CardBody>
-                  {/* <Dropdown>
-                    <DropdownTrigger>
-                      <Button
-                        color="warning"
-                        variant="bordered"
-                        // className="w-[100%] mt-4 border-1 border-primary-300 rounded-xl"
-                      >
-                        {selectedValue}
-                      </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="Single selection example"
-                      variant="flat"
-                      disallowEmptySelection
-                      selectionMode="single"
-                      selectedKeys={selectedValue}
-                      onSelectionChange={(keys) =>
-                        setSelectedValidity(keys as Set<string>)
-                      }
-                    >
-                      <DropdownItem key="مندوب توصيل">مندوب توصيل</DropdownItem>
-                     
-                    </DropdownMenu>
-                  </Dropdown> */}
                   <Button color="warning" variant="bordered">
                     {selectedValue}
                   </Button>
@@ -217,7 +184,6 @@ export default function ModelAddDeliveryClients(props: any) {
       }
       if (response.data === "no") {
         alert("هذا الموظف موجود بالفعل 😊");
-        // window.location.reload();
       }
     } catch (error) {
       console.error(error);

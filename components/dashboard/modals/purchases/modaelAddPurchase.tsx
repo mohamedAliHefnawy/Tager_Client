@@ -15,7 +15,6 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
   Avatar,
   AccordionItem,
   Accordion,
@@ -486,8 +485,6 @@ export default function ModaelAddPurchase({
                                 : inputValues[movedProduct._id]?.selectedSize
                                 ? "اختر"
                                 : "اختر"}
-
-                              {/* {inputValues[movedProduct._id]?.selectedSize} */}
                             </Button>
                           </DropdownTrigger>
 

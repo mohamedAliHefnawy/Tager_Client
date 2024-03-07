@@ -3,17 +3,11 @@
 //React
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
 
 //nextUi
 import { Avatar } from "@nextui-org/react";
-
-//images
-import Logo from "@/public/img/hbaieb.png";
 
 //components
 import NavBar from "@/components/delivery/navBar";
@@ -50,7 +44,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   const [orders, setOrders] = useState<Orders[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {

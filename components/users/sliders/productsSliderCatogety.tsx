@@ -1,7 +1,6 @@
 //react
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Slider from "react-slick";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";

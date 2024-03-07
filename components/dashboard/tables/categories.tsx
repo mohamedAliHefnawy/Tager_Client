@@ -1,11 +1,10 @@
 //react
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
 
 //nextUi
-import { Avatar, Spinner, Pagination } from "@nextui-org/react";
+import { Avatar, Pagination } from "@nextui-org/react";
 
 //components
 import ModelAddCategory from "../modals/categories/modelAddCategory";
@@ -24,7 +23,6 @@ export default function Categories() {
   const [categories, setCategories] = useState<Categories[]>([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
   const itemsPerPage = 6;
   const [nameCatogry, setNameCatogry] = useState("");
   const [imageURL, setImageURL] = useState("");
@@ -114,57 +112,49 @@ export default function Categories() {
 
             <div className="w-[33%] text-right"></div>
           </div>
-          {
-            // loading ? (
-            //   <div className="flex justify-center items-center h-[400px]">
-            //     <Spinner size="lg" color="warning" />
-            //   </div>
-            // ) : (
-            currentItems.map((category, index) => (
-              <div
-                key={index}
-                className="flex items-center  p-4 pr-10 pl-10 bg-[var(--mainColorRgbaa)] shadow-lg rounded-2xl border-1 mb-1 border-[var(--mainColor)] text-black opacity-75"
-              >
-                <div className="w-[15%]">
-                  <Avatar src={category.image} />
-                </div>
-                <div className="w-[25%]">
-                  <p> {category.name} </p>
-                </div>
-                <div className="w-[25%]">
-                  <p className="flex">
-                    <p className="mr-1"> منتج</p>
-                    <p> {category.products.length}</p>
-                  </p>
-                </div>
-                <div className="w-[25%] ">
-                  {category.active === true ? (
-                    <p className="text-success-600">نشط</p>
-                  ) : (
-                    <p className="text-danger-600">خامل</p>
-                  )}
-                </div>
+          {currentItems.map((category, index) => (
+            <div
+              key={index}
+              className="flex items-center  p-4 pr-10 pl-10 bg-[var(--mainColorRgbaa)] shadow-lg rounded-2xl border-1 mb-1 border-[var(--mainColor)] text-black opacity-75"
+            >
+              <div className="w-[15%]">
+                <Avatar src={category.image} />
+              </div>
+              <div className="w-[25%]">
+                <p> {category.name} </p>
+              </div>
+              <div className="w-[25%]">
+                <p className="flex">
+                  <p className="mr-1"> منتج</p>
+                  <p> {category.products.length}</p>
+                </p>
+              </div>
+              <div className="w-[25%] ">
+                {category.active === true ? (
+                  <p className="text-success-600">نشط</p>
+                ) : (
+                  <p className="text-danger-600">خامل</p>
+                )}
+              </div>
 
-                <div className="w-[33%] text-right">
-                  <div className="flex justify-center">
-                    <ModelEditCategory
-                      idCategoryy={category._id}
-                      nameCategoryy={category.name}
-                      imageCategoryy={category.image}
-                      activeCategoryy={category.active}
-                    />
-                  </div>
+              <div className="w-[33%] text-right">
+                <div className="flex justify-center">
+                  <ModelEditCategory
+                    idCategoryy={category._id}
+                    nameCategoryy={category.name}
+                    imageCategoryy={category.image}
+                    activeCategoryy={category.active}
+                  />
                 </div>
               </div>
-            ))
-            // )
-          }
+            </div>
+          ))}
         </div>
         <div className="pagination">
           <Pagination
             className=" mb-3"
             showShadow
-            color="primary"
+            color="warning"
             variant="faded"
             total={Math.ceil(filteredCategories.length / itemsPerPage)}
             initialPage={currentPage}

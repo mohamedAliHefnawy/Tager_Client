@@ -446,11 +446,6 @@ export default function ModaelEditOrder({
         data
       );
       if (response.data === "yes") {
-        // alert("تم تعديل الصنف بنجاح ✓");
-        // sendDataToParent({
-        //   orderId: order._id,
-        //   data: situation[situation.length - 1].situation,
-        // });
         window.location.reload();
       }
       if (response.data === "no") {
@@ -493,12 +488,7 @@ export default function ModaelEditOrder({
                 <Button color="danger" variant="light" onPress={onClose}>
                   إلغاء
                 </Button>
-                <Button
-                  color="warning"
-                  // disabled={closeBtn}
-                  onClick={EditOrder}
-                  onPress={onClose}
-                >
+                <Button color="warning" onClick={EditOrder} onPress={onClose}>
                   تعديل
                 </Button>
               </ModalFooter>

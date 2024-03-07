@@ -11,9 +11,8 @@ import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "@/components/loading";
 
-
 //imges
-import error from "../../../public/img/notfound.png";
+import error from "@/public/img/notfound.png";
 
 export default function Home() {
   const [nameAdmin] = useCheckLogin();

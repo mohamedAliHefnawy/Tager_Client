@@ -20,7 +20,7 @@ import DivCheck from "../../../components/dashboard/checkLogin/divCheck";
 import Loading from "../loading";
 
 //nextUi
-import { Avatar, Button, Input } from "@nextui-org/react";
+import { Avatar, Button } from "@nextui-org/react";
 
 //imgaes
 import error from "@/public/img/notfound.png";
@@ -37,15 +37,8 @@ export default function Home() {
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [searchValue, setSearchValue] = useState("");
-  const [items, setItems] = useState<string[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [img, setImg] = useState("");
   const [methodPayment, setMethodPayment] = useState<Payment[]>([]);
-
-  // const imgUr = methodPayment.map((item) => item.image)
   const [imageURL, setImageURL] = useState("");
-
   const [images, setImages] = useState<string[]>(
     Array(methodPayment.length).fill("")
   );
@@ -134,14 +127,6 @@ export default function Home() {
       reader.onerror = (err) => reject(err);
     });
   };
-
-  // const handleUploadImage = async (selectedFiles?: FileList | null) => {
-  //   const file = selectedFiles?.[0];
-  //   if (file) {
-  //     const image = await imagebase64(file);
-  //     setImg(image);
-  //   }
-  // };
 
   const generateUniqueFileName = (file: File) => {
     const timestamp = getUnixTime(new Date());

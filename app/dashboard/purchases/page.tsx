@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 //imges
-import error from "../../../public/img/notfound.png";
+import error from "@/public/img/notfound.png";
 
 export default function Home() {
   const [nameAdmin] = useCheckLogin();

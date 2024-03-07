@@ -1,6 +1,5 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
@@ -15,12 +14,10 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
   Tabs,
   Tab,
   Card,
   CardBody,
-  CardHeader,
   DropdownTrigger,
   DropdownItem,
   DropdownMenu,
@@ -33,7 +30,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 //compenents
 import { analytics } from "@/fireBase/fireBaseConfig";
-
 
 export default function ModelAddEmplyee(props: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -91,7 +87,6 @@ export default function ModelAddEmplyee(props: any) {
       const data = await uploadBytes(fileRef, file);
       const url = await getDownloadURL(data.ref);
       setImageURL(url);
-      console.log(url);
     } else {
       alert("Please select a file");
     }
@@ -215,7 +210,6 @@ export default function ModelAddEmplyee(props: any) {
       }
       if (response.data === "no") {
         alert("هذا الموظف موجود بالفعل 😊");
-        // window.location.reload();
       }
     } catch (error) {
       console.error(error);

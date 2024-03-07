@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
 import Icons from "@/iconsSvg";
+import Swal from "sweetalert2";
 
 //nextui
 import {
@@ -21,7 +22,7 @@ import {
 
 //components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
-import Swal from "sweetalert2";
+
 
 interface MoneySafe {
   _id: string;
@@ -39,20 +40,16 @@ export default function ModaelPullMoney({
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [moneySafe, setMoneySafe] = useState<MoneySafe[]>([]);
   const [user, userValidity] = useCheckLogin();
-
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
   const [money, setMoney] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
   const [selectedPayment, setSelectedPayment] = React.useState(
     new Set(["إختر طريقة الدفع"])
   );
-
   const handleSelectionChange = (selectedItems: string[]) => {
     setSelectedPayment(new Set(selectedItems));
   };
-
   const selectedValuePayment = React.useMemo(
     () => Array.from(selectedPayment).join(", ").replaceAll("_", " "),
     [selectedPayment]
@@ -173,7 +170,6 @@ export default function ModaelPullMoney({
     <>
       <Button
         onPress={onOpen}
-        // startContent={icons.ShoppingbagIcon}
         color="warning"
         className="w-[100%]"
       >

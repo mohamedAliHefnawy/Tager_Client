@@ -1,5 +1,5 @@
 //react
-import React, { useEffect, useState } from "react";
+import React from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
 import Icons from "@/iconsSvg";
@@ -29,7 +29,6 @@ export default function ModelwithdrawalRequests({
 }) {
   const [nameAdmin] = useCheckLogin();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selected, setSelected] = React.useState("1");
 
   const Confirm = async () => {
     try {
@@ -94,7 +93,6 @@ export default function ModelwithdrawalRequests({
                 </Button>
                 <Button
                   color="warning"
-                  // disabled={closeBtn}
                   onClick={Confirm}
                   onPress={onClose}
                 >

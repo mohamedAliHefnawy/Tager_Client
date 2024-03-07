@@ -2,15 +2,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
-import Icons from "@/iconsSvg";
 
 //nextUi
-import {
-  Avatar,
-  Spinner,
-  Pagination,
-
-} from "@nextui-org/react";
+import { Avatar, Spinner, Pagination } from "@nextui-org/react";
 
 //components
 import ModaelEditcCustomer from "../modals/customers/modaelEditcCustomer";
@@ -94,7 +88,6 @@ export default function Customers() {
               value={searchText}
             />
           </div>
-          {/* <ModelAddEmplyee titleButton="إضافة موظف" inputName="إسم الموظف" /> */}
         </div>
         <div className="mt-3 ml-2 text-slate-300 text-xs">
           <p>Total {filteredEmployees.length} Employees</p>
@@ -135,12 +128,7 @@ export default function Customers() {
                     <Avatar src={employees.image} />
                   </div>
                   <div className="w-[33%] flex justify-center">
-                    <p
-                      className="text-warning-500"
-                      // href={`/dashboard/account/${employees.name}`}
-                    >
-                      {employees.name}
-                    </p>
+                    <p className="text-warning-500">{employees.name}</p>
                   </div>
                   <div className="w-[33%] flex justify-center">
                     <p> {employees.phone} </p>

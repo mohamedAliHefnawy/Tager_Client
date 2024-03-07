@@ -2,28 +2,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
+import Swal from "sweetalert2";
 
 // components
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
-
-// svg
-import { BackwardIcon } from "@/public/svg/backwardIcon";
-import { HeartIcon } from "@/public/svg/heartIcon";
-import { HeartIcon2 } from "@/public/svg/heartIcon2";
-import { ShoppingcartIcon } from "@/public/svg/shoppingcartIcon";
-import Swal from "sweetalert2";
-
-interface Products {
-  _id: string;
-  name: string;
-  phone: string;
-  password: string;
-  validity: string;
-  image: string;
-  price2: number;
-  price3: number;
-  size: [{ size: string }];
-}
 
 export default function ButtonAddToFavourite({
   id,
@@ -38,24 +21,9 @@ export default function ButtonAddToFavourite({
 }) {
   const [user] = useCheckLogin();
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [products, setProducts] = useState<Products[]>([]);
   const [len, setLen] = useState(0);
 
-  const [arrProductsInFavourite, setArrProductsInFavourite] = useState(() => {
-    const storedData = localStorage.getItem("productsFavourite");
-    return storedData !== null ? JSON.parse(storedData) : [];
-  });
-
-  const [lenghtProductInFavourite, setLenghtProductInFavourite] = useState(
-    arrProductsInFavourite.length
-  );
-
-  const Icons = {
-    BackwardIcon: <BackwardIcon />,
-    HeartIcon: <HeartIcon />,
-    HeartIcon2: <HeartIcon2 />,
-    ShoppingcartIcon: <ShoppingcartIcon />,
-  };
+  const [lenghtProductInFavourite, setLenghtProductInFavourite] = useState(0);
 
   const GetProductsInFavourite = useCallback(async () => {
     try {
@@ -106,15 +74,6 @@ export default function ButtonAddToFavourite({
           toast: true,
           showConfirmButton: false,
         });
-        // if (!arrProductsInFavourite.includes(idProduct)) {
-        //   const updatedFavourite = [...arrProductsInFavourite, idProduct];
-        //   setArrProductsInFavourite(updatedFavourite);
-        //   updateParent(updatedFavourite.length);
-        //   localStorage.setItem(
-        //     "productsFavourite",
-        //     JSON.stringify(updatedFavourite)
-        //   );
-        // }
       }
       if (response.data === "exitSure") {
         Swal.fire({
@@ -129,15 +88,6 @@ export default function ButtonAddToFavourite({
           toast: true,
           showConfirmButton: false,
         });
-        // const updatedFavourite = arrProductsInFavourite.filter(
-        //   (productId: any) => productId !== idProduct
-        // );
-        // setArrProductsInFavourite(updatedFavourite);
-        // updateParent(updatedFavourite.length);
-        // localStorage.setItem(
-        //   "productsFavourite",
-        //   JSON.stringify(updatedFavourite)
-        // );
       }
     } catch (error) {
       console.log(error);
@@ -145,20 +95,14 @@ export default function ButtonAddToFavourite({
   };
 
   useEffect(() => {
-    setLenghtProductInFavourite(arrProductsInFavourite.length);
-  }, [arrProductsInFavourite, setLenghtProductInFavourite]);
+    setLenghtProductInFavourite(lenghtProductInFavourite);
+  }, [lenghtProductInFavourite, setLenghtProductInFavourite]);
 
   return (
     <>
       <p
         onClick={() => addToFavourite(id, size)}
         className="p-4 hover:cursor-pointer"
-
-        // className={`${
-        //   arrProductsInFavourite.includes(id)
-        //     ? "text-yellow-500 p-4"
-        //     : "text-red-500 p-4"
-        // } hover:cursor-pointer`}
       >
         {Icons.HeartIcon}
       </p>

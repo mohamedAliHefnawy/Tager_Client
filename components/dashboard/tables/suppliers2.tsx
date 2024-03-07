@@ -1,7 +1,6 @@
 //react
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import linkServer from "@/linkServer";
 
@@ -27,9 +26,6 @@ export default function Supplier2() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 6;
-  const [imageURL, setImageURL] = useState("");
-  const [categories, setCategories] = useState<Supplier[]>([]);
-  const [nameCatogry, setNameCatogry] = useState("");
 
   const handleSearchChange = (e: any) => {
     setSearchText(e.target.value);
@@ -52,34 +48,15 @@ export default function Supplier2() {
     indexOfLastItem
   );
 
-  // const handleAddCategory = (newCategory: Supplier) => {
-  //   const convertedCategory: Supplier = {
-  //     _id: newCategory._id,
-  //     name: newCategory.name,
-  //     image: "",
-  //     phone: "",
-  //     products: "",
-  //     active: false,
-  //   };
-
-  //   setCategories((prevCategories: Supplier[]) => [
-  //     ...prevCategories,
-  //     convertedCategory,
-  //   ]);
-  // };
-
   const GetSuppliers = async () => {
     setLoading(true);
     try {
       let response: { data: { token: string; suppliers: any } };
-      response = await axios.get(
-        `${linkServer.link}suppliers/getSuppliers`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
+      response = await axios.get(`${linkServer.link}suppliers/getSuppliers`, {
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+        },
+      });
       setSupplier(response.data.suppliers);
     } catch (error) {
       console.log(error);
@@ -105,14 +82,7 @@ export default function Supplier2() {
               value={searchText}
             />
           </div>
-          <ModaelAddPurchase
-            // nameCatogryy={nameCatogry}
-            // setNameCatogryy={setNameCatogry}
-            // imageURLL={imageURL}
-            // setImageURLL={setImageURL}
-            // onAddProductt={handleAddCategory}
-            supplier={supplier}
-          />
+          <ModaelAddPurchase supplier={supplier} />
         </div>
         <div className="mt-3 ml-2 text-black opacity-60 text-sm">
           <p>Total {filteredSupplier.length} Categories </p>

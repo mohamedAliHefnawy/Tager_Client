@@ -123,7 +123,6 @@ export default function Suppliers() {
                 <div className="w-[33%] flex justify-center">
                   <p
                   // className="text-warning-500"
-                  // href={`/dashboard/account/${employees.name}`}
                   >
                     {supplier.name}
                   </p>

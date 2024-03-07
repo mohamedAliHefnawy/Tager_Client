@@ -1,6 +1,5 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
@@ -88,12 +87,10 @@ export default function ModelAddCategory({
     if (selectedFiles && selectedFiles.length > 0) {
       const file = selectedFiles[0];
       const fileName = generateUniqueFileName(file);
-
       const fileRef = ref(analytics, `elhbaieb/${fileName}`);
       const data = await uploadBytes(fileRef, file);
       const url = await getDownloadURL(data.ref);
       setImageURL(url);
-      console.log(url);
     } else {
       alert("Please select a file");
     }
@@ -157,7 +154,6 @@ export default function ModelAddCategory({
         });
         setNameCatogry("");
         setImageURL("");
-
         toast.success("تم إضافة القسم بنجاح ✓");
       }
       if (response.data === "nameUse") {

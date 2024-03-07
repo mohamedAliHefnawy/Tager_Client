@@ -4,7 +4,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-
 //components
 import NavBar from "@/components/dashboard/navbar";
 import SideBar from "@/components/dashboard/sidebar";
@@ -14,23 +13,12 @@ import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "@/components/loading";
 
 //imges
-import error from "../../../public/img/notfound.png";
-
-interface Employee {
-  _id: string;
-  name: string;
-  phone1: string;
-  phone2: string;
-  password: string;
-  image: string;
-  validity: string;
-}
+import error from "@/public/img/notfound.png";
 
 export default function Home() {
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
 
   useEffect(() => {
     if (nameAdmin) {

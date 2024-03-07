@@ -1,35 +1,25 @@
 "use client";
 
 //react
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import linkServer from "@/linkServer";
 import { toast } from "react-toastify";
 
 //components
-import NavBar from "../../../../components/dashboard/navbar";
-import SideBar from "../../../../components/dashboard/sidebar";
-import useCheckLogin from "../../../../components/dashboard/checkLogin/checkLogin";
+import NavBar from "@/components/dashboard/navbar";
+import SideBar from "@/components/dashboard/sidebar";
+import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import ModaelDeliverySecurity from "@/components/dashboard/modals/deliverySecurity/modaelDeliverySecurity";
-import DivCheck from "../../../../components/dashboard/checkLogin/divCheck";
-import Loading from "../loading";
-
-// react
-import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import DivCheck from "@/components/dashboard/checkLogin/divCheck";
+import Loading from "@/components/loading";
 
 //imgaes
-import error from "../../../../public/img/notfound.png";
+import error from "@/public/img/notfound.png";
 
 //nextUi
-import {
-  Avatar,
-  Button,
-  Input,
-  Pagination,
-  Spinner,
-  Textarea,
-} from "@nextui-org/react";
+import { Avatar, Button, Spinner } from "@nextui-org/react";
 
 interface MoneyItem {
   value: string;
@@ -94,22 +84,12 @@ export default function Home({ params }: { params: { slug: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
-  const [num, setNum] = useState("");
-  const [notes, setNotes] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [closeBtn, setCloseBtn] = useState(true);
-  const [warning, setWarning] = useState("");
   const [loading, setLoading] = useState(true);
-  const [moneySafe, setMoneySafe] = useState<MoneySafeDetails>();
-  const [currentPage, setCurrentPage] = useState(1);
   const [dataDelivery, setDataDelivery] = useState<Data[]>([]);
   const [returnOrders, setReturnOrders] = useState<ReturnOrders[]>([]);
   const [inputValues, setInputValues] = useState<InputValues>({});
-
-  const ItemsPerPage = 3;
-
-  const indexOfLastItem = currentPage * ItemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - ItemsPerPage;
 
   const ReturnProductswithStore = (
     idProduct: string,
@@ -156,10 +136,7 @@ export default function Home({ params }: { params: { slug: string } }) {
           },
         ];
 
-        // console.log(SizeAll);
-
         setReturnOrders(updatedReturnOrders);
-
         setInputValues((prevInputValues) => ({
           ...prevInputValues,
           [idProduct]: {
@@ -353,10 +330,6 @@ export default function Home({ params }: { params: { slug: string } }) {
       setCloseBtn(false);
     }
   }, [returnOrders]);
-
-  // useEffect(() => {
-  //   GetDataDelivery();
-  // }, []);
 
   useEffect(() => {
     if (nameAdmin) {

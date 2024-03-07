@@ -5,21 +5,17 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
 import Swal from "sweetalert2";
 import Confetti from "react-confetti";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextUI
-import { Button, Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 
 //Images
 import UserLogin from "@/public/img/userLogin.png";
-import error from "../../public/img/notfound.png";
-
-//icons
-import { EyeIcon } from "@/public/svg/eyeIcon";
-import { EyeNotIcon } from "@/public/svg/eyeNotIcon";
+import error from "@/public/img/notfound.png";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -27,16 +23,6 @@ export default function Home() {
   const [check, setCheck] = useState(true);
   const [showPassword, setShowPassword] = useState(true);
   const router = useRouter();
-  const [showConfetti, setShowConfetti] = React.useState(false);
-
-  const Icons = {
-    EyeIcon: <EyeIcon />,
-    EyeNotIcon: <EyeNotIcon />,
-  };
-
-  const handleSuccess = () => {
-    setShowConfetti(true);
-  };
 
   const Login = async () => {
     try {
@@ -52,9 +38,7 @@ export default function Home() {
       const { validity, answer } = response.data;
 
       if (answer === "yes") {
-        // setTimeout(() => {
         if (validity === "أدمن") {
-          // handleSuccess();
           localStorage.setItem("nameAdmin", name);
           localStorage.setItem("valAdmin", validity);
           router.push("/dashboard/analysis");
@@ -67,7 +51,6 @@ export default function Home() {
             confirmButtonText: "حسنًا",
           });
         }
-        // }, 3000);
       }
       if (response.data === "noPassword") {
         Swal.fire({
@@ -113,7 +96,7 @@ export default function Home() {
     <>
       <div className=" max-2xl:flex max-xl:flex lg:flex md:hidden sm:hidden max-sm:hidden flex-col justify-center items-center h-auto pb-6">
         <div className="max-sm:w-[80%] sm:w-[80%] lg:w-[30%] max-lg:w-[40%] bg-white flex-col flex justify-center items-center">
-          {showConfetti && <Confetti width={1300} height={1300} />}
+          {/* {showConfetti && <Confetti width={1300} height={1300} />} */}
           <div className="mt-6">
             <Image src={UserLogin} alt={"error"} width={150} height={150} />
           </div>

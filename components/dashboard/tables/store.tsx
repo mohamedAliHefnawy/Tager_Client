@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 
 //nextUi
 import {
-  Avatar,
   Spinner,
   Pagination,
   CardBody,
@@ -17,10 +16,6 @@ import {
 
 //components
 import ModelAddStore from "../modals/store/modaelAddStore";
-import ModelEditStore from "../modals/store/modaelEditStore";
-import ModaelConvertStore from "../modals/store/modaelConvertStore";
-
-// import Sound from '@/public/mp3/'
 
 interface Stores {
   _id: string;
@@ -35,7 +30,6 @@ export default function Stores() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [showMessage, setShowMessage] = useState(true);
   const itemsPerPage = 6;
   const [nameStore, setNameStore] = useState("");
   const router = useRouter();
@@ -44,12 +38,7 @@ export default function Stores() {
     toast.success(
       "ألَلَهّـمً صّـلَِّ وٌسِـلَمً وٌبًأّرکْ عٌلَى نِبًيِّنِأّ مًحًمًدٍ وعلى آله وصحبه أجمعينﷺ."
     );
-
-    setTimeout(() => {
-      router.push(`/dashboard/store/${storeId}`);
-    }, 1000);
-
-    // <ReactAudioPlayer src="@/public/mp3/1.mp3" autoPlay />;
+    router.push(`/dashboard/store/${storeId}`);
   };
 
   const handleSearchChange = (e: any) => {
@@ -120,7 +109,6 @@ export default function Stores() {
               setGbsStoree={setNameStore}
               onAddStoree={handleAddCategory}
             />
-            
           </div>
         </div>
         <div className="mt-3 ml-2 text-black opacity-60 text-sm">
@@ -141,12 +129,6 @@ export default function Stores() {
                   shadow="sm"
                   key={indexStore}
                   className="hover:cursor-pointer hover:translate-x-[-5px] transition-transform"
-                  // onFocus={message}
-                  // style={{ opacity: moneySafe.active === true ? 1 : 0.5 }}
-                  // isPressable={moneySafe.active === true}
-                  // onClick={() =>
-                  //   router.push(`/dashboard/moneySafe/${moneySafe._id}`)
-                  // }
                 >
                   <CardBody className="overflow-visible  p-6 flex flex-col items-end">
                     <p className="flex mb-4">
@@ -174,40 +156,6 @@ export default function Stores() {
               ))
             )}
           </div>
-
-          {/* {loading ? (
-            <div className="flex justify-center items-center h-[400px]">
-              <Spinner size="lg" color="warning" />
-            </div>
-          ) : (
-            currentItems.map((store, index) => (
-              <div
-                key={index}
-                className="flex items-center  p-4 pr-10 pl-10 bg-[var(--mainColorRgbaa)] shadow-lg rounded-2xl border-1 mb-1 border-[var(--mainColor)] text-black opacity-75"
-              >
-                <div className="w-[25%]">
-                  <p> {store.name} </p>
-                </div>
-                <div className="w-[25%]">
-                  <p> {store.gbs}</p>
-                </div>
-                <div className="w-[25%]">
-                  <p> {store.priceDelivery}</p>
-                </div>
-
-                <div className="w-[33%] text-right">
-                  <div className="flex justify-center">
-                    <ModelEditStore
-                      idStoree={store._id}
-                      nameStoree={store.name}
-                      gbsStoree={store.gbs}
-                      priceDeliveryy={store.priceDelivery}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))
-          )} */}
         </div>
         <div className="pagination">
           <Pagination

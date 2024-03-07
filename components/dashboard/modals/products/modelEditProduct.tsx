@@ -51,9 +51,9 @@ interface Row {
   id: string;
   cost: string;
   image: string;
-  price1?: string; // Make it optional
-  price2: string; // Add price2 property
-  price3: string; // Add price3 property
+  price1?: string;
+  price2: string;
+  price3: string;
   catogry: string | undefined;
   name: string;
   marketer: string;
@@ -82,15 +82,6 @@ interface Product {
 
 interface SizeObject {
   size: string;
-  // Add other properties if needed
-}
-
-interface ModelAddProductProps {
-  nameProductt: string;
-  setNameProductt: React.Dispatch<React.SetStateAction<string>>;
-  imageURLL: string;
-  setImageURLL: React.Dispatch<React.SetStateAction<string>>;
-  onAddProductt: (newProduct: Product) => void;
 }
 
 export default function ModelEditProduct({
@@ -126,7 +117,6 @@ export default function ModelEditProduct({
   const [priceProduct3, setPriceProduct3] = useState("");
   const [priceProduct4, setPriceProduct4] = useState("");
   const [sizeProduct, setSizeProduct] = useState<SizeObject[]>([]);
-  const [closeBtn, setCloseBtn] = useState(true);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [imageURLs, setImageURLs] = useState<string[]>([]);
   const [imageURLs2, setImageURLs2] = useState<string[]>([]);
@@ -188,42 +178,6 @@ export default function ModelEditProduct({
     setRows(newRows);
   };
 
-  const handleDeleteInputSize = (rowIndex: number, inputIndex: number) => {
-    setRows((prevRows) => {
-      return prevRows.map((row, currentRowIndex) => {
-        if (currentRowIndex === rowIndex) {
-          const newInputs: string[] = row.dynamicInputs.filter(
-            (_, index) => index !== inputIndex
-          );
-          return { ...row, dynamicInputs: newInputs };
-        }
-        return row;
-      });
-    });
-  };
-
-  const addDynamicInput = (rowIndex: number) => {
-    const newRows = [...rows];
-    newRows[rowIndex].dynamicInputs.push("");
-    setRows(newRows);
-  };
-
-  // const handleSizeChange = (index: number, value: string) => {
-  //   const newSizes = [...sizeProduct];
-  //   newSizes[index] = value;
-  //   setSizeProduct(newSizes);
-  // };
-
-  const handleRemoveSize = (index: number) => {
-    const newSizes = [...sizeProduct];
-    newSizes.splice(index, 1);
-    setSizeProduct(newSizes);
-  };
-
-  const handleAddSize = () => {
-    setSizeProduct([...sizeProduct, { size: "" }]);
-  };
-
   const handleChange = (index: number, field: keyof Row, value: string) => {
     const newRows = [...rows];
     if (field === "images") {
@@ -250,7 +204,6 @@ export default function ModelEditProduct({
     }
   };
 
-
   const generateUniqueFileName = (file: File) => {
     const timestamp = getUnixTime(new Date());
     const randomChars = Math.random().toString(36).substring(2, 10);
@@ -269,28 +222,22 @@ export default function ModelEditProduct({
     if (!files) return;
     const filesArray = Array.from(files) as File[];
     setSelectedFiles(filesArray);
-
     const urls = [];
-
     for (let i = 0; i < filesArray.length; i++) {
       const file = filesArray[i];
       const fileName = generateUniqueFileName(file);
-
       const fileRef = ref(analytics, `elhbaieb/${fileName}`);
       const data = await uploadBytes(fileRef, file);
       const url = await getDownloadURL(data.ref);
       urls.push(url);
     }
-
     setImageURLs(urls);
   };
 
   const handleFileSelection2 = async (index: any, files: FileList | null) => {
     if (!files) return;
     const filesArray = Array.from(files) as File[];
-
     const urls: string[] = [];
-
     for (let i = 0; i < filesArray.length; i++) {
       const file = filesArray[i];
       const fileName = generateUniqueFileName2(file);
@@ -312,10 +259,6 @@ export default function ModelEditProduct({
 
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const filteredStores = stores.filter((store) =>
-    store.name.toLowerCase().includes(searchTermStore.toLowerCase())
   );
 
   const handleCategorySelect = (store: any) => {
@@ -354,12 +297,9 @@ export default function ModelEditProduct({
                       type="file"
                       id="img"
                       className=""
-                      // value={imageURLs}
                       onChange={(e) => handleFileSelection(e.target.files)}
                       multiple
                     />
-                    {/* {imagesProductt} */}
-
                     {selectedFiles && selectedFiles.length > 0 ? (
                       <div className="flex justify-center">
                         {selectedFiles.map((file, index) => (
@@ -494,17 +434,8 @@ export default function ModelEditProduct({
                               setSizeProduct(updatedSizes);
                             }}
                           />
-                          {/* <p
-                            className="text-danger-600 opacity-50 mt-2 hover:cursor-pointer"
-                            onClick={() => handleRemoveSize(index)}
-                          >
-                            {Icons.DeleteIcon}
-                          </p> */}
                         </div>
                       ))}
-
-                      {/* {sizeProductt.map((item) => item.size)} */}
-                      {/* <Button onClick={handleAddSize}>إضافة مقاس</Button> */}
                     </div>
                   </div>
                 </div>
@@ -522,7 +453,6 @@ export default function ModelEditProduct({
                 >
                   إضافة منتج
                 </Button>
-                {/* {allProductt.map((item) => item.color)} */}
                 <table className="border-1 border-warning-400 w-full rounded-2xl text-center p-4">
                   <tr className="border-1 border-warning-400 rounded-2xl text-sm">
                     <th className="border-1 w-[20%] border-warning-400 p-3">
@@ -622,23 +552,8 @@ export default function ModelEditProduct({
                                 className="inputTrue mt-2"
                                 placeholder={`المقاس ${inputIndex + 1}`}
                               />
-                              {/* <p
-                                className="text-danger-600 opacity-50 mt-2 hover:cursor-pointer"
-                                onClick={() =>
-                                  handleDeleteInputSize(index, inputIndex)
-                                }
-                              >
-                                {Icons.DeleteIcon}
-                              </p> */}
                             </div>
                           ))}
-
-                          {/* <Button
-                            className="mt-2 w-[100%]"
-                            onClick={() => addDynamicInput(index)}
-                          >
-                            إضافة مقاس
-                          </Button> */}
                         </div>
                       </td>
 
@@ -662,8 +577,8 @@ export default function ModelEditProduct({
                                 <Image
                                   src={url}
                                   alt={`الصورة المحددة ${fileIndex + 1}`}
-                                  width={64} // Set your preferred width
-                                  height={64} // Set your preferred height
+                                  width={64}
+                                  height={64}
                                   className="w-16 h-16 object-cover rounded-full"
                                 />
                               </div>
@@ -830,26 +745,6 @@ export default function ModelEditProduct({
     }
   }, [allProductt]);
 
-  // useEffect(() => {
-  //   if (
-  //     nameProduct !== "" &&
-  //     selectedCategory !== undefined &&
-  //     priceProduct1 !== "" &&
-  //     priceProduct2 !== "" &&
-  //     priceProduct3 !== ""
-  //   ) {
-  //     setCloseBtn(false);
-  //   } else {
-  //     setCloseBtn(true);
-  //   }
-  // }, [
-  //   nameProduct,
-  //   selectedCategory,
-  //   priceProduct1,
-  //   priceProduct2,
-  //   priceProduct3,
-  // ]);
-
   return (
     <>
       <ToastContainer />
@@ -878,9 +773,7 @@ export default function ModelEditProduct({
                   إلغاء
                 </Button>
                 <Button
-                  // color={closeBtn ? "default" : "warning"}
                   onClick={EditProduct}
-                  // disabled={closeBtn}
                 >
                   تعديل
                 </Button>

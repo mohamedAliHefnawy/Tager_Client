@@ -27,10 +27,6 @@ import {
   Avatar,
 } from "@nextui-org/react";
 
-
-
-
-
 interface Stores {
   _id: string;
   name: string;
@@ -81,8 +77,6 @@ export default function MoadelOrderProducts({
   const [phone1Client, setPhone1Client] = useState("");
   const [phone2Client, setPhone2Client] = useState("");
   const [addressClient, setAddressClient] = useState("");
-  const [amountOrder, setAmountOrder] = useState("");
-  const [priceOrder, setPriceOrder] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
   const [showConfetti, setShowConfetti] = React.useState(false);
   const [products, setProducts] = useState(Productss);
@@ -174,7 +168,6 @@ export default function MoadelOrderProducts({
       }));
 
       const amountOrder = +quantityValue * +priceValue;
-      const amountOrder2 = priceVall * +quantityValue;
       const profit = gainMarketer * +quantityValue;
       const profitAdmin = (+priceVall - +price1) * +quantityValue - +profit;
       setTotalAmount((prevTotalAmount) => {
@@ -243,9 +236,6 @@ export default function MoadelOrderProducts({
         >
           <div className=" flex flex-col items-center lg:w-[65%] md:w-[100%] sm:w-[100%] max-sm:w-[100%]">
             <p>البيانات الشخصية</p>
-            {/* {totalProfit}
-            {totalAmount} */}
-
             <div className=" lg:w-[60%] md:w-[90%] sm:w-[90%] max-sm:w-[90%]">
               <input
                 type="text"
@@ -347,8 +337,6 @@ export default function MoadelOrderProducts({
                                         className="text-success-600"
                                       >
                                         <span className="ml-1">متوفر</span>
-                                        {/* {item5.amount}
-                                        <span className="mr-1">قطعة</span> */}
                                       </p>
                                     ) : (
                                       <p
@@ -370,7 +358,6 @@ export default function MoadelOrderProducts({
                         <input
                           type="number"
                           className="input opacity-65"
-                          // disabled
                           placeholder="سعر البيع"
                           value={
                             (inputValues[item._id] &&
@@ -429,20 +416,7 @@ export default function MoadelOrderProducts({
                   <p className="mr-1">د.ل</p>
                 </p>
               </div>
-              {/* <div className="flex justify-between px-8 py-4">
-                <p> صافي الربح </p>
-                <p className="flex">
-                  <p>{totalProfit}</p>
-                  <p className="mr-1">د.ل</p>
-                </p>
-              </div> */}
-              {/* <div className="flex justify-between px-8 py-4">
-                <p> ربح الادمن </p>
-                <p className="flex">
-                  <p>{totalProfitAdmin}</p>
-                  <p className="mr-1">د.ل</p>
-                </p>
-              </div> */}
+
               <div className="flex justify-between px-8 py-4">
                 <p> سعر التوصيل </p>
                 <p className="flex">
@@ -473,10 +447,6 @@ export default function MoadelOrderProducts({
         </div>
       </>
     );
-  };
-
-  const handleSuccess = () => {
-    setShowConfetti(true);
   };
 
   const AddOrder = async () => {

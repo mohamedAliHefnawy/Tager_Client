@@ -1,6 +1,5 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
@@ -55,8 +54,6 @@ export default function ModaelEditDeliveryClients({
   const [phone, setPhone] = useState(phoneEmployee);
   const [password, setPassword] = useState(passwordEmployee);
   const [closeBtn, setCloseBtn] = useState(true);
-
-  const [generatedPassword, setGeneratedPassword] = useState(passwordEmployee);
   const [selected, setSelected] = React.useState("photos");
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
@@ -96,25 +93,6 @@ export default function ModaelEditDeliveryClients({
     }
   };
 
-  function generateStrongPassword() {
-    const length = 12;
-    const charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-    let password = "";
-
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset[randomIndex];
-    }
-
-    return password;
-  }
-
-  const generatePassword = () => {
-    const newPassword = generateStrongPassword();
-    setGeneratedPassword(newPassword);
-  };
-
   const imagebase64 = async (file: any) => {
     const reader = new FileReader();
     await reader.readAsDataURL(file);
@@ -149,7 +127,6 @@ export default function ModaelEditDeliveryClients({
       const data = await uploadBytes(fileRef, file);
       const url = await getDownloadURL(data.ref);
       setImageURL(url);
-      console.log(url);
     } else {
       alert("Please select a file");
     }

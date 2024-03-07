@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import linkServer from "@/linkServer";
 
-
 //components
 import NavBar from "@/components/dashboard/navbar";
 import SideBar from "@/components/dashboard/sidebar";
@@ -53,12 +52,12 @@ interface Purchasess {
   moneySafe: string;
   totalPrice: number;
 }
+
 export default function Home({ params }: { params: { slug: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [closeBtn, setCloseBtn] = useState(true);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [purchasess, setPurchasess] = useState<Purchasess[]>([]);
@@ -122,7 +121,6 @@ export default function Home({ params }: { params: { slug: string } }) {
                     </div>
                     <div className="flex w-[100%] justify-between items-center mt-4">
                       <div className=" justify-end">
-                        {/* {+item.totalPrice !== 0 && ( */}
                         <ModelPaymentpurchases
                           idPurchase={item._id}
                           namePatient={""}
@@ -132,7 +130,6 @@ export default function Home({ params }: { params: { slug: string } }) {
                           supplierr={item.supplier}
                           discount={""}
                         />
-                        {/* )} */}
                       </div>
                       <div className="flex justify-end items-center">
                         <p className="text-slate-800 font-bold mr-2">

@@ -6,7 +6,7 @@ export default function Loading() {
       <div className="w-[100%] h-screen flex justify-center items-center">
         <Spinner
           size="lg"
-          label="إنتظار ..."
+          label="يا عم استني شوية "
           color="warning"
           labelColor="warning"
         />

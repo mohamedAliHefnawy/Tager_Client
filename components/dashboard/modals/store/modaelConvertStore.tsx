@@ -6,7 +6,6 @@ import { ToastContainer } from "react-toastify";
 import linkServer from "@/linkServer";
 import Icons from "@/iconsSvg";
 
-
 //nextui
 import {
   Modal,
@@ -54,9 +53,6 @@ export default function ModaelConvertStore({
 }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [nameStore, setNameStore] = useState("");
-  const [gbsStore, setGbsStore] = useState("");
-  const [priceDelivery, setPriceDelivery] = useState("");
   const [closeBtn, setCloseBtn] = useState(false);
   const [inputValues, setInputValues] = useState<InputValues>({});
   const [stores, setStores] = useState<Stores[]>([]);
@@ -246,14 +242,6 @@ export default function ModaelConvertStore({
   useEffect(() => {
     GetStores();
   }, []);
-
-  // useEffect(() => {
-  //   if (nameStore !== "" && gbsStore.trim() !== "" && priceDelivery !== "") {
-  //     setCloseBtn(false);
-  //   } else {
-  //     setCloseBtn(true);
-  //   }
-  // }, [nameStore, gbsStore, priceDelivery]);
 
   return (
     <>

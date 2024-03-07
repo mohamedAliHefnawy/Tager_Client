@@ -17,24 +17,9 @@ import ModaelConvertStore from "@/components/dashboard/modals/store/modaelConver
 
 //imges
 import error from "@/public/img/notfound.png";
-import {
-  Avatar,
-  Card,
-  CardBody,
-  CardFooter,
-  Pagination,
-  Spinner,
-} from "@nextui-org/react";
 
-interface Employee {
-  _id: string;
-  name: string;
-  phone1: string;
-  phone2: string;
-  password: string;
-  image: string[];
-  validity: string;
-}
+//nextUi
+import { Avatar, Pagination, Spinner } from "@nextui-org/react";
 
 interface Stores {
   _id: string;
@@ -71,7 +56,6 @@ export default function ProductsInStore({
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [stores, setStores] = useState<Stores[]>([]);
   const [searchText, setSearchText] = useState("");
   const [nameStore, setNameStore] = useState("");
   const [currentPage, setCurrentPage] = useState(1);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
-import { toast } from "react-toastify";
 import useCheckLogin from "@/components/users/checkLogin/checkLogin";
 import { BackwardIcon } from "@/public/svg/backwardIcon";
 import { HeartIcon } from "@/public/svg/heartIcon";
@@ -116,7 +115,6 @@ export default function ButtonAddToCart({
           onClick={() => addToCart(id, size)}
           className="p-4 hover:cursor-pointer"
         >
-          {/* {lenghtProductInCart} */}
           {Icons.ShoppingcartIcon}
         </p>
       </p>

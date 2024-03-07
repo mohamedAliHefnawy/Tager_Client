@@ -17,15 +17,10 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
-
 export default function ModaelRecoveryProduct(props: any) {
   const [user, userValidity] = useCheckLogin();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
-  const [selectedProducts, setSelectedProducts] = React.useState<string[]>([
-    "إختر طريقة الدفع",
-  ]);
-
   const [notes, setNotes] = useState("");
   const RecoveryOrder = async () => {
     try {
@@ -34,7 +29,6 @@ export default function ModaelRecoveryProduct(props: any) {
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
         notes: notes,
-        // person: user,
       };
       const response = await axios.post(
         `${linkServer.link}notifications/addNotification2`,

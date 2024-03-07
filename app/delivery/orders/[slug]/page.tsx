@@ -153,18 +153,15 @@ export default function Home({ params }: { params: { slug: string } }) {
       const data = {
         delivery: nameDelivery,
         marketer: order?.marketer,
-        // admin: order?.marketer,
         gainMarketer: order?.gainMarketer,
         gainAdmin: order?.gainAdmin,
         idOrder: order?._id,
         situationOrder: selectedValueSituationOrder,
         orderMoney: order?.totalPriceProducts,
-
         message: `تم تحويل منتجات طلبيه من خلال مندوب التوصيل ${nameDelivery}`,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
         notes: "",
-
         nameClient: order?.nameClient,
         phone1Client: order?.phone1Client,
         phone2Client: order?.phone2Client,
@@ -207,7 +204,6 @@ export default function Home({ params }: { params: { slug: string } }) {
           }
         );
         setOrder(response.data.order);
-        // setNoReturnOrders(response.data.order?.products);
       } catch (error) {
         console.log(error);
       } finally {

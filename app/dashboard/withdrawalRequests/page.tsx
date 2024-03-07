@@ -1,5 +1,9 @@
 "use client";
 
+// react
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
 //components
 import NavBar from "@/components/dashboard/navbar";
 import SideBar from "@/components/dashboard/sidebar";
@@ -7,14 +11,10 @@ import WithdrawalRequests from "@/components/dashboard/tables/withdrawalRequests
 import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "@/components/loading";
-import Scanner from "@/components/delivery/scanner";
 
-// react
-import { useEffect, useState } from "react";
-import Image from "next/image";
 
 //imges
-import error from "../../../public/img/notfound.png";
+import error from "@/public/img/notfound.png";
 
 
 export default function Home() {

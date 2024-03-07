@@ -1,40 +1,23 @@
 "use client";
 
 //react
-import { format, isValid, parse } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import linkServer from "@/linkServer";
 
 //components
-import NavBar from "../../../../components/dashboard/navbar";
-import SideBar from "../../../../components/dashboard/sidebar";
-import useCheckLogin from "../../../../components/dashboard/checkLogin/checkLogin";
-import DivCheck from "../../../../components/dashboard/checkLogin/divCheck";
-import Loading from "../loading";
+import NavBar from "@/components/dashboard/navbar";
+import SideBar from "@/components/dashboard/sidebar";
+import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
+import DivCheck from "@/components/dashboard/checkLogin/divCheck";
+import Loading from "@/components/loading";
 
 //nextUi
-import {
-  Avatar,
-  Button,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Pagination,
-  Spinner,
-  useDisclosure,
-} from "@nextui-org/react";
+import { Avatar, Pagination, Spinner } from "@nextui-org/react";
 
 //imgaes
-import error from "../../../../public/img/notfound.png";
-import arrow from "../../../../public/img/right-arrow.png";
-
-//icons
-import { MinuscircleIcon } from "../../../../public/svg/minuscircleIcon";
+import error from "@/public/img/notfound.png";
 
 interface Order {
   _id: string;
@@ -76,81 +59,11 @@ interface Order {
 
 export default function Home({ params }: { params: { slug: string } }) {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [nameAdmin] = useCheckLogin();
   const [username, setUsername] = useState("");
-  const [num, setNum] = useState("");
-  const [num2, setNum2] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [closeBtn, setCloseBtn] = useState(true);
-  const [warning, setWarning] = useState("");
   const [order, setOrder] = useState<Order | undefined>();
   const [loading, setLoading] = useState(true);
-
-  const icons = {
-    MinuscircleIcon: <MinuscircleIcon />,
-  };
-
-  const formattedExpiryDate = (expirydate: any) => {
-    const dateObject = new Date(expirydate);
-    const formattedDate = `${
-      dateObject.getMonth() + 1
-    }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
-    return formattedDate;
-  };
-
-  const amount = order?.products
-    .filter(
-      (item) =>
-        formattedExpiryDate(item.expirydate) === new Date().toLocaleDateString()
-    )
-    .reduce((sum, { amount }) => +sum + +amount, 0);
-
-  const handleOpenModal = () => {
-    if (amount !== 0) {
-      onOpen();
-    }
-  };
-
-  const ModelMinus1 = () => {
-    return (
-      <>
-        <p
-          onClick={handleOpenModal}
-          className=" w-[50px] h-[50px] text-center hover:cursor-pointer hover:opacity-75 bg-danger-200 p-3 mt-1 rounded-full border-1 border-white"
-        ></p>
-        <Modal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          isDismissable={false}
-          className=" rounded-e-none max-h-screen overflow-y-auto overflow-x-hidden scrollbar-thumb-gray-500 scrollbar-track-gray-300"
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  تأكيد !
-                </ModalHeader>
-                <ModalBody>هل أنت متاكد من خصم هذه الكمية ؟</ModalBody>
-                <ModalFooter>
-                  <Button color="success" variant="light" onPress={onClose}>
-                    إلغاء
-                  </Button>
-                  <Button
-                    disabled={amount === 0 ? true : false}
-                    color={amount === 0 ? "default" : "danger"}
-                    // onClick={MinusProducts}
-                  >
-                    نعم
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </>
-    );
-  };
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);

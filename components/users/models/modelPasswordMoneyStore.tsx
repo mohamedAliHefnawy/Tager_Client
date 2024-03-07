@@ -1,6 +1,5 @@
 //react
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 
 //nextui
 import {

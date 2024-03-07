@@ -1,19 +1,7 @@
 //react
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import axios from "axios";
-import Swal from "sweetalert2";
-import { toast } from "react-toastify";
+import React from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { getUnixTime } from "date-fns";
-import Icons from "@/iconsSvg";
-
-//fireBase
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
-//compenents
-import { analytics } from "@/fireBase/fireBaseConfig";
 
 //nextui
 import {
@@ -26,14 +14,6 @@ import {
   useDisclosure,
   Avatar,
 } from "@nextui-org/react";
-
-
-interface Stores {
-  _id: string;
-  name: string;
-  gbs: string;
-  priceDelivery: string;
-}
 
 export default function ModaelDeliverySecurity({
   products,
@@ -95,7 +75,6 @@ export default function ModaelDeliverySecurity({
         onPress={onOpen}
         color="warning"
         className="opacity-90 rounded-full w-[100%]"
-        // startContent={Icons.PlusIcon}
       >
         منتجات الطلبية
       </Button>

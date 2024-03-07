@@ -21,7 +21,6 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
   CardBody,
   Card,
   Tab,
@@ -56,8 +55,6 @@ export default function ModaelEditcCustomer({
   const [phone, setPhone] = useState(phoneEmployee);
   const [password, setPassword] = useState(passwordEmployee);
   const [closeBtn, setCloseBtn] = useState(true);
-
-  const [generatedPassword, setGeneratedPassword] = useState(passwordEmployee);
   const [selected, setSelected] = React.useState("photos");
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
@@ -65,8 +62,6 @@ export default function ModaelEditcCustomer({
   const [selectedValidity, setSelectedValidity] = React.useState(
     new Set([validitiyEmployee])
   );
-
- 
 
   const selectedValueValidity = React.useMemo(
     () => Array.from(selectedValidity).join(", ").replaceAll("_", " "),
@@ -98,26 +93,7 @@ export default function ModaelEditcCustomer({
       console.error(error);
     }
   };
-
-  function generateStrongPassword() {
-    const length = 12;
-    const charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-    let password = "";
-
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset[randomIndex];
-    }
-
-    return password;
-  }
-
-  const generatePassword = () => {
-    const newPassword = generateStrongPassword();
-    setGeneratedPassword(newPassword);
-  };
-
+ 
   const imagebase64 = async (file: any) => {
     const reader = new FileReader();
     await reader.readAsDataURL(file);
@@ -147,12 +123,10 @@ export default function ModaelEditcCustomer({
     if (selectedFiles && selectedFiles.length > 0) {
       const file = selectedFiles[0];
       const fileName = generateUniqueFileName(file);
-
       const fileRef = ref(analytics, `elhbaieb/${fileName}`);
       const data = await uploadBytes(fileRef, file);
       const url = await getDownloadURL(data.ref);
       setImageURL(url);
-      console.log(url);
     } else {
       alert("Please select a file");
     }

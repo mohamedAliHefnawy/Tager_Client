@@ -1,5 +1,9 @@
 "use client";
 
+// react
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
 //components
 import NavBar from "@/components/dashboard/navbar";
 import SideBar from "@/components/dashboard/sidebar";
@@ -8,12 +12,9 @@ import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "../loading";
 
-// react
-import { useEffect, useState } from "react";
-import Image from "next/image";
 
 //imges
-import error from "../../../public/img/notfound.png";
+import error from "@/public/img/notfound.png";
 
 export default function Home() {
   const [nameAdmin] = useCheckLogin();

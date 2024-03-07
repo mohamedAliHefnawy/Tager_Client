@@ -1,20 +1,12 @@
 //react
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
 import Icons from "@/iconsSvg";
-
-//fireBase
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
-//compenents
-import { analytics } from "@/fireBase/fireBaseConfig";
 
 //nextui
 import {
@@ -25,7 +17,6 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Avatar,
 } from "@nextui-org/react";
 
 interface Stores {
@@ -104,7 +95,6 @@ export default function ModelAddCategory({
         });
         setNameStore("");
         setGbsStore("");
-
         toast.success("تم إضافة المخزن بنجاح ✓");
       }
       if (response.data === "nameUse") {

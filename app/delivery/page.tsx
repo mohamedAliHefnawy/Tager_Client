@@ -3,7 +3,6 @@
 //React
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import Swal from "sweetalert2";
@@ -14,7 +13,6 @@ import { Button } from "@nextui-org/react";
 
 //Images
 import Delivery from "@/public/img/delivery-bike.png";
-import UserLogin from "@/public/img/userLogin.png";
 
 //icons
 import { EyeIcon } from "@/public/svg/eyeIcon";
@@ -132,14 +130,6 @@ export default function Home() {
               </span>
             </span>
           </div>
-
-          {/* <div className="flex justify-end w-[100%] mt-3">
-            <Link className="mr-2 text-blue-400" href="/auth/signUp">
-              إنشاء حساب
-            </Link>
-            <p>ليس لديك حساب ؟</p>
-          </div> */}
-
           <Button className="button" onClick={Login} disabled={check}>
             تسجيل دخول
           </Button>

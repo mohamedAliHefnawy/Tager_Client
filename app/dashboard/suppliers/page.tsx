@@ -1,19 +1,20 @@
 "use client";
 
-//components
-import NavBar from "../../../components/dashboard/navbar";
-import SideBar from "../../../components/dashboard/sidebar";
-import Suppliers from "@/components/dashboard/tables/suppliers";
-import useCheckLogin from "../../../components/dashboard/checkLogin/checkLogin";
-import DivCheck from "../../../components/dashboard/checkLogin/divCheck";
-import Loading from "../loading";
-
 // react
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+//components
+import NavBar from "@/components/dashboard/navbar";
+import SideBar from "@/components/dashboard/sidebar";
+import Suppliers from "@/components/dashboard/tables/suppliers";
+import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
+import DivCheck from "@/components/dashboard/checkLogin/divCheck";
+import Loading from "@/components/loading";
+
+
 //imges
-import error from "../../../public/img/notfound.png";
+import error from "@/public/img/notfound.png";
 
 export default function Home() {
   const [nameAdmin] = useCheckLogin();
@@ -50,7 +51,6 @@ export default function Home() {
                 <div className="w-[90%]  bg-slate-100 rounded-r-3xl  rounded-2xl p-6 min-h-screen">
                   <div className="w-[100%] ">
                     <Suppliers />
-                    
                   </div>
                 </div>
               </div>

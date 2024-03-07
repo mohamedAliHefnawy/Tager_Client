@@ -1,13 +1,11 @@
 //react
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import linkServer from "@/linkServer";
 
 //nextUi
 import {
   Avatar,
-  Spinner,
   Pagination,
   Accordion,
   AccordionItem,
@@ -56,7 +54,6 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
   const itemsPerPage = 6;
   const [nameCatogry, setNameCatogry] = useState("");
   const [imageURL, setImageURL] = useState("");
@@ -181,11 +178,6 @@ export default function Products() {
             <div className="w-[10%] text-right"></div>
           </div>
           {
-            // loading ? (
-            //   <div className="flex justify-center items-center h-[400px]">
-            //     <Spinner size="lg" color="warning" />
-            //   </div>
-            // ) : (
             currentItems.map((product, index) => (
               <>
                 <div
@@ -286,16 +278,6 @@ export default function Products() {
                                   0
                                 )}
                               </p>
-                            </div>
-                            <div className="w-[10%] text-right">
-                              <div className="flex justify-center">
-                                {/* <ModelEditProduct
-                idCategoryy={product._id}
-                nameCategoryy={product.name}  
-                imageCategoryy={product.image[0]}
-                activeCategoryy={product.active}
-              /> */}
-                              </div>
                             </div>
                           </div>
                         ))}

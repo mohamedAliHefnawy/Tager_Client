@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
-import Icons from "@/iconsSvg";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
@@ -136,7 +135,6 @@ export default function DeliveryClients() {
                   <div className="w-[33%] flex justify-center">
                     <p
                       className="text-warning-500"
-                      // href={`/dashboard/account/${employees.name}`}
                     >
                       {employees.name}
                     </p>

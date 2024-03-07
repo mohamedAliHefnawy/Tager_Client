@@ -51,9 +51,9 @@ interface Row {
   id: string;
   cost: string;
   image: string;
-  price1?: string; // Make it optional
-  price2: string; // Add price2 property
-  price3: string; // Add price3 property
+  price1?: string;
+  price2: string;
+  price3: string;
   catogry: string | undefined;
   name: string;
   marketer: string;
@@ -107,7 +107,6 @@ export default function ModelAddProduct({
   const [sizeProduct, setSizeProduct] = useState<string[]>([]);
   const [closeBtn, setCloseBtn] = useState(true);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [selectedFiles2, setSelectedFiles2] = useState<File[]>([]);
   const [imageURLs, setImageURLs] = useState<string[]>([]);
   const [imageURLs2, setImageURLs2] = useState<string[]>([]);
   const [showDivStore, setShowDivStore] = useState(false);
@@ -238,9 +237,7 @@ export default function ModelAddProduct({
     if (!files) return;
     const filesArray = Array.from(files) as File[];
     setSelectedFiles(filesArray);
-
     const urls = [];
-
     for (let i = 0; i < filesArray.length; i++) {
       const file = filesArray[i];
       const fileName = generateUniqueFileName(file);
@@ -249,7 +246,6 @@ export default function ModelAddProduct({
       const url = await getDownloadURL(data.ref);
       urls.push(url);
     }
-
     setImageURLs(urls);
   };
 
@@ -282,18 +278,9 @@ export default function ModelAddProduct({
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredStores = stores.filter((store) =>
-    store.name.toLowerCase().includes(searchTermStore.toLowerCase())
-  );
-
   const handleCategorySelect = (store: any) => {
     setSelectedCategory(store);
     setShowDivCatogry(false);
-  };
-
-  const handleStoreSelect = (store: any) => {
-    setSelectedStore(store);
-    setShowDivStore(false);
   };
 
   const Tabss = () => {
@@ -349,41 +336,7 @@ export default function ModelAddProduct({
                       </div>
                     )}
                   </div>
-                  {/* <div className="w-[100%] ">
-                    <Button
-                      className="input opacity-70"
-                      variant="bordered"
-                      onClick={() => setShowDivStore(!showDivStore)}
-                    >
-                      {selectedStore ? selectedStore.name : "المخزن"}
-                    </Button>
-                    <div
-                      className={`w-[100%] border-2 rounded-lg mt-3 flex flex-col items-center transition-all duration-500 ${
-                        showDivStore
-                          ? "opacity-100 translate-y-0"
-                          : "hidden translate-y-full"
-                      }`}
-                    >
-                      <div className="w-[100%] p-6 pt-0 flex flex-col items-center">
-                        <input
-                          type="text"
-                          className="input opacity-40"
-                          placeholder="بحث ..."
-                          value={searchTermStore}
-                          onChange={(e) => setSearchTermStore(e.target.value)}
-                        />
-                        {filteredStores.map((store, index) => (
-                          <div
-                            key={index}
-                            className="my-2"
-                            onClick={() => handleStoreSelect(store)}
-                          >
-                            <p className="hover:cursor-pointer">{store.name}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div> */}
+
                   <div className="w-[100%] ">
                     <Button
                       className="input opacity-70"

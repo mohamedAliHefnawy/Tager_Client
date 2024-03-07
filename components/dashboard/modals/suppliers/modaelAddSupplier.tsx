@@ -61,7 +61,6 @@ export default function ModelAddSupplier() {
     if (selectedFiles && selectedFiles.length > 0) {
       const file = selectedFiles[0];
       const fileName = generateUniqueFileName(file);
-
       const fileRef = ref(analytics, `elhbaieb/${fileName}`);
       const data = await uploadBytes(fileRef, file);
       const url = await getDownloadURL(data.ref);
