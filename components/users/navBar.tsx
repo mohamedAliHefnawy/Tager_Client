@@ -26,15 +26,10 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Modal,
-  ModalContent,
-  ModalBody,
-  useDisclosure,
 } from "@nextui-org/react";
 
 //images
 import Logo from "@/public/img/hbaieb.png";
-import CartIcon from "./cart";
 
 export default function NavBar({
   userr,
@@ -101,41 +96,6 @@ export default function NavBar({
     fetchLengthProductsInCart();
   }, []);
 
-  const Login = async () => {
-    try {
-      const data = {
-        name: userr,
-        password,
-      };
-      const response = await axios.post(
-        `${linkServer.link}users/loginMoneySafe`,
-        data
-      );
-
-      if (response.data === "yes") {
-        Swal.fire({
-          icon: "success",
-          title: "تم  التسجيل بنجاح ",
-          text: "✓",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-        router.push("/wallet");
-      }
-      if (response.data === "no") {
-        Swal.fire({
-          icon: "warning",
-          title: "كلمة المرور خاطئة",
-          text: "⤫",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     if (password.trim() !== "") {
       setCheck(false);
@@ -170,35 +130,43 @@ export default function NavBar({
               className="border-1 bg-[var(--mainColorRgba)] rounded-lg"
             >
               <DropdownItem key="1">
-                <p className="flex items-center " onClick={DeleteWalletSign}>
+                <Link
+                  href="/profile"
+                  className="flex items-center "
+                  onClick={DeleteWalletSign}
+                >
                   <p className="text-[var(--mainColor)]">{Icons.UserIcon}</p>
                   <Link href="/profile" className="mr-1 text-slate-700">
                     حسابي
                   </Link>
-                </p>
+                </Link>
               </DropdownItem>
               <DropdownItem key="1">
                 {userValidity === "مندوب تسويق" && (
-                  <p className="flex items-center ">
+                  <Link href="/wallet" className="flex items-center ">
                     <p className="text-[var(--mainColor)]">
                       {Icons.BanknotesIcon}
                     </p>
                     <Link href="/wallet" className="mr-1 text-slate-700">
                       المحفظة
                     </Link>
-                  </p>
+                  </Link>
                 )}
               </DropdownItem>
               <DropdownItem key="1">
-                <p className="flex items-center " onClick={DeleteWalletSign}>
+                <Link
+                  href="/orders"
+                  className="flex items-center "
+                  onClick={DeleteWalletSign}
+                >
                   <p className="text-[var(--mainColor)]">{Icons.TagIcon}</p>
                   <Link href="/orders" className="mr-1 text-slate-700">
                     الطلبات
                   </Link>
-                </p>
+                </Link>
               </DropdownItem>
               <DropdownItem key="logout" className="text-danger" color="danger">
-                <p className="flex items-center ">
+                <p onClick={() => Logout()} className="flex items-center ">
                   <p>{Icons.LogoutIcon}</p>
                   <p onClick={() => Logout()} className="mr-1">
                     تسجيل خروج
