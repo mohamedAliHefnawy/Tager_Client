@@ -136,12 +136,6 @@ export default function NavBar({
     }
   };
 
-  // useEffect(() => {
-  //   if (lengthProductsInCart !== 0) {
-  //     setLen(lengthProductsInCart);
-  //   }
-  // }, [lengthProductsInCart]);
-
   useEffect(() => {
     if (password.trim() !== "") {
       setCheck(false);
@@ -184,8 +178,6 @@ export default function NavBar({
                 </p>
               </DropdownItem>
               <DropdownItem key="1">
-                {/* {userValidity} */}
-                {/* {user} */}
                 {userValidity === "مندوب تسويق" && (
                   <p className="flex items-center ">
                     <p className="text-[var(--mainColor)]">
@@ -219,10 +211,8 @@ export default function NavBar({
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           <NavbarItem className="mr-4 mt-5">
             <Link color="foreground" href="/fav" onClick={DeleteWalletSign}>
-              {/* <p>{lengthProductsInFavourite}</p> */}
               <span className="text-red-600 mr-3 mt-5">{Icons.HeartIcon}</span>
             </Link>
-            {/* {len} */}
           </NavbarItem>
           <NavbarItem className="mr-4 mt-5">
             <Link color="foreground" href="/cart" onClick={DeleteWalletSign}>
@@ -232,7 +222,6 @@ export default function NavBar({
               <span className="text-slate-600 mr-3">
                 {Icons.ShoppingcartIcon}
               </span>
-              {/* {lengthProductsInCart} */}
             </Link>
           </NavbarItem>
           <NavbarItem className="ml-4">
@@ -251,11 +240,6 @@ export default function NavBar({
           <NavbarItem className="lg:flex md:flex max-md:flex sm:hidden max-sm:hidden">
             <Image src={Logo} width={100} height={100} alt={"error"} />
           </NavbarItem>
-          {/* <CartIcon
-            userr={user}
-            lengthProductsInCart={lengthProductsInCart}
-            lengthProductsInFavourite={lengthProductsInFavourite}
-          /> */}
         </NavbarContent>
         <NavbarMenuToggle
           className="lg:hidden md:hidden max-md:hidden sm:flex max-sm:flex"

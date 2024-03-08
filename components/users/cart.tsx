@@ -50,7 +50,7 @@ export default function CartIcon({
   return (
     <div className="fixed z-50 bottom-0 right-0 max-lg:hidden lg:hidden md:hidden sm:flex max-sm:flex">
       <p className="absolute z-50 bottom-0 right-0 mr-6 mb-4 bg-warning-500 rounded-full flex justify-center items-center text-white w-6 h-6 ">
-        {lengthProductsInCart ? lengthProductsInCart : len}
+      {lengthProductsInCart ? lengthProductsInCart : len}
       </p>
       <Link
         color="foreground"

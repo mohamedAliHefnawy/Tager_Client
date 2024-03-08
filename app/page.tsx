@@ -124,7 +124,9 @@ export default function Home() {
 
               <CartIcon
                 userr={user}
-                lengthProductsInCart={lenghtProductInCart}
+                lengthProductsInCart={
+                  lenghtProductInCart2 + lenghtProductInCart
+                }
                 lengthProductsInFavourite={lengthProductsInFavourite}
               />
               <MainSlider />

@@ -9,7 +9,6 @@ import Img4 from "@/public/img/bg-2222.png";
 import Img5 from "@/public/img/bg-3333.png";
 
 export default function MainSlider() {
-
   const settings = {
     dots: true,
     infinite: true,
@@ -17,7 +16,6 @@ export default function MainSlider() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
 
   const productTemplate = () => {
     return (
@@ -53,12 +51,12 @@ export default function MainSlider() {
           <Image
             src={Img3}
             alt={"error"}
-            className="w-[90%] h-60 max-lg:mr-1 lg:mr-1 md:mr-1 sm:mr-0 max-sm:mr-0"
+            className="w-[1000%] h-60 max-lg:mr-1 lg:mr-1 md:mr-1 sm:mr-0 max-sm:mr-0 mb-2"
           />
           <Image
             src={Img2}
             alt={"error"}
-            className="w-[90%] h-60 max-lg:ml-1 lg:ml-1 md:ml-1 sm:ml-0 max-sm:ml-0"
+            className="w-[100%] h-60 max-lg:ml-1 lg:ml-1 md:ml-1 sm:ml-0 max-sm:ml-0 mb-2"
           />
         </div>
       </div>
