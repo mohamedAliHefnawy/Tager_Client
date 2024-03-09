@@ -6,7 +6,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import linkServer from "@/linkServer";
 import { QrScanner } from "@yudiel/react-qr-scanner";
-
 import { Switch } from "@nextui-org/react";
 
 export default function QRScanner({ name }: { name: string }) {

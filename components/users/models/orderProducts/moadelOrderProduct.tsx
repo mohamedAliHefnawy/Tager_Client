@@ -26,6 +26,7 @@ import {
   DropdownTrigger,
   Avatar,
 } from "@nextui-org/react";
+import Swal from "sweetalert2";
 
 interface Stores {
   _id: string;
@@ -450,6 +451,19 @@ export default function MoadelOrderProducts({
   };
 
   const AddOrder = async () => {
+    Swal.fire({
+      icon: "success",
+      title: "تم عمل الطلبية بنجاح",
+      text: "✓",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "حسنًا",
+      position: "top-right",
+      timer: 4000,
+      timerProgressBar: true,
+      toast: true,
+      showConfirmButton: false,
+    });
+    router.push("/orders");
     try {
       const data = {
         nameClient,
@@ -478,9 +492,9 @@ export default function MoadelOrderProducts({
         `${linkServer.link}orders/addOrderProducts`,
         data
       );
-      if (response.data === "yes") {
-        router.push("/orders");
-      }
+      // if (response.data === "yes") {
+      //   router.push("/orders");
+      // }
     } catch (error) {
       console.error(error);
     }

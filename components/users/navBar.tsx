@@ -112,7 +112,7 @@ export default function NavBar({
     <>
       <Navbar className="bg-white">
         <NavbarBrand>
-          <Dropdown>
+          <Dropdown  closeOnSelect={false}>
             <DropdownTrigger>
               <Button
                 variant="bordered"

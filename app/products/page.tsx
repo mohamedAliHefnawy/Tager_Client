@@ -190,7 +190,7 @@ export default function Home() {
                         />
                       </div>
                       <div className="w-[100%] mt-4">
-                        <Dropdown>
+                        <Dropdown  closeOnSelect={false}>
                           <DropdownTrigger>
                             <Button
                               startContent={Icons.ArrowUturnDownIcon}
