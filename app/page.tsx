@@ -113,7 +113,6 @@ export default function Home() {
         ) : user ? (
           <>
             <div className="w-[100%] flex-col flex items-center">
-              {/* {lenghtProductInCart} */}
               <NavBar
                 userr={user}
                 lengthProductsInCart={
@@ -121,7 +120,6 @@ export default function Home() {
                 }
                 lengthProductsInFavourite={lengthProductsInFavourite}
               />
-
               <CartIcon
                 userr={user}
                 lengthProductsInCart={
@@ -131,14 +129,11 @@ export default function Home() {
               />
               <MainSlider />
               <ElementsSlider />
-              {/* {lenghtProductInCart2 + lenghtProductInCart} */}
               <ProductsSlider1
                 updateLengthInCart={updateLengthInCart1}
                 key={0}
                 updateLengthInFavoutire={updateLengthInFavourite}
               />
-
-              {/* {lenghtProductInCart2 + lenghtProductInCart} */}
               {categories.map((item, index) => (
                 <ProductsSliderCatogety
                   updateLengthInCart={updateLengthInCart2}

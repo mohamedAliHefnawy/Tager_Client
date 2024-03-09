@@ -23,7 +23,6 @@ export default function Home() {
   const [showPassword, setShowPassword] = useState(true);
   const router = useRouter();
 
-
   const Login = async () => {
     try {
       const NameTrim = name.trim();
@@ -68,7 +67,7 @@ export default function Home() {
         });
       }
 
-      if (answer === "notFoundUser") {
+      if (response.data === "notFoundUser") {
         Swal.fire({
           icon: "error",
           title: "هذا المستخدم غير موجود",

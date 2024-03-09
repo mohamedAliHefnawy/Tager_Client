@@ -65,8 +65,7 @@ export default function Home() {
     indexOfLastItem
   );
 
-  const GetProductsInCart = async () => {
-    setLoading(true);
+  const GetProductsInFav = async () => {
     try {
       let response: {
         data: { token: string; combinedProducts: any };
@@ -86,6 +85,12 @@ export default function Home() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      GetProductsInFav();
+    }
+  }, [user, GetProductsInFav]);
 
   useEffect(() => {
     if (user) {

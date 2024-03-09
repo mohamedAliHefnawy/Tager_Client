@@ -98,12 +98,12 @@ export default function Home() {
     const lowerCaseSearchText = searchText.toLowerCase();
     const productPrice = getProductPrice(product);
     return (
-      (product.name &&
-        product.name.toLowerCase().includes(lowerCaseSearchText)) ||
-      (product.catogry &&
-        product.catogry.toLowerCase().includes(lowerCaseSearchText) &&
-        productPrice >= priceRange[0] &&
-        productPrice <= priceRange[1])
+      product.name &&
+      product.name.toLowerCase().includes(lowerCaseSearchText) &&
+      product.catogry &&
+      product.catogry.toLowerCase().includes(lowerCaseSearchText) &&
+      productPrice >= priceRange[0] &&
+      productPrice <= priceRange[1]
     );
   });
 
@@ -251,7 +251,7 @@ export default function Home() {
                                 className="p-8 py-3 mr-2 h-auto "
                               >
                                 <div className="flex justify-center rounded-2xl py-4">
-                                  <Image
+                                  <img
                                     className="w-[90%] h-36"
                                     src={product.image[0]}
                                     alt={"error"}

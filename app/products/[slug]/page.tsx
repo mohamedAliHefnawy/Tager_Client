@@ -265,7 +265,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                                 className="p-8 py-3 mr-2 h-auto "
                               >
                                 <div className="flex justify-center rounded-2xl py-4">
-                                  <Image
+                                  <img
                                     className="w-[90%] h-36"
                                     src={product.image[0]}
                                     alt={"error"}

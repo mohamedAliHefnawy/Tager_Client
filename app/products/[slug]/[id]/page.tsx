@@ -260,6 +260,9 @@ export default function Product({ params }: { params: { id: string } }) {
       </div>
     ));
 
+  // const ColorWhite = "fff";
+  // const ColoeWhiteUpper = ColorWhite.toUpperCase();
+
   const Body = () => {
     return (
       <>
@@ -273,6 +276,7 @@ export default function Product({ params }: { params: { id: string } }) {
             <p className="flex justify-end font-bold text-xl">
               <p className="mr-1">د.ل</p>
               <p>{displayedPrice}</p>
+              {/* {ColoeWhiteUpper} */}
             </p>
             <p className="my-1 mt-6  text-lg text-[var(--mainColor)]">
               <p style={{ direction: "rtl" }}>الحالة :</p>
@@ -319,8 +323,8 @@ export default function Product({ params }: { params: { id: string } }) {
                       outlineColor: color,
                       border:
                         selectedColor === color
-                          ? "0px solid red"
-                          : `0px solid ${color}`,
+                          ? "0px solid #00000"
+                          : `1px solid #00000`,
                     }}
                     className={`w-10 h-10 border-1 border-slate-400 ${
                       selectedColor === color ? "outline-8" : "outline-2"

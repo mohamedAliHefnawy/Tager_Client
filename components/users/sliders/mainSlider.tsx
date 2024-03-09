@@ -48,16 +48,20 @@ export default function MainSlider() {
           <div>{productTemplate3()}</div>
         </Slider>
         <div className="w-[100%] max-lg:flex lg:flex md:flex sm:block max-sm:block justify-center mt-10">
-          <Image
-            src={Img3}
-            alt={"error"}
-            className="w-[1000%] h-60 max-lg:mr-1 lg:mr-1 md:mr-1 sm:mr-0 max-sm:mr-0 mb-2"
-          />
-          <Image
-            src={Img2}
-            alt={"error"}
-            className="w-[100%] h-60 max-lg:ml-1 lg:ml-1 md:ml-1 sm:ml-0 max-sm:ml-0 mb-2"
-          />
+          <div className="lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
+            <Image
+              src={Img3}
+              alt={"error"}
+              className="w-[100%] h-60 max-lg:mr-1 lg:mr-1 md:mr-1 sm:mr-0 max-sm:mr-0 mb-2"
+            />
+          </div>
+          <div className="lg:w-[50%] md:w-[50%] sm:w-[100%] max-sm:w-[100%] ">
+            <Image
+              src={Img4}
+              alt={"error"}
+              className="w-[100%] h-60 max-lg:ml-1 lg:ml-1 md:ml-1 sm:ml-0 max-sm:ml-0 mb-2"
+            />
+          </div>
         </div>
       </div>
     </>

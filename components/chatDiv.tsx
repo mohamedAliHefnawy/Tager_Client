@@ -129,7 +129,6 @@ export default function ChatDiv({
           {Icons.ChatbubbleleftrightIcon}
         </p>
       </Badge>
-      {/* </p> */}
 
       <Modal
         isOpen={isOpen}
@@ -142,7 +141,7 @@ export default function ChatDiv({
             <>
               <ModalBody>
                 <div
-                  className={`fixed right-0 bottom-0 lg:w-[30%] md:w-[30%] sm:w-[90%] max-sm:w-[90%] h-auto max-h-[500px] overflow-y-auto z-50 border-1 border-[var(--mainColor)] bg-warning-100 rounded-3xl p-10 pt-2 mr-2 opacity-100`}
+                  className={`fixed z-50 right-0 bottom-0 lg:w-[30%] md:w-[30%] sm:w-[90%] max-sm:w-[90%] h-auto max-h-[500px] overflow-y-auto border-1 border-[var(--mainColor)] bg-warning-100 rounded-3xl p-10 pt-2 mr-2 mb-20 opacity-100`}
                 >
                   <div className="w-[100%] flex justify-end ">
                     <span

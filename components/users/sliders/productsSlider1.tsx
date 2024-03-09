@@ -64,15 +64,24 @@ export default function ProductsSlider1({
       key={index}
       className="p-8 py-3 mr-2 h-auto w-auto flex flex-col items-center "
     >
-      <div className="flex justify-center rounded-2xl py-4">
-        <Image
-          className="w-[90%] h-36"
-          src={item.image}
-          alt={"error"}
-          width={100}
-          height={100}
-        />
-      </div>
+      {item.idProduct !== "" ? (
+        <div
+          className="flex justify-center rounded-2xl py-4 hover:cursor-pointer lg:w-[50%] md:w-[50%] h-56 sm:w-[100%] max-sm:w-[100%] sm:h-40 max-sm:h-32"
+          onClick={() =>
+            router.push(`/products/${item.catogry}/${item.idProduct}`)
+          }
+        >
+          <img src={item.image} alt={"error"} className="rounded-md  " />
+        </div>
+      ) : (
+        <div
+          className="flex justify-center rounded-2xl py-4 hover:cursor-pointer lg:w-[50%] md:w-[50%] h-56 sm:w-[100%] max-sm:w-[100%] sm:h-40 max-sm:h-32"
+          onClick={() => Sw()}
+        >
+          <img src={item.image} alt={"error"} className="rounded-md  " />
+        </div>
+      )}
+
       <div className=" rounded-2xl py-2 mt-2">
         {item.idProduct !== "" ? (
           <div
