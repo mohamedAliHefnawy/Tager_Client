@@ -8,6 +8,7 @@ import Icons from "@/iconsSvg";
 import {
   Modal,
   ModalContent,
+  ModalHeader,
   ModalBody,
   useDisclosure,
   Badge,
@@ -45,7 +46,6 @@ export default function ChatDiv({
   const [messageText, setMessageText] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [closeBtn, setCloseBtn] = useState(true);
-
 
   const ShowedOrlready = async () => {
     onOpen();
@@ -134,23 +134,25 @@ export default function ChatDiv({
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}
-        className="bg-red-400 h-0 w-0"
+        size="2xl"
+        className="pb-6 max-h-[500px] overflow-y-auto"
       >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalBody>
                 <div
-                  className={`fixed z-50 right-0 bottom-0 lg:w-[30%] md:w-[30%] sm:w-[90%] max-sm:w-[90%] h-auto max-h-[500px] overflow-y-auto border-1 border-[var(--mainColor)] bg-warning-100 rounded-3xl p-10 pt-2 mr-2 mb-20 opacity-100`}
+                // className={`fixed z-50 right-0 bottom-0 lg:w-[30%] md:w-[30%] sm:w-[90%] max-sm:w-[90%] h-auto max-h-[500px] overflow-y-auto border-1 border-[var(--mainColor)] bg-warning-100 rounded-3xl p-10 pt-2 mr-2 mb-20 opacity-100`}
                 >
-                  <div className="w-[100%] flex justify-end ">
+                  {/* <div className="w-[100%] flex justify-end ">
                     <span
                       onClick={onClose}
                       className="p-4 hover:cursor-pointer text-danger-600"
                     >
                       ⌧
                     </span>
-                  </div>
+                  </div> */}
+                  <ModalHeader></ModalHeader>
                   <div className="flex justify-start w-[100%]">
                     <div>
                       {messages.map((item, index) => (
