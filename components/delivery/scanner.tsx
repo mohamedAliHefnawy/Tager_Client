@@ -20,6 +20,7 @@ export default function QRScanner({ name }: { name: string }) {
   };
 
   const handleScannerResult = async (result: any) => {
+    setScannerActive(false);
     const scannedResult = result?.toString();
     setScanResult(scannedResult);
     try {

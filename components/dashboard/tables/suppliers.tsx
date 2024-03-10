@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 //nextUi
 import { Avatar, Spinner, Pagination } from "@nextui-org/react";
@@ -9,6 +10,7 @@ import { Avatar, Spinner, Pagination } from "@nextui-org/react";
 //components
 import ModelAddSupplier from "../modals/suppliers/modaelAddSupplier";
 import ModelEditSupplier from "../modals/suppliers/modaelEditSupplier";
+import Link from "next/link";
 
 interface Suppliers {
   _id: string;
@@ -106,6 +108,7 @@ export default function Suppliers() {
               <p>تاريخ الإضافة</p>
             </div>
             <div className="w-[10%] flex justify-center"></div>
+            <div className="w-[10%] flex justify-center"></div>
           </div>
           {loading ? (
             <div className="flex justify-center items-center h-[400px]">
@@ -142,6 +145,16 @@ export default function Suppliers() {
                       imageSupplier={supplier.image}
                       phoneSupplier={supplier.phone}
                     />
+                  </div>
+                </div>
+                <div className="w-[10%] flex justify-center">
+                  <div className="flex flex-wrap gap-4">
+                    <Link
+                      href={`/dashboard/purchases/${supplier.name}`}
+                      className="bg-primary-200 p-2 rounded-full border-1 border-primary-500 text-primary-700 hover:cursor-pointer"
+                    >
+                      {Icons.ArrowUturnDownIcon}
+                    </Link>
                   </div>
                 </div>
               </div>

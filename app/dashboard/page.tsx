@@ -16,6 +16,8 @@ import { Button } from "@nextui-org/react";
 //Images
 import UserLogin from "@/public/img/userLogin.png";
 import error from "@/public/img/notfound.png";
+import admin1 from "@/public/img/admin1.png";
+import admin2 from "@/public/img/admin2.png";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -96,9 +98,8 @@ export default function Home() {
     <>
       <div className=" max-2xl:flex max-xl:flex lg:flex md:hidden sm:hidden max-sm:hidden flex-col justify-center items-center h-auto pb-6">
         <div className="max-sm:w-[80%] sm:w-[80%] lg:w-[30%] max-lg:w-[40%] bg-white flex-col flex justify-center items-center">
-          {/* {showConfetti && <Confetti width={1300} height={1300} />} */}
           <div className="mt-6">
-            <Image src={UserLogin} alt={"error"} width={150} height={150} />
+            <Image src={admin1} alt={"error"} width={150} height={150} />
           </div>
 
           <input

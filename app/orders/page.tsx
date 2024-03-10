@@ -91,7 +91,7 @@ export default function Home() {
     "مع الشحن",
     "بإنتظار الموافقة",
   ]);
-  const itemsPerPage = 6;
+  const itemsPerPage = 4;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -99,7 +99,9 @@ export default function Home() {
     setCurrentPage(newPage);
   };
 
-  const currentItems = orders
+  const ordersRevese = orders.slice().reverse();
+
+  const currentItems = ordersRevese
     .filter((item) =>
       selected.includes(
         item.situationSteps[item.situationSteps.length - 1].situation

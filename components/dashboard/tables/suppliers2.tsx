@@ -115,9 +115,7 @@ export default function Supplier2() {
                 </div>
                 <div className="w-[25%] text-center">
                   <Link href={`/dashboard/purchases/${supplier.name}`}>
-                    {/* <p className="text-warning-300 hover:text-warning-200 hover:cursor-pointer"> */}
                     {supplier.name}
-                    {/* </p> */}
                   </Link>
                 </div>
                 <div className="w-[25%] text-center">
