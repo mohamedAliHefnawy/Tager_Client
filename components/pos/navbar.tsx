@@ -17,175 +17,63 @@ import {
   PopoverTrigger,
 } from "@nextui-org/react";
 
-// svgIcons
-import { BellalertIcon } from "@/public/svg/bellalertIcon";
-import { BackwardIcon } from "@/public/svg/backwardIcon";
-
-interface Notifications {
+interface Categories {
   _id: string;
-  message: string;
-  date: string;
-  time: string;
-  marketer: string;
-  notes: string;
-  person: string;
+  image: string;
+  name: string;
+  products: string;
+  active: boolean;
 }
 
-export default function NavBarPos() {
-  const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [loading, setLoading] = useState(true);
-  const usernamee = localStorage.getItem("nameAdmin");
-  const [notifications, setNotifications] = useState<Notifications[]>([]);
-
-  const icons = {
-    BellalertIcon: <BellalertIcon />,
-    BackwardIcon: <BackwardIcon />,
-  };
-
-  const AcceptMoney = async (
-    person: string,
-    message: string,
-    idMessage: string,
-    marketer: string
-  ) => {
-    const regex = /\d+/;
-    let number = 0;
-    const match = message.match(regex);
-
-    const [firstNumber, secondNumber] = message
-      .match(/--(\d+)--(\d+)--/)
-      ?.slice(1)
-      .map((number) => parseInt(number, 10)) || [0, 0];
-
-    const marketerMoney = parseInt(String(firstNumber).substring(1));
-    const deliveryMoney = parseInt(String(secondNumber).substring(1));
-
-    if (match) {
-      number = parseInt(match[0], 10);
-    } else {
-      console.log("لم يتم العثور على أي رقم في النص");
-    }
-    try {
-      const data = {
-        id: idMessage,
-        nameDelivery: person,
-        nameAdmin: usernamee,
-        marketer: marketer,
-        money: number,
-        marketerMoney,
-        deliveryMoney,
-      };
-      const response = await axios.post(
-        `${linkServer.link}users/acceptMoney `,
-        data
-      );
-      if (response.data === "yes") {
-        Swal.fire({
-          icon: "success",
-          title: "تم الإستلام بنجاح",
-          text: "⤫",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-
-        const filter = notifications.filter((item) => item._id !== idMessage);
-        setNotifications(filter);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const DeclineMoney = async (
-    person: string,
-    message: string,
-    idMessage: string,
-    marketer: string
-  ) => {
-    const regex = /\d+/;
-    let number = 0;
-    const match = message.match(regex);
-
-    const [firstNumber, secondNumber] = message
-      .match(/--(\d+)--(\d+)--/)
-      ?.slice(1)
-      .map((number) => parseInt(number, 10)) || [0, 0];
-
-    const marketerMoney = parseInt(String(firstNumber).substring(1));
-    const deliveryMoney = parseInt(String(secondNumber).substring(1));
-
-    if (match) {
-      number = parseInt(match[0], 10);
-    } else {
-      console.log("لم يتم العثور على أي رقم في النص");
-    }
-    try {
-      const data = {
-        id: idMessage,
-        nameDelivery: person,
-        nameAdmin: usernamee,
-        marketer: marketer,
-        money: number,
-        marketerMoney,
-        deliveryMoney,
-      };
-      const response = await axios.post(
-        `${linkServer.link}users/declineMoney`,
-        data
-      );
-      if (response.data === "yes") {
-        Swal.fire({
-          icon: "success",
-          title: "تم الرفض بنجاح",
-          text: "⤫",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-        const filter = notifications.filter((item) => item._id !== idMessage);
-        setNotifications(filter);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const GetNotifications = async () => {
-    setLoading(true);
-    try {
-      let response: { data: { token: string; notifications: any } };
-      response = await axios.get(
-        `${linkServer.link}notifications/getNotifications`,
-        {
-          headers: {
-            Authorization: `Bearer ${secretKey}`,
-          },
-        }
-      );
-      setNotifications(response.data.notifications);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+export default function NavBarPos({
+  categories,
+  selectedCatogryParent,
+  searchTextFilt,
+}: {
+  categories: Categories[];
+  selectedCatogryParent: any;
+  searchTextFilt: any;
+}) {
+  const [selectedCatogry, setSelectedCatogry] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const handleSearchChange = (e: any) => {
+    setSearchText(e.target.value);
   };
 
   useEffect(() => {
-    GetNotifications();
-  }, []);
+    if (selectedCatogry || searchText) {
+      selectedCatogryParent(selectedCatogry);
+      searchTextFilt(searchText);
+    }
+  }, [selectedCatogry, searchText]);
 
   return (
     <>
       <div className="flex justify-evenly items-center w-[100%] h-[60px] bg-slate-50 rounded-2xl rounded-ss-none rounded-es-none px-4">
         <div className="flex">
-          <p className="mr-5 font-bold hover:cursor-pointer">ملابس</p>
-          <p className="mr-5 font-bold hover:cursor-pointer">ملابس</p>
-          <p className="mr-5 font-bold hover:cursor-pointer">ملابس</p>
-          <p className="mr-5 font-bold hover:cursor-pointer">ملابس</p>
-          <p className="mr-5 font-bold hover:cursor-pointer">ملابس</p>
-          <p className="mr-5 font-bold hover:cursor-pointer">ملابس</p>
+          {/* <p
+            className="mr-5 font-bold hover:cursor-pointer"
+            onClick={() => setSelectedCatogry("")}
+            >
+            كل المنتجات
+          </p> */}
+          {categories.map((item, indeItem) => (
+            <p
+              className="mr-5 font-bold hover:cursor-pointer"
+              key={indeItem}
+              onClick={() => setSelectedCatogry(item.name)}
+            >
+              {item.name}
+            </p>
+          ))}
         </div>
         <div className="w-[30%]">
-          <input className="inputTrue" placeholder="بحث ..." />
+          <input
+            className="inputTrue"
+            placeholder="بحث ..."
+            onChange={handleSearchChange}
+            value={searchText}
+          />
         </div>
       </div>
     </>

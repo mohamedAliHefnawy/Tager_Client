@@ -41,6 +41,9 @@ import { HeartIcon } from "@/public/svg/heartIcon";
 import { SearchIcon } from "@/public/svg/searchIcon";
 import { ReceiptrefundIcon } from "@/public/svg/receiptrefundIcon";
 import { CircleStackIcon } from "@/public/svg/circleStackIcon";
+import { CalendarDaysIcon } from "@/public/svg/calendarDaysIcon";
+import { MinuscircleIcon } from "@/public/svg/minuscircleIcon";
+import { PlusCircleIcon } from "@/public/svg/plusCircleIcon";
 
 const Icons = {
   HomeIcon: <HomeIcon />,
@@ -85,6 +88,9 @@ const Icons = {
   SearchIcon: <SearchIcon />,
   ReceiptrefundIcon: <ReceiptrefundIcon />,
   CircleStackIcon: <CircleStackIcon />,
+  CalendarDaysIcon: <CalendarDaysIcon />,
+  MinuscircleIcon: <MinuscircleIcon />,
+  PlusCircleIcon: <PlusCircleIcon />,
 };
 
 export default Icons;

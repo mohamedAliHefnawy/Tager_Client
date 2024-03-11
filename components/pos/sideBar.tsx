@@ -37,7 +37,7 @@ export default function SideBarPos() {
 
   return (
     <>
-      <div className="h-[700px] w-36 bg-slate-50 mr-1 rounded-2xl rounded-se-none">
+      <div className="h-[100%] w-36 bg-slate-50 mr-1 rounded-2xl rounded-se-none">
         <Link
           href={"/dashboard/pos"}
           className="p-4 pt-0 opacity-90 text-black text-sm flex flex-col items-center hover:font-bold"
