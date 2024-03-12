@@ -9,7 +9,7 @@ import axios from "axios";
 import NavBarPos from "@/components/pos/navbar";
 import SideBarPos from "@/components/pos/sideBar";
 import BodyPos from "@/components/pos/body";
-import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
+import useCheckLogin from "@/components/pos/checkLogin/checkLogin";
 import DivCheck from "@/components/dashboard/checkLogin/divCheck";
 import Loading from "@/components/loading";
 import linkServer from "@/linkServer";
@@ -51,7 +51,7 @@ interface Categories {
 
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [nameAdmin] = useCheckLogin();
+  const [nameKasheer , valKasheer] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
@@ -100,21 +100,21 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (nameAdmin) {
+    if (nameKasheer) {
       const timeoutId = setTimeout(() => {
-        setUsername(nameAdmin);
+        setUsername(nameKasheer);
       }, 2000);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [nameAdmin]);
+  }, [nameKasheer]);
 
   return (
     <>
       <div>
         {isLoading ? (
           <Loading />
-        ) : nameAdmin ? (
+        ) : nameKasheer ? (
           <>
             <div className="bg-zinc-200 flex justify-center items-center lg:h-auto min-h-screen lg:block md:hidden sm:hidden max-sm:hidden">
               <div className="bg-white h-screen p-6">
@@ -144,7 +144,7 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <DivCheck link="/dashboard" />
+          <DivCheck link="/pos/login" />
         )}
       </div>
     </>

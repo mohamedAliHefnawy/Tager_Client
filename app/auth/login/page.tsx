@@ -130,7 +130,7 @@ export default function Home() {
             <p>ليس لديك حساب ؟</p>
           </div>
 
-          <Button className="button" onClick={Login} disabled={check}>
+          <Button className="button" onClick={Login}>
             تسجيل دخول
           </Button>
         </div>

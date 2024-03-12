@@ -3,7 +3,7 @@
 // react
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //component
 import Icons from "@/iconsSvg";
@@ -22,77 +22,88 @@ import {
   User,
 } from "@nextui-org/react";
 
-export default function CartPos() {
-  const AdminPos = localStorage.getItem("nameAdmin");
-  const ValPos = localStorage.getItem("valAdmin");
+export default function CartPos({
+  productsCart,
+}: {
+  productsCart: {
+    idProduct: string;
+    nameProduct: string;
+    imageProduct: string[];
+    sizeProduct: { size: string; store: { amount: number }[] }[];
+    colorProduct: string;
+    priceProduct: number;
+    catogryProduct: string;
+  }[];
+}) {
+  const AdminPos = localStorage.getItem("nameKasheer");
+  const ValPos = localStorage.getItem("valKasheer");
+  const StorePos = localStorage.getItem("storeKasheer");
+  const MoneySafePos = localStorage.getItem("moneySafeKasheer");
+
   const [showDivCart, setShowDivCart] = useState(false);
   const [selectedColor, setSelectedColor] = React.useState(new Set(["اللون "]));
-  const [selectedSize, setSelectedSSize] = React.useState(new Set(["الحجم "]));
+  const [selectedSize, setSelectedSize] = React.useState({});
+  const [allProducts, setAllProducts] = useState<
+    {
+      idProduct: string;
+      nameProduct: string;
+      imageProduct: string[];
+      sizeProduct: { size: string; store: { amount: number }[] }[];
+      colorProduct: string;
+      priceProduct: number;
+      catogryProduct: string;
+    }[]
+  >([]);
 
-  const selectedValueColor = React.useMemo(
-    () => Array.from(selectedColor).join(", ").replaceAll("_", " "),
-    [selectedColor]
-  );
+  const [productsCartAlready, setProductsCartAlready] = useState({});
+
   const selectedValueSize = React.useMemo(
-    () => Array.from(selectedSize).join(", ").replaceAll("_", " "),
-    [selectedSize]
+    () => Object.values(productsCartAlready).join(", ").replaceAll("_", " "),
+    [productsCartAlready]
   );
-  const handleSelectionColor = (selectedItems: string[]) => {
-    setSelectedColor(new Set(selectedItems));
-  };
-  const handleSelectionSize = (selectedItems: string[]) => {
-    setSelectedSSize(new Set(selectedItems));
+
+  const handleSelectionSize = ({ productId, size }: any) => {
+    setSelectedSize((prevSizes) => ({
+      ...prevSizes,
+      [productId]: size,
+    }));
   };
 
-  const DropColor = () => {
+  const DropSize = ({ sizes, productId }: any) => {
     return (
       <Dropdown>
         <DropdownTrigger>
           <Button variant="bordered" className="h-8 w-10 ">
-            {selectedValueColor}
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          disallowEmptySelection
-          selectionMode="single"
-          selectedKeys={selectedColor}
-          onSelectionChange={(keys: string[] | any) =>
-            handleSelectionColor(keys)
-          }
-        >
-          <DropdownItem key={1}>{1}</DropdownItem>
-          {/* {moneySafe.map((item) => (
-            <DropdownItem key={item.name}>{item.name}</DropdownItem>
-          ))} */}
-        </DropdownMenu>
-      </Dropdown>
-    );
-  };
-  const DropSize = () => {
-    return (
-      <Dropdown>
-        <DropdownTrigger>
-          <Button variant="bordered" className="h-8 w-10 ">
-            {selectedValueSize}
+            {selectedSize[productId] || "Select Size"}
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           variant="flat"
           disallowEmptySelection
           selectionMode="single"
-          selectedKeys={selectedSize}
-          onSelectionChange={(keys: string[] | any) =>
-            handleSelectionSize(keys)
+          selectedKeys={[selectedSize[productId]]}
+          onSelectionChange={(keys) =>
+            handleSelectionSize({ productId, size: keys })
           }
         >
-          <DropdownItem key={1}>{1}</DropdownItem>
-          {/* {moneySafe.map((item) => (
-            <DropdownItem key={item.name}>{item.name}</DropdownItem>
-          ))} */}
+          {sizes.map((item) => (
+            <DropdownItem key={item.size}>{item.size}</DropdownItem>
+          ))}
         </DropdownMenu>
       </Dropdown>
     );
   };
+
+  const RemoveProductWithCart = (idProduct: string) => {
+    const filter = allProducts.filter((item) => item.idProduct !== idProduct);
+    setAllProducts(filter);
+  };
+
+  useEffect(() => {
+    if (productsCart) {
+      setAllProducts(productsCart);
+    }
+  }, [productsCart]);
 
   return (
     <>
@@ -104,7 +115,7 @@ export default function CartPos() {
       </div>
 
       {showDivCart && (
-        <div className="w-[30%] h-screen fixed z-50 right-0 top-0 p-10 pt-5 bg-white shadow-lg flex flex-col items-center">
+        <div className="w-[30%] h-screen overflow-y-auto scrollDashbordSideBar fixed z-50 right-0 top-0 p-10 pt-5 bg-white shadow-lg flex flex-col items-center">
           <div className="flex justify-between items-center w-[100%]">
             <User
               name={
@@ -134,21 +145,26 @@ export default function CartPos() {
           <div className="w-[100%] flex flex-col items-center mt-6">
             <p className="text-lg font-bold">منتجات الطلبية</p>
           </div>
-          <div className="w-[100%] flex justify-between items-center my-4">
-            <span className="relative  hover:cursor-pointer text-danger-400">
-              ✘
-            </span>
-            <Avatar
-              src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-              size="md"
-            />
-            <p>اسم المنتج</p>
-            <p>{Icons.MinuscircleIcon}</p>
-            <p>1</p>
-            <p>{Icons.PlusCircleIcon}</p>
-            {DropColor()}
-            {DropSize()}
-          </div>
+          {allProducts.map((item, indexItem) => (
+            <div
+              className="w-[100%] flex justify-between items-center my-4"
+              key={indexItem}
+            >
+              {/* <span
+                className="relative  hover:cursor-pointer text-danger-400"
+                onClick={() => RemoveProductWithCart(item.idProduct)}
+              >
+                ✘
+              </span> */}
+              <Avatar src={item.imageProduct[0]} size="md" />
+              <p className="w-[20%] text-center">{item.nameProduct}</p>
+              <p className="hover:cursor-pointer">{Icons.MinuscircleIcon}</p>
+              <p>1</p>
+              <p className="hover:cursor-pointer">{Icons.PlusCircleIcon}</p>
+              {/* {DropColor()} */}
+              <DropSize sizes={item.sizeProduct} productId={item.idProduct} />
+            </div>
+          ))}
         </div>
       )}
     </>

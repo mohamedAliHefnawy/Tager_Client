@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import linkServer from "@/linkServer";
+import Icons from "@/iconsSvg";
 
 // nextUi
 import {
@@ -54,7 +55,7 @@ export default function NavBarPos({
           {/* <p
             className="mr-5 font-bold hover:cursor-pointer"
             onClick={() => setSelectedCatogry("")}
-            >
+          >
             كل المنتجات
           </p> */}
           {categories.map((item, indeItem) => (
@@ -63,7 +64,13 @@ export default function NavBarPos({
               key={indeItem}
               onClick={() => setSelectedCatogry(item.name)}
             >
-              {item.name}
+              {selectedCatogry === item.name ? (
+                <p className="bg-warning-100 p-3 rounded-2xl text-warning-500">
+                  {item.name}
+                </p>
+              ) : (
+                <p className=" p-3 rounded-2xl text-warning-300">{item.name}</p>
+              )}
             </p>
           ))}
         </div>

@@ -44,6 +44,8 @@ import { CircleStackIcon } from "@/public/svg/circleStackIcon";
 import { CalendarDaysIcon } from "@/public/svg/calendarDaysIcon";
 import { MinuscircleIcon } from "@/public/svg/minuscircleIcon";
 import { PlusCircleIcon } from "@/public/svg/plusCircleIcon";
+import { ForwardIcon } from "@/public/svg/forwardIcon";
+import { ComputerDesktopIcon } from "@/public/svg/computerDesktopIcon";
 
 const Icons = {
   HomeIcon: <HomeIcon />,
@@ -91,6 +93,8 @@ const Icons = {
   CalendarDaysIcon: <CalendarDaysIcon />,
   MinuscircleIcon: <MinuscircleIcon />,
   PlusCircleIcon: <PlusCircleIcon />,
+  ForwardIcon: <ForwardIcon />,
+  ComputerDesktopIcon: <ComputerDesktopIcon />,
 };
 
 export default Icons;

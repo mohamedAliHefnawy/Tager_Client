@@ -117,6 +117,11 @@ export default function SideBar() {
           icon={Icons.StopcircleIcon}
         />
         <ElementSideBar
+          name="الكاشير"
+          link="/dashboard/kasheer"
+          icon={Icons.ComputerDesktopIcon}
+        />
+        <ElementSideBar
           name="المصاريف"
           link="/dashboard/employees"
           icon={Icons.BanknotesIcon}

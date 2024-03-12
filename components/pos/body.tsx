@@ -47,7 +47,22 @@ export default function BodyPos({
   catogryFilter: string;
   searchTextFilt: string;
 }) {
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null
+  );
   const [allProducts, setAllProducts] = useState<
+    {
+      idProduct: string;
+      nameProduct: string;
+      imageProduct: string[];
+      sizeProduct: { size: string; store: { amount: number }[] }[];
+      colorProduct: string;
+      priceProduct: number;
+      catogryProduct: string;
+    }[]
+  >([]);
+
+  const [productsCart, setProductsCart] = useState<
     {
       idProduct: string;
       nameProduct: string;
@@ -97,14 +112,41 @@ export default function BodyPos({
     return matchesSearchText && matchesCategory;
   });
 
+  const AddProductToCart = (idProduct: string) => {
+    const SearchProduct = FilterProductsWithCatogry.find(
+      (item) => item.idProduct === idProduct
+    );
+
+    if (SearchProduct) {
+      setProductsCart((prevProductsCart) => [
+        ...prevProductsCart,
+        {
+          idProduct: SearchProduct.idProduct,
+          imageProduct: SearchProduct.imageProduct,
+          nameProduct: SearchProduct.nameProduct,
+          sizeProduct: SearchProduct.sizeProduct,
+          colorProduct: SearchProduct.colorProduct,
+          priceProduct: SearchProduct.priceProduct,
+          catogryProduct: SearchProduct.catogryProduct,
+        },
+      ]);
+      setSelectedProductId(idProduct);
+    }
+  };
+
   return (
     <>
       <div className="pt-1 grid lg:grid-cols-5 md:grid-cols-5 max-h-[100%] overflow-y-auto scrollDashbordPos rounded-se-2xl">
         {FilterProductsWithCatogry.length > 0 ? (
           FilterProductsWithCatogry.map((item, indexItem) => (
             <div
-              className="flex items-center bg-warning-50 rounded-2xl p-3 mr-1 mb-1 hover:cursor-pointer transition-transform hover:scale-95"
+              className={`flex items-center bg-warning-50 rounded-2xl p-3 mr-1 mb-1 hover:cursor-pointer transition-transform hover:scale-95 ${
+                selectedProductId === item.idProduct
+                  ? "border-1 border-warning-400"
+                  : ""
+              }`}
               key={indexItem}
+              onClick={() => AddProductToCart(item.idProduct)}
             >
               <div className="mr-3">
                 <Avatar src={item.imageProduct[0]} alt="error" size="lg" />
@@ -124,7 +166,7 @@ export default function BodyPos({
           </p>
         )}
       </div>
-      <CartPos />
+      <CartPos productsCart={productsCart} />
     </>
   );
 }

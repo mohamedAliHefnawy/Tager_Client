@@ -16,9 +16,13 @@ import { Avatar } from "@nextui-org/react";
 
 export default function SideBarPos() {
   const router = useRouter();
+
   const handleLogout = () => {
-    localStorage.removeItem("nameAdmin");
-    router.push("/dashboard");
+    localStorage.removeItem("nameKasheer");
+    localStorage.removeItem("valKasheer");
+    localStorage.removeItem("storeKasheer");
+    localStorage.removeItem("moneySafeKasheer");
+    router.push("/pos/login");
   };
 
   const ElementSideBar = (props: any) => {
@@ -66,11 +70,14 @@ export default function SideBarPos() {
           link="/dashboard/customers"
           icon={Icons.BanknotesIcon}
         />
-        <ElementSideBar
-          name="logout"
-          link="/dashboard/customers"
-          icon={Icons.LogoutIcon}
-        />
+
+        <p
+          onClick={() => handleLogout()}
+          className="p-4 opacity-90 text-black flex flex-col items-center hover:font-bold hover:cursor-pointer text-lg "
+        >
+          <p className="text-lg">{Icons.LogoutIcon}</p>
+          <p className="block hover:font-bold">logout</p>
+        </p>
       </div>
     </>
   );
