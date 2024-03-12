@@ -22,8 +22,12 @@ import {
 interface Stores {
   _id: string;
   name: string;
-  gbs: string;
-  priceDelivery: string;
+  details: [
+    {
+      gbs: string;
+      price: number;
+    }
+  ];
 }
 
 interface ModelAddCategoryProps {
@@ -46,6 +50,26 @@ export default function ModelAddCategory({
   const [gbsStore, setGbsStore] = useState("");
   const [priceDelivery, setPriceDelivery] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
+  const [additionalInputs, setAdditionalInputs] = useState<any[]>([]);
+
+  const handleButtonClick = () => {
+    setAdditionalInputs([
+      ...additionalInputs,
+      { gbsStore: "", priceDelivery: "" },
+    ]);
+  };
+
+  const handleInputChange = (index: number, field: string, value: string) => {
+    const updatedInputs = [...additionalInputs];
+    updatedInputs[index][field] = value;
+    setAdditionalInputs(updatedInputs);
+  };
+
+  const handleDeleteClick = (index: number) => {
+    const updatedInputs = [...additionalInputs];
+    updatedInputs.splice(index, 1);
+    setAdditionalInputs(updatedInputs);
+  };
 
   const Body = () => (
     <div className="p-4 flex flex-col items-center">
@@ -57,20 +81,42 @@ export default function ModelAddCategory({
           value={nameStore}
           onChange={(e) => setNameStore(e.target.value)}
         />
-        <input
-          type="text"
-          className="input"
-          placeholder="المكان"
-          value={gbsStore}
-          onChange={(e) => setGbsStore(e.target.value)}
-        />
-        <input
-          type="number"
-          className="input"
-          placeholder="سعرالتوصيل للمكان"
-          value={priceDelivery}
-          onChange={(e) => setPriceDelivery(e.target.value)}
-        />
+        <Button
+          variant="bordered"
+          color="warning"
+          className="mt-4 w-[100%]"
+          onClick={handleButtonClick}
+        >
+          إضافة مكان
+        </Button>
+        {additionalInputs.map((input, index) => (
+          <div key={index} className="flex">
+            <input
+              type="text"
+              className="input mr-2"
+              placeholder="المكان"
+              value={input.gbsStore}
+              onChange={(e) =>
+                handleInputChange(index, "gbsStore", e.target.value)
+              }
+            />
+            <input
+              type="number"
+              className="input"
+              placeholder="سعر التوصيل للمكان"
+              value={input.priceDelivery}
+              onChange={(e) =>
+                handleInputChange(index, "priceDelivery", e.target.value)
+              }
+            />
+            <button
+              className="mt-3 text-danger-500"
+              onClick={() => handleDeleteClick(index)}
+            >
+              {Icons.DeleteIcon}
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -79,23 +125,23 @@ export default function ModelAddCategory({
     try {
       const data = {
         nameStore,
-        gbsStore,
-        priceDelivery,
+        additionalInputs,
       };
       const response = await axios.post(
         `${linkServer.link}stores/addStore`,
         data
       );
       if (response.data === "yes") {
-        onAddStoree({
-          _id: new Date().toISOString(),
-          name: nameStore,
-          gbs: gbsStore,
-          priceDelivery: priceDelivery,
-        });
-        setNameStore("");
-        setGbsStore("");
+        // onAddStoree({
+        //   _id: new Date().toISOString(),
+        //   name: nameStore,
+        //   gbs: gbsStore,
+        //   priceDelivery: priceDelivery,
+        // });
+        // setNameStore("");
+        // setGbsStore("");
         toast.success("تم إضافة المخزن بنجاح ✓");
+        window.location.reload();
       }
       if (response.data === "nameUse") {
         Swal.fire({
@@ -147,11 +193,7 @@ export default function ModelAddCategory({
                 <Button color="danger" variant="light" onPress={onClose}>
                   إلغاء
                 </Button>
-                <Button
-                  color={closeBtn ? "default" : "warning"}
-                  disabled={closeBtn}
-                  onClick={AddStore}
-                >
+                <Button color="warning" onClick={AddStore}>
                   إضافة
                 </Button>
               </ModalFooter>

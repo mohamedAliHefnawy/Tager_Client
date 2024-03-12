@@ -20,8 +20,12 @@ import ModelAddStore from "../modals/store/modaelAddStore";
 interface Stores {
   _id: string;
   name: string;
-  gbs: string;
-  priceDelivery: string;
+  details: [
+    {
+      gbs: string;
+      price: number;
+    }
+  ];
 }
 
 export default function Stores() {
@@ -49,10 +53,7 @@ export default function Stores() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const filteredCategories = stores.filter((store) => {
     const lowerCaseSearchText = searchText.toLowerCase();
-    return (
-      (store.name && store.name.toLowerCase().includes(lowerCaseSearchText)) ||
-      (store.gbs && store.gbs.toLowerCase().includes(lowerCaseSearchText))
-    );
+    return store.name && store.name.toLowerCase().includes(lowerCaseSearchText);
   });
 
   const handlePageChange = (newPage: any) => {
@@ -136,11 +137,11 @@ export default function Stores() {
                       <span className="opacity-65"> :- الإسم </span>
                     </p>
                     <p className="flex mb-4">
-                      <span className="mr-2">{store.gbs}</span>
+                      <span className="mr-2">{store.details[0].gbs}</span>
                       <span className="opacity-65"> :- المكان </span>
                     </p>
                     <p className="flex mb-4">
-                      <span className="mr-2">{store.priceDelivery}</span>
+                      <span className="mr-2">{store.details[0].price}</span>
                       <span className="opacity-65"> :- سعر التوصيل </span>
                     </p>
                   </CardBody>

@@ -424,8 +424,8 @@ export default function ModaelAddPurchase({
                             }
                           >
                             {stores.map((item) => (
-                              <DropdownItem key={item.gbs}>
-                                {item.gbs}
+                              <DropdownItem key={item.name}>
+                                {item.name}
                               </DropdownItem>
                             ))}
                           </DropdownMenu>
@@ -559,8 +559,8 @@ export default function ModaelAddPurchase({
                                       }
                                     >
                                       {stores.map((item) => (
-                                        <DropdownItem key={item.gbs}>
-                                          {item.gbs}
+                                        <DropdownItem key={item.name}>
+                                          {item.name}
                                         </DropdownItem>
                                       ))}
                                     </DropdownMenu>
