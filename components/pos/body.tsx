@@ -17,7 +17,7 @@ import { Avatar } from "@nextui-org/react";
 interface Product {
   _id: string;
   name: string;
-  size: [{ size: string; store: [{ amount: number }] }];
+  size: [{ size: string; store: [{ amount: number; nameStore: string }] }];
   color: string;
   price3: number;
   image: string[];
@@ -27,7 +27,7 @@ interface Product {
       name: string;
       image: string[];
 
-      size: [{ size: string; store: [{ amount: number }] }];
+      size: [{ size: string; store: [{ amount: number; nameStore: string }] }];
       color: string;
       price1: string;
       price2: string;
@@ -47,15 +47,17 @@ export default function BodyPos({
   catogryFilter: string;
   searchTextFilt: string;
 }) {
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(
-    null
-  );
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
+
   const [allProducts, setAllProducts] = useState<
     {
       idProduct: string;
       nameProduct: string;
       imageProduct: string[];
-      sizeProduct: { size: string; store: { amount: number }[] }[];
+      sizeProduct: {
+        size: string;
+        store: { nameStore: string; amount: number }[];
+      }[];
       colorProduct: string;
       priceProduct: number;
       catogryProduct: string;
@@ -67,7 +69,10 @@ export default function BodyPos({
       idProduct: string;
       nameProduct: string;
       imageProduct: string[];
-      sizeProduct: { size: string; store: { amount: number }[] }[];
+      sizeProduct: {
+        size: string;
+        store: { nameStore: string; amount: number }[];
+      }[];
       colorProduct: string;
       priceProduct: number;
       catogryProduct: string;
@@ -113,24 +118,35 @@ export default function BodyPos({
   });
 
   const AddProductToCart = (idProduct: string) => {
-    const SearchProduct = FilterProductsWithCatogry.find(
+    const existingIndex = productsCart.findIndex(
       (item) => item.idProduct === idProduct
     );
 
-    if (SearchProduct) {
-      setProductsCart((prevProductsCart) => [
-        ...prevProductsCart,
-        {
-          idProduct: SearchProduct.idProduct,
-          imageProduct: SearchProduct.imageProduct,
-          nameProduct: SearchProduct.nameProduct,
-          sizeProduct: SearchProduct.sizeProduct,
-          colorProduct: SearchProduct.colorProduct,
-          priceProduct: SearchProduct.priceProduct,
-          catogryProduct: SearchProduct.catogryProduct,
-        },
-      ]);
-      setSelectedProductId(idProduct);
+    if (existingIndex !== -1) {
+      const updatedCart = [...productsCart];
+      updatedCart.splice(existingIndex, 1);
+      setProductsCart(updatedCart);
+      const updatedIds = updatedCart.map((product) => product.idProduct);
+      setSelectedProductIds(updatedIds);
+    } else {
+      const SearchProduct = FilterProductsWithCatogry.find(
+        (item) => item.idProduct === idProduct
+      );
+
+      if (SearchProduct) {
+        setProductsCart((prevProductsCart) =>
+          prevProductsCart.concat({
+            idProduct: SearchProduct.idProduct,
+            imageProduct: SearchProduct.imageProduct,
+            nameProduct: SearchProduct.nameProduct,
+            sizeProduct: SearchProduct.sizeProduct,
+            colorProduct: SearchProduct.colorProduct,
+            priceProduct: SearchProduct.priceProduct,
+            catogryProduct: SearchProduct.catogryProduct,
+          })
+        );
+        setSelectedProductIds((prevIds) => [...prevIds, idProduct]);
+      }
     }
   };
 
@@ -140,10 +156,10 @@ export default function BodyPos({
         {FilterProductsWithCatogry.length > 0 ? (
           FilterProductsWithCatogry.map((item, indexItem) => (
             <div
-              className={`flex items-center bg-warning-50 rounded-2xl p-3 mr-1 mb-1 hover:cursor-pointer transition-transform hover:scale-95 ${
-                selectedProductId === item.idProduct
-                  ? "border-1 border-warning-400"
-                  : ""
+              className={`flex items-center bg-warning-50 rounded-2xl p-3 mr-1 mb-1 hover:cursor-pointer transition-transform hover:scale-95 border-1 ${
+                selectedProductIds.includes(item.idProduct)
+                  ? "border-warning-400"
+                  : "border-transparent"
               }`}
               key={indexItem}
               onClick={() => AddProductToCart(item.idProduct)}
@@ -166,6 +182,7 @@ export default function BodyPos({
           </p>
         )}
       </div>
+
       <CartPos productsCart={productsCart} />
     </>
   );

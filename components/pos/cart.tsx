@@ -22,6 +22,10 @@ import {
   User,
 } from "@nextui-org/react";
 
+interface SizeData {
+  [key: string]: string | undefined;
+}
+
 export default function CartPos({
   productsCart,
 }: {
@@ -29,7 +33,10 @@ export default function CartPos({
     idProduct: string;
     nameProduct: string;
     imageProduct: string[];
-    sizeProduct: { size: string; store: { amount: number }[] }[];
+    sizeProduct: {
+      size: string;
+      store: { nameStore: string; amount: number }[];
+    }[];
     colorProduct: string;
     priceProduct: number;
     catogryProduct: string;
@@ -42,13 +49,16 @@ export default function CartPos({
 
   const [showDivCart, setShowDivCart] = useState(false);
   const [selectedColor, setSelectedColor] = React.useState(new Set(["اللون "]));
-  const [selectedSize, setSelectedSize] = React.useState({});
+  const [selectedSize, setSelectedSize] = React.useState<SizeData>({});
   const [allProducts, setAllProducts] = useState<
     {
       idProduct: string;
       nameProduct: string;
       imageProduct: string[];
-      sizeProduct: { size: string; store: { amount: number }[] }[];
+      sizeProduct: {
+        size: string;
+        store: { nameStore: string; amount: number }[];
+      }[];
       colorProduct: string;
       priceProduct: number;
       catogryProduct: string;
@@ -71,22 +81,23 @@ export default function CartPos({
 
   const DropSize = ({ sizes, productId }: any) => {
     return (
-      <Dropdown>
+      <Dropdown closeOnSelect={false}>
         <DropdownTrigger>
           <Button variant="bordered" className="h-8 w-10 ">
-            {selectedSize[productId] || "Select Size"}
+            {selectedSize[productId] || "المقاس"}
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           variant="flat"
           disallowEmptySelection
           selectionMode="single"
-          selectedKeys={[selectedSize[productId]]}
+          selectedKeys={[selectedSize[productId] ?? "all"]}
           onSelectionChange={(keys) =>
             handleSelectionSize({ productId, size: keys })
           }
+          closeOnSelect
         >
-          {sizes.map((item) => (
+          {sizes.map((item: { size: string }) => (
             <DropdownItem key={item.size}>{item.size}</DropdownItem>
           ))}
         </DropdownMenu>
@@ -104,6 +115,10 @@ export default function CartPos({
       setAllProducts(productsCart);
     }
   }, [productsCart]);
+
+  const size = (id: string) => {
+    return selectedSize[id];
+  };
 
   return (
     <>
@@ -145,6 +160,7 @@ export default function CartPos({
           <div className="w-[100%] flex flex-col items-center mt-6">
             <p className="text-lg font-bold">منتجات الطلبية</p>
           </div>
+          {/* {StorePos} */}
           {allProducts.map((item, indexItem) => (
             <div
               className="w-[100%] flex justify-between items-center my-4"
@@ -159,9 +175,20 @@ export default function CartPos({
               <Avatar src={item.imageProduct[0]} size="md" />
               <p className="w-[20%] text-center">{item.nameProduct}</p>
               <p className="hover:cursor-pointer">{Icons.MinuscircleIcon}</p>
-              <p>1</p>
+              <p>
+                {item.sizeProduct
+                  .filter(
+                    (item2) => item2.size === selectedSize[item.idProduct]
+                  )
+                  .map(
+                    (item2) =>
+                      item2.store.find((store) => store.nameStore === StorePos)
+                        ?.amount
+                  )
+                  .join(", ")}
+              </p>
+
               <p className="hover:cursor-pointer">{Icons.PlusCircleIcon}</p>
-              {/* {DropColor()} */}
               <DropSize sizes={item.sizeProduct} productId={item.idProduct} />
             </div>
           ))}

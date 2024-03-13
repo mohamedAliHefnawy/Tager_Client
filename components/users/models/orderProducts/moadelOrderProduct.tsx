@@ -31,8 +31,7 @@ import Swal from "sweetalert2";
 interface Stores {
   _id: string;
   name: string;
-  gbs: string;
-  priceDelivery: string;
+  details: [{ _id: string; gbs: string; price: number }];
 }
 
 interface Products {
@@ -93,13 +92,24 @@ export default function MoadelOrderProducts({
   const [profitPerProductAdmin, setProfitPerProductAdmin] =
     useState<ProfitPerProduct>({});
 
-  const [selectedKeysTo, setSelectedKeysTo] = React.useState<string[]>([
-    "إختر البلدة",
+  const [selectedKeysFrom, setSelectedKeysFrom] = React.useState<string[]>([
+    "من",
   ]);
+  const [selectedKeysTo, setSelectedKeysTo] = React.useState<string[]>(["إلي"]);
+
+  const selectedValueFrom = React.useMemo(
+    () => Array.from(selectedKeysFrom).join(", ").replaceAll("_", " "),
+    [selectedKeysFrom]
+  );
+
   const selectedValueTo = React.useMemo(
     () => Array.from(selectedKeysTo).join(", ").replaceAll("_", " "),
     [selectedKeysTo]
   );
+
+  const handleSelectionChangeFrom = (selectedItems: string[]) => {
+    setSelectedKeysFrom(selectedItems);
+  };
 
   const handleSelectionChangeTo = (selectedItems: string[]) => {
     setSelectedKeysTo(selectedItems);
@@ -206,9 +216,14 @@ export default function MoadelOrderProducts({
     0
   );
 
-  const priceDeliveryStore = stores
-    .filter((item) => item.gbs === selectedValueTo)
-    .map((item) => item.priceDelivery);
+  const amountStore = stores
+    .filter((item: any) => item.nameStore === selectedValueFrom)
+    .map((item: any) => item.amount);
+
+  const priceDeliveryStore =
+    stores
+      .find((item) => item.name === selectedValueFrom)
+      ?.details.find((item) => item.gbs === selectedValueTo)?.price ?? 0;
 
   const GetStores = async () => {
     try {
@@ -265,12 +280,35 @@ export default function MoadelOrderProducts({
             <div className=" my-4">
               <p>بيانات التوصيل</p>
             </div>
-            <div className="lg:w-[60%] md:w-[90%] sm:w-[90%] max-sm:w-[90%]">
+            <div className="lg:w-[60%] md:w-[90%] sm:w-[90%] max-sm:w-[90%] flex">
               <Dropdown className=" w-[100%]">
                 <DropdownTrigger>
                   <Button
-                    startContent={Icons.ArrowUturnDownIcon}
-                    className={`w-[100%] border-1 border-warning-500 bg-white`}
+                    // startContent={Icons.ArrowUturnDownIcon}
+                    className={`w-[100%] mr-2 border-1 bg-white`}
+                  >
+                    {selectedValueFrom}
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  variant="flat"
+                  disallowEmptySelection
+                  selectionMode="single"
+                  selectedKeys={selectedKeysFrom}
+                  onSelectionChange={(keys: string[] | any) =>
+                    handleSelectionChangeFrom(keys)
+                  }
+                >
+                  {stores.map((store) => (
+                    <DropdownItem key={store.name}>{store.name}</DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+              <Dropdown className=" w-[100%]">
+                <DropdownTrigger>
+                  <Button
+                    // startContent={Icons.ArrowUturnDownIcon}
+                    className={`w-[100%] mr-2 border-1 bg-white`}
                   >
                     {selectedValueTo}
                   </Button>
@@ -284,11 +322,17 @@ export default function MoadelOrderProducts({
                     handleSelectionChangeTo(keys)
                   }
                 >
-                  {stores.map((store) => (
-                    <DropdownItem key={store.gbs}>{store.gbs}</DropdownItem>
-                  ))}
+                  {stores
+                    .filter((filt) => filt.name === selectedValueFrom)
+                    .flatMap((store) =>
+                      store.details.map((item) => (
+                        <DropdownItem key={item.gbs}>{item.gbs}</DropdownItem>
+                      ))
+                    )}
                 </DropdownMenu>
               </Dropdown>
+            </div>
+            <div className=" lg:w-[60%] md:w-[90%] sm:w-[90%] max-sm:w-[90%]">
               <input
                 type="text"
                 className="input mr-1"
@@ -329,7 +373,7 @@ export default function MoadelOrderProducts({
                                 {item3.store
                                   .filter(
                                     (item4) =>
-                                      item4.nameStore === selectedValueTo
+                                      item4.nameStore === selectedValueFrom
                                   )
                                   .map((item5, index5) =>
                                     item5.amount !== undefined ? (
@@ -463,7 +507,9 @@ export default function MoadelOrderProducts({
       toast: true,
       showConfirmButton: false,
     });
-    router.push("/orders");
+    // router.push("/orders");
+    setCloseBtn(true);
+
     try {
       const data = {
         nameClient,

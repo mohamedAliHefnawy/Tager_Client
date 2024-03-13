@@ -20,7 +20,7 @@ import error from "@/public/img/notfound.png";
 interface Product {
   _id: string;
   name: string;
-  size: [{ size: string; store: [{ amount: number }] }];
+  size: [{ size: string; store: [{ amount: number; nameStore: string }] }];
   color: string;
   price3: number;
   image: string[];
@@ -30,7 +30,7 @@ interface Product {
       name: string;
       image: string[];
 
-      size: [{ size: string; store: [{ amount: number }] }];
+      size: [{ size: string; store: [{ amount: number; nameStore: string }] }];
       color: string;
       price1: string;
       price2: string;
@@ -51,7 +51,7 @@ interface Categories {
 
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [nameKasheer , valKasheer] = useCheckLogin();
+  const [nameKasheer, valKasheer] = useCheckLogin();
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);

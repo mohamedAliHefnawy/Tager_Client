@@ -109,7 +109,10 @@ export default function Orders() {
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage);
   };
-  const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
+
+  const ordersRevese = filteredOrders.slice().reverse();
+
+  const currentItems = ordersRevese.slice(indexOfFirstItem, indexOfLastItem);
 
   const GetOrders = async () => {
     setLoading(true);
