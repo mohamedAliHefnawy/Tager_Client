@@ -7,15 +7,12 @@ import Swal from "sweetalert2";
 import linkServer from "@/linkServer";
 import { QrScanner } from "@yudiel/react-qr-scanner";
 import { Switch } from "@nextui-org/react";
-import QrReader from "react-qr-reader";
 
 export default function QRScanner({ name }: { name: string }) {
   const nameDelivery = localStorage.getItem("nameDelivery");
   const [scanResult, setScanResult] = useState<string | null>(null);
   const [isScannerActive, setScannerActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [data, setData] = useState("No result");
 
   const router = useRouter();
 
@@ -41,7 +38,6 @@ export default function QRScanner({ name }: { name: string }) {
         router.push("/delivery/orders");
       }
       if (response.data === "idOrder already exists") {
-        
         Swal.fire({
           icon: "warning",
           title: "هذه الطلبية موجودة بالفعل",
@@ -86,18 +82,18 @@ export default function QRScanner({ name }: { name: string }) {
         color="warning"
       />
       {isScannerActive && (
-        <QrReader
-          delay={10000}
-          onError={handleScannerError}
-          onScan={handleScannerScan}
-        />
-        // <QrScanner
-        //   audio
-        //   tracker
-        //   scanDelay={500}
-        //   onResult={handleScannerResult}
-        //   onError={(error) => console.log(error?.message)}
+        // <QrReader
+        //   delay={10000}
+        //   onError={handleScannerError}
+        //   onScan={handleScannerScan}
         // />
+        <QrScanner
+          audio
+          tracker
+          scanDelay={500}
+          onResult={handleScannerScan}
+          onError={handleScannerError}
+        />
       )}
       {/* </>
       )} */}
