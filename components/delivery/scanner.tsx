@@ -41,6 +41,7 @@ export default function QRScanner({ name }: { name: string }) {
         router.push("/delivery/orders");
       }
       if (response.data === "idOrder already exists") {
+        
         Swal.fire({
           icon: "warning",
           title: "هذه الطلبية موجودة بالفعل",
