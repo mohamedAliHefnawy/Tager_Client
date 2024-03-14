@@ -38,6 +38,8 @@ interface withdrawalRequests {
   pymentMethod: string;
   phoneNumber: string;
   situation: string;
+  date: string;
+  time: string;
 }
 
 export default function Home() {
@@ -138,6 +140,8 @@ export default function Home() {
                       <p className="w-[15%]">رقم الهاتف</p>
                       <p className="w-[15%]">طريقة الدفع</p>
                       <p className="w-[15%]">المبلغ</p>
+                      <p className="w-[9%]">التاريخ</p>
+                      <p className="w-[9%]">الوقت</p>
                     </div>
 
                     {withdrawUser
@@ -164,6 +168,8 @@ export default function Home() {
                               <p className="mr-1">د.ل</p>
                               <p>{item.sumMoney}</p>
                             </p>
+                            <p className="w-[9%]">{item.date}</p>
+                            <p className="w-[9%]">{item.time}</p>
                           </div>
                         </div>
                       ))}

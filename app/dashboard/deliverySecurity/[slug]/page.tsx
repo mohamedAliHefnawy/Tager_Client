@@ -90,17 +90,17 @@ export default function Home({ params }: { params: { slug: string } }) {
   const [closeBtn, setCloseBtn] = useState(true);
   const [loading, setLoading] = useState(true);
   const [dataDelivery, setDataDelivery] = useState<Data[]>([]);
+  const [dataDeliveryInStore, setDataDeliveryInStore] = useState<Data[]>([]);
   const [returnOrders, setReturnOrders] = useState<ReturnOrders[]>([]);
   const [inputValues, setInputValues] = useState<InputValues>({});
+
   const ReturnProductswithStore = (
     idProduct: string,
     sizeProduct: string,
     amountProduct: number,
     storeProduct: string
   ) => {
-    const productOrderId = idProduct;
-
-    const AmountAll = dataDelivery.reduce(
+    const AmountAll = dataDeliveryInStore.reduce(
       (calc, alt) =>
         calc +
         (alt.idProduct === idProduct &&
@@ -111,22 +111,25 @@ export default function Home({ params }: { params: { slug: string } }) {
       0
     );
 
-    if (productOrderId) {
-      const isProductInReturnOrders = returnOrders.some(
-        (item) => item.idProduct === productOrderId
-      );
+    console.log(AmountAll);
 
+  
+    if (idProduct) {
+      const isProductInReturnOrders = returnOrders.some(
+        (item) => item.idProduct === idProduct
+      );
+  
       if (!isProductInReturnOrders) {
         const currentInputValues = (inputValues as InputValues)[idProduct] || {
           store: "",
           size: "",
           amount: 0,
         };
-
+  
         const storeValue = storeProduct || currentInputValues.store;
         const sizeValue = sizeProduct || currentInputValues.size;
         const amountValue = AmountAll;
-
+  
         const updatedReturnOrders = [
           ...returnOrders,
           {
@@ -136,7 +139,7 @@ export default function Home({ params }: { params: { slug: string } }) {
             store: storeValue,
           },
         ];
-
+  
         setReturnOrders(updatedReturnOrders);
         setInputValues((prevInputValues) => ({
           ...prevInputValues,
@@ -150,10 +153,12 @@ export default function Home({ params }: { params: { slug: string } }) {
       }
     }
   };
+  
 
   const details = () => {
     return (
       <>
+        {/* {AmountAll} */}
         <div className="flex justify-between">
           {loading ? (
             <p>
@@ -205,8 +210,8 @@ export default function Home({ params }: { params: { slug: string } }) {
                 <p className="text-lg">راجع</p>
                 <div className="my-2 p-2 pt-0  px-3 w-[100%]">
                   <div className="w-[100%] h-auto border-1 border-slate-400 text-center rounded-2xl p-3 gap-2 grid grid-cols-2">
-                    {dataDelivery.map((product, indexProduct) =>
-                      product.nameProduct ? (
+                    {dataDeliveryInStore.map((product, indexProduct) =>
+                      dataDeliveryInStore.length > 0 ? (
                         <div
                           key={indexProduct}
                           onClick={() =>
@@ -302,7 +307,9 @@ export default function Home({ params }: { params: { slug: string } }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let response: { data: { token: string; AllData: any } };
+        let response: {
+          data: { token: string; AllData: any; productsReturn: any };
+        };
         response = await axios.get(
           `${linkServer.link}users/getDeliveryProductStore/${params.slug}`,
           {
@@ -312,6 +319,7 @@ export default function Home({ params }: { params: { slug: string } }) {
           }
         );
         setDataDelivery(response.data.AllData);
+        setDataDeliveryInStore(response.data.productsReturn);
       } catch (error) {
         console.log(error);
       } finally {
@@ -321,6 +329,14 @@ export default function Home({ params }: { params: { slug: string } }) {
 
     fetchData();
   }, [params.slug, secretKey]);
+
+  useEffect(() => {
+    if (returnOrders.length > 0) {
+      setCloseBtn(false);
+    } else {
+      setCloseBtn(true);
+    }
+  }, [returnOrders]);
 
   useEffect(() => {
     if (nameAdmin) {

@@ -362,7 +362,7 @@ export default function MoadelOrderProduct({
         nameClient,
         phone1Client,
         phone2Client,
-        store: selectedValueTo,
+        store: selectedValueFrom,
         address: addressClient,
         idProduct,
         imageProduct,
