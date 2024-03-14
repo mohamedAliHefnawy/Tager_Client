@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useCallback, useEffect, useState, Component } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -21,23 +19,23 @@ export default function QRScanner({ name }: { name: string }) {
   };
 
   const handleScannerResult = async (result: any) => {
+    setIsLoading(true);
     setScannerActive(false);
-    const scannedResult = result?.toString();
-    setScanResult(scannedResult);
+    setScanResult(result?.toString());
+
     try {
-      setIsLoading(true);
       const data = {
         deliveryName: nameDelivery,
-        idOrder: scannedResult,
+        idOrder: result,
       };
       const response = await axios.post(
         `${linkServer.link}scanner/addOrderWithDelivery`,
         data
       );
+
       if (response.data === "yes") {
         router.push("/delivery/orders");
-      }
-      if (response.data === "idOrder already exists") {
+      } else if (response.data === "idOrder already exists") {
         Swal.fire({
           icon: "warning",
           title: "هذه الطلبية موجودة بالفعل",
@@ -57,12 +55,6 @@ export default function QRScanner({ name }: { name: string }) {
     console.log(error?.message);
   };
 
-  const handleScannerScan = (result: any) => {
-    if (result) {
-      handleScannerResult(result);
-    }
-  };
-
   useEffect(() => {
     if (scanResult) {
       handleScannerResult(scanResult);
@@ -71,10 +63,6 @@ export default function QRScanner({ name }: { name: string }) {
 
   return (
     <>
-      {/* {isLoading ? (
-        <p className="text-center">يرجى الانتظار</p>
-      ) : (
-        <> */}
       <Switch
         className="rotate-90"
         onClick={toggleScanner}
@@ -82,21 +70,15 @@ export default function QRScanner({ name }: { name: string }) {
         color="warning"
       />
       {isScannerActive && (
-        // <QrReader
-        //   delay={10000}
-        //   onError={handleScannerError}
-        //   onScan={handleScannerScan}
-        // />
         <QrScanner
           audio
           tracker
           scanDelay={500}
-          onResult={handleScannerScan}
+          onResult={handleScannerResult}
           onError={handleScannerError}
         />
       )}
-      {/* </>
-      )} */}
+      {isLoading && <p className="text-center">يرجى الانتظار</p>}
     </>
   );
 }
