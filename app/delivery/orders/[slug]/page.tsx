@@ -156,6 +156,7 @@ export default function Home({ params }: { params: { slug: string } }) {
         gainMarketer: order?.gainMarketer,
         gainAdmin: order?.gainAdmin,
         idOrder: order?._id,
+        deliveryPrice: +order?.deliveryPrice,
         situationOrder: selectedValueSituationOrder,
         orderMoney: order?.totalPriceProducts,
         message: `تم تحويل منتجات طلبيه من خلال مندوب التوصيل ${nameDelivery}`,

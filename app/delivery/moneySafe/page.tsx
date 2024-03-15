@@ -17,9 +17,11 @@ interface Data {
   name: string;
   money: [
     {
+      idOrder: string;
+      _id: string;
       money: number;
       moneyMarketer: number;
-      moneyDelivery: number;
+      moneyAdmin: number;
       marketer: string;
       notes: string;
       date: string;
@@ -31,7 +33,7 @@ interface Data {
 
 export default function Home() {
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
-  const [nameDelivery] = useCheckLogin();
+  const [nameDelivery, valDelivery] = useCheckLogin();
   const [nameDeliveryy, setNameDeliveryy] = useState("");
   const [notesSend, setNotesSend] = useState("لا يوجد ملاحظة");
   const [isLoading, setIsLoading] = useState(true);
@@ -48,23 +50,31 @@ export default function Home() {
 
   const TotalMoneyMDelivery = dataUser?.money
     .filter((money) => money.acceptMoney === true)
-    .reduce((calc, alt) => calc + alt.moneyDelivery, 0);
+    .reduce((calc, alt) => calc + alt.moneyAdmin, 0);
 
   const SendMoney = async () => {
     setCloseBtn(true);
     try {
       const data = {
-        person: nameDelivery,
-        marketer: dataUser?.money[dataUser?.money.length - 1].marketer,
-        message: `تم تحويل مبلغ قدرة ${TotalMoney} د.ل من مندوب التوصيل ${nameDelivery} --1${TotalMoneyMarkerter}--2${TotalMoneyMDelivery}--`,
+        nameTransfer: nameDelivery,
+        validityTransfer: valDelivery,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
-        notes: notesSend,
-        orders: 0,
+        money: dataUser?.money
+          .filter((itemFilter) => itemFilter.acceptMoney === true)
+          .map((item) => ({
+            idOrder: item.idOrder,
+            idMoney: item._id,
+            marketer: item.marketer,
+            money: item.money,
+            moneyMarketer: item.moneyMarketer,
+            moneyAdmin: item.moneyAdmin,
+            acceptMoney: false,
+          })),
       };
 
       const response = await axios.post(
-        `${linkServer.link}notifications/addNotification`,
+        `${linkServer.link}moneyTransfers/addMoneyTransfer`,
         data
       );
       if (response.data === "yes") {

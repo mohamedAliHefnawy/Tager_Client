@@ -97,6 +97,11 @@ export default function SideBar() {
           icon={Icons.BuildinglibraryIcon}
         />
         <ElementSideBar
+          name="تحويلات مالية"
+          link="/dashboard/moneyTransfers"
+          icon={Icons.ArrowPathcon}
+        />
+        <ElementSideBar
           name="طلبات السحب"
           link="/dashboard/withdrawalRequests"
           icon={Icons.BanknotesIcon}

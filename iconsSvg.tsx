@@ -46,6 +46,7 @@ import { MinuscircleIcon } from "@/public/svg/minuscircleIcon";
 import { PlusCircleIcon } from "@/public/svg/plusCircleIcon";
 import { ForwardIcon } from "@/public/svg/forwardIcon";
 import { ComputerDesktopIcon } from "@/public/svg/computerDesktopIcon";
+import { ArrowPathcon } from "@/public/svg/arrowPathcon";
 
 const Icons = {
   HomeIcon: <HomeIcon />,
@@ -95,6 +96,7 @@ const Icons = {
   PlusCircleIcon: <PlusCircleIcon />,
   ForwardIcon: <ForwardIcon />,
   ComputerDesktopIcon: <ComputerDesktopIcon />,
+  ArrowPathcon: <ArrowPathcon />,
 };
 
 export default Icons;
