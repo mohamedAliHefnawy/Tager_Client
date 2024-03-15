@@ -18,6 +18,7 @@ interface MoneyTransfers {
   time: string;
   money: [
     {
+      _id: string;
       idOrder: string;
       idMoney: string;
       marketer: string;
@@ -146,7 +147,10 @@ export default function MoneyTransfers() {
                 </div>
               </CardBody>
               <CardFooter className="text-small justify-between">
-                <ModaelMoneyTransfers money={moneyTransfer.money} />
+                <ModaelMoneyTransfers
+                  money={moneyTransfer.money}
+                  idMoneyTransfer={moneyTransfer._id}
+                />
               </CardFooter>
             </Card>
           ))

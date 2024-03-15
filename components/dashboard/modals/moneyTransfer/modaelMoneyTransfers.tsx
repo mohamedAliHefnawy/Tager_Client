@@ -25,6 +25,7 @@ import {
 import useCheckLogin from "@/components/dashboard/checkLogin/checkLogin";
 
 interface MoneyTransfer {
+  _id: string;
   idOrder: string;
   idMoney: string;
   marketer: string;
@@ -43,8 +44,10 @@ interface MoneySafe {
 
 export default function ModaelMoneyTransfers({
   money,
+  idMoneyTransfer,
 }: {
   money: MoneyTransfer[];
+  idMoneyTransfer: string;
 }) {
   const [nameAdmin] = useCheckLogin();
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
@@ -95,7 +98,16 @@ export default function ModaelMoneyTransfers({
                   </p>
                   <p
                     className="flex justify-center w-[25%] mt-4 text-success-400 hover:cursor-pointer"
-                    onClick={() => AcceptMoney(item.idMoney)}
+                    onClick={() =>
+                      AcceptMoney(
+                        item.idOrder,
+                        item.marketer,
+                        item.money,
+                        item.moneyMarketer,
+                        item.moneyAdmin,
+                        item._id
+                      )
+                    }
                   >
                     {Icons.TagIcon}
                   </p>
@@ -138,35 +150,54 @@ export default function ModaelMoneyTransfers({
     }
   }, [money]);
 
-  const AcceptMoney = async (idMoney: string) => {
-    try {
-      const response = await axios.post(
-        `${linkServer.link}payment/convertMoney`,
-        {
-          marketer: 12,
-          gainMarketer: 34,
-          gainAdmin: 34,
-          money: salaryFrom,
-          employee: nameAdmin,
+  const AcceptMoney = async (
+    idOrder: string,
+    marketer: string,
+    money: number,
+    moneyMarketer: number,
+    moneyAdmin: number,
+    _id: string
+  ) => {
+    if (selectedValuePayment !== "الخزينة") {
+      try {
+        const response = await axios.post(
+          `${linkServer.link}moneyTransfers/acceptMoney`,
+          {
+            idOrder: idOrder,
+            idMoney: _id,
+            idMoneyTransfer ,
+            marketer: marketer,
+            nameAdmin,
+            money: money,
+            gainMarketer: moneyMarketer,
+            gainAdmin: moneyAdmin,
+            selectedValuePayment,
+          }
+        );
+        if (response.data === "yes") {
+          Swal.fire({
+            icon: "success",
+            title: "تمت العملية بنجاح",
+            text: "✓",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "حسنًا",
+          });
         }
-      );
-      if (response.data === "yes") {
-        Swal.fire({
-          icon: "success",
-          title: "تمت العملية بنجاح",
-          text: "✓",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "حسنًا",
-        });
-        window.location.reload();
-        window.location.reload();
+        if (response.data === "no") {
+          alert("توجد مشكلة حاول مره أخري ☹");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error(error);
       }
-      if (response.data === "no") {
-        alert("توجد مشكلة حاول مره أخري ☹");
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error(error);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "اختر الخزينة من فضلك",
+        text: "⤫",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "حسنًا",
+      });
     }
   };
 

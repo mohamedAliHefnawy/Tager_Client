@@ -9,11 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nextui-org/react": "^2.2.9",
+    "@nextui-org/react": "^2.2.10",
     "@nextui-org/system": "^2.0.15",
     "@nextui-org/theme": "^2.1.17",
     "@yudiel/react-qr-scanner": "^1.2.10",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "date-fns": "^3.3.1",
     "firebase": "^10.8.1",
     "framer-motion": "^11.0.8",
