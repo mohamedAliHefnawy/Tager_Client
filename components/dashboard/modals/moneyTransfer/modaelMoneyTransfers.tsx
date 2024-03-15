@@ -159,13 +159,15 @@ export default function ModaelMoneyTransfers({
     _id: string
   ) => {
     if (selectedValuePayment !== "الخزينة") {
+      const filter = moneyTransfer.filter((item) => item._id !== _id);
+      setMoneyTransfer(filter);
       try {
         const response = await axios.post(
           `${linkServer.link}moneyTransfers/acceptMoney`,
           {
             idOrder: idOrder,
             idMoney: _id,
-            idMoneyTransfer ,
+            idMoneyTransfer,
             marketer: marketer,
             nameAdmin,
             money: money,
@@ -174,6 +176,7 @@ export default function ModaelMoneyTransfers({
             selectedValuePayment,
           }
         );
+
         if (response.data === "yes") {
           Swal.fire({
             icon: "success",
