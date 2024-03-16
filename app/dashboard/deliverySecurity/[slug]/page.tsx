@@ -111,49 +111,47 @@ export default function Home({ params }: { params: { slug: string } }) {
       0
     );
 
-    console.log(AmountAll);
-
-  
-    if (idProduct) {
+    if (idProduct && sizeProduct) {
       const isProductInReturnOrders = returnOrders.some(
-        (item) => item.idProduct === idProduct
+        (item) =>
+          item.idProduct === idProduct &&
+          item.size === sizeProduct &&
+          item.store === storeProduct
       );
-  
+
       if (!isProductInReturnOrders) {
         const currentInputValues = (inputValues as InputValues)[idProduct] || {
           store: "",
           size: "",
           amount: 0,
         };
-  
+
         const storeValue = storeProduct || currentInputValues.store;
-        const sizeValue = sizeProduct || currentInputValues.size;
         const amountValue = AmountAll;
-  
+
         const updatedReturnOrders = [
           ...returnOrders,
           {
             idProduct: idProduct,
             amount: amountValue,
-            size: sizeValue,
+            size: sizeProduct,
             store: storeValue,
           },
         ];
-  
+
         setReturnOrders(updatedReturnOrders);
         setInputValues((prevInputValues) => ({
           ...prevInputValues,
           [idProduct]: {
             ...currentInputValues,
             store: storeValue,
-            size: sizeValue,
+            size: sizeProduct,
             amount: amountValue,
           },
         }));
       }
     }
   };
-  
 
   const details = () => {
     return (
@@ -173,7 +171,7 @@ export default function Home({ params }: { params: { slug: string } }) {
                     item.nameClient ? (
                       <div
                         key={indexItem}
-                        className="border-1 border-slate-400 rounded-2xl mr-1 p-4 text-right text-lg"
+                        className="border-1 border-slate-400 rounded-2xl mr-1 p-4 text-right text-lg mb-1"
                       >
                         <span className="block mb-2">
                           <span>{item.nameClient}</span>
@@ -222,11 +220,13 @@ export default function Home({ params }: { params: { slug: string } }) {
                               product.store
                             )
                           }
-                          className={`flex justify-evenly bg-warning-50 border-1 p-2 rounded-2xl text-lg hover:cursor-pointer ${
+                          className={`flex justify-evenly bg-warning-50 p-2 rounded-2xl text-lg hover:cursor-pointer ${
                             returnOrders.some(
-                              (item) => item.idProduct === product.idProduct
+                              (item) =>
+                                item.idProduct === product.idProduct &&
+                                item.size === product.size
                             )
-                              ? "border-danger-600"
+                              ? "border-1 border-danger-600"
                               : ""
                           }`}
                         >

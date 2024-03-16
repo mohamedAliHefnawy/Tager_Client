@@ -23,7 +23,11 @@ import {
 } from "@nextui-org/react";
 
 interface SizeData {
-  [key: string]: string | undefined;
+  [key: string]: { anchorKey: string };
+}
+
+interface AmountData {
+  [key: string]: number;
 }
 
 export default function CartPos({
@@ -48,8 +52,9 @@ export default function CartPos({
   const MoneySafePos = localStorage.getItem("moneySafeKasheer");
 
   const [showDivCart, setShowDivCart] = useState(false);
-  const [selectedColor, setSelectedColor] = React.useState(new Set(["اللون "]));
   const [selectedSize, setSelectedSize] = React.useState<SizeData>({});
+  const [amountProduct, setAmountProduct] = React.useState<AmountData>({});
+  const [deduct, setDeduct] = React.useState(0);
   const [allProducts, setAllProducts] = useState<
     {
       idProduct: string;
@@ -65,13 +70,6 @@ export default function CartPos({
     }[]
   >([]);
 
-  const [productsCartAlready, setProductsCartAlready] = useState({});
-
-  const selectedValueSize = React.useMemo(
-    () => Object.values(productsCartAlready).join(", ").replaceAll("_", " "),
-    [productsCartAlready]
-  );
-
   const handleSelectionSize = ({ productId, size }: any) => {
     setSelectedSize((prevSizes) => ({
       ...prevSizes,
@@ -79,19 +77,62 @@ export default function CartPos({
     }));
   };
 
+  const MinusValueAomunt = (productId: string, newValue: string) => {
+    const parsedValue = parseInt(newValue);
+    setAmountProduct((prevAmounts) => {
+      const newAmount = Math.max(parsedValue, 1);
+      return {
+        ...prevAmounts,
+        [productId]: newAmount,
+      };
+    });
+  };
+
+  const amountAvail = (productId: string) => {
+    const amount =
+      selectedSize[productId] &&
+      allProducts
+        .flatMap((item) => item.sizeProduct)
+        .flatMap((item2) =>
+          item2.store
+            .filter(
+              (item4) =>
+                item4.nameStore === StorePos &&
+                item2.size === selectedSize[productId]["anchorKey"]
+            )
+            .map((item3) => item3.amount)
+        );
+
+    const totalAmount = amount.length > 0 ? amount[0] : 0;
+    return totalAmount;
+  };
+
+  const PlusValueAomunt = (productId: string, newValue: string) => {
+    const parsedValue = parseInt(newValue) || 0;
+    setAmountProduct((prevAmounts) => {
+      const newAmount = Math.min(parsedValue, +amountAvail(productId));
+      return {
+        ...prevAmounts,
+        [productId]: newAmount,
+      };
+    });
+  };
+
   const DropSize = ({ sizes, productId }: any) => {
     return (
       <Dropdown closeOnSelect={false}>
         <DropdownTrigger>
           <Button variant="bordered" className="h-8 w-10 ">
-            {selectedSize[productId] || "المقاس"}
+            {selectedSize[productId]?.anchorKey.toString() || "المقاس"}
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           variant="flat"
           disallowEmptySelection
           selectionMode="single"
-          selectedKeys={[selectedSize[productId] ?? "all"]}
+          selectedKeys={[
+            selectedSize[productId]?.anchorKey.toString() ?? "all",
+          ]}
           onSelectionChange={(keys) =>
             handleSelectionSize({ productId, size: keys })
           }
@@ -105,20 +146,16 @@ export default function CartPos({
     );
   };
 
-  const RemoveProductWithCart = (idProduct: string) => {
-    const filter = allProducts.filter((item) => item.idProduct !== idProduct);
-    setAllProducts(filter);
-  };
+  const PriceOrder = allProducts.reduce(
+    (cacl, alt) => cacl + alt.priceProduct,
+    0
+  );
 
   useEffect(() => {
     if (productsCart) {
       setAllProducts(productsCart);
     }
   }, [productsCart]);
-
-  const size = (id: string) => {
-    return selectedSize[id];
-  };
 
   return (
     <>
@@ -160,38 +197,100 @@ export default function CartPos({
           <div className="w-[100%] flex flex-col items-center mt-6">
             <p className="text-lg font-bold">منتجات الطلبية</p>
           </div>
-          {/* {StorePos} */}
           {allProducts.map((item, indexItem) => (
             <div
               className="w-[100%] flex justify-between items-center my-4"
               key={indexItem}
             >
-              {/* <span
-                className="relative  hover:cursor-pointer text-danger-400"
-                onClick={() => RemoveProductWithCart(item.idProduct)}
-              >
-                ✘
-              </span> */}
               <Avatar src={item.imageProduct[0]} size="md" />
               <p className="w-[20%] text-center">{item.nameProduct}</p>
-              <p className="hover:cursor-pointer">{Icons.MinuscircleIcon}</p>
-              <p>
-                {item.sizeProduct
-                  .filter(
-                    (item2) => item2.size === selectedSize[item.idProduct]
-                  )
-                  .map(
-                    (item2) =>
-                      item2.store.find((store) => store.nameStore === StorePos)
-                        ?.amount
-                  )
-                  .join(", ")}
-              </p>
+              {selectedSize[item.idProduct] ? (
+                <p
+                  className="hover:cursor-pointer transform transition-transform hover:scale-125"
+                  onClick={() =>
+                    MinusValueAomunt(
+                      item.idProduct,
+                      String(amountProduct[item.idProduct] - 1)
+                    )
+                  }
+                >
+                  {Icons.MinuscircleIcon}
+                </p>
+              ) : (
+                <p className="opacity-75">{Icons.MinuscircleIcon}</p>
+              )}
 
-              <p className="hover:cursor-pointer">{Icons.PlusCircleIcon}</p>
+              <div className="w-28">
+                {selectedSize[item.idProduct] ? (
+                  <input
+                    type=""
+                    className="inputTrue2"
+                    value={amountProduct[item.idProduct]}
+                    onChange={(e) => {
+                      const enteredValue = +e.target.value;
+                      const availableAmount = amountAvail(item.idProduct);
+
+                      if (enteredValue <= availableAmount) {
+                        MinusValueAomunt(
+                          item.idProduct,
+                          enteredValue.toString()
+                        );
+                      }
+                    }}
+                  />
+                ) : (
+                  <input
+                    type=""
+                    disabled
+                    className="inputTrue2"
+                    value={amountProduct[item.idProduct]}
+                    onChange={(e) =>
+                      MinusValueAomunt(item.idProduct, e.target.value)
+                    }
+                  />
+                )}
+              </div>
+
+              {selectedSize[item.idProduct] ? (
+                <p
+                  className="hover:cursor-pointer transform transition-transform hover:scale-125"
+                  onClick={() =>
+                    PlusValueAomunt(
+                      item.idProduct,
+                      String(amountProduct[item.idProduct] + 1)
+                    )
+                  }
+                >
+                  {Icons.PlusCircleIcon}
+                </p>
+              ) : (
+                <p className="opacity-75">{Icons.PlusCircleIcon}</p>
+              )}
+
               <DropSize sizes={item.sizeProduct} productId={item.idProduct} />
             </div>
           ))}
+          <div className="w-[100%] flex flex-col items-center mt-6 p-4 bg-warning-200 border-1 border-warning-500 ">
+            ملخص الطلب
+          </div>
+
+          <div className="w-[100%] flex flex-col items-center p-5 ">
+            <p className="w-[100%] text-right mt-3 flex justify-end items-center">
+              <div className="w-[20%] mr-2">
+                <input type="number" className="inputTrue" placeholder="%" />
+              </div>
+              <span style={{ direction: "rtl" }} className="mb-1">
+                خصم |
+              </span>
+            </p>
+            <p className="w-[100%] text-right mt-3">
+              <span>سعر المنتجات |</span>
+              <span className="mr-3 text-lg">
+                <span className="font-bold">{PriceOrder}</span>
+                <span className="mr-1">د.ل</span>
+              </span>
+            </p>
+          </div>
         </div>
       )}
     </>

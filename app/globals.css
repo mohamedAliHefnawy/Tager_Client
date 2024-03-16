@@ -106,6 +106,17 @@
   border-radius: 12px;
 }
 
+.inputTrue2 {
+  display: block;
+  text-align: center !important;
+  width: 100%;
+  border: 0.2px solid var(--mainColor);
+  transition: border 0.5s ease-out;
+  transition: background-color 0.5s ease-out;
+  outline: none;
+  border-radius: 12px;
+}
+
 .input::-webkit-inner-spin-button,
 .input::-webkit-outer-spin-button {
   -webkit-appearance: none;
