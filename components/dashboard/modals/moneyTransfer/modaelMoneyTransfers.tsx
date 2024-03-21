@@ -96,21 +96,27 @@ export default function ModaelMoneyTransfers({
                     <p className="mr-1">د.ل</p>
                     <p>{item.moneyAdmin}</p>
                   </p>
-                  <p
-                    className="flex justify-center w-[25%] mt-4 text-success-400 hover:cursor-pointer"
-                    onClick={() =>
-                      AcceptMoney(
-                        item.idOrder,
-                        item.marketer,
-                        item.money,
-                        item.moneyMarketer,
-                        item.moneyAdmin,
-                        item._id
-                      )
-                    }
-                  >
-                    {Icons.TagIcon}
-                  </p>
+                  {selectedValuePayment === "الخزينة" ? (
+                    <p className="flex justify-center w-[25%] mt-4 text-success-400 opacity-65">
+                      {Icons.TagIcon}
+                    </p>
+                  ) : (
+                    <p
+                      className="flex justify-center w-[25%] mt-4 text-success-400 hover:cursor-pointer"
+                      onClick={() =>
+                        AcceptMoney(
+                          item.idOrder,
+                          item.marketer,
+                          item.money,
+                          item.moneyMarketer,
+                          item.moneyAdmin,
+                          item._id
+                        )
+                      }
+                    >
+                      {Icons.TagIcon}
+                    </p>
+                  )}
                 </div>
               </p>
             ))}

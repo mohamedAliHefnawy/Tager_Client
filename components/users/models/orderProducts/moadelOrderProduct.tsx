@@ -129,10 +129,10 @@ export default function MoadelOrderProducts({
               .filter((item2) => item2.size === Size(productId))
               .map((item3) =>
                 item3.store
-                  .filter((item4) => item4.nameStore === selectedValueTo)
+                  .filter((item4) => item4.nameStore === selectedValueFrom)
                   .map((item5) => item5.amount)[0] !== undefined
                   ? item3.store
-                      .filter((item4) => item4.nameStore === selectedValueTo)
+                      .filter((item4) => item4.nameStore === selectedValueFrom)
                       .map((item5) => item5.amount)[0]
                   : 0
               )[0] || 0
@@ -352,6 +352,7 @@ export default function MoadelOrderProducts({
                 {products.map((item, index) => (
                   <div key={index} className="flex items-center my-3">
                     <div key={item._id} className="flex w-[50%]">
+                      {/* {Amount(item._id)} */}
                       <div className="w-24 h-20 rounded-full">
                         <Avatar src={item.image[0]} size="lg" />
                         <p
@@ -429,11 +430,10 @@ export default function MoadelOrderProducts({
                           type="number"
                           className="input mr-1"
                           placeholder="الكمية"
-                          disabled={selectedValueTo === "إختر البلدة"}
+                          disabled={selectedValueFrom === "من"}
                           value={
-                            (inputValues[item._id] &&
-                              inputValues[item._id].quantity) ||
-                            ""
+                            inputValues[item._id] &&
+                            inputValues[item._id].quantity
                           }
                           onChange={(e) =>
                             handleInputChange(

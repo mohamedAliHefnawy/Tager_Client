@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import Icons from "@/iconsSvg";
 
 //images
-import Logo from "@/public/img/hbaieb.png";
+import Logo from "@/public/img/";
 
 //nextUi
 import {

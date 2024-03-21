@@ -57,7 +57,7 @@ export default function Home() {
   };
 
   const TotalMoney = dataUser?.money
-    .filter((money) => money.acceptMoney === true)
+    // .filter((money) => money.acceptMoney === true)
     .reduce((calc, alt) => calc + alt.money, 0);
 
   const GetDataUser = useCallback(async () => {
