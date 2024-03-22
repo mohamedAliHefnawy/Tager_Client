@@ -4,6 +4,7 @@ import axios from "axios";
 import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
 import Icons from "@/iconsSvg";
+import { TwitterPicker } from "react-color";
 
 //nextui
 import {
@@ -60,6 +61,7 @@ export default function ModelAddkasheer(props: any) {
   const [img, setImg] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneCompany, setPhoneCompany] = useState("");
   const [password, setPassword] = useState("");
   const [closeBtn, setCloseBtn] = useState(true);
   const [selected, setSelected] = React.useState("1");
@@ -67,6 +69,10 @@ export default function ModelAddkasheer(props: any) {
   const [moneySafe, setMoneySafe] = useState<MoneySafe[]>([]);
   const [selectedStore, setSelectedStore] = useState("");
   const [selectedMoneySafe, setSelectedMoneySafe] = useState("");
+  const [colorkasheer, setColorkasheer] = useState("#FCB900");
+  const handleChangekasheer = (newColor: any) => {
+    setColorkasheer(newColor.hex);
+  };
 
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
@@ -206,6 +212,40 @@ export default function ModelAddkasheer(props: any) {
               defaultValue={password}
               placeholder="كلمه المرور"
               onChange={(e) => setPassword(e.target.value)}
+            />
+          </form>
+        </CardBody>
+      </Card>
+    );
+  };
+
+  const TabDataKasheerCompany = () => {
+    return (
+      <Card>
+        <CardBody>
+          <form className="flex flex-col justify-center items-center">
+            <div
+              className=" w-[100%] h-32 flex justify-center items-center p-5  rounded-full ml-3"
+              style={{ backgroundColor: `${colorkasheer}` }}
+            >
+              <TwitterPicker
+                className="w-[100%]"
+                color={colorkasheer}
+                onChangeComplete={handleChangekasheer}
+              />
+            </div>
+
+            <input
+              type="number"
+              className="input rounded-full"
+              placeholder="رقم هاتف الشركة "
+              value={phoneCompany}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                if (inputValue.length <= 16) {
+                  setPhoneCompany(inputValue);
+                }
+              }}
             />
           </form>
         </CardBody>
@@ -356,10 +396,13 @@ export default function ModelAddkasheer(props: any) {
             <Tab key="1" title="المعلومات الشخصية">
               {TabDataKasheer()}
             </Tab>
-            <Tab key="2" title="طرق الدفع">
+            <Tab key="2" title="الشركة">
+              {TabDataKasheerCompany()}
+            </Tab>
+            <Tab key="3" title="طرق الدفع">
               {TabMoneyStore()}
             </Tab>
-            <Tab key="3" title="المخزن">
+            <Tab key="4" title="المخزن">
               {TabStore()}
             </Tab>
           </Tabs>
@@ -412,6 +455,8 @@ export default function ModelAddkasheer(props: any) {
       const data = {
         name,
         phone,
+        phoneCompany ,
+        colorkasheer ,
         imageURL,
         password,
         selectedStore,
@@ -457,14 +502,17 @@ export default function ModelAddkasheer(props: any) {
 
   useEffect(() => {
     if (
-      (name.trim() !== "" && phone.trim() !== "" && password !== "",
+      (name.trim() !== "" &&
+        phone.trim() !== "" &&
+        phoneCompany.trim() !== "" &&
+        password !== "",
       selectedStore !== "" && selectedMoneySafe !== "")
     ) {
       setCloseBtn(false);
     } else {
       setCloseBtn(true);
     }
-  }, [name, phone, password, selectedStore, selectedMoneySafe]);
+  }, [name, phone, phoneCompany, password, selectedStore, selectedMoneySafe]);
 
   return (
     <>

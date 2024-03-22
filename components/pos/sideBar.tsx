@@ -57,7 +57,7 @@ export default function SideBarPos() {
 
         <ElementSideBar
           name="لوحة التحكم"
-          link="/dashboard/analysis"
+          link="/pos"
           icon={Icons.HomeIcon}
         />
         <ElementSideBar

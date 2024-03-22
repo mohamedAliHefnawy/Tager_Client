@@ -32,6 +32,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import Swal from "sweetalert2";
+import { TwitterPicker } from "react-color";
 
 interface Stores {
   _id: string;
@@ -53,6 +54,8 @@ export default function ModelEditkasheer({
   namekasheer,
   imagekasheer,
   phonekasheer,
+  phonekasheerCompany,
+  colorkasheerCompany,
   passwordkasheer,
   storekasheer,
   moneyStorekasheer,
@@ -61,6 +64,8 @@ export default function ModelEditkasheer({
   namekasheer: string;
   imagekasheer: string;
   phonekasheer: string;
+  phonekasheerCompany: string;
+  colorkasheerCompany: string;
   passwordkasheer: string;
   storekasheer: string;
   moneyStorekasheer: string;
@@ -71,6 +76,7 @@ export default function ModelEditkasheer({
   const [img, setImg] = useState(imagekasheer);
   const [name, setName] = useState(namekasheer);
   const [phone, setPhone] = useState(phonekasheer);
+  const [phoneCompany, setPhoneCompany] = useState(phonekasheerCompany);
   const [password, setPassword] = useState(passwordkasheer);
   const [closeBtn, setCloseBtn] = useState(true);
   const [searchText, setSearchText] = useState("");
@@ -81,6 +87,10 @@ export default function ModelEditkasheer({
   const [selectedStore, setSelectedStore] = useState(storekasheer);
   const [selectedMoneySafe, setSelectedMoneySafe] = useState(moneyStorekasheer);
   const [stores, setStores] = useState<Stores[]>([]);
+  const [colorkasheer, setColorkasheer] = useState(colorkasheerCompany);
+  const handleChangekasheer = (newColor: any) => {
+    setColorkasheer(newColor.hex);
+  };
   const [moneySafe, setMoneySafe] = useState<MoneySafe[]>([]);
   const handleSelectionChange = (key: string | number) => {
     setSelected(String(key));
@@ -173,6 +183,40 @@ export default function ModelEditkasheer({
               defaultValue={password}
               placeholder="كلمه المرور"
               onChange={(e) => setPassword(e.target.value)}
+            />
+          </form>
+        </CardBody>
+      </Card>
+    );
+  };
+
+  const TabDataKasheerCompany = () => {
+    return (
+      <Card>
+        <CardBody>
+          <form className="flex flex-col justify-center items-center">
+            <div
+              className=" w-[100%] h-32 flex justify-center items-center p-5  rounded-full ml-3"
+              style={{ backgroundColor: `${colorkasheer}` }}
+            >
+              <TwitterPicker
+                className="w-[100%]"
+                color={colorkasheer}
+                onChangeComplete={handleChangekasheer}
+              />
+            </div>
+
+            <input
+              type="number"
+              className="input rounded-full"
+              placeholder="رقم هاتف الشركة "
+              value={phoneCompany}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                if (inputValue.length <= 16) {
+                  setPhoneCompany(inputValue);
+                }
+              }}
             />
           </form>
         </CardBody>
@@ -362,10 +406,13 @@ export default function ModelEditkasheer({
             <Tab key="1" title="المعلومات الشخصية">
               {TabDataKasheer()}
             </Tab>
-            <Tab key="2" title="طرق الدفع">
+            <Tab key="2" title="الشركة">
+              {TabDataKasheerCompany()}
+            </Tab>
+            <Tab key="3" title="طرق الدفع">
               {TabMoneyStore()}
             </Tab>
-            <Tab key="3" title="المخزن">
+            <Tab key="4" title="المخزن">
               {TabStore()}
             </Tab>
           </Tabs>
@@ -419,6 +466,8 @@ export default function ModelEditkasheer({
         id: idkasheer,
         name,
         imageURL,
+        phoneCompany,
+        colorkasheer,
         phone,
         password,
         selectedStore,

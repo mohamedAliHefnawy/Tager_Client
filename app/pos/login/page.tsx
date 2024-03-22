@@ -36,7 +36,7 @@ export default function Home() {
         `${linkServer.link}Kasheer/login`,
         data
       );
-      const { validity, answer, store, moneysafe } = response.data;
+      const { validity, answer, store, moneysafe , colorCompany , phoneCompany } = response.data;
       if (answer === "yes") {
         if (validity === "كاشير") {
           Swal.fire({
@@ -50,6 +50,8 @@ export default function Home() {
           localStorage.setItem("valKasheer", validity);
           localStorage.setItem("storeKasheer", store);
           localStorage.setItem("moneySafeKasheer", moneysafe);
+          localStorage.setItem("phoneCompanyKasheer", phoneCompany);
+          localStorage.setItem("colorCompanyKasheer", colorCompany);
           router.push("/pos");
         } else {
           Swal.fire({

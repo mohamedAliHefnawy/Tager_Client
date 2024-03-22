@@ -14,6 +14,8 @@ interface kasheer {
   _id: string;
   name: string;
   phone: string;
+  phoneCompany: string;
+  colorCompany: string;
   password: string;
   validity: string;
   image: string;
@@ -152,6 +154,8 @@ export default function Kasheer() {
                     namekasheer={kasheer.name}
                     imagekasheer={kasheer.image}
                     phonekasheer={kasheer.phone}
+                    phonekasheerCompany={kasheer.phoneCompany}
+                    colorkasheerCompany={kasheer.colorCompany}
                     passwordkasheer={kasheer.password}
                     storekasheer={kasheer.store}
                     moneyStorekasheer={kasheer.moneysafe}

@@ -3,13 +3,15 @@
 // react
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { ReactToPrint } from "react-to-print";
+import PrintInvoice from "@/components/pos/printInvoice";
 
 //component
 import Icons from "@/iconsSvg";
 
 //images
-import Logo from "@/public/img/";
+import Logo from "@/public/hbaieb.png";
 
 //nextUi
 import {
@@ -46,15 +48,18 @@ export default function CartPos({
     catogryProduct: string;
   }[];
 }) {
+  const componentRef = useRef();
   const AdminPos = localStorage.getItem("nameKasheer");
   const ValPos = localStorage.getItem("valKasheer");
   const StorePos = localStorage.getItem("storeKasheer");
   const MoneySafePos = localStorage.getItem("moneySafeKasheer");
+  const phoneCompaneyPos = localStorage.getItem("phoneCompanyKasheer");
+  const colorCompanyPos = localStorage.getItem("colorCompanyKasheer");
 
   const [showDivCart, setShowDivCart] = useState(false);
   const [selectedSize, setSelectedSize] = React.useState<SizeData>({});
   const [amountProduct, setAmountProduct] = React.useState<AmountData>({});
-  const [deduct, setDeduct] = React.useState(0);
+  const [deduct, setDeduct] = React.useState<Number>(0);
   const [allProducts, setAllProducts] = useState<
     {
       idProduct: string;
@@ -147,7 +152,8 @@ export default function CartPos({
   };
 
   const PriceOrder = allProducts.reduce(
-    (cacl, alt) => cacl + alt.priceProduct,
+    (cacl, alt) =>
+      cacl + alt.priceProduct * (amountProduct[alt.idProduct] || 0),
     0
   );
 
@@ -173,6 +179,8 @@ export default function CartPos({
               name={
                 <p className="text-black opacity-90  font-medium">
                   <p className="font-bold">{AdminPos}</p>
+                  {phoneCompaneyPos}
+                  {colorCompanyPos}
                   <p className="opacity-70">{ValPos}</p>
                 </p>
               }
@@ -277,7 +285,17 @@ export default function CartPos({
           <div className="w-[100%] flex flex-col items-center p-5 ">
             <p className="w-[100%] text-right mt-3 flex justify-end items-center">
               <div className="w-[20%] mr-2">
-                <input type="number" className="inputTrue" placeholder="%" />
+                <input
+                  type="number"
+                  className="inputTrue"
+                  placeholder="%"
+                  value={+deduct}
+                  onChange={(e) => {
+                    if (+e.target.value >= 0 && +e.target.value <= 100) {
+                      setDeduct(+e.target.value);
+                    }
+                  }}
+                />
               </div>
               <span style={{ direction: "rtl" }} className="mb-1">
                 خصم |
@@ -286,11 +304,32 @@ export default function CartPos({
             <p className="w-[100%] text-right mt-3">
               <span>سعر المنتجات |</span>
               <span className="mr-3 text-lg">
-                <span className="font-bold">{PriceOrder}</span>
+                <span className="font-bold">
+                  {PriceOrder - (PriceOrder * +deduct) / 100}
+                </span>
                 <span className="mr-1">د.ل</span>
               </span>
             </p>
           </div>
+          <div className="flex justify-between w-[100%] p-4 mt-5">
+            <p className="bg-warning-200 border-1 border-warning-600  p-8 w-[31%] flex justify-center items-center hover:cursor-pointer">
+              {MoneySafePos}
+            </p>
+            <p className="bg-warning-200 border-1  p-8 w-[31%] text-center hover:cursor-pointer">
+              بنك مصرفي
+            </p>
+            <p className="bg-warning-200 border-1  p-8 w-[31%] flex justify-center items-center hover:cursor-pointer">
+              بيبال
+            </p>
+          </div>
+
+          <PrintInvoice
+            products={allProducts}
+            colorCompany={colorCompanyPos}
+            phoneCompany={phoneCompaneyPos}
+            amount={amountProduct}
+            size={selectedSize as SizeData}
+          />
         </div>
       )}
     </>
