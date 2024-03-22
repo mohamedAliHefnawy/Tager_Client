@@ -7,6 +7,7 @@ import Image from "next/image";
 //component
 import Link from "next/link";
 import Icons from "@/iconsSvg";
+import MoneyStoreModel from "@/components/pos/models/moneyStore";
 
 //images
 import Logo from "@/public/img/hbaieb.png";
@@ -55,21 +56,15 @@ export default function SideBarPos() {
           />
         </Link>
 
-        <ElementSideBar
-          name="لوحة التحكم"
-          link="/pos"
-          icon={Icons.HomeIcon}
-        />
+        <ElementSideBar name="لوحة التحكم" link="/pos" icon={Icons.HomeIcon} />
+
         <ElementSideBar
           name="فواتير"
           link="/dashboard/employees"
           icon={Icons.TagIcon}
         />
-        <ElementSideBar
-          name="الخزينة"
-          link="/dashboard/customers"
-          icon={Icons.BanknotesIcon}
-        />
+
+        <MoneyStoreModel />
 
         <p
           onClick={() => handleLogout()}

@@ -48,11 +48,11 @@ export default function CartPos({
     catogryProduct: string;
   }[];
 }) {
-  const componentRef = useRef();
-  const AdminPos = localStorage.getItem("nameKasheer");
+
+  const AdminPos = localStorage.getItem("nameKasheer") as string;
   const ValPos = localStorage.getItem("valKasheer");
-  const StorePos = localStorage.getItem("storeKasheer");
-  const MoneySafePos = localStorage.getItem("moneySafeKasheer");
+  const StorePos = localStorage.getItem("storeKasheer") as string;
+  const MoneySafePos = localStorage.getItem("moneySafeKasheer") as string;
   const phoneCompaneyPos = localStorage.getItem("phoneCompanyKasheer");
   const colorCompanyPos = localStorage.getItem("colorCompanyKasheer");
 
@@ -85,7 +85,7 @@ export default function CartPos({
   const MinusValueAomunt = (productId: string, newValue: string) => {
     const parsedValue = parseInt(newValue);
     setAmountProduct((prevAmounts) => {
-      const newAmount = Math.max(parsedValue, 1);
+      const newAmount = Math.max(parsedValue, 0);
       return {
         ...prevAmounts,
         [productId]: newAmount,
@@ -93,29 +93,40 @@ export default function CartPos({
     });
   };
 
-  const amountAvail = (productId: string) => {
-    const amount =
-      selectedSize[productId] &&
-      allProducts
-        .flatMap((item) => item.sizeProduct)
-        .flatMap((item2) =>
-          item2.store
-            .filter(
-              (item4) =>
-                item4.nameStore === StorePos &&
-                item2.size === selectedSize[productId]["anchorKey"]
-            )
-            .map((item3) => item3.amount)
+  const amountAvail = (productId: string, sizeProduct: any) => {
+    const amounts = sizeProduct
+      .filter(
+        (item2: {
+          size: string;
+          store: { nameStore: string; amount: number }[];
+        }) =>
+          item2.size === selectedSize[productId]["anchorKey"] &&
+          item2.store.some(
+            (item3: { nameStore: string }) => item3.nameStore === StorePos
+          )
+      )
+      .map((item: { store: { nameStore: string; amount: number }[] }) => {
+        const store = item.store.find(
+          (item3: { nameStore: string }) => item3.nameStore === StorePos
         );
+        return store ? store.amount : 0;
+      });
 
-    const totalAmount = amount.length > 0 ? amount[0] : 0;
+    const totalAmount = amounts.length > 0 ? amounts[0] : 0;
     return totalAmount;
   };
 
-  const PlusValueAomunt = (productId: string, newValue: string) => {
+  const PlusValueAomunt = (
+    productId: string,
+    sizeProduct: any,
+    newValue: string
+  ) => {
     const parsedValue = parseInt(newValue) || 0;
     setAmountProduct((prevAmounts) => {
-      const newAmount = Math.min(parsedValue, +amountAvail(productId));
+      const newAmount = Math.min(
+        parsedValue,
+        +amountAvail(productId, sizeProduct)
+      );
       return {
         ...prevAmounts,
         [productId]: newAmount,
@@ -233,10 +244,20 @@ export default function CartPos({
                   <input
                     type=""
                     className="inputTrue2"
+                    style={{
+                      border: `1px solid ${
+                        amountAvail(item.idProduct, item.sizeProduct) === 0
+                          ? "red"
+                          : "#D9BB67"
+                      }`,
+                    }}
                     value={amountProduct[item.idProduct]}
                     onChange={(e) => {
                       const enteredValue = +e.target.value;
-                      const availableAmount = amountAvail(item.idProduct);
+                      const availableAmount = amountAvail(
+                        item.idProduct,
+                        item.sizeProduct
+                      );
 
                       if (enteredValue <= availableAmount) {
                         MinusValueAomunt(
@@ -265,6 +286,7 @@ export default function CartPos({
                   onClick={() =>
                     PlusValueAomunt(
                       item.idProduct,
+                      item.sizeProduct,
                       String(amountProduct[item.idProduct] + 1)
                     )
                   }
@@ -329,6 +351,10 @@ export default function CartPos({
             phoneCompany={phoneCompaneyPos}
             amount={amountProduct}
             size={selectedSize as SizeData}
+            deduct={deduct}
+            store={StorePos}
+            moneySafe={MoneySafePos}
+            pos={AdminPos}
           />
         </div>
       )}
