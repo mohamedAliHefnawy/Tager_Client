@@ -15,17 +15,6 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
-  DropdownTrigger,
-  DropdownItem,
-  DropdownMenu,
-  Dropdown,
-  Avatar,
-  Spinner,
-  CardFooter,
 } from "@nextui-org/react";
 
 //fireBase
@@ -44,18 +33,94 @@ interface Stores {
 
 interface MoneySafe {
   _id: string;
-  name: string;
-  money: [{ value: string; notes: string }];
-  active: Boolean;
-  image: string;
+  idInvoice: string;
+  deduct: number;
+  money: number;
+  notes: string;
+  date: string;
+  time: string;
+  acceptMoney: boolean;
 }
 
 export default function MoneyStoreModel(props: any) {
+  const AdminPos = localStorage.getItem("nameKasheer");
+  const colorCompanyPos = localStorage.getItem("colorCompanyKasheer");
+
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [moneySafe, setMoneySafe] = useState<MoneySafe[]>([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${linkServer.link}Kasheer/getMoneykasheer/${AdminPos}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        }
+      );
+
+      setMoneySafe(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const Table = () => {
-    return <>12</>;
+    return (
+      <>
+        <div>
+          <div
+            className="flex justify-evenly items-center p-4  rounded-2xl opacity-80"
+            style={{
+              backgroundColor: `${colorCompanyPos}`,
+              border: "1px solid white",
+              outline: `2px double ${colorCompanyPos}`,
+            }}
+          >
+            <p className="w-[20%] text-center">الوقت</p>
+            <p className="w-[20%] text-center">التاريخ </p>
+            <p className="w-[20%] text-center">خصم</p>
+            <p className="w-[20%] text-center">ملاحظة</p>
+            <p className="w-[20%] text-center">المبلغ</p>
+            <p className="w-[20%] text-center" style={{ direction: "rtl" }}>
+              id الفاتورة
+            </p>
+          </div>
+          {moneySafe.map((item, indexItem) => (
+            <div
+              key={indexItem}
+              className="flex justify-evenly items-center p-4 py-8  rounded-2xl mt-4 "
+              style={{
+                backgroundColor: `${colorCompanyPos}`,
+                border: "1px solid white",
+                outline: `2px double ${colorCompanyPos}`,
+              }}
+            >
+              <p className="w-[20%] text-center">{item.time}</p>
+              <p className="w-[20%] text-center">{item.date}</p>
+              <p className="w-[20%] flex justify-center">
+                <p className="mr-1">%</p>
+                <p>{item.deduct}</p>
+              </p>
+              <p className="w-[20%] text-center">{item.notes}</p>
+              <p className="w-[20%] flex justify-center">
+                <p className="mr-1">د.ل</p>
+                <p>{item.money}</p>
+              </p>
+              <p className="w-[20%] text-center" style={{ direction: "rtl" }}>
+                {item.idInvoice}
+              </p>
+            </div>
+          ))}
+        </div>
+      </>
+    );
   };
 
   return (

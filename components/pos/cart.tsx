@@ -48,7 +48,6 @@ export default function CartPos({
     catogryProduct: string;
   }[];
 }) {
-
   const AdminPos = localStorage.getItem("nameKasheer") as string;
   const ValPos = localStorage.getItem("valKasheer");
   const StorePos = localStorage.getItem("storeKasheer") as string;
@@ -174,6 +173,11 @@ export default function CartPos({
     }
   }, [productsCart]);
 
+  // const upadteParent = (newProducts: any[], newDeduct: number) => {
+  //   setAllProducts(newProducts);
+  //   setDeduct(newDeduct);
+  // };
+
   return (
     <>
       <div
@@ -190,8 +194,7 @@ export default function CartPos({
               name={
                 <p className="text-black opacity-90  font-medium">
                   <p className="font-bold">{AdminPos}</p>
-                  {phoneCompaneyPos}
-                  {colorCompanyPos}
+
                   <p className="opacity-70">{ValPos}</p>
                 </p>
               }
@@ -355,6 +358,7 @@ export default function CartPos({
             store={StorePos}
             moneySafe={MoneySafePos}
             pos={AdminPos}
+            // upadteParent={upadteParent}
           />
         </div>
       )}

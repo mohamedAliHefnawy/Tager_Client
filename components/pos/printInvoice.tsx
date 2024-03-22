@@ -32,6 +32,7 @@ export default function PrintInvoice({
   size,
   deduct,
   products,
+  // upadteParent,
 }: {
   phoneCompany: string | null;
   colorCompany: string | null;
@@ -53,6 +54,7 @@ export default function PrintInvoice({
     priceProduct: number;
     catogryProduct: string;
   }[];
+  // upadteParent: any;
 }) {
   const printRef = useRef<HTMLFormElement | null>(null);
 

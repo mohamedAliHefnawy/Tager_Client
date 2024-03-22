@@ -85,6 +85,7 @@ export default function Home() {
           },
         }
       );
+      
 
       setCategories(categoriesResponse.data.categories);
       setProducts(productsResponse.data.products);

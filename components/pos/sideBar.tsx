@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Icons from "@/iconsSvg";
 import MoneyStoreModel from "@/components/pos/models/moneyStore";
+import InvoicePosModel from "@/components/pos/models/invoicePos";
 
 //images
 import Logo from "@/public/img/hbaieb.png";
@@ -58,11 +59,7 @@ export default function SideBarPos() {
 
         <ElementSideBar name="لوحة التحكم" link="/pos" icon={Icons.HomeIcon} />
 
-        <ElementSideBar
-          name="فواتير"
-          link="/dashboard/employees"
-          icon={Icons.TagIcon}
-        />
+        <InvoicePosModel />
 
         <MoneyStoreModel />
 
