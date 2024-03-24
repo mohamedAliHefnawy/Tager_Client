@@ -1,5 +1,5 @@
 const linkServer = {
-  link: "http://185.139.1.4/",
+  link: "https://qmohasib.com/",
 };
 
 export default linkServer;
