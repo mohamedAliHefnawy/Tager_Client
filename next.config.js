@@ -3,7 +3,7 @@ const nextConfig = {
   images: {
     domains: ["firebasestorage.googleapis.com"],
   },
-  distDir: 'dist',
+  // distDir: 'dist',
 
 };
 
