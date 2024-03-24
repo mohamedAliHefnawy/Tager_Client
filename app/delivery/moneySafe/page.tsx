@@ -44,14 +44,6 @@ export default function Home() {
     .filter((money) => money.acceptMoney === true)
     .reduce((calc, alt) => calc + alt.money, 0);
 
-  const TotalMoneyMarkerter = dataUser?.money
-    .filter((money) => money.acceptMoney === true)
-    .reduce((calc, alt) => calc + alt.moneyMarketer, 0);
-
-  const TotalMoneyMDelivery = dataUser?.money
-    .filter((money) => money.acceptMoney === true)
-    .reduce((calc, alt) => calc + alt.moneyAdmin, 0);
-
   const SendMoney = async () => {
     setCloseBtn(true);
     try {

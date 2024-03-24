@@ -150,6 +150,7 @@ export default function MoneyTransfers() {
                 <ModaelMoneyTransfers
                   money={moneyTransfer.money}
                   idMoneyTransfer={moneyTransfer._id}
+                  val={moneyTransfer.validityTransfer}
                 />
               </CardFooter>
             </Card>

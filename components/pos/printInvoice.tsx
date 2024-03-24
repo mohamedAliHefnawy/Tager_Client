@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import linkServer from "@/linkServer";
 
@@ -32,8 +32,8 @@ export default function PrintInvoice({
   size,
   deduct,
   products,
-  // upadteParent,
-}: {
+}: // upadteParent,
+{
   phoneCompany: string | null;
   colorCompany: string | null;
   amount: { [key: string]: number };
@@ -61,6 +61,9 @@ export default function PrintInvoice({
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
   });
+
+  const [numSize, setNumSize] = useState(0);
+  const [numAmount, setNumAmount] = useState(0);
 
   const priceProducts = products.reduce(
     (clac, alt) => clac + amount[alt.idProduct] * alt.priceProduct,
@@ -99,9 +102,28 @@ export default function PrintInvoice({
     }
   };
 
+  useEffect(() => {
+    let newSize = 0;
+    let newAmount = 0;
+    products.forEach((item) => {
+      const si = size[item.idProduct];
+      if (!si) {
+        newSize++;
+      }
+    });
+    products.forEach((item) => {
+      const am = amount[item.idProduct];
+      if (!am) {
+        newAmount++;
+      }
+    });
+    setNumSize(newSize);
+    setNumAmount(newAmount);
+  }, [products, size, amount]);
+
   return (
     <>
-      {products.length > 0 ? (
+      {products.length > 0 && numSize === 0 && numAmount === 0 ? (
         <div
           className="w-[100%] flex flex-col items-center mt-6 p-4 bg-warning-200 border-1 border-warning-500 rounded-full hover:cursor-pointer transform transition-transform hover:scale-90  "
           onClick={orderInvoice}

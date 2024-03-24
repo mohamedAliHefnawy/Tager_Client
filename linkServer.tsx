@@ -1,5 +1,5 @@
 const linkServer = {
-  link: "http://localhost:5000/",
+  link: "http://185.139.1.4/",
 };
 
 export default linkServer;

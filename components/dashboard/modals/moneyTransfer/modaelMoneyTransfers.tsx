@@ -45,9 +45,11 @@ interface MoneySafe {
 export default function ModaelMoneyTransfers({
   money,
   idMoneyTransfer,
+  val,
 }: {
   money: MoneyTransfer[];
   idMoneyTransfer: string;
+  val: string;
 }) {
   const [nameAdmin] = useCheckLogin();
   const secretKey = "#@6585c49f88fe0cd0da1359a7";
@@ -72,6 +74,7 @@ export default function ModaelMoneyTransfers({
         <div className="p-16">
           <div className="flex border-1 border-slate-500 py-4">
             <p className="w-[15%] text-center">المبلغ</p>
+
             <p className="w-[25%] text-center">مندوب التسويق</p>
             <p className="w-[25%] text-center">ربح مندوب التسويق</p>
             <p className="w-[25%] text-center">ربح الأدمن</p>
@@ -87,15 +90,30 @@ export default function ModaelMoneyTransfers({
                     <p className="mr-1">د.ل</p>
                     <p>{item.money}</p>
                   </p>
-                  <p className="mt-4 w-[25%] text-center">{item.marketer}</p>
-                  <p className="flex justify-center w-[25%] mt-4">
-                    <p className="mr-1">د.ل</p>
-                    <p>{item.moneyMarketer}</p>
-                  </p>
-                  <p className="flex justify-center w-[25%] mt-4">
-                    <p className="mr-1">د.ل</p>
-                    <p>{item.moneyAdmin}</p>
-                  </p>
+                  {item.marketer ? (
+                    <p className="mt-4 w-[25%] text-center">{item.marketer}</p>
+                  ) : (
+                    <span className="flex justify-center w-[25%] mt-4">-</span>
+                  )}
+
+                  {item.moneyMarketer ? (
+                    <p className="flex justify-center w-[25%] mt-4">
+                      <p className="mr-1">د.ل</p>
+                      <p>{item.moneyMarketer}</p>
+                    </p>
+                  ) : (
+                    <span className="flex justify-center w-[25%] mt-4">-</span>
+                  )}
+
+                  {item.moneyAdmin ? (
+                    <p className="flex justify-center w-[25%] mt-4">
+                      <p className="mr-1">د.ل</p>
+                      <p>{item.moneyAdmin}</p>
+                    </p>
+                  ) : (
+                    <span className="flex justify-center w-[25%] mt-4">-</span>
+                  )}
+
                   {selectedValuePayment === "الخزينة" ? (
                     <p className="flex justify-center w-[25%] mt-4 text-success-400 opacity-65">
                       {Icons.TagIcon}
@@ -106,6 +124,7 @@ export default function ModaelMoneyTransfers({
                       onClick={() =>
                         AcceptMoney(
                           item.idOrder,
+                          item.idMoney,
                           item.marketer,
                           item.money,
                           item.moneyMarketer,
@@ -158,6 +177,7 @@ export default function ModaelMoneyTransfers({
 
   const AcceptMoney = async (
     idOrder: string,
+    idMoney: string,
     marketer: string,
     money: number,
     moneyMarketer: number,
@@ -165,16 +185,17 @@ export default function ModaelMoneyTransfers({
     _id: string
   ) => {
     if (selectedValuePayment !== "الخزينة") {
-      const filter = moneyTransfer.filter((item) => item._id !== _id);
-      setMoneyTransfer(filter);
       try {
         const response = await axios.post(
-          `${linkServer.link}moneyTransfers/acceptMoney`,
+          `${linkServer.link}moneyTransfers/${
+            val !== "كاشير" ? "acceptMoney" : "acceptMoneyToPos"
+          }`,
           {
             idOrder: idOrder,
             idMoney: _id,
             idMoneyTransfer,
             marketer: marketer,
+            idMoneyy: idMoney,
             nameAdmin,
             money: money,
             gainMarketer: moneyMarketer,
@@ -184,10 +205,15 @@ export default function ModaelMoneyTransfers({
         );
 
         if (response.data === "yes") {
+          const filter = moneyTransfer.filter((item) => item._id !== _id);
+          setMoneyTransfer(filter);
           Swal.fire({
             icon: "success",
             title: "تمت العملية بنجاح",
             text: "✓",
+            toast: true,
+            position: "top-right",
+            timer: 3000,
             confirmButtonColor: "#3085d6",
             confirmButtonText: "حسنًا",
           });
