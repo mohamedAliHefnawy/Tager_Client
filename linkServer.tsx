@@ -1,5 +1,5 @@
 const linkServer = {
-  link: "http://localhost:5000/",
+  link: "https://alhabiebserver.online/",
 };
 
 export default linkServer;
