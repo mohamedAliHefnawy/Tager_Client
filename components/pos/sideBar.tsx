@@ -16,7 +16,20 @@ import Logo from "@/public/img/hbaieb.png";
 //nextUi
 import { Avatar } from "@nextui-org/react";
 
-export default function SideBarPos() {
+export default function SideBarPos({
+  moneyData,
+}: {
+  moneyData: {
+    idInvoice: string;
+    deduct: number;
+    money: number;
+    notes: string;
+    date: string;
+    time: string;
+    acceptMoney: boolean;
+    _id: string;
+  };
+}) {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -61,7 +74,7 @@ export default function SideBarPos() {
 
         <InvoicePosModel />
 
-        <MoneyStoreModel />
+        <MoneyStoreModel moneyData={moneyData} />
 
         <p
           onClick={() => handleLogout()}

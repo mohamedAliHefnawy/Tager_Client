@@ -22,6 +22,10 @@ interface SizeData {
   [key: string]: { anchorKey: string };
 }
 
+interface Data {
+  money: number;
+}
+
 export default function PrintInvoice({
   phoneCompany,
   colorCompany,
@@ -32,8 +36,8 @@ export default function PrintInvoice({
   size,
   deduct,
   products,
-}: // upadteParent,
-{
+  upadteParent,
+}: {
   phoneCompany: string | null;
   colorCompany: string | null;
   amount: { [key: string]: number };
@@ -54,7 +58,7 @@ export default function PrintInvoice({
     priceProduct: number;
     catogryProduct: string;
   }[];
-  // upadteParent: any;
+  upadteParent: any;
 }) {
   const printRef = useRef<HTMLFormElement | null>(null);
 
@@ -64,6 +68,16 @@ export default function PrintInvoice({
 
   const [numSize, setNumSize] = useState(0);
   const [numAmount, setNumAmount] = useState(0);
+  const [moneyData, setMoneyData] = useState({
+    idInvoice: "",
+    deduct: 0,
+    money: 0,
+    notes: "",
+    date: "",
+    time: "",
+    acceptMoney: true,
+    _id: "",
+  });
 
   const priceProducts = products.reduce(
     (clac, alt) => clac + amount[alt.idProduct] * alt.priceProduct,
@@ -88,10 +102,13 @@ export default function PrintInvoice({
         `${linkServer.link}Kasheer/orderInvoice`,
         data
       );
-      if (response.data === "yes") {
+
+      const { answer, dataMoney } = response.data;
+      if (answer === "yes") {
+        upadteParent(dataMoney);
         Swal.fire({
           icon: "success",
-          title: "تم التحويل بنجاح",
+          title: "تم عمل الفاتوره بنجاح",
           text: "⤫",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",

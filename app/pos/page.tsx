@@ -58,12 +58,34 @@ export default function Home() {
   const [categories, setCategories] = useState<Categories[]>([]);
   const [catFilter, setCatFilter] = useState("");
   const [textFilter, setTextFilter] = useState("");
-
+  const [moneyData, setMoneyData] = useState({
+    idInvoice: "",
+    deduct: 0,
+    money: 0,
+    notes: "",
+    date: "",
+    time: "",
+    acceptMoney: true,
+    _id: "",
+  });
   const selectedCatogry = (val: string) => {
     setCatFilter(val);
   };
   const searchTextFilter = (val: string) => {
     setTextFilter(val);
+  };
+
+  const upadteParent3 = (dataMoney: {
+    idInvoice: string;
+    deduct: number;
+    money: number;
+    notes: string;
+    date: string;
+    time: string;
+    acceptMoney: boolean;
+    _id: string;
+  }) => {
+    setMoneyData(dataMoney);
   };
 
   const fetchData = async () => {
@@ -85,7 +107,6 @@ export default function Home() {
           },
         }
       );
-      
 
       setCategories(categoriesResponse.data.categories);
       setProducts(productsResponse.data.products);
@@ -121,7 +142,7 @@ export default function Home() {
               <div className="bg-white h-screen p-6">
                 <div className="flex ">
                   <div className="">
-                    <SideBarPos />
+                    <SideBarPos moneyData={moneyData} />
                   </div>
                   <div className="w-[100%]">
                     <NavBarPos
@@ -133,6 +154,7 @@ export default function Home() {
                       products={products}
                       catogryFilter={catFilter}
                       searchTextFilt={textFilter}
+                      upadteParent3={upadteParent3}
                     />
                   </div>
                 </div>

@@ -1,10 +1,8 @@
 //react
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { getUnixTime } from "date-fns";
 import linkServer from "@/linkServer";
 import Icons from "@/iconsSvg";
-import { TwitterPicker } from "react-color";
 
 //nextui
 import {
@@ -17,19 +15,8 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
-//fireBase
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
 //compenents
-import { analytics } from "@/fireBase/fireBaseConfig";
 import Swal from "sweetalert2";
-
-interface Stores {
-  _id: string;
-  name: string;
-  gbs: string;
-  priceDelivery: string;
-}
 
 interface MoneySafe {
   _id: string;
@@ -42,7 +29,20 @@ interface MoneySafe {
   acceptMoney: boolean;
 }
 
-export default function MoneyStoreModel(props: any) {
+export default function MoneyStoreModel({
+  moneyData,
+}: {
+  moneyData: {
+    idInvoice: string;
+    deduct: number;
+    money: number;
+    notes: string;
+    date: string;
+    time: string;
+    acceptMoney: boolean;
+    _id: string;
+  };
+}) {
   const AdminPos = localStorage.getItem("nameKasheer");
   const ValPos = localStorage.getItem("valKasheer");
   const colorCompanyPos = localStorage.getItem("colorCompanyKasheer");
@@ -51,6 +51,7 @@ export default function MoneyStoreModel(props: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [moneySafe, setMoneySafe] = useState<MoneySafe[]>([]);
   const [closeBtn, setCloseBtn] = useState(true);
+  const [moneyPosTotal, setMoneyPosTotal] = useState(0);
 
   const fetchData = async () => {
     try {
@@ -73,12 +74,29 @@ export default function MoneyStoreModel(props: any) {
     fetchData();
   }, []);
 
-  const moneyPosTotal = moneySafe
-    .filter((item) => item.acceptMoney === true)
-    .reduce(
-      (calc, alt) => calc + alt.money - (alt.money * alt.deduct) / 100,
-      0
-    );
+  useEffect(() => {
+    if (moneyData) {
+      setMoneySafe((prevMoneySafe) => [...prevMoneySafe, moneyData]);
+      setMoneyPosTotal(
+        (prevMoneyPosTotal) =>
+          prevMoneyPosTotal +
+          moneyData.money -
+          (moneyData.money * moneyData.deduct) / 100
+      );
+    }
+  }, [moneyData]);
+
+  useEffect(() => {
+    const totalMoney = moneySafe
+      .filter((item) => item.acceptMoney === true)
+      .reduce(
+        (total, currentItem) =>
+          total +
+          (currentItem.money - (currentItem.money * currentItem.deduct) / 100),
+        0
+      );
+    setMoneyPosTotal(totalMoney);
+  }, [moneySafe]);
 
   const Table = () => {
     return (
@@ -101,42 +119,48 @@ export default function MoneyStoreModel(props: any) {
               id الفاتورة
             </p>
           </div>
-          {/* {moneyPosTotal} */}
+
           {moneySafe
             .filter((item2) => item2.acceptMoney === true)
-            .map((item, indexItem) => (
-              <div
-                key={indexItem}
-                className="flex justify-evenly items-center p-4 py-8  rounded-2xl mt-4 "
-                style={{
-                  backgroundColor: `${colorCompanyPos}`,
-                  border: "1px solid white",
-                  outline: `2px double ${colorCompanyPos}`,
-                }}
-              >
-                <p className="w-[20%] text-center">{item.time}</p>
-                <p className="w-[20%] text-center">{item.date}</p>
-                <p className="w-[20%] flex justify-center">
-                  <p className="mr-1">%</p>
-                  <p>{item.deduct}</p>
-                </p>
-                <p className="w-[20%] text-center">{item.notes}</p>
-                <p className="w-[20%] flex justify-center">
-                  <p className="mr-1">د.ل</p>
-                  <p>{item.money - (item.money * item.deduct) / 100}</p>
-                </p>
-                <p className="w-[20%] text-center" style={{ direction: "rtl" }}>
-                  {item.idInvoice}
-                </p>
-              </div>
-            ))}
+            .map(
+              (item, indexItem) =>
+                item.idInvoice && (
+                  <div
+                    key={indexItem}
+                    className="flex justify-evenly items-center p-4 py-8  rounded-2xl mt-4 "
+                    style={{
+                      backgroundColor: `${colorCompanyPos}`,
+                      border: "1px solid white",
+                      outline: `2px double ${colorCompanyPos}`,
+                    }}
+                  >
+                    <p className="w-[20%] text-center">{item.time}</p>
+                    <p className="w-[20%] text-center">{item.date}</p>
+                    <p className="w-[20%] flex justify-center">
+                      <p className="mr-1">%</p>
+                      <p>{item.deduct}</p>
+                    </p>
+                    <p className="w-[20%] text-center">{item.notes}</p>
+                    <p className="w-[20%] flex justify-center">
+                      <p className="mr-1">د.ل</p>
+                      <p>{item.money - (item.money * item.deduct) / 100}</p>
+                    </p>
+                    <p
+                      className="w-[20%] text-center"
+                      style={{ direction: "rtl" }}
+                    >
+                      {item.idInvoice}
+                    </p>
+                  </div>
+                )
+            )}
         </div>
       </>
     );
   };
 
   const SendMoney = async () => {
-    setCloseBtn(true);
+    // setCloseBtn(true);
     try {
       const data = {
         nameTransfer: AdminPos,
@@ -165,25 +189,13 @@ export default function MoneyStoreModel(props: any) {
           confirmButtonColor: "#3085d6",
           confirmButtonText: "حسنًا",
         });
+        setMoneySafe([]);
+        setMoneyPosTotal(0);
       }
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    const total = moneySafe
-      .filter((item) => item.acceptMoney === true)
-      .reduce(
-        (calc, alt) => calc + alt.money - (alt.money * alt.deduct) / 100,
-        0
-      );
-    if (total > 0) {
-      setCloseBtn(false);
-    } else {
-      setCloseBtn(true);
-    }
-  }, [moneySafe]);
 
   return (
     <>
@@ -214,11 +226,16 @@ export default function MoneyStoreModel(props: any) {
               <ModalBody>{Table()}</ModalBody>
               <ModalFooter>
                 <Button
-                  disabled={closeBtn}
-                  color={closeBtn ? "default" : "warning"}
+                  disabled={moneyPosTotal > 0 ? false : true}
+                  color={moneyPosTotal > 0 ? "warning" : "default"}
                   onClick={SendMoney}
+                  className="flex items-center"
                 >
-                  تحويل للأدمن
+                  <p className="flex font-bold">
+                    <p className="mr-1">د.ل</p>
+                    <p>{moneyPosTotal}</p>
+                  </p>
+                  <p>تحويل للأدمن</p>
                 </Button>
                 <Button onPress={onClose}>شـــــكراَ</Button>
               </ModalFooter>

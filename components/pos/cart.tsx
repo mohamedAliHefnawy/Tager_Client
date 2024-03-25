@@ -33,8 +33,10 @@ interface AmountData {
 }
 
 export default function CartPos({
+  upadteParent2,
   productsCart,
 }: {
+  upadteParent2: any;
   productsCart: {
     idProduct: string;
     nameProduct: string;
@@ -59,6 +61,16 @@ export default function CartPos({
   const [selectedSize, setSelectedSize] = React.useState<SizeData>({});
   const [amountProduct, setAmountProduct] = React.useState<AmountData>({});
   const [deduct, setDeduct] = React.useState<Number>(0);
+  const [moneyData, setMoneyData] = useState({
+    idInvoice: "",
+    deduct: 0,
+    money: 0,
+    notes: "",
+    date: "",
+    time: "",
+    acceptMoney: true,
+    _id: "",
+  });
   const [allProducts, setAllProducts] = useState<
     {
       idProduct: string;
@@ -173,10 +185,18 @@ export default function CartPos({
     }
   }, [productsCart]);
 
-  // const upadteParent = (newProducts: any[], newDeduct: number) => {
-  //   setAllProducts(newProducts);
-  //   setDeduct(newDeduct);
-  // };
+  const upadteParent = (dataMoney: {
+    idInvoice: string;
+    deduct: number;
+    money: number;
+    notes: string;
+    date: string;
+    time: string;
+    acceptMoney: boolean;
+    _id: string;
+  }) => {
+    upadteParent2(dataMoney);
+  };
 
   return (
     <>
@@ -210,6 +230,7 @@ export default function CartPos({
               >
                 ⌧
               </span>
+              {/* {moneyData.money} */}
             </div>
           </div>
           <div className="w-[100%] flex justify-center my-3 opacity-70">
@@ -358,7 +379,7 @@ export default function CartPos({
             store={StorePos}
             moneySafe={MoneySafePos}
             pos={AdminPos}
-            // upadteParent={upadteParent}
+            upadteParent={upadteParent}
           />
         </div>
       )}

@@ -42,13 +42,24 @@ export default function BodyPos({
   products,
   catogryFilter,
   searchTextFilt,
+  upadteParent3,
 }: {
   products: Product[];
   catogryFilter: string;
   searchTextFilt: string;
+  upadteParent3: any;
 }) {
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
-
+  const [moneyData, setMoneyData] = useState({
+    idInvoice: "",
+    deduct: 0,
+    money: 0,
+    notes: "",
+    date: "",
+    time: "",
+    acceptMoney: true,
+    _id: "",
+  });
   const [allProducts, setAllProducts] = useState<
     {
       idProduct: string;
@@ -150,6 +161,19 @@ export default function BodyPos({
     }
   };
 
+  const upadteParent2 = (dataMoney: {
+    idInvoice: string;
+    deduct: number;
+    money: number;
+    notes: string;
+    date: string;
+    time: string;
+    acceptMoney: boolean;
+    _id: string;
+  }) => {
+    upadteParent3(dataMoney);
+  };
+
   return (
     <>
       <div className="pt-1 grid lg:grid-cols-5 md:grid-cols-5 max-h-[100%] overflow-y-auto scrollDashbordPos rounded-se-2xl">
@@ -183,7 +207,7 @@ export default function BodyPos({
         )}
       </div>
 
-      <CartPos productsCart={productsCart} />
+      <CartPos productsCart={productsCart} upadteParent2={upadteParent2} />
     </>
   );
 }
